@@ -1,0 +1,410 @@
+{
+  "name": "Climapro - Clients posés sans entretien (V2 brouillon)",
+  "nodes": [
+    {
+      "id": "b34e2471-ea86-4aec-aadc-8cb2a3949e44",
+      "name": "Chaque lundi 7h35",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "weeksInterval": 1,
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 7,
+              "triggerAtMinute": 35
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "65e444f3-6031-4f3b-b4a4-c56012a056b7",
+      "name": "Lancer à la main",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "e1d57a82-3b83-4f0a-b255-00a0c1ce6053",
+      "name": "Parametres",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        100
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// Réglages du rapport. Tout ce qui peut se discuter est ici, rien n'est caché dans le code.\nreturn [{ json: {\n  DEBUT: '2018-01-01T00:00:00Z',                                   // début de l'historique Interfast lu\n  FIN: DateTime.now().plus({ months: 13 }).toUTC().toISO(),        // inclut le planning à venir (entretiens déjà prévus, tournées)\n  TAILLE_PAGE: 100,\n  MAX_PAGES: 300,                   // garde-fou : 30 000 interventions\n  MOIS_MIN: 12,                     // pose depuis au moins 12 mois sans entretien\n  CONTRAT_MOIS: 18,                 // visite « contrat » dans les 18 derniers mois (ou à venir) = client sous contrat, exclu\n  NON_CLOTURE_JOURS: 7,             // intervention passée non clôturée depuis 7 jours = à vérifier\n  ENTRETIEN_PROCHE_JOURS: 30,       // entretien à moins de 30 jours d'une pose = on ne sait pas quelle clim : à vérifier\n  JOURS_ROUTE: 10,                  // tournées prévues regardées sur les 10 prochains jours\n  RAYON_KM: 1,                      // client « sur la route » s'il est à moins de 1 km d'une intervention prévue (3 km = 61 clients sur 10 jours, trop)\n  MEME_SITE_KM: 0.15,               // deux adresses à moins de 150 m = même site\n  MAX_LIGNES: 80,                   // lignes affichées dans Telegram (le reste est compté)\n  EXCLURE_CLIENTS: '^toshiba$',     // repris de la V1 (interventions pour le fabricant)\n  NOMS_TECH: { 5066: 'Laurent', 5069: 'Christophe', 9965: 'Axel', 5198: 'Axel ou Julien (?)' }\n} }];\n"
+      }
+    },
+    {
+      "id": "f9cff258-15b5-4036-86ff-abae09cfbd01",
+      "name": "Lire utilisateurs",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        480,
+        100
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "MAaqIFX2KBiCvHFa",
+          "cachedResultName": "bot_users"
+        },
+        "returnAll": true
+      },
+      "executeOnce": true,
+      "alwaysOutputData": true
+    },
+    {
+      "id": "4c3178b7-a79e-48c4-bf55-f5ed2523d205",
+      "name": "Lire clients_gps",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        100
+      ],
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "xrWuLpFXi8qQWU86",
+          "cachedResultName": "clients_gps"
+        },
+        "returnAll": true
+      },
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "86939284-edb5-4cc4-9e36-6f4721feff83",
+      "name": "Interfast - interventions (toutes les pages)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        960,
+        100
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://app.inter-fast.fr/v1/events",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "start",
+              "value": "={{ $('Parametres').first().json.DEBUT }}"
+            },
+            {
+              "name": "end",
+              "value": "={{ $('Parametres').first().json.FIN }}"
+            },
+            {
+              "name": "count",
+              "value": "={{ $('Parametres').first().json.TAILLE_PAGE }}"
+            },
+            {
+              "name": "archived",
+              "value": "false"
+            },
+            {
+              "name": "meeting",
+              "value": "false"
+            },
+            {
+              "name": "orderBy",
+              "value": "start"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 30000,
+          "pagination": {
+            "pagination": {
+              "paginationMode": "updateAParameterInEachRequest",
+              "parameters": {
+                "parameters": [
+                  {
+                    "type": "qs",
+                    "name": "page",
+                    "value": "={{ $pageCount }}"
+                  }
+                ]
+              },
+              "paginationCompleteWhen": "other",
+              "completeExpression": "={{ !Array.isArray($response.body.items) || $response.body.items.length < $('Parametres').first().json.TAILLE_PAGE }}",
+              "limitPagesFetched": true,
+              "maxRequests": "={{ $('Parametres').first().json.MAX_PAGES }}",
+              "requestInterval": 300
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "executeOnce": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "id": "b2b136cd-59af-46c9-b444-528cca5acf4e",
+      "name": "Analyser",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// Clients posés sans entretien — V2 (brouillon). Lecture seule, aucune IA.\n// Entrée : une page de /v1/events par item. Sortie : un seul item { ok, ... } lu par « Rédiger messages ».\nconst P = $('Parametres').first().json;\nconst now = DateTime.now().setZone('Europe/Paris');\nconst fr = d => d ? d.setZone('Europe/Paris').toFormat('dd/MM/yyyy') : '';\nconst norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\\s+/g, ' ').trim();\nconst rad = x => x * Math.PI / 180;\nconst km = (a, b) => { const h = Math.sin(rad(b.lat - a.lat) / 2) ** 2 + Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(rad(b.lon - a.lon) / 2) ** 2; return 12742 * Math.asin(Math.sqrt(h)); };\nconst coord = (lat, lon) => { const a = Number(lat), b = Number(lon); return (lat !== null && lat !== undefined && lat !== '' && isFinite(a) && isFinite(b) && (a !== 0 || b !== 0)) ? { lat: a, lon: b } : null; };\n\n// ---------- 1. Contrôle d'intégrité : on n'envoie rien plutôt qu'une liste fausse ----------\nconst pages = $input.all().map(i => i.json || {});\nconst tailles = pages.map(p => Array.isArray(p.items) ? p.items.length : -1);\nif (!pages.length || tailles.some(t => t < 0)) return [{ json: { ok: false, erreur: 'Réponse Interfast inattendue (pas de liste items). Rien n\\'est envoyé.' } }];\nif (tailles[tailles.length - 1] >= P.TAILLE_PAGE) return [{ json: { ok: false, erreur: 'Historique Interfast incomplet : ' + pages.length + ' pages lues, la dernière est pleine. Augmenter MAX_PAGES. Rien n\\'est envoyé.' } }];\n\n// ---------- 2. Classement d'une intervention ----------\n// D'abord le TYPE Interfast (fiable), le titre seulement pour les types génériques (« Intervention », « Autre », vide...).\n// Types vus le 20/10/2026 : Fin d'installation - PAC Air/Air|Air/Eau, Avancement de chantier, Entretien - Maintenance de PAC et climatisation,\n// Dépannage, Visite avant devis (+ variantes), Devis, Intervention, Intervention - ClimatPro, Autre, Cerfa 15497, CR / PV de chantier.\nconst TYPES = [\n  [/^fin d.installation/, 'pose'],\n  [/^(avancement|compte rendu) de chantier|^pv de reception/, 'chantier'],\n  [/^entretien|maintenance de pac/, 'entretien'],\n  [/^depannage/, 'depannage'],\n  [/^visite avant devis|^devis$/, 'devis']\n];\nconst RX = {\n  devis: /visite (technique|avant|devis|prealable)|\\bmetre\\b|chiffrage|estimation|(faire|etablir|pour) (un |le )?devis|^devis\\b/,\n  pose: /\\binstall|\\bpose\\b|\\bposer\\b|mise en service|remplacement (de |d.)?(l.|la |le |une |un )?(unite|clim|climatisation|climatiseur|split|groupe|pac|pompe)/,\n  entretien: /entretien|maintenance|nettoyage|revision|visite annuelle|controle annuel|visite (de )?contrat/,\n  depannage: /depannage|\\bpanne\\b|fuite|\\berreur\\b|code (defaut|erreur)|ne fonctionne|ne fait plus|ne (re)?demarre|\\bsav\\b|diagnostic|recharge/\n};\nconst cats = s => {\n  s = norm(s).replace(/\\b(suite|selon|cf|voir|ref)?\\.?\\s*devis\\s*(n\\S*\\s*)?d[ce]\\s?\\d{3,6}\\b/g, ' ');   // « suite devis DC1234 » n'est pas une visite devis\n  const c = new Set(Object.keys(RX).filter(k => RX[k].test(s)));\n  if (/\\bdepose\\b/.test(s) && !/\\brepose\\b/.test(s)) { c.delete('pose'); c.add('depose'); }\n  if (/\\brepose\\b/.test(s)) c.add('repose');\n  return c;\n};\nfunction classer(ev) {\n  const CTi = cats(ev.title);\n  const depose = CTi.has('depose');\n  if (ev.maintenance) return { k: 'entretien', contrat: true, depose };\n  const t = norm(ev.type);\n  const parType = (TYPES.find(([rx]) => rx.test(t)) || [])[1];\n  if (parType) {\n    // Type net : il fait foi. Un titre qui parle d'autre chose (pose / entretien / remise en service) est noté.\n    const autres = ['pose', 'entretien'].filter(x => CTi.has(x) && x !== parType && !(parType === 'chantier' && x === 'pose'));\n    return autres.length ? { k: parType, conflit: parType + ' + ' + autres.join(' + '), depose } : { k: parType, depose };\n  }\n  const utiles = ['pose', 'entretien', 'depannage'].filter(x => CTi.has(x));\n  if (!utiles.length) {\n    if (CTi.has('repose')) return { k: 'ambigu', conflit: 'repose', depose };\n    return { k: CTi.has('devis') ? 'devis' : (depose ? 'depose' : 'autre'), depose };\n  }\n  if (utiles.length === 1) return { k: utiles[0], parTitre: true, depose };\n  return { k: 'ambigu', conflit: utiles.join(' + '), depose };\n}\n\n// ---------- 3. Lecture des interventions, regroupées par client puis par site ----------\nconst exclure = new RegExp(P.EXCLURE_CLIENTS, 'i');\nconst vus = new Set();\nconst C = {};\nconst futurs = [];\nconst libellesInconnus = {};\nlet nbEv = 0;\nconst finRoute = now.plus({ days: P.JOURS_ROUTE }).endOf('day');\nfor (const p of pages) for (const ev of p.items) {\n  if (!ev || vus.has(String(ev.id))) continue;\n  vus.add(String(ev.id));\n  if (ev.lifecycleState === 'cancelled' || ev.category === 'task' || ev.category === 'absence' || !ev.client || !ev.client.id) continue;\n  const d = DateTime.fromISO(String(ev.start || ''), { zone: 'utc' });\n  if (!d.isValid) continue;\n  nbEv++;\n  const id = String(ev.client.id);\n  const nom = String(ev.client.name || '').trim();\n  const pos = coord(ev.lat, ev.lon);\n  const cl = classer(ev);\n  if (cl.k === 'autre') { const l = (norm(ev.type) || '(sans type)') + ' : ' + norm(ev.title).slice(0, 35); libellesInconnus[l] = (libellesInconnus[l] || 0) + 1; }\n  if (d > now && d <= finRoute && cl.k !== 'devis') futurs.push({ ev, d, pos, clientId: id, nom });\n  if (exclure.test(nom)) continue;\n  const c = C[id] || (C[id] = { id, nom, sites: [], contratRecent: false, contratAncien: null });\n  if (cl.contrat) {\n    if (d > now.minus({ months: P.CONTRAT_MOIS })) c.contratRecent = true;\n    else if (!c.contratAncien || d > c.contratAncien) c.contratAncien = d;\n  }\n  // Site : même adresse normalisée, ou à moins de MEME_SITE_KM\n  const adr = String(ev.address || '').trim();\n  const cleAdr = norm(adr).replace(/[^a-z0-9]/g, '');\n  let s = c.sites.find(x => (cleAdr && x.cleAdr === cleAdr) || (pos && x.pos && km(pos, x.pos) <= P.MEME_SITE_KM));\n  if (!s) { s = { adr, cleAdr, pos, ev: [] }; c.sites.push(s); }\n  if (!s.pos && pos) s.pos = pos;\n  if (!s.adr && adr) { s.adr = adr; s.cleAdr = cleAdr; }\n  s.ev.push({ d, cl, ev, fini: !!ev.finished });\n}\n\n// ---------- 4. Règles de détection par site ----------\n// Référence = la PREMIÈRE pose qui n'a été suivie d'aucun entretien net. « Jamais entretenu depuis le JJ/MM/AAAA ».\n// Entretien net = clôturé, libellé sans ambiguïté, et pas collé à une pose (sinon on ne sait pas quelle clim a été entretenue).\nconst liste = [], aVerifier = [];\nconst stats = { interventions: nbEv, pages: pages.length, clients: Object.keys(C).length, sousContrat: 0, entretienPrevu: 0, entretenus: 0, poseRecente: 0 };\nconst ville = a => { const m = String(a || '').match(/(\\d{5})[\\s,]+([^,]+)$/); return m ? m[2].trim() : ''; };\nconst objet = ev => [ev.type, ev.title && ev.title !== ev.type ? ev.title : ''].filter(Boolean).join(' : ').replace(/\\s+/g, ' ').slice(0, 90);\nconst limiteNC = now.minus({ days: P.NON_CLOTURE_JOURS });\nconst ligne = (c, s, ref, extra) => Object.assign({ client_id: c.id, nom: c.nom, site: s.adr, ville: ville(s.adr), pos: s.pos,\n  pose_le: ref.d, pose_objet: objet(ref.ev), mois: Math.floor(now.diff(ref.d, 'months').months), multiSites: c.sites.length > 1 }, extra || {});\nfor (const c of Object.values(C)) {\n  for (const s of c.sites) {\n    const passe = s.ev.filter(e => e.d <= now).sort((a, b) => a.d - b.d);\n    const poses = passe.filter(e => e.cl.k === 'pose');\n    if (!poses.length) {\n      // Pas de pose nette : libellé ambigu (repose, pose + dépannage...) ou chantier sans « Fin d'installation » → on signale\n      if (c.contratRecent) continue;\n      const amb = passe.filter(e => (e.cl.k === 'ambigu' && /pose/.test(e.cl.conflit)) || (e.cl.k === 'chantier' && e.d < now.minus({ months: P.MOIS_MIN }))).pop();\n      if (!amb || passe.some(e => e.cl.k === 'entretien' && e.fini && e.d > amb.d) || s.ev.some(e => e.cl.k === 'entretien' && e.d > now)) continue;\n      if (Math.floor(now.diff(amb.d, 'months').months) < P.MOIS_MIN) continue;\n      const r = amb.cl.k === 'chantier' ? 'chantier du ' + fr(amb.d) + ' sans « Fin d\\'installation » dans Interfast'\n        : amb.cl.conflit === 'repose' ? 'repose du ' + fr(amb.d) + ' : réinstallation par ClimatPro, à compter comme une pose ?'\n        : 'libellé ambigu ' + amb.cl.conflit + ' le ' + fr(amb.d);\n      aVerifier.push(ligne(c, s, amb, { raisons: [r + ' (« ' + objet(amb.ev) + ' »)'] }));\n      continue;\n    }\n    const prochePose = e => poses.some(p => Math.abs(e.d.diff(p.d, 'days').days) <= P.ENTRETIEN_PROCHE_JOURS);\n    const ents = passe.filter(e => e.cl.k === 'entretien' && e.fini);\n    const nets = ents.filter(e => !e.cl.conflit && !prochePose(e));\n    const dernierNet = nets.length ? nets[nets.length - 1].d : null;\n    const posesApres = poses.filter(p => !dernierNet || p.d > dernierNet);\n    if (c.contratRecent) { stats.sousContrat++; continue; }\n    if (!posesApres.length) { stats.entretenus++; continue; }\n    const ref = posesApres[0];\n    if (s.ev.some(e => e.cl.k === 'entretien' && e.d > now)) { stats.entretienPrevu++; continue; }\n    const mois = Math.floor(now.diff(ref.d, 'months').months);\n    if (mois < P.MOIS_MIN) { stats.poseRecente++; continue; }\n    const apres = passe.filter(e => e.d >= ref.d && e !== ref);\n    const raisons = [];\n    for (const p of posesApres.filter(p => !p.fini && p.d < limiteNC)) raisons.push('pose du ' + fr(p.d) + ' jamais clôturée dans Interfast');\n    if (ref.cl.conflit) raisons.push('libellé de la pose mélange ' + ref.cl.conflit + ' (« ' + objet(ref.ev) + ' »)');\n    for (const e of ents.filter(e => e.d >= ref.d && !nets.includes(e))) raisons.push('entretien du ' + fr(e.d) + (prochePose(e) ? ' collé à une pose' : ' au libellé ambigu') + ' : sur la clim posée ou une autre ? (« ' + objet(e.ev) + ' »)');\n    for (const e of apres.filter(e => e.cl.k === 'entretien' && !e.fini && e.d < limiteNC)) raisons.push('entretien du ' + fr(e.d) + ' non clôturé : fait ou pas ?');\n    for (const e of apres.filter(e => e.cl.k === 'ambigu' || (e.cl.k === 'depannage' && e.cl.conflit))) raisons.push('intervention du ' + fr(e.d) + ' : ' + e.cl.conflit + ' (« ' + objet(e.ev) + ' »)');\n    for (const e of apres.filter(e => e.cl.depose)) raisons.push('dépose le ' + fr(e.d) + ' après la pose : clim encore en place ?');\n    if (c.contratAncien) raisons.push('ancien contrat d\\'entretien (dernière visite contrat le ' + fr(c.contratAncien) + ') : résilié ?');\n    if (!s.adr && c.sites.length > 1) raisons.push('client à plusieurs adresses, pose sans adresse');\n    if (ref.cl.parTitre && !/install|pose/.test(norm(ref.ev.title))) raisons.push('pose déduite d\\'un libellé indirect (« ' + objet(ref.ev) + ' »)');\n    const extra = { depannages: apres.filter(e => e.cl.k === 'depannage').length,\n      autrePose: posesApres.length > 1 ? fr(posesApres[posesApres.length - 1].d) : '', dejaEntretenuAvant: dernierNet ? fr(dernierNet) : '' };\n    if (raisons.length) aVerifier.push(ligne(c, s, ref, Object.assign(extra, { raisons }))); else liste.push(ligne(c, s, ref, extra));\n  }\n}\n\n// ---------- 5. Bonus : sur la route d'une intervention prévue ----------\nconst gps = {};\nfor (const it of $('Lire clients_gps').all()) { const r = it.json || {}; const p = coord(r.lat, r.lon); if (r.client_id && p) gps[String(r.client_id)] = p; }\nconst techs = ev => [...new Set((ev.users || []).map(u => (u && (u.firstName || u.name || u.lastName)) || P.NOMS_TECH[u && u.id] || ('tech ' + (u && u.id))))].join(' + ') || 'non attribué';\nconst route = [];\nfor (const x of liste.concat(aVerifier)) {\n  const p = x.pos || gps[x.client_id];\n  if (!p) continue;\n  let best = null;\n  for (const f of futurs) {\n    if (f.clientId === x.client_id) continue;\n    const fp = f.pos || gps[f.clientId];\n    if (!fp) continue;\n    const dist = km(p, fp);\n    if (dist <= P.RAYON_KM && (!best || f.d < best.f.d || (+f.d === +best.f.d && dist < best.dist))) best = { f, dist };\n  }\n  if (best) route.push({ x, f: best.f, dist: Math.round(best.dist * 10) / 10 });\n}\nroute.sort((a, b) => a.f.d - b.f.d || a.dist - b.dist);\n\nconst enLigne = x => Object.assign({}, x, { pose_le: fr(x.pose_le), pos: undefined });\nreturn [{ json: {\n  ok: true, maj: now.toISO(), stats,\n  liste: liste.sort((a, b) => b.mois - a.mois).map(enLigne),\n  aVerifier: aVerifier.sort((a, b) => b.mois - a.mois).map(enLigne),\n  route: route.map(r => ({ client_id: r.x.client_id, nom: r.x.nom, ville: r.x.ville, mois: r.x.mois, aVerifier: !!r.x.raisons,\n    quand: r.f.d.setZone('Europe/Paris').setLocale('fr').toFormat('ccc dd/MM'), qui: techs(r.f.ev), chez: r.f.nom, chezVille: ville(r.f.ev.address), km: r.dist })),\n  libellesInconnus: Object.entries(libellesInconnus).sort((a, b) => b[1] - a[1]).slice(0, 10)\n} }];\n"
+      }
+    },
+    {
+      "id": "9a4ec890-120a-4ad2-9684-e0feaa020439",
+      "name": "Rediger messages",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// Construit les messages Telegram (HTML échappé par le node d'envoi) pour chaque admin actif de bot_users.\nconst P = $('Parametres').first().json;\nconst r = $input.first().json;\nconst admins = $('Lire utilisateurs').all().map(i => i.json).filter(u => u && u.actif && u.role === 'admin' && u.telegram_id);\nif (!admins.length) return [];\nconst blocs = [];\nif (!r.ok) {\n  blocs.push('⚠️ Clients posés sans entretien : rapport non envoyé.\\n' + r.erreur);\n} else {\n  const s = r.stats;\n  blocs.push('🔧 Clients posés sans entretien (pose ≥ ' + P.MOIS_MIN + ' mois, hors contrat)\\n'\n    + r.liste.length + ' à proposer, ' + r.aVerifier.length + ' à vérifier.\\n'\n    + 'Écartés : ' + s.sousContrat + ' sous contrat, ' + s.entretienPrevu + ' entretien déjà planifié, ' + s.entretenus + ' déjà entretenus, ' + s.poseRecente + ' posés depuis moins de ' + P.MOIS_MIN + ' mois.\\n'\n    + 'Base : ' + s.interventions + ' interventions Interfast (' + s.pages + ' pages), historique depuis l\\'arrivée d\\'Interfast seulement.');\n  if (r.route.length) {\n    // Regroupé par intervention prévue : « mar. 21/10 — Christophe chez X (Cannes) » puis les clients à proposer autour\n    const g = {};\n    for (const x of r.route) { const k = x.quand + ' — ' + x.qui + ' chez ' + x.chez + (x.chezVille ? ' (' + x.chezVille + ')' : ''); (g[k] = g[k] || []).push(x); }\n    blocs.push('🚐 Sur la route (≤ ' + String(P.RAYON_KM).replace('.', ',') + ' km d\\'une intervention prévue dans les ' + P.JOURS_ROUTE + ' jours)\\n'\n      + Object.entries(g).map(([k, xs]) => k + '\\n' + xs.map(x => '   → ' + x.nom + ' à ' + String(x.km).replace('.', ',') + ' km, ' + x.mois + ' mois sans entretien' + (x.aVerifier ? ' [à vérifier]' : '') + ' · id ' + x.client_id).join('\\n')).join('\\n'));\n  } else blocs.push('🚐 Sur la route : aucun client concerné à moins de ' + String(P.RAYON_KM).replace('.', ',') + ' km des interventions des ' + P.JOURS_ROUTE + ' prochains jours.');\n  const parVille = {};\n  for (const x of r.liste.slice(0, P.MAX_LIGNES)) (parVille[x.ville || 'Ville inconnue'] = parVille[x.ville || 'Ville inconnue'] || []).push(x);\n  const villes = Object.keys(parVille).sort((a, b) => parVille[b].length - parVille[a].length);\n  for (const v of villes) blocs.push('📍 ' + v + ' (' + parVille[v].length + ')\\n' + parVille[v].map(x => '• ' + x.nom + ' — posé le ' + x.pose_le + ' (' + x.mois + ' mois) : ' + x.pose_objet + (x.depannages ? ' · ' + x.depannages + ' dépannage(s) depuis' : '') + (x.autrePose ? ' · autre pose le ' + x.autrePose : '') + (x.dejaEntretenuAvant ? ' · entretien avant cette pose le ' + x.dejaEntretenuAvant : '') + ' · id ' + x.client_id).join('\\n'));\n  if (r.liste.length > P.MAX_LIGNES) blocs.push('… et ' + (r.liste.length - P.MAX_LIGNES) + ' autres (les plus anciens sont affichés en premier).');\n  if (r.aVerifier.length) blocs.push('❓ À vérifier avant de proposer (' + r.aVerifier.length + ')\\n' + r.aVerifier.slice(0, 40).map(x => '• ' + x.nom + (x.ville ? ' (' + x.ville + ')' : '') + ' — ' + x.raisons.join(' ; ') + ' · id ' + x.client_id).join('\\n') + (r.aVerifier.length > 40 ? '\\n… et ' + (r.aVerifier.length - 40) + ' autres.' : ''));\n  if (r.libellesInconnus.length) blocs.push('🏷️ Libellés non reconnus (ni pose, ni entretien, ni dépannage), pour régler les règles :\\n' + r.libellesInconnus.map(([l, n]) => '• « ' + l + ' » × ' + n).join('\\n'));\n}\n// Découpe en messages de 3 900 caractères maximum, sans couper une ligne\nconst msgs = [];\nlet cur = '';\nfor (const b of blocs) for (const ligne of (b + '\\n').split('\\n')) {\n  const l = ligne.length > 3800 ? ligne.slice(0, 3800) + '…' : ligne;\n  if (cur.length + l.length + 1 > 3900) { msgs.push(cur.trim()); cur = ''; }\n  cur += l + '\\n';\n}\nif (cur.trim()) msgs.push(cur.trim());\nconst out = [];\nfor (const a of admins) for (const t of msgs) out.push({ json: { chat_id: String(a.telegram_id), text: t } });\nreturn out;\n"
+      }
+    },
+    {
+      "id": "b750f1ff-c3b9-468a-8894-75da6d17cf7c",
+      "name": "Envoyer aux admins",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1680,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ String($json.text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "4a2a8d0d-94ac-45ec-b19f-eb8dddbbca1c",
+      "name": "Message erreur",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        240
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// Interfast en erreur : on prévient les admins au lieu d'envoyer une liste fausse.\nconst admins = $('Lire utilisateurs').all().map(i => i.json).filter(u => u && u.actif && u.role === 'admin' && u.telegram_id);\nconst e = $input.first().json || {};\nconst msg = String((e.error && (e.error.message || e.error)) || e.message || 'erreur inconnue').slice(0, 300);\nreturn admins.map(a => ({ json: { chat_id: String(a.telegram_id), text: '⚠️ Clients posés sans entretien : lecture Interfast impossible, rapport non envoyé.\\n' + msg } }));\n"
+      }
+    },
+    {
+      "id": "f6c64ee5-acdb-4c36-9a47-951b0ffa05df",
+      "name": "Prevenir erreur",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1440,
+        240
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "={{ $json.chat_id }}",
+        "text": "={{ String($json.text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "id": "28674825-c885-4b33-82ff-deeb076acf7f",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        200,
+        -320
+      ],
+      "parameters": {
+        "width": 760,
+        "height": 300,
+        "color": 4,
+        "content": "## Clients posés sans entretien — V2 (BROUILLON, non publié)\nLecture seule : Interfast en GET (credential « Interfast API »), Data Tables bot_users et clients_gps en lecture. Aucune écriture, aucune IA.\n\n1. Lit **toutes** les interventions depuis 2018 avec une vraie pagination (s'arrête à la dernière page, refuse un historique incomplet).\n2. Par client et par site : dernière pose, entretiens après la pose, contrat, entretien déjà planifié.\n3. Envoie aux admins de bot_users : liste par ville, « sur la route » (≤ 1 km) des interventions des 10 prochains jours, cas à vérifier, libellés non reconnus.\n\nRéglages : node **Parametres**. Détail : proposals/clients-sans-entretien.md"
+      }
+    }
+  ],
+  "connections": {
+    "Chaque lundi 7h35": {
+      "main": [
+        [
+          {
+            "node": "Parametres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lancer à la main": {
+      "main": [
+        [
+          {
+            "node": "Parametres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parametres": {
+      "main": [
+        [
+          {
+            "node": "Lire utilisateurs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lire utilisateurs": {
+      "main": [
+        [
+          {
+            "node": "Lire clients_gps",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lire clients_gps": {
+      "main": [
+        [
+          {
+            "node": "Interfast - interventions (toutes les pages)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Interfast - interventions (toutes les pages)": {
+      "main": [
+        [
+          {
+            "node": "Analyser",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Message erreur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyser": {
+      "main": [
+        [
+          {
+            "node": "Rediger messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rediger messages": {
+      "main": [
+        [
+          {
+            "node": "Envoyer aux admins",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message erreur": {
+      "main": [
+        [
+          {
+            "node": "Prevenir erreur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Europe/Paris",
+    "saveManualExecutions": true
+  },
+  "meta": {
+    "description": "Brouillon non publié. Remplace à terme l'analyse de Climapro - Clients sans entretien (H7muVNYi1nx8vEFs). Voir proposals/clients-sans-entretien.md."
+  }
+}

@@ -3,7 +3,20 @@
 Lecture seule : rien n'a été modifié sur le serveur. Chaque point renvoie à la fiche du workflow dans `docs/`.
 Ordre : du plus urgent au moins urgent.
 
-## 1. Sécurité (à traiter en premier)
+## 0. Le dépôt GitHub `climatpro/magento2` est PUBLIC
+
+Constaté le 20/10/2026 après le premier push. Les secrets (clés, jetons, mots de passe, credentials) sont bien retirés des exports.
+Mais les workflows contiennent d'autres données qui n'ont rien à faire en public :
+
+- les **coordonnées GPS du domicile** du gérant (`MAISON` dans [Quartix - Historique](quartix-historique.md)) ;
+- des **adresses personnelles** et des informations privées (holding, SCI, famille) dans [Climapro - Mémos vocaux](climapro-memos-vocaux.md) ;
+- le **domaine n8n** et la liste des chemins de webhook. Certains webhooks ne sont protégés que par leur chemin, par exemple `fiche-contact-iphone-k7q2` et `devis-mail-valider` ;
+- les identifiants Telegram, les prénoms des techniciens, les identifiants de dossiers Drive et de Sheets.
+
+**À faire tout de suite** : passer le dépôt en privé (GitHub > Settings > General > Danger Zone > Change visibility).
+Ensuite, changer le chemin des webhooks protégés seulement par leur nom, et sortir l'adresse du domicile du code.
+
+## 1. Sécurité
 
 | Gravité | Workflow | Problème | Action proposée |
 |---|---|---|---|
@@ -65,4 +78,4 @@ Les quatre workflows « Archives factures » et « Equipe - Mail vers groupe Tel
 - **Technicien 5198 = Axel ou Julien selon l'outil.** Axel dans Outil - Camions et Outil - Detail RDV, Julien dans Outil - Fiche client. Les identifiants techniciens sont copiés en dur dans au moins 6 workflows.
 - **Deux versions publiées ≠ brouillon** : Outil - Sonepar et Factures Gmail → Drive. Ce que vous voyez dans l'éditeur n'est pas ce qui tourne. L'export garde les deux (`versionPubliee` dans le JSON).
 - **Erreurs silencieuses partout.** La majorité des appels Interfast sont en `onError: continueRegularOutput` : une panne Interfast se lit « aucun client trouvé » ou « 2 camions libres ». Aucun workflow n'a d'`errorWorkflow`. Un workflow d'erreur unique qui prévient Laurent sur Telegram couvrirait tout.
-- **Pagination tronquée sans prévenir** : plusieurs workflows lisent « toutes » les interventions ou fiches avec un nombre de pages fixe (15, 32, 40 pages de 100). Le cas le plus gênant est [Climapro - Clients sans entretien](climapro-clients-sans-entretien.md) : voir `proposals/clients-sans-entretien.md`.
+- **Pagination à nombre de pages fixe** : plusieurs workflows lisent « toutes » les interventions ou fiches avec un nombre de pages figé (15, 32, 40 pages de 100), sans vérifier que la dernière page est incomplète. Aujourd'hui, [Climapro - Clients sans entretien](climapro-clients-sans-entretien.md) lit 20 pages pleines sur 40 : pas encore de perte, mais aucune alerte le jour où la limite sera atteinte. Voir `proposals/clients-sans-entretien.md`.
