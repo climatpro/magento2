@@ -1,0 +1,134 @@
+{
+  "active": true,
+  "connections": {
+    "Appel outil": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Chercher client",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Chercher client": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Formater resultats",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-08T14:30:43.797Z",
+  "description": "Outil du bot : recherche de clients Interfast par nom (id, adresse, téléphone). Lecture seule.",
+  "id": "FHVtoHPBvB59ExMT",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Outil - Recherche client",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "6da78a00-be3a-4954-b2dd-1d3b0540899f",
+      "name": "Appel outil",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "nom",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "6f28a945-87e8-45e6-845a-fab7eceef224",
+      "name": "Chercher client",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "client_recherche",
+            "params": "={{ ({ nom: $json.nom }) }}"
+          }
+        }
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "cfcca955-f36f-4770-8d7f-a9c772d52a13",
+      "name": "Formater resultats",
+      "parameters": {
+        "jsCode": "const r = $input.first().json || {};\nconst items = ((r.ok && r.data && r.data.items) || []).filter(c => c.category !== 'supplier');\nif (!items.length) return [{ json: { resultat: 'Aucun client trouve pour ce nom.' } }];\nconst L = items.slice(0, 10).map(c => {\n  const a = c.address || {};\n  return [c.name ? String(c.name).trim() : '?', 'client_id: ' + c.id, [a.address, [a.zipCode, a.city].filter(Boolean).join(' ')].filter(Boolean).join(', '), c.phoneNumber ? 'tel ' + c.phoneNumber : '', c.secondaryPhoneNumber ? 'tel2 ' + c.secondaryPhoneNumber : ''].filter(Boolean).join(' | ');\n});\nreturn [{ json: { resultat: 'Clients trouves (recherche approximative, verifier le nom) :\\n' + L.join('\\n') } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        448,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-08T14:30:43.797Z"
+}

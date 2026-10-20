@@ -1,0 +1,134 @@
+{
+  "active": true,
+  "connections": {
+    "Appel outil": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire intervention",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire intervention": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Formater detail",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-08T14:39:24.571Z",
+  "description": "Outil du bot : détail complet d'une intervention (description, consignes, matériel noté, accès). Lecture seule.",
+  "id": "0bCdxnRh9exHqvvM",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Outil - Detail RDV",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "c112ad62-7f9e-43ce-864c-44a68e85ec7f",
+      "name": "Appel outil",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "event_id",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "48918b4d-61c4-45de-a0a0-00daea2802c7",
+      "name": "Formater detail",
+      "parameters": {
+        "jsCode": "const id = String($('Appel outil').first().json.event_id || '');\nconst r = $input.first().json || {};\nif (!r.ok || !r.data) return [{ json: { resultat: 'Pas de detail disponible pour ' + id + ' (rendez-vous simple ou identifiant inconnu).' } }];\nconst d = r.data;\nconst plat = s => String(s || '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\\s+/g, ' ').trim();\nconst NOMS = { 5066: 'Laurent', 5069: 'Christophe', 9965: 'Axel', 5198: 'Axel' };\nconst L = [];\nL.push('Intervention ' + (d.reference || id) + ' : ' + [d.type && (d.type.name || d.type), plat(d.title)].filter(Boolean).join(' : '));\nif (d.heureParis) L.push('Date : ' + d.dateParis + ' ' + d.heureParis + ' (' + d.horaireLibelle + ')');\nif (d.client) L.push('Client : ' + (d.client.name || d.client.displayName || '') + ' (client_id ' + (d.client.id || '') + ')');\nconst a = d.address || {};\nif (a.address) L.push('Adresse : ' + [a.address, [a.zipCode, a.city].filter(Boolean).join(' '), plat(a.additionalLine), plat(a.comments)].filter(Boolean).join(', '));\nif (d.users) L.push('Techniciens : ' + [...new Set(d.users.map(u => NOMS[u.id] || u.firstName))].join(', '));\nif (d.secondReference) L.push('Devis lie : ' + d.secondReference);\nif (d.description) L.push('Description : ' + plat(d.description).slice(0, 1500));\nif (d.report) L.push('Compte-rendu : ' + plat(typeof d.report === 'string' ? d.report : JSON.stringify(d.report)).slice(0, 800));\nif (d.finished) L.push('Statut : termine');\nreturn [{ json: { resultat: L.join('\\n') } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        448,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "b00516da-3740-4b40-96f8-d58a3c2cadca",
+      "name": "Lire intervention",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "intervention",
+            "params": "={{ ({ id: $json.event_id }) }}"
+          }
+        }
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-08T14:39:24.571Z"
+}

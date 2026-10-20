@@ -1,0 +1,636 @@
+{
+  "active": true,
+  "connections": {
+    "Ancienne version a supprimer ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Supprimer ancienne image WP",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Rien a supprimer",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Comparer": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Telecharger image Drive",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Enregistrer dans la table": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ancienne version a supprimer ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Envoyer dans WordPress": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enregistrer dans la table",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Icones manquantes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Mettre a jour icones-a-creer.md",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lancer a la main": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Verifier WordPress",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire memos Todoist": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Icones manquantes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire table images": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Comparer",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Lire memos Todoist",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lister images Drive": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire table images",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Telecharger image Drive": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Envoyer dans WordPress",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Toutes les 15 min": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Verifier WordPress",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Verifier WordPress": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lister images Drive",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-11T11:11:58.470Z",
+  "description": "Toutes les 15 min : images nouvelles ou modifiées dans Drive > Tableau de bord ClimatPro > images envoyées dans la médiathèque WordPress climatpro.fr, ancienne version supprimée, adresse finale dans la table images_tableau (lue par Page - Tableau technici",
+  "id": "awPLiSdGvFBFGK14",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Climapro - Images tableau de bord",
+  "nodeGroups": [
+    {
+      "id": "05411c1d-6eda-4488-9c9f-2cf4250e19fb",
+      "name": "Envoyer et noter",
+      "nodeNames": [
+        "Telecharger image Drive",
+        "Envoyer dans WordPress",
+        "Enregistrer dans la table"
+      ]
+    },
+    {
+      "id": "5e18f57d-9fc9-4c8d-acc8-ba47dbd678e1",
+      "name": "Liste d'attente pour Codex",
+      "nodeNames": [
+        "Lire memos Todoist",
+        "Icones manquantes",
+        "Mettre a jour icones-a-creer.md"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "86814253-c9bc-4544-bcb3-f0497d651147",
+      "name": "Ancienne version a supprimer ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $('Comparer').item.json.oldWpId }}",
+              "operator": {
+                "operation": "gt",
+                "type": "number"
+              },
+              "rightValue": 0
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        1792,
+        96
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "f98d471d-31ed-463d-9cb4-d77870c80ab6",
+      "name": "Comparer",
+      "notes": "Garde les images nouvelles ou modifiees (md5 different de la table). Aucune sortie = rien a faire.",
+      "parameters": {
+        "jsCode": "// Images de Drive a envoyer dans WordPress : nouvelles, ou dont le contenu (md5) a change.\n// Les images du sous-dossier icones sont rangees dans la table sous la cle \"icones/<mot>.png\".\nconst ICONES = '1uIhYG4xxOMhXr9gCGLnoYrdfGSbV22FU';\nconst files = (($('Lister images Drive').first().json || {}).files) || [];\nconst rows = $('Lire table images').all().map(i => i.json).filter(r => r && r.nom);\nconst parNom = {};\nfor (const r of rows) parNom[r.nom] = r;\nconst out = [];\nfor (const f of files) {\n  if (!/\\.(png|jpe?g|gif|webp|svg)$/i.test(f.name || '')) continue;\n  const icone = (f.parents || []).includes(ICONES);\n  const cle = (icone ? 'icones/' : '') + f.name;\n  const r = parNom[cle];\n  if (r && r.url && r.md5 === (f.md5Checksum || '')) continue;\n  out.push({ json: { id: f.id, name: cle, fichier: (icone ? 'icone-' : '') + f.name, mimeType: f.mimeType, md5: f.md5Checksum || '', oldWpId: r && r.wp_id ? Number(r.wp_id) : null } });\n}\nreturn out;"
+      },
+      "position": [
+        896,
+        96
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "173bdfbc-064c-4998-bcde-ce2701967c3e",
+      "name": "Enregistrer dans la table",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "nom"
+          ],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "nom",
+              "id": "nom",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "md5",
+              "id": "md5",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "url",
+              "id": "url",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "wp_id",
+              "id": "wp_id",
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "maj",
+              "id": "maj",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "maj": "={{ $now.toISO() }}",
+            "md5": "={{ $('Comparer').item.json.md5 }}",
+            "nom": "={{ $('Comparer').item.json.name }}",
+            "url": "={{ $json.source_url }}",
+            "wp_id": "={{ $json.id }}"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "gkJQL9liZvE8M2Op"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "nom",
+              "keyValue": "={{ $('Comparer').item.json.name }}"
+            }
+          ]
+        },
+        "operation": "upsert",
+        "resource": "row"
+      },
+      "position": [
+        1568,
+        96
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "d1SeVJUDTXBOklWX",
+          "name": "WordPress climatpro.fr"
+        }
+      },
+      "id": "2a54005d-364d-45f2-9b8c-d57eeca6ec7e",
+      "name": "Envoyer dans WordPress",
+      "notes": "Mediatheque climatpro.fr. WordPress renvoie id et source_url.",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "contentType": "binaryData",
+        "genericAuthType": "httpBasicAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Disposition",
+              "value": "=attachment; filename=\"{{ $('Comparer').item.json.fichier }}\""
+            },
+            {
+              "name": "Content-Type",
+              "value": "={{ $('Comparer').item.json.mimeType }}"
+            }
+          ]
+        },
+        "inputDataFieldName": "data",
+        "method": "POST",
+        "options": {
+          "timeout": 60000
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "url": "https://climatpro.fr/wp-json/wp/v2/media"
+      },
+      "position": [
+        1344,
+        96
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "3bf21cbe-acd3-4580-a45c-237c4533403f",
+      "name": "Icones manquantes",
+      "notes": "Compare les objets des mémos (« Icône : mot » dans la description) aux icônes présentes dans Drive, et rédige icones-a-creer.md.",
+      "parameters": {
+        "jsCode": "// Objets dictes dans les memos qui n'ont pas encore d'icone dans Drive > images > icones\nconst ICONES = '1uIhYG4xxOMhXr9gCGLnoYrdfGSbV22FU';\nconst files = (($('Lister images Drive').first().json || {}).files) || [];\nconst presentes = new Set(files.filter(f => (f.parents || []).includes(ICONES)).map(f => String(f.name).replace(/\\.[a-z0-9]+$/i, '').toLowerCase()));\nlet taches = [];\nfor (const it of $input.all()) {\n  const j = it.json || {};\n  if (Array.isArray(j.results)) taches = taches.concat(j.results);\n  else if (j.id && j.content) taches.push(j);\n}\nconst demandes = {};\nfor (const t of taches) {\n  const m = String(t.description || '').match(/Ic[oô]ne : ([a-z0-9-]+)/i);\n  if (!m) continue;\n  const mot = m[1].toLowerCase();\n  if (presentes.has(mot)) continue;\n  if (!demandes[mot]) demandes[mot] = [];\n  if (demandes[mot].length < 2) demandes[mot].push(String(t.content || '').slice(0, 60));\n}\nconst mots = Object.keys(demandes).sort();\nconst now = DateTime.now().setZone('Europe/Paris').toFormat('dd/MM/yyyy HH:mm');\nconst lignes = mots.length ? mots.map(m => '- `' + m + '` (exemple de memo : ' + demandes[m].join(' / ') + ')') : ['(aucune icone en attente)'];\nconst md = [\n  '# Icones a creer pour le tableau de bord ClimatPro', '',\n  'Fichier mis a jour automatiquement par n8n toutes les 15 minutes (derniere mise a jour : ' + now + '). Ne pas l\\'editer a la main.', '',\n  'Regle pour Codex : une icone par mot, fichier PNG nomme exactement `<mot>.png`, depose dans Drive > Tableau de bord ClimatPro > images > icones. Pictogramme leger (96 x 96 px, moins de 20 Ko), fond transparent, meme style que cat-*.png. Une fois l\\'icone deposee, le mot disparait de cette liste au passage suivant.', '',\n  '## En attente (' + mots.length + ')', '', ...lignes, '',\n  '## Deja disponibles (' + presentes.size + ')', '', [...presentes].sort().join(', ') || '(aucune)', ''\n].join('\\n');\nreturn [{ json: { md, en_attente: mots.length } }];"
+      },
+      "position": [
+        1320,
+        200
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "39327007-a917-4105-b616-89cbecc89750",
+      "name": "Lancer a la main",
+      "parameters": {},
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "todoistApi": {
+          "id": "feB4B4HQds0e2tFC",
+          "name": "Todoist account"
+        }
+      },
+      "executeOnce": true,
+      "id": "eb1217b2-0924-4641-805a-68ceb77f2c94",
+      "name": "Lire memos Todoist",
+      "notes": "Mémos ouverts (label memo). Sert à trouver les objets dictés sans icône.",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "method": "GET",
+        "nodeCredentialType": "todoistApi",
+        "options": {
+          "timeout": 15000
+        },
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "@memo"
+            },
+            {
+              "name": "limit",
+              "value": "200"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://api.todoist.com/api/v1/tasks/filter"
+      },
+      "position": [
+        1100,
+        200
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "27ba880b-93c0-42b1-8c7f-8bf45be0e833",
+      "name": "Lire table images",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "gkJQL9liZvE8M2Op"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        672,
+        96
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "executeOnce": true,
+      "id": "4d2bc1dc-84fa-492f-8667-7c0e111b19f9",
+      "name": "Lister images Drive",
+      "notes": "Dossier Drive > Mon Drive > Tableau de bord ClimatPro > images (1qaVFnDuR2Gd43MoBU3w06JHn7Gq28MTA).",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "options": {
+          "timeout": 15000
+        },
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "('1c2zZA2AqNarxkwsH62RQUXdK0r_RXqB_' in parents or '1uIhYG4xxOMhXr9gCGLnoYrdfGSbV22FU' in parents) and trashed = false and mimeType contains 'image/'"
+            },
+            {
+              "name": "fields",
+              "value": "files(id, name, mimeType, md5Checksum, modifiedTime, parents)"
+            },
+            {
+              "name": "pageSize",
+              "value": "200"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://www.googleapis.com/drive/v3/files"
+      },
+      "position": [
+        448,
+        96
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "executeOnce": true,
+      "id": "9433973b-92d5-4e1b-86d7-0ed3764efe83",
+      "name": "Mettre a jour icones-a-creer.md",
+      "notes": "Réécrit le fichier Drive icones-a-creer.md (même fichier, même identifiant) que Codex lit.",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "body": "={{ $json.md }}",
+        "contentType": "raw",
+        "method": "PATCH",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "options": {
+          "timeout": 15000
+        },
+        "rawContentType": "text/markdown",
+        "sendBody": true,
+        "url": "https://www.googleapis.com/upload/drive/v3/files/1SHdNeJn1wMEY8QGPYKIGysZ9IeCbVDRK?uploadType=media"
+      },
+      "position": [
+        1540,
+        200
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "de27a20c-daaf-44eb-8637-d6f6a0b45e24",
+      "name": "Rien a supprimer",
+      "parameters": {},
+      "position": [
+        2016,
+        192
+      ],
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1
+    },
+    {
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "d1SeVJUDTXBOklWX",
+          "name": "WordPress climatpro.fr"
+        }
+      },
+      "id": "d2f71c32-dc54-434d-a362-bfeeef66ed5e",
+      "name": "Supprimer ancienne image WP",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "method": "DELETE",
+        "options": {
+          "timeout": 30000
+        },
+        "url": "=https://climatpro.fr/wp-json/wp/v2/media/{{ $('Comparer').item.json.oldWpId }}?force=true"
+      },
+      "position": [
+        2016,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "65f69798-fd77-4353-9dc3-21c1e0f04469",
+      "name": "Telecharger image Drive",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "options": {
+          "response": {
+            "response": {
+              "outputPropertyName": "data",
+              "responseFormat": "file"
+            }
+          },
+          "timeout": 30000
+        },
+        "url": "=https://www.googleapis.com/drive/v3/files/{{ $json.id }}?alt=media"
+      },
+      "position": [
+        1120,
+        96
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "28aa5e0f-1622-400b-bc4b-6d7cf0378c20",
+      "name": "Toutes les 15 min",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        192
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3
+    },
+    {
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "d1SeVJUDTXBOklWX",
+          "name": "WordPress climatpro.fr"
+        }
+      },
+      "executeOnce": true,
+      "id": "b87ee1f6-14d5-4a45-ae67-d69f24444434",
+      "name": "Verifier WordPress",
+      "notes": "Controle que le mot de passe d application WordPress fonctionne. Si ce noeud echoue, rien n est envoye.",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "options": {
+          "timeout": 15000
+        },
+        "url": "https://climatpro.fr/wp-json/wp/v2/users/me?context=edit"
+      },
+      "position": [
+        224,
+        96
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-11T11:33:55.560Z"
+}

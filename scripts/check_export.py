@@ -16,7 +16,7 @@ SECRET_VALUE = [
     re.compile(r"\bsk-ant-[A-Za-z0-9_-]{20,}"),
     re.compile(r"\bAIza[0-9A-Za-z_-]{35}\b"),
 ]
-MODEL_RX = re.compile(r"\b(claude-[a-z0-9.-]+|gemini-[a-z0-9.-]+|gpt-[a-z0-9.-]+|o[134](?:-mini)?)\b")
+MODEL_RX = re.compile(r"\b(claude-(?:haiku|sonnet|opus|3|4|5)[a-z0-9.-]*\d[a-z0-9.-]*|gemini-[0-9][a-z0-9.-]+|gpt-[0-9o][a-z0-9.-]*)\b")
 
 
 def walk(o):
@@ -80,7 +80,7 @@ def analyse(path):
                 calls.append({"id": "", "name": "webhook " + url.split("/webhook/")[1].split("?")[0].split("'")[0].split('"')[0], "node": n["name"]})
         if t == "n8n-nodes-base.webhook":
             webhooks.append(f"{p.get('httpMethod', 'GET')} /webhook/{p.get('path', '')}")
-        if t.endswith("Trigger") or t.endswith("trigger"):
+        if t.endswith("Trigger") or t.endswith("trigger") or t == "n8n-nodes-base.webhook":
             trigger = trigger or t.split(".")[-1]
         for ctype, c in (n.get("credentials") or {}).items():
             creds[c.get("id")] = {"id": c.get("id"), "name": c.get("name"), "type": ctype}

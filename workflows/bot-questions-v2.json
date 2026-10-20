@@ -1,0 +1,581 @@
+{
+  "active": false,
+  "connections": {
+    "Comprendre la question": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Extraire intention",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Controle acces": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Comprendre la question",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extraire intention": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire interventions du jour",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire RDV du jour": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Trouver prochain RDV",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire client": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Rediger reponse",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire interventions du jour": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire RDV du jour",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire utilisateurs": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Controle acces",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Message Telegram": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire utilisateurs",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Rediger reponse": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Repondre Telegram",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Repondre Telegram": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Journal",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Trouver prochain RDV": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire client",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-08T13:54:57.390Z",
+  "description": "Bot Telegram question-réponse V2 minimale : prochain RDV, téléphone du client, adresse. Liste blanche bot_users, Haiku classe l'intention, le code copie les données.",
+  "id": "39jFHOalFexDqKDq",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Bot - Questions (V2)",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "anthropicApi": {
+          "id": "UtZzlYk97MvjuDan",
+          "name": "Anthropic account 2"
+        }
+      },
+      "id": "db6f60a1-40ff-4353-9747-3142333a36e4",
+      "name": "Comprendre la question",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "contentType": "json",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify({ model: \"claude-haiku-5-5\", max_tokens: 100, system: \"Tu classes la question d un technicien de climatisation. Nous sommes le \" + $now.setZone('Europe/Paris').setLocale('fr').toFormat('cccc dd/MM/yyyy') + \". Reponds UNIQUEMENT par un JSON {\\\"intent\\\":\\\"prochain_rdv\\\"|\\\"telephone\\\"|\\\"adresse\\\"|\\\"autre\\\",\\\"date\\\":\\\"AAAA-MM-JJ\\\"|null}. intent : prochain_rdv = il demande son rendez-vous, client ou planning ; telephone = le numero de telephone du client ; adresse = l adresse ou le lieu ; autre = tout le reste. date : seulement s il cite un jour (aujourd hui, demain, lundi, le 14...), calcule a partir d aujourd hui ; s il ne cite aucun jour, date = null.\", messages: [{ role: \"user\", content: $json.question }] }) }}",
+        "method": "POST",
+        "nodeCredentialType": "anthropicApi",
+        "options": {
+          "timeout": 20000
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://api.anthropic.com/v1/messages"
+      },
+      "position": [
+        600,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5
+    },
+    {
+      "id": "7fe0b6b7-bddf-4c5a-90cb-06f076b030f1",
+      "name": "Controle acces",
+      "parameters": {
+        "jsCode": "const upd = $('Message Telegram').first().json;\nconst msg = upd.message || {};\nif (!msg.chat || msg.chat.type !== 'private') return [];\nconst chatId = String(msg.chat.id);\nconst users = $input.all().map(i => i.json);\nconst u = users.find(x => x.actif && String(x.telegram_id) === chatId);\nif (!u) return [];\nconst q = String(msg.text || '').trim();\nif (!q) return [];\nreturn [{ json: { chat_id: chatId, interfast_id: Number(u.interfast_id), role: String(u.role || ''), nom: String(u.nom || ''), question: q.slice(0, 500) } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        400,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "ed614a99-88e9-4f86-bfe1-da47bf4a2fe8",
+      "name": "Extraire intention",
+      "parameters": {
+        "jsCode": "const ctx = $('Controle acces').first().json;\nconst now = DateTime.now().setZone('Europe/Paris');\nlet intent = 'autre', date = now.toISODate(), jours = 14, jourPrecis = false;\ntry {\n  const t = ($input.first().json.content || []).map(c => c.text || '').join('').replace(/```json|```/g, '').trim();\n  const p = JSON.parse(t);\n  if (['prochain_rdv', 'telephone', 'adresse', 'autre'].includes(p.intent)) intent = p.intent;\n  if (p.date) {\n    const d = DateTime.fromISO(String(p.date), { zone: 'Europe/Paris' });\n    if (d.isValid) {\n      const ecart = d.startOf('day').diff(now.startOf('day'), 'days').days;\n      if (ecart >= -7 && ecart <= 60) { date = d.toISODate(); jours = 1; jourPrecis = true; }\n    }\n  }\n} catch (e) {}\nreturn [{ json: { ...ctx, intent, date, jours, jourPrecis, estAujourdhui: date === now.toISODate() } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        800,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "id": "02e01f2d-6e2d-429f-b399-1062108163ef",
+      "name": "Journal",
+      "parameters": {
+        "authentication": "oAuth2",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "horodatage",
+              "id": "horodatage",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "workflow",
+              "id": "workflow",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "utilisateur",
+              "id": "utilisateur",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "question",
+              "id": "question",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "reponse",
+              "id": "reponse",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "horodatage": "={{ $now.setZone('Europe/Paris').toFormat('yyyy-MM-dd HH:mm:ss') }}",
+            "question": "={{ $('Controle acces').item.json.question }}",
+            "reponse": "={{ $('Rediger reponse').item.json.text }}",
+            "utilisateur": "={{ $('Controle acces').item.json.nom }} ({{ $('Controle acces').item.json.chat_id }})",
+            "workflow": "questions"
+          }
+        },
+        "documentId": {
+          "__rl": true,
+          "cachedResultName": "Journal Bot ClimatPro",
+          "mode": "id",
+          "value": "1AYGI1KRBJrVBRiE9VIcfq6i6-0Tcz0HF9Mjan12wJmg"
+        },
+        "operation": "append",
+        "options": {
+          "useAppend": true
+        },
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "cachedResultName": "Untitled",
+          "mode": "id",
+          "value": "282010760"
+        }
+      },
+      "position": [
+        2200,
+        0
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "id": "d0d22f31-52d9-450b-8546-5c33d93619d3",
+      "name": "Lire RDV du jour",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "rdv_jour",
+            "params": "={{ ({ date: $('Extraire intention').item.json.date, jours: $('Extraire intention').item.json.jours, technicianId: String($('Extraire intention').item.json.interfast_id) }) }}"
+          }
+        }
+      },
+      "position": [
+        1200,
+        -100
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "7edcade0-be4d-4b69-90bb-cae211d9ac34",
+      "name": "Lire client",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "client",
+            "params": "={{ ({ id: $json.clientId }) }}"
+          }
+        }
+      },
+      "position": [
+        1600,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "a69fd6bd-f749-470b-a1ab-6355e266c4d4",
+      "name": "Lire interventions du jour",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "events_jour",
+            "params": "={{ ({ date: $json.date, jours: $json.jours, technicianId: String($json.interfast_id) }) }}"
+          }
+        }
+      },
+      "position": [
+        1000,
+        -100
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "e5d734e7-9053-42bd-98bb-8e479481eccd",
+      "name": "Lire utilisateurs",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "bot_users",
+          "mode": "id",
+          "value": "MAaqIFX2KBiCvHFa"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        200,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "id": "32c701b7-a8f3-4a23-a698-381dc8e23af5",
+      "name": "Message Telegram",
+      "parameters": {
+        "additionalFields": {},
+        "updates": [
+          "message"
+        ]
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "3d69fddb-ac9f-4b24-ad1d-c2419e93ecbd",
+      "name": "Rediger reponse",
+      "parameters": {
+        "jsCode": "const sel = $('Trouver prochain RDV').first().json;\nconst now = DateTime.now().setZone('Europe/Paris');\nfunction libJour(iso) {\n  const d = DateTime.fromISO(iso, { zone: 'Europe/Paris' }).startOf('day');\n  const ecart = d.diff(now.startOf('day'), 'days').days;\n  if (ecart === 0) return \"Aujourd'hui\";\n  if (ecart === 1) return 'Demain';\n  return d.setLocale('fr').toFormat('cccc d LLLL');\n}\nconst h = String(sel.heure || '?').replace(':', 'h').replace(/^0/, '');\nconst quand = (sel.dateRdv ? libJour(sel.dateRdv) + ' ' : '') + (sel.code === 1 ? h + ' (approx.)' : sel.code === 2 ? h + ' (demi-journee)' : sel.code === 3 ? h + ' (journee entiere)' : h);\nlet text = '';\nif (sel.intent === 'autre') {\n  text = \"Pour l'instant je ne reponds qu'a : prochain RDV, telephone du client, adresse.\";\n} else if (!sel.trouve) {\n  if (!sel.jourPrecis) text = 'Aucun RDV prevu dans les 14 prochains jours.';\n  else text = sel.estAujourdhui ? \"Plus rien au planning aujourd'hui.\" : 'Rien au planning ' + libJour(sel.date).toLowerCase() + '.';\n} else if (sel.intent === 'adresse') {\n  text = sel.adresse ? (quand + ' - ' + (sel.clientNom || sel.titre) + '\\n' + sel.adresse) : 'Pas d adresse sur ce RDV.';\n} else if (sel.intent === 'telephone') {\n  let tel = '', nomContact = '';\n  try {\n    const r = $input.first().json;\n    const c = (r && r.ok && r.data) || null;\n    if (c) {\n      const g = c.clientParticular || c.clientProfessional || c.clientOwnersAssociation || {};\n      const contacts = g.contacts || [];\n      const ct = contacts.find(x => (x.roles || []).includes('primary')) || contacts.find(x => x.phoneNumber) || g.contact;\n      if (ct && ct.phoneNumber) { tel = String(ct.phoneNumber); nomContact = [ct.firstName, ct.lastName].filter(Boolean).join(' '); }\n    }\n  } catch (e) {}\n  if (!sel.clientId) text = 'Pas de client relie a ce RDV (' + quand + ' - ' + sel.titre + ').';\n  else if (!tel) text = 'Pas de numero dans la fiche de ' + (sel.clientNom || 'ce client') + '.';\n  else text = quand + ' - ' + (sel.clientNom || '') + '\\n' + (nomContact ? nomContact + ' : ' : '') + tel;\n} else {\n  const objet = sel.titre && sel.titre !== sel.type ? sel.titre : sel.type;\n  text = 'Prochain RDV : ' + quand + ' - ' + [sel.clientNom, sel.adresse].filter(Boolean).join(', ') + (objet ? '\\n' + objet : '');\n}\nreturn [{ json: { chat_id: sel.chat_id, text } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1800,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "id": "c0957773-086e-40eb-9641-5810adbf2da6",
+      "name": "Repondre Telegram",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false
+        },
+        "chatId": "={{ $json.chat_id }}",
+        "operation": "sendMessage",
+        "resource": "message",
+        "text": "={{ $json.text }}"
+      },
+      "position": [
+        2000,
+        0
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "44905d3f-e822-418c-b4f5-d9b2398d6764",
+      "name": "Sticky Note aa663cff",
+      "parameters": {
+        "color": 4,
+        "content": "## Bot - Questions (V2 minimale)\n3 questions : prochain RDV, telephone du client, adresse.\nSecurite : liste blanche par ID Telegram (table bot_users, actif=true), conversation privee uniquement, un inconnu n obtient aucune reponse.\nHaiku classe seulement l intention ; les donnees (numero, adresse) sont copiees par le code depuis Interfast, jamais reecrites par le modele.\nLecture Interfast uniquement via le sous-workflow Interfast - Lecture.\nLimite connue : les RDV encore au nom de Julien ne remontent pas pour Axel ici (filtre API par technicien).\nReste a faire : journal Google Sheet, quota, plus d intentions."
+      },
+      "position": [
+        100,
+        300
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "56f9995e-e779-4b92-bcb4-2803d9a5df65",
+      "name": "Trouver prochain RDV",
+      "parameters": {
+        "jsCode": "const ctx = $('Extraire intention').first().json;\nfunction items(n) {\n  try { const r = $(n).first().json; return (r && r.ok && r.data && r.data.items) || []; } catch (e) { return []; }\n}\nconst tous = items('Lire interventions du jour').concat(items('Lire RDV du jour'));\nconst now = DateTime.now().setZone('Europe/Paris');\nconst cands = tous\n  .filter(ev => !ev.finished && ev.lifecycleState !== 'cancelled' && ev.codeHoraire !== 4 && ev.start)\n  .filter(ev => !ctx.estAujourdhui || DateTime.fromISO(ev.start, { zone: 'utc' }) > now)\n  .sort((a, b) => String(a.start).localeCompare(String(b.start)));\nconst ev = cands[0];\nif (!ev) return [{ json: { ...ctx, trouve: false, clientId: '' } }];\nreturn [{ json: {\n  ...ctx, trouve: true,\n  dateRdv: ev.dateParis || ctx.date,\n  clientId: (ev.client && ev.client.id) ? String(ev.client.id) : '',\n  clientNom: (ev.client && ev.client.name) || '',\n  heure: ev.heureParis || '?', libelle: ev.horaireLibelle || '', code: ev.codeHoraire,\n  titre: ev.title || '', type: ev.type || '', adresse: ev.address || ''\n} }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1400,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-10T05:10:33.780Z"
+}

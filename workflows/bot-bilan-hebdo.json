@@ -1,0 +1,183 @@
+{
+  "active": true,
+  "connections": {
+    "Calculer bilan": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Envoyer bilan",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire destinataires": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Calculer bilan",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire journal": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire destinataires",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lundi 8h20": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire journal",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-08T15:51:19.372Z",
+  "description": "Bilan hebdomadaire de l'usage du bot envoyé à Laurent le lundi 8h20 : questions par personne, hors sujet/sensibles, quotas atteints (lecture du journal Google Sheet).",
+  "id": "4ZLozTo8dtEjTUwG",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Bot - Bilan hebdo",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "15c5bb29-e027-41aa-a1b1-a5d0e04f0149",
+      "name": "Calculer bilan",
+      "parameters": {
+        "jsCode": "const now = DateTime.now().setZone('Europe/Paris');\nconst debut = now.minus({ days: 7 }).startOf('day');\nconst sens = /(prix|tarif|co[uû]t|marge|chiffre d.?affaires|\\bca\\b|salaire|paie|b[ée]n[ée]fice|facture|montant|€|euro|mot de passe|password|identifiant|banque|\\brib\\b|iban)/i;\nconst refus = /(pas acc[eè]s|n.?ai pas acc[eè]s|je ne peux pas|pas autoris|non autoris|confidenti)/i;\nconst rows = $('Lire journal').all().map(i => i.json);\nconst parNom = {};\nfor (const r of rows) {\n  if (String(r.workflow || '') === 'brief') continue;\n  const d = DateTime.fromFormat(String(r.horodatage || ''), 'yyyy-MM-dd HH:mm:ss', { zone: 'Europe/Paris' });\n  if (!d.isValid || d < debut) continue;\n  const nom = String(r.utilisateur || '?').replace(/\\s*\\(.*\\)$/, '');\n  const s = parNom[nom] = parNom[nom] || { n: 0, hors: 0, quota: 0 };\n  s.n++;\n  const q = String(r.question || ''), rep = String(r.reponse || '');\n  if (/limite de 30 questions/.test(rep)) s.quota++;\n  else if (sens.test(q) || refus.test(rep)) s.hors++;\n}\nconst noms = Object.keys(parNom).sort((a, b) => parNom[b].n - parNom[a].n);\nconst L = ['Bilan bot, 7 derniers jours :'];\nif (!noms.length) L.push('Aucune question.');\nfor (const n of noms) {\n  const s = parNom[n];\n  L.push('- ' + n + ' : ' + s.n + ' question' + (s.n > 1 ? 's' : '') + (s.hors ? ', ' + s.hors + ' hors sujet ou sensible' : '') + (s.quota ? ', quota atteint ' + s.quota + ' fois' : ''));\n}\nconst total = noms.reduce((a, n) => a + parNom[n].hors, 0);\nif (total) L.push('Detail dans le journal Google Sheet.');\nconst admins = $('Lire destinataires').all().map(i => i.json).filter(u => u.actif && u.role === 'admin' && u.telegram_id);\nreturn admins.map(a => ({ json: { chat_id: String(a.telegram_id), text: L.join('\\n') } }));",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        660,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "id": "d5f9383a-cce9-4ded-b146-cb44552b4c49",
+      "name": "Envoyer bilan",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false
+        },
+        "chatId": "={{ $json.chat_id }}",
+        "operation": "sendMessage",
+        "resource": "message",
+        "text": "={{ $json.text }}"
+      },
+      "position": [
+        880,
+        0
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "executeOnce": true,
+      "id": "39ba6c8e-9b06-4c6a-8968-84fbb96b65a6",
+      "name": "Lire destinataires",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "bot_users",
+          "mode": "id",
+          "value": "MAaqIFX2KBiCvHFa"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        440,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "id": "690bddd0-f031-4c5e-bf03-db0a9051c468",
+      "name": "Lire journal",
+      "parameters": {
+        "authentication": "oAuth2",
+        "documentId": {
+          "__rl": true,
+          "cachedResultName": "Journal Bot ClimatPro",
+          "mode": "id",
+          "value": "1AYGI1KRBJrVBRiE9VIcfq6i6-0Tcz0HF9Mjan12wJmg"
+        },
+        "operation": "read",
+        "options": {},
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "cachedResultName": "Untitled",
+          "mode": "id",
+          "value": "282010760"
+        }
+      },
+      "position": [
+        220,
+        0
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "id": "00919440-8a68-4d83-a648-b8e0aac00131",
+      "name": "Lundi 8h20",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "expression": "0 20 8 * * 1",
+              "field": "cronExpression"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-08T15:51:19.372Z"
+}

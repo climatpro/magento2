@@ -1,0 +1,474 @@
+{
+  "active": true,
+  "connections": {
+    "Lire utilisateurs": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer message",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Message du groupe": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Validation ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Photo ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Telecharger photo",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Enregistrer message",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer message": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Photo ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Ranger photo (Drive)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enregistrer message",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Telecharger photo": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ranger photo (Drive)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Validation ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Valider une note",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Lire utilisateurs",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-16T20:19:22.454Z",
+  "description": "Bot muet @Team_ClimatPro_bot dans le groupe Telegram ClimatPro Equipe : enregistre chaque message (table equipe_messages) et range les photos dans Drive > Tableau de bord ClimatPro > fil-equipe-photos. Ne repond jamais.",
+  "id": "Sfax1FXhgLXoeyLN",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Equipe - Archiviste",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "91d95c5c-b3c1-470c-9b74-13a2b90df9e9",
+      "name": "Enregistrer message",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "date",
+              "id": "date",
+              "required": false,
+              "type": "dateTime"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "chat_id",
+              "id": "chat_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "tg_message_id",
+              "id": "tg_message_id",
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "telegram_id",
+              "id": "telegram_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "auteur",
+              "id": "auteur",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "texte",
+              "id": "texte",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "type",
+              "id": "type",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "photo_drive_id",
+              "id": "photo_drive_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "source",
+              "id": "source",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "note_interfast",
+              "id": "note_interfast",
+              "required": false,
+              "type": "boolean"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "traite",
+              "id": "traite",
+              "required": false,
+              "type": "boolean"
+            }
+          ],
+          "value": {
+            "auteur": "={{ $('Preparer message').first().json.auteur }}",
+            "chat_id": "={{ $('Preparer message').first().json.chat_id }}",
+            "date": "={{ $('Preparer message').first().json.date }}",
+            "note_interfast": false,
+            "photo_drive_id": "={{ $json.file_id ? '' : ($json.id || '') }}",
+            "source": "telegram",
+            "telegram_id": "={{ $('Preparer message').first().json.telegram_id }}",
+            "texte": "={{ $('Preparer message').first().json.texte }}",
+            "tg_message_id": "={{ $('Preparer message').first().json.tg_message_id }}",
+            "traite": false,
+            "type": "={{ $('Preparer message').first().json.type }}"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "JtuuDgi9yHe84lHj"
+        },
+        "operation": "insert",
+        "options": {},
+        "resource": "row"
+      },
+      "position": [
+        1320,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "eeeceb40-5663-4d50-9f30-a5590aa991e9",
+      "name": "Lire utilisateurs",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "MAaqIFX2KBiCvHFa"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        220,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "gQjbmvis03Oi1VtD",
+          "name": "Bot Telegram - groupe climatpro"
+        }
+      },
+      "id": "40faf808-b4e0-44b4-bacb-91096becaf51",
+      "name": "Message du groupe",
+      "parameters": {
+        "additionalFields": {},
+        "updates": [
+          "message",
+          "callback_query"
+        ]
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "0fbbf152-5da7-4dc0-8aac-a9f9a7c6c00e",
+      "name": "Photo ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.file_id }}",
+              "operator": {
+                "operation": "notEmpty",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        660,
+        0
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "79784d31-2243-440a-87f7-5a05c53d2f31",
+      "name": "Preparer message",
+      "parameters": {
+        "jsCode": "// Groupe Telegram ClimatPro Equipe : bot muet, il ne repond jamais. Il range chaque message.\n// Ignore : conversations privees, messages de service (arrivee, depart, titre, epingle).\nconst upd = $('Message du groupe').first().json;\nconst m = upd.message || {};\nconst chat = m.chat || {};\nif (!['group', 'supergroup'].includes(chat.type)) return [];\nif (m.new_chat_members || m.left_chat_member || m.group_chat_created || m.supergroup_chat_created || m.new_chat_title || m.new_chat_photo || m.pinned_message || m.migrate_to_chat_id || m.migrate_from_chat_id) return [];\nconst users = $input.all().map(i => i.json).filter(r => r && r.telegram_id);\nconst from = m.from || {};\nconst connu = users.find(r => String(r.telegram_id).trim() === String(from.id));\nconst auteur = connu ? connu.nom : ([from.first_name, from.last_name].filter(Boolean).join(' ') || 'Inconnu');\nlet type = 'texte', fileId = '';\nif (Array.isArray(m.photo) && m.photo.length) { type = 'photo'; fileId = m.photo[m.photo.length - 1].file_id; }\nelse if (m.document) { const im = String(m.document.mime_type || '').startsWith('image/'); type = im ? 'photo' : 'document'; if (im) fileId = m.document.file_id; }\nelse if (m.voice || m.audio) type = 'vocal';\nelse if (m.video || m.video_note) type = 'video';\nelse if (m.sticker) type = 'sticker';\nelse if (m.location) type = 'position';\nelse if (m.contact) type = 'contact';\nlet texte = m.text || m.caption || '';\nif (m.location) texte = (texte ? texte + ' ' : '') + 'https://maps.google.com/?q=' + m.location.latitude + ',' + m.location.longitude;\nif (m.contact) texte = (texte ? texte + ' ' : '') + [m.contact.first_name, m.contact.last_name].filter(Boolean).join(' ') + ' ' + (m.contact.phone_number || '');\nif (m.document && type === 'document') texte = (texte ? texte + ' ' : '') + '[fichier : ' + (m.document.file_name || 'document') + ']';\nconst d = DateTime.fromSeconds(Number(m.date || 0)).setZone('Europe/Paris');\nconst nomFichier = d.toFormat('yyyy-LL-dd_HH-mm') + '_' + String(auteur).replace(/[^A-Za-z0-9]+/g, '-') + '_' + m.message_id + '.jpg';\nreturn [{ json: { chat_id: String(chat.id), tg_message_id: m.message_id, telegram_id: String(from.id || ''), auteur, texte: String(texte).slice(0, 4000), type, file_id: fileId, date: d.toUTC().toISO(), nom_fichier: nomFichier } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        440,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "45ba94ca-7790-4cca-95a4-df24ad993c61",
+      "name": "Ranger photo (Drive)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1B7lTbisc88kRcVsQ5QX8LdZ0BeWhX2NE"
+        },
+        "inputDataFieldName": "data",
+        "name": "={{ $('Preparer message').first().json.nom_fichier }}",
+        "operation": "upload",
+        "options": {},
+        "resource": "file"
+      },
+      "position": [
+        1100,
+        -120
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "gQjbmvis03Oi1VtD",
+          "name": "Bot Telegram - groupe climatpro"
+        }
+      },
+      "id": "4e25e499-7b01-4bcd-be2c-ee5954d3153d",
+      "name": "Telecharger photo",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "additionalFields": {
+          "mimeType": "image/jpeg"
+        },
+        "download": true,
+        "fileId": "={{ $json.file_id }}",
+        "operation": "get",
+        "resource": "file"
+      },
+      "position": [
+        880,
+        -120
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "4915f588-7f92-449f-a757-0cbf6f1bf4cf",
+      "name": "Validation ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ !!$json.callback_query || (($json.message || {}).chat || {}).type === 'private' }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        110,
+        200
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "1a6e0ccc-a031-4494-a33e-b72917bfd0cc",
+      "name": "Valider une note",
+      "parameters": {
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": false
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "7NeZSKB3GXm3tXOB"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "update",
+              "id": "update",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "update": "={{ $json }}"
+          }
+        }
+      },
+      "position": [
+        330,
+        300
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-16T22:18:43.590Z"
+}

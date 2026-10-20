@@ -1,0 +1,93 @@
+{
+  "active": false,
+  "connections": {
+    "Lancer le test": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire acces Quartix",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire acces Quartix": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Tester API Quartix (lecture seule)",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-13T09:46:08.313Z",
+  "description": "Test de connexion à l'API Quartix QWS v2 (lecture seule) : identifiants lus dans la Data Table quartix_acces.",
+  "id": "PROTVUjUQLOPHwcg",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Quartix - Test connexion",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "0079922e-5f97-4c78-acb1-85338c6a1076",
+      "name": "Lancer le test",
+      "parameters": {},
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "id": "b5343944-c042-4206-a9c5-df2c4b29e5a0",
+      "name": "Lire acces Quartix",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "NEpa7TDPMZep9rOI"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "f41dee16-acad-4436-a930-468399167e4a",
+      "name": "Tester API Quartix (lecture seule)",
+      "parameters": {
+        "jsCode": "// Test de connexion Quartix QWS v2 : lecture seule (auth + GET uniquement). Aucun jeton ni mot de passe dans la sortie.\nconst a = $input.first().json;\nconst base = 'https://qws.quartix.net/v2/api';\nconst enc = o => Object.keys(o).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(o[k] == null ? '' : String(o[k]))).join('&');\nconst err = (e) => ({ erreur: String(e.message || e), code: e.httpCode || e.statusCode || null, detail: (e.response && e.response.body) || e.description || null });\nlet auth;\ntry {\n  auth = await this.helpers.httpRequest({ method: 'POST', url: base + '/auth', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: enc({ CustomerID: a.customer_id, UserName: a.identifiant, Password: a.mot_de_passe, Application: a.application }), json: true });\n} catch (e) { return [{ json: { etape: 'auth', ...err(e) } }]; }\nconst d = (auth && (auth.data || auth.Data)) || {};\nconst tok = d.accessToken || d.AccessToken;\nif (!tok) return [{ json: { etape: 'auth', erreur: 'pas de jeton', cles: Object.keys(auth || {}), meta: auth && auth.meta } }];\nconst H = { AccessToken: tok };\nconst get = async (p) => { try { return await this.helpers.httpRequest({ method: 'GET', url: base + p, headers: H, json: true }); } catch (e) { return err(e); } };\nconst jour = $now.setZone('Europe/Paris').toFormat('yyyy-MM-dd');\nreturn [{ json: {\n  auth: 'OK',\n  vehicules: await get('/vehicles'),\n  live: await get('/vehicles/live'),\n  trajets_du_jour: await get('/vehicles/trips?StartDay=' + jour + '&EndDay=' + jour),\n  gestion: await get('/vehicles/management')\n} }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        448,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false
+  },
+  "tags": [],
+  "updatedAt": "2026-10-13T14:39:35.945Z"
+}

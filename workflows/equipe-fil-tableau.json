@@ -1,0 +1,1235 @@
+{
+  "active": true,
+  "connections": {
+    "Avec photo ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Photo en binaire",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Publier dans le groupe",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Enregistrer envoi": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Envoi OK",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Envoi autorise ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Trouver le groupe",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Refuse (envoi)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Fil autorise ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire derniers messages",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Refuse (fil)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Formater fil": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Envoyer fil",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "GET /equipe-fil": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire secrets (fil)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "GET /equipe-photo": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire secrets (photo)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire acces (envoi)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Verifier envoi",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire acces (fil)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Verifier fil",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire derniers messages": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Formater fil",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire photo (Drive)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Envoyer photo",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire secrets (envoi)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire acces (envoi)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire secrets (fil)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire acces (fil)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire secrets (photo)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Verifier photo",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "POST /equipe-envoyer": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire secrets (envoi)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Photo autorisee ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire photo (Drive)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Refuse (photo)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Photo en binaire": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Publier la photo",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Publier dans le groupe": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enregistrer envoi",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Publier la photo": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Reprendre photo",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Ranger photo envoyee (Drive)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resultat photo",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Reprendre photo": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ranger photo envoyee (Drive)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Resultat photo": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enregistrer envoi",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Trouver le groupe": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Avec photo ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Verifier envoi": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Envoi autorise ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Verifier fil": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Fil autorise ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Verifier photo": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Photo autorisee ?",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-16T20:24:09.548Z",
+  "description": "Encadre Fil equipe du tableau de bord : GET /equipe-fil (40 derniers messages, jeton signe fil.v1), POST /equipe-envoyer (publie dans le groupe Telegram via @Team_ClimatPro_bot), GET /equipe-photo (photo Drive, lien signe).",
+  "id": "2vzK7iVCvfsZLzhE",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Equipe - Fil (tableau)",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "8e37892c-4620-47dd-a060-26e9aa8b84e2",
+      "name": "Avec photo ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $('Verifier envoi').first().json.photo }}",
+              "operator": {
+                "operation": "notEmpty",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1320,
+        250
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "ea4083b7-3219-4ea8-a20d-346c18cd16a3",
+      "name": "Enregistrer envoi",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "date",
+              "id": "date",
+              "required": false,
+              "type": "dateTime"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "chat_id",
+              "id": "chat_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "tg_message_id",
+              "id": "tg_message_id",
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "telegram_id",
+              "id": "telegram_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "auteur",
+              "id": "auteur",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "texte",
+              "id": "texte",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "type",
+              "id": "type",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "photo_drive_id",
+              "id": "photo_drive_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "source",
+              "id": "source",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "note_interfast",
+              "id": "note_interfast",
+              "required": false,
+              "type": "boolean"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "traite",
+              "id": "traite",
+              "required": false,
+              "type": "boolean"
+            }
+          ],
+          "value": {
+            "auteur": "={{ $('Verifier envoi').first().json.nom }}",
+            "chat_id": "={{ $('Trouver le groupe').first().json.chat_id }}",
+            "date": "={{ $now.toUTC().toISO() }}",
+            "note_interfast": false,
+            "photo_drive_id": "={{ $json.photo_drive_id || '' }}",
+            "source": "tableau",
+            "telegram_id": "={{ $('Verifier envoi').first().json.telegram_id }}",
+            "texte": "={{ $('Verifier envoi').first().json.texte }}",
+            "tg_message_id": "={{ $json.result.message_id }}",
+            "traite": false,
+            "type": "={{ $json.photo_drive_id ? 'photo' : 'texte' }}"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "JtuuDgi9yHe84lHj"
+        },
+        "operation": "insert",
+        "options": {},
+        "resource": "row"
+      },
+      "position": [
+        1540,
+        400
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "6e4f404a-2f6f-4546-87e3-fe3cac421e01",
+      "name": "Envoi OK",
+      "parameters": {
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Cache-Control",
+                "value": "no-store"
+              },
+              {
+                "name": "X-Robots-Tag",
+                "value": "noindex, nofollow"
+              }
+            ]
+          }
+        },
+        "respondWith": "json",
+        "responseBody": "{\"ok\":true}"
+      },
+      "position": [
+        1760,
+        400
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5
+    },
+    {
+      "id": "56a6c5db-e9d4-460a-ac18-b0d49f7e4cad",
+      "name": "Envoi autorise ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.ok }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        880,
+        500
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "11064200-dce9-4b53-bd29-b3d91d1015fd",
+      "name": "Envoyer fil",
+      "parameters": {
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Cache-Control",
+                "value": "no-store"
+              },
+              {
+                "name": "X-Robots-Tag",
+                "value": "noindex, nofollow"
+              }
+            ]
+          }
+        },
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}"
+      },
+      "position": [
+        1540,
+        -100
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5
+    },
+    {
+      "id": "490db3db-786f-497c-a25a-b6ef708409f0",
+      "name": "Envoyer photo",
+      "parameters": {
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Cache-Control",
+                "value": "private, max-age=604800"
+              },
+              {
+                "name": "X-Robots-Tag",
+                "value": "noindex, nofollow"
+              }
+            ]
+          }
+        },
+        "respondWith": "binary",
+        "responseDataSource": "automatically"
+      },
+      "position": [
+        1100,
+        900
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5
+    },
+    {
+      "id": "ec79ae18-0916-4d16-9dbf-29ca6c7bc59f",
+      "name": "Fil autorise ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.ok }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        880,
+        0
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "f93fbf1f-3d9d-48b7-94ef-9cec57b70615",
+      "name": "Formater fil",
+      "parameters": {
+        "jsCode": "// --- SHA-256 / HMAC-SHA256 en JavaScript pur (aucune dépendance au module crypto de n8n) ---\nconst utf8 = s => { const o = []; for (const ch of String(s)) { const c = ch.codePointAt(0); if (c < 128) o.push(c); else if (c < 2048) o.push(192 | c >> 6, 128 | c & 63); else if (c < 65536) o.push(224 | c >> 12, 128 | c >> 6 & 63, 128 | c & 63); else o.push(240 | c >> 18, 128 | c >> 12 & 63, 128 | c >> 6 & 63, 128 | c & 63); } return o; };\nconst hex = b => b.map(x => (x < 16 ? '0' : '') + x.toString(16)).join('');\nfunction sha256(m) {\n  const K = [], H = []; let p = 2;\n  for (let c = 0; c < 64; p++) { let pr = true; for (let d = 2; d * d <= p; d++) if (p % d === 0) { pr = false; break; } if (pr) { if (c < 8) H[c] = (Math.pow(p, 1 / 2) * 4294967296) | 0; K[c++] = (Math.pow(p, 1 / 3) * 4294967296) | 0; } }\n  const l = m.length * 8, b = m.slice(); b.push(0x80); while (b.length % 64 !== 56) b.push(0);\n  for (let i = 7; i >= 0; i--) b.push(i > 3 ? 0 : (l >>> (i * 8)) & 255);\n  const r = (x, n) => (x >>> n) | (x << (32 - n));\n  for (let o = 0; o < b.length; o += 64) {\n    const w = [];\n    for (let i = 0; i < 64; i++) {\n      if (i < 16) w[i] = (b[o + 4 * i] << 24) | (b[o + 4 * i + 1] << 16) | (b[o + 4 * i + 2] << 8) | b[o + 4 * i + 3];\n      else { const a = w[i - 15], c = w[i - 2]; w[i] = (w[i - 16] + (r(a, 7) ^ r(a, 18) ^ (a >>> 3)) + w[i - 7] + (r(c, 17) ^ r(c, 19) ^ (c >>> 10))) | 0; }\n    }\n    let [A, B, C, D, E, F, G, I] = H;\n    for (let i = 0; i < 64; i++) {\n      const t1 = (I + (r(E, 6) ^ r(E, 11) ^ r(E, 25)) + ((E & F) ^ (~E & G)) + K[i] + w[i]) | 0;\n      const t2 = ((r(A, 2) ^ r(A, 13) ^ r(A, 22)) + ((A & B) ^ (A & C) ^ (B & C))) | 0;\n      I = G; G = F; F = E; E = (D + t1) | 0; D = C; C = B; B = A; A = (t1 + t2) | 0;\n    }\n    [A, B, C, D, E, F, G, I].forEach((v, i) => { H[i] = (H[i] + v) | 0; });\n  }\n  const out = []; H.forEach(v => { for (let i = 3; i >= 0; i--) out.push((v >>> (i * 8)) & 255); }); return out;\n}\nfunction hmac(key, msg) { let k = key.length > 64 ? sha256(key) : key.slice(); while (k.length < 64) k.push(0); return sha256(k.map(x => x ^ 0x5c).concat(sha256(k.map(x => x ^ 0x36).concat(msg)))); }\nconst egal = (a, b) => { a = String(a); b = String(b); if (a.length !== b.length) return false; let d = 0; for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i); return d === 0; };\n// --- fin des outils ---\n// 40 derniers messages du groupe, du plus ancien au plus recent. Photos : lien signe photo.v1.<id Drive>.\n// lien_groupe : ouvre le groupe Telegram sur le dernier message (pour repondre depuis l'appli).\nconst v = $('Verifier fil').first().json;\nconst sec = v.secret;\nconst tout = $input.all().map(i => i.json).filter(r => r && r.id);\nconst lignes = tout.filter(r => Number(r.id) > v.apres).sort((a, b) => a.id - b.id);\nconst messages = lignes.map(r => ({\n  id: r.id,\n  date: r.date || r.createdAt,\n  auteur: r.auteur || '',\n  texte: r.texte || '',\n  type: r.type || 'texte',\n  source: r.source || 'telegram',\n  client: r.client_nom || '',\n  photo: r.photo_drive_id ? 'https://n8n.climatpro.fr/webhook/equipe-photo?id=' + encodeURIComponent(r.photo_drive_id) + '&s=' + hex(hmac(utf8(sec), utf8('photo.v1.' + r.photo_drive_id))) : ''\n}));\nconst der = tout.filter(r => r.chat_id && r.tg_message_id).sort((a, b) => b.id - a.id)[0];\nconst lien_groupe = der ? 'https://t.me/c/' + String(der.chat_id).replace(/^-100/, '') + '/' + der.tg_message_id : '';\nreturn [{ json: { ok: true, moi: v.nom, lien_groupe, messages } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1320,
+        -100
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "835e06b5-e91c-4c3c-9a3f-8c0ee657f8bb",
+      "name": "GET /equipe-fil",
+      "parameters": {
+        "httpMethod": "GET",
+        "options": {
+          "allowedOrigins": "*",
+          "ignoreBots": true
+        },
+        "path": "equipe-fil",
+        "responseMode": "responseNode"
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "ff37a95f-99c3-45b2-bc44-caef1505ca27",
+      "name": "GET /equipe-photo",
+      "parameters": {
+        "httpMethod": "GET",
+        "options": {
+          "allowedOrigins": "*",
+          "ignoreBots": true
+        },
+        "path": "equipe-photo",
+        "responseMode": "responseNode"
+      },
+      "position": [
+        0,
+        1000
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2
+    },
+    {
+      "executeOnce": true,
+      "id": "b42247ca-669d-4586-ba23-e101e45e9fa9",
+      "name": "Lire acces (envoi)",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "D0StwthqUQF0nV7Z"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        440,
+        500
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "executeOnce": true,
+      "id": "096cf0c7-0e85-4833-828b-2b93e713ec24",
+      "name": "Lire acces (fil)",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "D0StwthqUQF0nV7Z"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        440,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "8c00416a-2eb6-40e3-b979-952c32f07c36",
+      "name": "Lire derniers messages",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "JtuuDgi9yHe84lHj"
+        },
+        "limit": 40,
+        "operation": "get",
+        "orderBy": true,
+        "orderByColumn": "id",
+        "orderByDirection": "DESC",
+        "resource": "row",
+        "returnAll": false
+      },
+      "position": [
+        1100,
+        -100
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "339d37da-ac32-4c7d-ac0a-bb0c9be2e989",
+      "name": "Lire photo (Drive)",
+      "parameters": {
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.id }}"
+        },
+        "operation": "download",
+        "options": {},
+        "resource": "file"
+      },
+      "position": [
+        880,
+        900
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "executeOnce": true,
+      "id": "9207a12d-f60f-4a92-9508-13ec69a6ecfb",
+      "name": "Lire secrets (envoi)",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "ZS80JIsncc2f3ZED"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        220,
+        500
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "executeOnce": true,
+      "id": "86a3e26b-c6c0-4f46-8c6e-bb58553f2f4d",
+      "name": "Lire secrets (fil)",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "ZS80JIsncc2f3ZED"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        220,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "executeOnce": true,
+      "id": "c3075889-e89f-4278-a81c-015c066efda8",
+      "name": "Lire secrets (photo)",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "ZS80JIsncc2f3ZED"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        220,
+        1000
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "be34ca78-ef7d-4da8-b6f7-edf6ce8b060b",
+      "name": "POST /equipe-envoyer",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {
+          "allowedOrigins": "*",
+          "ignoreBots": true
+        },
+        "path": "equipe-envoyer",
+        "responseMode": "responseNode"
+      },
+      "position": [
+        0,
+        500
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "bf29008d-efce-491a-8513-bd6b5f9a3665",
+      "name": "Photo autorisee ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.ok }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        660,
+        1000
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "b3d9da7e-0640-4052-a70b-930313856683",
+      "name": "Photo en binaire",
+      "parameters": {
+        "jsCode": "// Photo du tableau de bord : base64 -> fichier JPEG pour Telegram et Drive.\nconst v = $('Verifier envoi').first().json;\nconst nom = DateTime.now().setZone('Europe/Paris').toFormat('yyyy-LL-dd_HH-mm') + '_' + String(v.nom || 'tableau').replace(/[^A-Za-z0-9]+/g, '-') + '_tableau.jpg';\nconst bin = await this.helpers.prepareBinaryData(Buffer.from(v.photo, 'base64'), nom, 'image/jpeg');\nreturn [{ json: { chat_id: $input.first().json.chat_id, nom_fichier: nom }, binary: { data: bin } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1540,
+        250
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "gQjbmvis03Oi1VtD",
+          "name": "Bot Telegram - groupe climatpro"
+        }
+      },
+      "id": "edfdffaf-6f4a-4428-a572-d892e23c4726",
+      "name": "Publier dans le groupe",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        },
+        "chatId": "={{ $json.chat_id }}",
+        "operation": "sendMessage",
+        "resource": "message",
+        "text": "={{ $('Verifier envoi').first().json.html }}"
+      },
+      "position": [
+        1320,
+        400
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "gQjbmvis03Oi1VtD",
+          "name": "Bot Telegram - groupe climatpro"
+        }
+      },
+      "id": "c56b00be-b6f8-4486-af7d-068adaa81e6d",
+      "name": "Publier la photo",
+      "parameters": {
+        "additionalFields": {
+          "caption": "={{ $('Verifier envoi').first().json.html }}",
+          "fileName": "={{ $json.nom_fichier }}",
+          "parse_mode": "HTML"
+        },
+        "binaryData": true,
+        "binaryPropertyName": "data",
+        "chatId": "={{ $json.chat_id }}",
+        "operation": "sendPhoto",
+        "resource": "message"
+      },
+      "position": [
+        1760,
+        250
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "b89f8fdb-4210-4a6d-8411-d1479ca240ad",
+      "name": "Ranger photo envoyee (Drive)",
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1B7lTbisc88kRcVsQ5QX8LdZ0BeWhX2NE"
+        },
+        "inputDataFieldName": "data",
+        "name": "={{ $('Photo en binaire').first().json.nom_fichier }}",
+        "operation": "upload",
+        "options": {},
+        "resource": "file"
+      },
+      "position": [
+        2200,
+        250
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "id": "b60e2a24-aa25-41d1-b4f2-68488b7d37b1",
+      "name": "Refuse (envoi)",
+      "parameters": {
+        "options": {
+          "responseCode": 403,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Cache-Control",
+                "value": "no-store"
+              },
+              {
+                "name": "X-Robots-Tag",
+                "value": "noindex, nofollow"
+              }
+            ]
+          }
+        },
+        "respondWith": "json",
+        "responseBody": "{\"ok\":false}"
+      },
+      "position": [
+        1100,
+        620
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5
+    },
+    {
+      "id": "8f3a5114-7fd8-423c-9d2c-56f1419c5b81",
+      "name": "Refuse (fil)",
+      "parameters": {
+        "options": {
+          "responseCode": 403,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Cache-Control",
+                "value": "no-store"
+              },
+              {
+                "name": "X-Robots-Tag",
+                "value": "noindex, nofollow"
+              }
+            ]
+          }
+        },
+        "respondWith": "json",
+        "responseBody": "{\"ok\":false}"
+      },
+      "position": [
+        1100,
+        120
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5
+    },
+    {
+      "id": "47fba2c6-aaf7-47cb-b680-1f8d27a2b4a8",
+      "name": "Refuse (photo)",
+      "parameters": {
+        "options": {
+          "responseCode": 403,
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Cache-Control",
+                "value": "no-store"
+              },
+              {
+                "name": "X-Robots-Tag",
+                "value": "noindex, nofollow"
+              }
+            ]
+          }
+        },
+        "respondWith": "json",
+        "responseBody": "{\"ok\":false}"
+      },
+      "position": [
+        880,
+        1120
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5
+    },
+    {
+      "id": "0d8eb087-f319-4989-91f8-f01b8f7f7559",
+      "name": "Reprendre photo",
+      "parameters": {
+        "jsCode": "// Le noeud Telegram ne renvoie pas la photo : on la reprend pour la ranger dans le Drive.\nreturn [{ json: { message_id: (($input.first().json || {}).result || {}).message_id }, binary: $('Photo en binaire').first().binary }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1980,
+        250
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "f26b4c27-800d-4a27-bf90-2d1d35517c1d",
+      "name": "Resultat photo",
+      "parameters": {
+        "jsCode": "// Meme forme que la sortie de « Publier dans le groupe » pour l'enregistrement commun.\nreturn [{ json: { result: { message_id: $('Reprendre photo').first().json.message_id }, photo_drive_id: $input.first().json.id || '' } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        2420,
+        250
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "executeOnce": true,
+      "id": "53a8248d-d19a-4677-a2f0-6d177cafbb6f",
+      "name": "Trouver le groupe",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "JtuuDgi9yHe84lHj"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "source",
+              "keyValue": "telegram"
+            }
+          ]
+        },
+        "limit": 1,
+        "matchType": "allConditions",
+        "operation": "get",
+        "orderBy": true,
+        "orderByColumn": "id",
+        "orderByDirection": "DESC",
+        "resource": "row",
+        "returnAll": false
+      },
+      "position": [
+        1100,
+        400
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "60808557-627c-438d-9abd-7f34e750397d",
+      "name": "Verifier envoi",
+      "parameters": {
+        "jsCode": "// --- SHA-256 / HMAC-SHA256 en JavaScript pur (aucune dépendance au module crypto de n8n) ---\nconst utf8 = s => { const o = []; for (const ch of String(s)) { const c = ch.codePointAt(0); if (c < 128) o.push(c); else if (c < 2048) o.push(192 | c >> 6, 128 | c & 63); else if (c < 65536) o.push(224 | c >> 12, 128 | c >> 6 & 63, 128 | c & 63); else o.push(240 | c >> 18, 128 | c >> 12 & 63, 128 | c >> 6 & 63, 128 | c & 63); } return o; };\nconst hex = b => b.map(x => (x < 16 ? '0' : '') + x.toString(16)).join('');\nfunction sha256(m) {\n  const K = [], H = []; let p = 2;\n  for (let c = 0; c < 64; p++) { let pr = true; for (let d = 2; d * d <= p; d++) if (p % d === 0) { pr = false; break; } if (pr) { if (c < 8) H[c] = (Math.pow(p, 1 / 2) * 4294967296) | 0; K[c++] = (Math.pow(p, 1 / 3) * 4294967296) | 0; } }\n  const l = m.length * 8, b = m.slice(); b.push(0x80); while (b.length % 64 !== 56) b.push(0);\n  for (let i = 7; i >= 0; i--) b.push(i > 3 ? 0 : (l >>> (i * 8)) & 255);\n  const r = (x, n) => (x >>> n) | (x << (32 - n));\n  for (let o = 0; o < b.length; o += 64) {\n    const w = [];\n    for (let i = 0; i < 64; i++) {\n      if (i < 16) w[i] = (b[o + 4 * i] << 24) | (b[o + 4 * i + 1] << 16) | (b[o + 4 * i + 2] << 8) | b[o + 4 * i + 3];\n      else { const a = w[i - 15], c = w[i - 2]; w[i] = (w[i - 16] + (r(a, 7) ^ r(a, 18) ^ (a >>> 3)) + w[i - 7] + (r(c, 17) ^ r(c, 19) ^ (c >>> 10))) | 0; }\n    }\n    let [A, B, C, D, E, F, G, I] = H;\n    for (let i = 0; i < 64; i++) {\n      const t1 = (I + (r(E, 6) ^ r(E, 11) ^ r(E, 25)) + ((E & F) ^ (~E & G)) + K[i] + w[i]) | 0;\n      const t2 = ((r(A, 2) ^ r(A, 13) ^ r(A, 22)) + ((A & B) ^ (A & C) ^ (B & C))) | 0;\n      I = G; G = F; F = E; E = (D + t1) | 0; D = C; C = B; B = A; A = (t1 + t2) | 0;\n    }\n    [A, B, C, D, E, F, G, I].forEach((v, i) => { H[i] = (H[i] + v) | 0; });\n  }\n  const out = []; H.forEach(v => { for (let i = 3; i >= 0; i--) out.push((v >>> (i * 8)) & 255); }); return out;\n}\nfunction hmac(key, msg) { let k = key.length > 64 ? sha256(key) : key.slice(); while (k.length < 64) k.push(0); return sha256(k.map(x => x ^ 0x5c).concat(sha256(k.map(x => x ^ 0x36).concat(msg)))); }\nconst egal = (a, b) => { a = String(a); b = String(b); if (a.length !== b.length) return false; let d = 0; for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i); return d === 0; };\n// --- fin des outils ---\n// Envoi depuis le tableau de bord : meme jeton signe que la lecture (fil.v1). Texte (0 a 2000 car.) et/ou photo JPEG en base64 (6 Mo max).\nconst b = $('POST /equipe-envoyer').first().json.body || {};\nconst sec = String((($('Lire secrets (envoi)').first() || {}).json || {}).cookie_secret || '').trim();\nconst rows = $input.all().map(i => i.json).filter(r => r && (r.actif === true || r.actif === 'true'));\nconst tid = String(b.tid || ''), exp = String(b.exp || ''), s = String(b.s || '');\nconst texte = String(b.texte || '').replace(/\\r/g, '').trim().slice(0, 2000);\nlet photo = String(b.photo || '').replace(/^data:image\\/[a-z]+;base64,/, '').replace(/\\s/g, '');\nif (photo && (!/^[A-Za-z0-9+/=]+$/.test(photo) || photo.length > 8000000)) photo = '';\nconst valide = sec.length >= 32 && /^\\d{1,20}$/.test(tid) && /^\\d{10}$/.test(exp) && Number(exp) >= Math.floor(Date.now() / 1000) && egal(s, hex(hmac(utf8(sec), utf8('fil.v1.' + tid + '.' + exp))));\nconst moi = valide ? rows.find(r => String(r.telegram_id || '').trim() === tid) : null;\nconst esc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst html = moi ? '<b>' + esc(moi.nom) + '</b>' + (texte ? ' : ' + esc(texte) : '') : '';\nreturn [{ json: { ok: !!moi && (texte.length > 0 || photo.length > 0), nom: moi ? moi.nom : '', telegram_id: tid, texte, html: photo ? html.slice(0, 1000) : html, photo } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        660,
+        500
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "fe26db80-5e75-4034-9917-725dd196a073",
+      "name": "Verifier fil",
+      "parameters": {
+        "jsCode": "// --- SHA-256 / HMAC-SHA256 en JavaScript pur (aucune dépendance au module crypto de n8n) ---\nconst utf8 = s => { const o = []; for (const ch of String(s)) { const c = ch.codePointAt(0); if (c < 128) o.push(c); else if (c < 2048) o.push(192 | c >> 6, 128 | c & 63); else if (c < 65536) o.push(224 | c >> 12, 128 | c >> 6 & 63, 128 | c & 63); else o.push(240 | c >> 18, 128 | c >> 12 & 63, 128 | c >> 6 & 63, 128 | c & 63); } return o; };\nconst hex = b => b.map(x => (x < 16 ? '0' : '') + x.toString(16)).join('');\nfunction sha256(m) {\n  const K = [], H = []; let p = 2;\n  for (let c = 0; c < 64; p++) { let pr = true; for (let d = 2; d * d <= p; d++) if (p % d === 0) { pr = false; break; } if (pr) { if (c < 8) H[c] = (Math.pow(p, 1 / 2) * 4294967296) | 0; K[c++] = (Math.pow(p, 1 / 3) * 4294967296) | 0; } }\n  const l = m.length * 8, b = m.slice(); b.push(0x80); while (b.length % 64 !== 56) b.push(0);\n  for (let i = 7; i >= 0; i--) b.push(i > 3 ? 0 : (l >>> (i * 8)) & 255);\n  const r = (x, n) => (x >>> n) | (x << (32 - n));\n  for (let o = 0; o < b.length; o += 64) {\n    const w = [];\n    for (let i = 0; i < 64; i++) {\n      if (i < 16) w[i] = (b[o + 4 * i] << 24) | (b[o + 4 * i + 1] << 16) | (b[o + 4 * i + 2] << 8) | b[o + 4 * i + 3];\n      else { const a = w[i - 15], c = w[i - 2]; w[i] = (w[i - 16] + (r(a, 7) ^ r(a, 18) ^ (a >>> 3)) + w[i - 7] + (r(c, 17) ^ r(c, 19) ^ (c >>> 10))) | 0; }\n    }\n    let [A, B, C, D, E, F, G, I] = H;\n    for (let i = 0; i < 64; i++) {\n      const t1 = (I + (r(E, 6) ^ r(E, 11) ^ r(E, 25)) + ((E & F) ^ (~E & G)) + K[i] + w[i]) | 0;\n      const t2 = ((r(A, 2) ^ r(A, 13) ^ r(A, 22)) + ((A & B) ^ (A & C) ^ (B & C))) | 0;\n      I = G; G = F; F = E; E = (D + t1) | 0; D = C; C = B; B = A; A = (t1 + t2) | 0;\n    }\n    [A, B, C, D, E, F, G, I].forEach((v, i) => { H[i] = (H[i] + v) | 0; });\n  }\n  const out = []; H.forEach(v => { for (let i = 3; i >= 0; i--) out.push((v >>> (i * 8)) & 255); }); return out;\n}\nfunction hmac(key, msg) { let k = key.length > 64 ? sha256(key) : key.slice(); while (k.length < 64) k.push(0); return sha256(k.map(x => x ^ 0x5c).concat(sha256(k.map(x => x ^ 0x36).concat(msg)))); }\nconst egal = (a, b) => { a = String(a); b = String(b); if (a.length !== b.length) return false; let d = 0; for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i); return d === 0; };\n// --- fin des outils ---\n// Lecture du fil depuis le tableau de bord : jeton signe fil.v1.<telegram_id>.<expiration> pose dans la page (valable 12 h).\nconst q = $('GET /equipe-fil').first().json.query || {};\nconst sec = String((($('Lire secrets (fil)').first() || {}).json || {}).cookie_secret || '').trim();\nconst rows = $input.all().map(i => i.json).filter(r => r && (r.actif === true || r.actif === 'true'));\nconst tid = String(q.tid || ''), exp = String(q.exp || ''), s = String(q.s || '');\nconst valide = sec.length >= 32 && /^\\d{1,20}$/.test(tid) && /^\\d{10}$/.test(exp) && Number(exp) >= Math.floor(Date.now() / 1000) && egal(s, hex(hmac(utf8(sec), utf8('fil.v1.' + tid + '.' + exp))));\nconst moi = valide ? rows.find(r => String(r.telegram_id || '').trim() === tid) : null;\nreturn [{ json: { ok: !!moi, nom: moi ? moi.nom : '', apres: Number(q.apres || 0) || 0, secret: moi ? sec : '' } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        660,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "566ab894-b50e-4f8a-8250-4e8892e780f6",
+      "name": "Verifier photo",
+      "parameters": {
+        "jsCode": "// --- SHA-256 / HMAC-SHA256 en JavaScript pur (aucune dépendance au module crypto de n8n) ---\nconst utf8 = s => { const o = []; for (const ch of String(s)) { const c = ch.codePointAt(0); if (c < 128) o.push(c); else if (c < 2048) o.push(192 | c >> 6, 128 | c & 63); else if (c < 65536) o.push(224 | c >> 12, 128 | c >> 6 & 63, 128 | c & 63); else o.push(240 | c >> 18, 128 | c >> 12 & 63, 128 | c >> 6 & 63, 128 | c & 63); } return o; };\nconst hex = b => b.map(x => (x < 16 ? '0' : '') + x.toString(16)).join('');\nfunction sha256(m) {\n  const K = [], H = []; let p = 2;\n  for (let c = 0; c < 64; p++) { let pr = true; for (let d = 2; d * d <= p; d++) if (p % d === 0) { pr = false; break; } if (pr) { if (c < 8) H[c] = (Math.pow(p, 1 / 2) * 4294967296) | 0; K[c++] = (Math.pow(p, 1 / 3) * 4294967296) | 0; } }\n  const l = m.length * 8, b = m.slice(); b.push(0x80); while (b.length % 64 !== 56) b.push(0);\n  for (let i = 7; i >= 0; i--) b.push(i > 3 ? 0 : (l >>> (i * 8)) & 255);\n  const r = (x, n) => (x >>> n) | (x << (32 - n));\n  for (let o = 0; o < b.length; o += 64) {\n    const w = [];\n    for (let i = 0; i < 64; i++) {\n      if (i < 16) w[i] = (b[o + 4 * i] << 24) | (b[o + 4 * i + 1] << 16) | (b[o + 4 * i + 2] << 8) | b[o + 4 * i + 3];\n      else { const a = w[i - 15], c = w[i - 2]; w[i] = (w[i - 16] + (r(a, 7) ^ r(a, 18) ^ (a >>> 3)) + w[i - 7] + (r(c, 17) ^ r(c, 19) ^ (c >>> 10))) | 0; }\n    }\n    let [A, B, C, D, E, F, G, I] = H;\n    for (let i = 0; i < 64; i++) {\n      const t1 = (I + (r(E, 6) ^ r(E, 11) ^ r(E, 25)) + ((E & F) ^ (~E & G)) + K[i] + w[i]) | 0;\n      const t2 = ((r(A, 2) ^ r(A, 13) ^ r(A, 22)) + ((A & B) ^ (A & C) ^ (B & C))) | 0;\n      I = G; G = F; F = E; E = (D + t1) | 0; D = C; C = B; B = A; A = (t1 + t2) | 0;\n    }\n    [A, B, C, D, E, F, G, I].forEach((v, i) => { H[i] = (H[i] + v) | 0; });\n  }\n  const out = []; H.forEach(v => { for (let i = 3; i >= 0; i--) out.push((v >>> (i * 8)) & 255); }); return out;\n}\nfunction hmac(key, msg) { let k = key.length > 64 ? sha256(key) : key.slice(); while (k.length < 64) k.push(0); return sha256(k.map(x => x ^ 0x5c).concat(sha256(k.map(x => x ^ 0x36).concat(msg)))); }\nconst egal = (a, b) => { a = String(a); b = String(b); if (a.length !== b.length) return false; let d = 0; for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i); return d === 0; };\n// --- fin des outils ---\n// Photo du fil : lien signe photo.v1.<id Drive> (les images n'emportent pas le cookie de session).\nconst q = $('GET /equipe-photo').first().json.query || {};\nconst sec = String((($('Lire secrets (photo)').first() || {}).json || {}).cookie_secret || '').trim();\nconst id = String(q.id || ''), s = String(q.s || '');\nconst ok = sec.length >= 32 && /^[A-Za-z0-9_-]{10,100}$/.test(id) && egal(s, hex(hmac(utf8(sec), utf8('photo.v1.' + id))));\nreturn [{ json: { ok, id: ok ? id : '' } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        440,
+        1000
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-16T20:53:57.668Z"
+}

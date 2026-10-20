@@ -1,0 +1,589 @@
+{
+  "active": false,
+  "connections": {
+    "Choix devis": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interfast - detail devis",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Composition du brief": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Envoi Telegram Laurent",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Fenetre J+1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interfast - events J+1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Fusion client + choix recherche devis": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interfast - recherche devis",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Fusion detail": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interfast - fiche client",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interfast - detail devis": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Composition du brief",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interfast - detail intervention": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Fusion detail",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interfast - events J+1": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interventions",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interfast - fiche client": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Fusion client + choix recherche devis",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interfast - recherche devis": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Choix devis",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interventions": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interfast - detail intervention",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Test manuel": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Fenetre J+1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Tous les jours 18h": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Fenetre J+1",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-07T21:04:36.354Z",
+  "description": "Brief quotidien 18h des interventions du lendemain (V1 pilote Laurent) : events, fiche intervention, fiche client, devis via secondReference, materiel, envoi Telegram.",
+  "id": "Lw8Dv81qmxIMwXVI",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Bot - Brief 18h",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "5dafa10e-963c-4826-8d46-b84f99cee4e1",
+      "name": "Choix devis",
+      "parameters": {
+        "jsCode": "const base = $('Fusion client + choix recherche devis').all();\nconst res = $input.all();\nconst STATUS = { paid: 'paye', signed: 'signe', sent: 'envoye', draft: 'brouillon', refused: 'refuse', expired: 'expire', billed: 'facture' };\nreturn base.map((b, i) => {\n  const j = Object.assign({}, b.json);\n  const r = res[i] ? res[i].json : null;\n  const list = (r && r.ok && r.data && Array.isArray(r.data.items)) ? r.data.items : [];\n  j.quoteId = '';\n  j.quoteStatus = '';\n  j.quoteNote = '';\n  if (j.quoteMode === 'ref') {\n    const exact = list.filter(q => String(q.reference || '').toUpperCase() === j.quoteRef);\n    if (exact.length === 1) { j.quoteId = exact[0].id; j.quoteStatus = STATUS[exact[0].status] || exact[0].status || ''; }\n    else if (exact.length === 0) j.quoteNote = 'Devis ' + j.quoteRef + ' introuvable dans Interfast';\n    else j.quoteNote = 'Plusieurs devis portent la reference ' + j.quoteRef;\n  } else if (j.quoteMode === 'fallback') {\n    const signed = list.filter(q => q.signedAt);\n    const cands = signed.map(q => String(q.reference || '?') + ' (' + (STATUS[q.status] || q.status || '?') + (q.name ? ', ' + q.name : '') + ')');\n    j.quoteNote = signed.length\n      ? 'Pas de n de devis sur le RDV. Devis signes du client : ' + cands.join(' ; ')\n      : 'Pas de n de devis sur le RDV, et aucun devis signe pour ce client';\n  }\n  j.path = j.quoteId ? '/v1/billing/quotations/' + j.quoteId : '';\n  j.query = {};\n  return { json: j };\n});",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        2016,
+        96
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "fd49461d-caf3-4a06-8dea-eefaf40f31ba",
+      "name": "Composition du brief",
+      "parameters": {
+        "jsCode": "const base = $('Choix devis').all();\nconst res = $input.all();\nconst CHAT_ID = '1857340429';\nconst MAX = 3800;\nfunction esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }\nfunction cap(s) { s = String(s || ''); return s.charAt(0).toUpperCase() + s.slice(1); }\nfunction stripHtml(h) {\n  return String(h || '')\n    .replace(/<br\\s*\\/?>/gi, '\\n').replace(/<\\/p>/gi, '\\n').replace(/<[^>]+>/g, '')\n    .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&#39;/g, \"'\").replace(/&quot;/g, '\"').replace(/&eacute;/g, 'e')\n    .trim();\n}\nfunction itemTitle(it) {\n  const m = String(it.name || '').match(/<strong>([\\s\\S]*?)<\\/strong>/i);\n  let t = m ? stripHtml(m[1]) : stripHtml(it.name).split('\\n')[0];\n  t = t.replace(/\\s+/g, ' ').trim();\n  if (t.length > 80) t = t.slice(0, 77) + '...';\n  return t;\n}\nconst SKIP = /^(pose|mise en service|main d|deplacement|d[ée]placement|forfait pose)/i;\nconst rows = base.map((b, i) => {\n  const j = Object.assign({}, b.json);\n  const r = res[i] ? res[i].json : null;\n  const q = (r && r.ok && r.data) ? r.data : null;\n  j.material = [];\n  j.quoteName = '';\n  if (q) {\n    j.quoteName = String(q.name || '').trim();\n    for (const it of (q.items || [])) {\n      const t = itemTitle(it);\n      if (!t || SKIP.test(t)) continue;\n      const qty = (it.quantity && Number(it.quantity) !== 1) ? it.quantity + ' x ' : '';\n      const ref = it.reference ? ' [' + String(it.reference).trim() + ']' : '';\n      j.material.push(qty + t + ref);\n    }\n  }\n  return j;\n});\nif (rows.length === 1 && rows[0].empty) {\n  return [{ json: { chatId: CHAT_ID, text: '<b>Brief ClimatPro</b>\\nAucune intervention planifiee pour demain.' } }];\n}\nfunction block(r, tn) {\n  const o = [];\n  o.push('<b>' + esc(r.timeLabel) + '</b> - ' + esc(r.clientName) + (r.city ? ', ' + esc(r.city) : '') + ' - ' + esc(r.reference));\n  if (r.type) o.push(esc(r.type));\n  if (r.title && r.title !== r.type) o.push('Titre : ' + esc(r.title));\n  const others = r.techs.filter(t => t.name !== tn).map(t => t.name);\n  if (others.length) o.push('Avec : ' + esc(others.join(', ')));\n  if (r.address) o.push(esc(r.address));\n  if (r.addrLine2) o.push('Acces : ' + esc(r.addrLine2));\n  if (r.addrComments) o.push('Acces : ' + esc(r.addrComments));\n  if (r.phones && r.phones.length) o.push('Tel : ' + esc(r.phones.join(' / ')));\n  if (r.clientComment) o.push('Client : ' + esc(r.clientComment));\n  if (r.description) o.push('Note : ' + esc(r.description));\n  if (r.isMaintenance) {\n    o.push('Visite de maintenance sous contrat');\n  } else if (r.quoteId) {\n    o.push('Devis ' + esc(r.quoteRef) + (r.quoteStatus ? ' (' + esc(r.quoteStatus) + ')' : '') + (r.quoteName ? ' - ' + esc(r.quoteName) : ''));\n    if (r.material.length) o.push('Materiel :\\n- ' + r.material.map(esc).join('\\n- '));\n    else o.push('Materiel : aucune ligne lisible dans le devis');\n  } else if (r.quoteNote) {\n    o.push('Devis : ' + esc(r.quoteNote));\n  }\n  return o;\n}\nconst byDate = {};\nfor (const r of rows) {\n  const key = r.timeMode === 'acaler' ? 'ZZ' : r.dateKey;\n  (byDate[key] = byDate[key] || []).push(r);\n}\nconst lines = [];\nconst keys = Object.keys(byDate).sort();\nfor (const k of keys) {\n  const list = byDate[k];\n  if (lines.length) lines.push('');\n  lines.push(k === 'ZZ' ? '<b>A caler (date non fixee)</b>' : '<b>Brief ClimatPro - ' + esc(cap(list[0].dateLabel)) + '</b>');\n  const byTech = {};\n  for (const r of list) {\n    const p = r.techs.find(t => t.id === r.primaryTechId) || r.techs[0] || { id: 0, name: 'Non affecte' };\n    (byTech[p.name] = byTech[p.name] || []).push(r);\n  }\n  for (const tn of Object.keys(byTech).sort()) {\n    lines.push('');\n    lines.push('<u><b>' + esc(tn) + '</b></u> - ' + byTech[tn].length + ' intervention' + (byTech[tn].length > 1 ? 's' : ''));\n    for (const r of byTech[tn]) {\n      lines.push('');\n      for (const l of block(r, tn)) lines.push(l);\n    }\n  }\n}\nconst messages = [];\nlet cur = '';\nfor (const l of lines) {\n  const next = cur ? cur + '\\n' + l : l;\n  if (next.length > MAX && cur) { messages.push(cur); cur = l; } else { cur = next; }\n}\nif (cur) messages.push(cur);\nreturn messages.map(t => ({ json: { chatId: CHAT_ID, text: t } }));",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        2464,
+        96
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "id": "df03f939-7368-431d-8819-d846b9614724",
+      "name": "Envoi Telegram Laurent",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        },
+        "chatId": "={{ $json.chatId }}",
+        "operation": "sendMessage",
+        "resource": "message",
+        "text": "={{ $json.text }}"
+      },
+      "position": [
+        2688,
+        96
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "4f3c5a19-44e9-4b9b-b7d1-7238bf73a86a",
+      "name": "Fenetre J+1",
+      "parameters": {
+        "jsCode": "const now = $now.setZone('Europe/Paris');\nconst dayStart = now.plus({ days: 1 }).startOf('day');\nlet dayEnd = dayStart.endOf('day');\nif (dayStart.weekday === 6) dayEnd = dayStart.plus({ days: 2 }).endOf('day');\nif (dayStart.weekday === 7) dayEnd = dayStart.plus({ days: 1 }).endOf('day');\nreturn [{ json: {\n  path: '/v1/events',\n  query: {\n    start: dayStart.toUTC().toISO(),\n    end: dayEnd.toUTC().toISO(),\n    archived: false,\n    meeting: false,\n    page: 0,\n    count: 100\n  },\n  windowStart: dayStart.toISO(),\n  windowEnd: dayEnd.toISO()\n} }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        224,
+        96
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "a14b0f20-cb11-4b73-817a-b488dd2bba16",
+      "name": "Fusion client + choix recherche devis",
+      "parameters": {
+        "jsCode": "const base = $('Fusion detail').all();\nconst res = $input.all();\nfunction fmtPhone(p) {\n  if (!p) return '';\n  let s = String(p).replace(/[\\s.-]/g, '');\n  if (s.startsWith('+33')) s = '0' + s.slice(3);\n  return s.replace(/(\\d{2})(?=\\d)/g, '$1 ').trim();\n}\nfunction short(s, max) {\n  s = String(s || '').replace(/\\s+/g, ' ').trim();\n  if (s.length > max) s = s.slice(0, max - 3) + '...';\n  return s;\n}\nreturn base.map((b, i) => {\n  const j = Object.assign({}, b.json);\n  const r = res[i] ? res[i].json : null;\n  const c = (r && r.ok && r.data) ? r.data : null;\n  j.phones = [];\n  j.clientComment = '';\n  if (c) {\n    const cp = c.clientParticular || c.clientProfessional || c.clientOwnersAssociation || {};\n    const main = cp.contact || {};\n    const seen = new Set();\n    function addPhone(num, info) {\n      const f = fmtPhone(num);\n      if (!f || seen.has(f)) return;\n      seen.add(f);\n      j.phones.push(f + (info ? ' (' + info + ')' : ''));\n    }\n    addPhone(main.phoneNumber, short(main.comment, 60));\n    addPhone(main.secondaryPhoneNumber, '');\n    for (const ct of (cp.contacts || [])) {\n      const nm = [ct.firstName, ct.lastName].filter(Boolean).join(' ').trim();\n      addPhone(ct.phoneNumber, short([nm, ct.comment].filter(Boolean).join(', '), 60));\n    }\n    j.clientComment = short(c.commentary, 300);\n  }\n  j.description = short(j.description, 300);\n  const mref = String(j.secondReference || '').match(/\\b(DC\\s*\\d{3,})\\b/i);\n  j.quoteRef = mref ? mref[1].replace(/\\s+/g, '').toUpperCase() : '';\n  if (j.quoteRef) {\n    j.quoteMode = 'ref';\n    j.path = '/v1/billing/quotations';\n    j.query = { name: j.quoteRef, page: 0, size: 10 };\n  } else if (!j.isMaintenance && j.clientId) {\n    j.quoteMode = 'fallback';\n    j.path = '/v1/billing/quotations';\n    j.query = { clients: [j.clientId], page: 0, size: 20, orderBy: 'updatedAt', isDesc: true };\n  } else {\n    j.quoteMode = 'none';\n    j.path = '';\n    j.query = {};\n  }\n  return { json: j };\n});",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1568,
+        96
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "e95d6950-d4cd-483d-b530-174654005012",
+      "name": "Fusion detail",
+      "parameters": {
+        "jsCode": "const base = $('Interventions').all();\nconst det = $input.all();\nreturn base.map((b, i) => {\n  const j = Object.assign({}, b.json);\n  const r = det[i] ? det[i].json : null;\n  const d = (r && r.ok && r.data) ? r.data : null;\n  j.description = '';\n  j.addrLine2 = '';\n  j.addrComments = '';\n  if (d) {\n    j.description = String(d.description || '').trim();\n    if (d.address) {\n      j.addrLine2 = String(d.address.additionalLine || '').replace(/\\s+/g, ' ').trim();\n      j.addrComments = String(d.address.comments || '').replace(/\\s+/g, ' ').trim();\n    }\n  }\n  j.path = j.clientId ? '/v1/client/' + j.clientId : '';\n  j.query = {};\n  return { json: j };\n});",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1120,
+        96
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "7677f5a4-8a1a-4ae3-8de5-1c489f713466",
+      "name": "Interfast - detail devis",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "MOZo7wkYxjOghKVZ"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "path",
+              "id": "path",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "query",
+              "id": "query",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "path": "={{ $json.path }}",
+            "query": "={{ $json.query }}"
+          }
+        }
+      },
+      "position": [
+        2240,
+        96
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "290810ba-a52c-4f5a-b07d-c5d812135049",
+      "name": "Interfast - detail intervention",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "MOZo7wkYxjOghKVZ"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "path",
+              "id": "path",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "query",
+              "id": "query",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "path": "={{ $json.path }}",
+            "query": "={{ $json.query }}"
+          }
+        }
+      },
+      "position": [
+        896,
+        96
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "7b264582-11c9-4fb2-84fe-cae29bea300c",
+      "name": "Interfast - events J+1",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "MOZo7wkYxjOghKVZ"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "path",
+              "id": "path",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "query",
+              "id": "query",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "path": "={{ $json.path }}",
+            "query": "={{ $json.query }}"
+          }
+        }
+      },
+      "position": [
+        448,
+        96
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "5d6cbc94-37c8-41ef-b7c3-88ae8a36e829",
+      "name": "Interfast - fiche client",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "MOZo7wkYxjOghKVZ"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "path",
+              "id": "path",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "query",
+              "id": "query",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "path": "={{ $json.path }}",
+            "query": "={{ $json.query }}"
+          }
+        }
+      },
+      "position": [
+        1344,
+        96
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "5f54b84f-7ce3-4618-8916-c2a262a0db20",
+      "name": "Interfast - recherche devis",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "MOZo7wkYxjOghKVZ"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "path",
+              "id": "path",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "query",
+              "id": "query",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "path": "={{ $json.path }}",
+            "query": "={{ $json.query }}"
+          }
+        }
+      },
+      "position": [
+        1792,
+        96
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "f27f8deb-7d74-49ce-96ec-388ddcc22239",
+      "name": "Interventions",
+      "parameters": {
+        "jsCode": "const res = $input.first().json;\nconst items = (res && res.data && Array.isArray(res.data.items)) ? res.data.items : [];\nconst TZ = 'Europe/Paris';\nfunction decode(dt) {\n  const d = dt.minute % 10;\n  const hhmm = dt.toFormat('H') + 'h' + dt.toFormat('mm');\n  if (d === 1) return { label: hhmm + ' (approx., +/- 30 min)', mode: 'approx' };\n  if (d === 2) return { label: (dt.hour < 12 ? 'Matin' : 'Apres-midi') + ' (demi-journee)', mode: 'demi' };\n  if (d === 3) return { label: 'Journee entiere', mode: 'journee' };\n  if (d === 4) return { label: 'Date non fixee (RDV valide)', mode: 'acaler' };\n  return { label: hhmm, mode: 'fixe' };\n}\nconst out = [];\nfor (const ev of items) {\n  if (ev.category !== 'intervention') continue;\n  if (ev.finished || ev.lifecycleState === 'cancelled') continue;\n  const seen = new Set();\n  const techs = [];\n  for (const u of (ev.users || [])) {\n    if (!seen.has(u.id)) { seen.add(u.id); techs.push({ id: u.id, name: u.firstName || u.lastName || ('#' + u.id) }); }\n  }\n  const start = DateTime.fromISO(ev.start, { zone: 'utc' }).setZone(TZ);\n  const t = decode(start);\n  const addr = ev.address || '';\n  const m = addr.match(/(\\d{5})\\s+(.+)$/);\n  out.push({ json: {\n    id: ev.id,\n    reference: ev.reference || '',\n    title: ev.title || '',\n    type: ev.type || '',\n    startIso: ev.start,\n    dateKey: start.toFormat('yyyy-LL-dd'),\n    dateLabel: start.setLocale('fr').toFormat('cccc d LLLL'),\n    sortKey: start.toMillis(),\n    timeLabel: t.label,\n    timeMode: t.mode,\n    clientId: ev.client ? ev.client.id : null,\n    clientName: ev.client ? ev.client.name : '?',\n    address: addr,\n    city: m ? m[2] : '',\n    priority: ev.priority || '',\n    primaryTechId: ev.primaryTechnicianId,\n    techs: techs,\n    secondReference: String(ev.secondReference || '').trim(),\n    isMaintenance: !!ev.maintenance,\n    path: '/v1/intervention/' + ev.id,\n    query: { withFollowUp: false }\n  } });\n}\nout.sort((a, b) => a.json.sortKey - b.json.sortKey);\nif (out.length === 0) return [{ json: { empty: true, path: '', query: {} } }];\nreturn out;",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        672,
+        96
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "d49849d5-fb05-4d21-adbd-f50d22d3529d",
+      "name": "Sticky Note 2244bd60",
+      "parameters": {
+        "color": 5,
+        "content": "## Bot - Brief 18h (V1, pilote Laurent)\nChaque soir a 18h : interventions du lendemain (week-end inclus jusqu au lundi si on est vendredi), fiche intervention, fiche client, devis via secondReference (DC46xx), materiel lu dans les lignes du devis.\nToutes les lectures passent par le sous-workflow Interfast - Lecture. Aucun LLM en V1.\nCode horaire : dernier chiffre des minutes 1 = approx, 2 = demi-journee, 3 = journee, 4 = date non fixee."
+      },
+      "position": [
+        1280,
+        192
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "65b7d1f6-cd1e-469f-8ae3-debed90f53bf",
+      "name": "Test manuel",
+      "parameters": {},
+      "position": [
+        0,
+        192
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "id": "8801463e-9e96-4b67-b25f-4cb8e8facdc2",
+      "name": "Tous les jours 18h",
+      "parameters": {
+        "misfirePolicy": "skip",
+        "rule": {
+          "interval": [
+            {
+              "daysInterval": 1,
+              "field": "days",
+              "triggerAtHour": 18,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-07T21:15:03.726Z"
+}

@@ -1,0 +1,395 @@
+{
+  "active": true,
+  "connections": {
+    "Appel outil": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Entree",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Catalogue Toshiba": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Selection",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Entree": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Catalogue Toshiba",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Piece trouvee ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Stock",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Resultat",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Pieces": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Stock",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Selection": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Vue eclatee ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Stock": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resultat",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Vue eclatee": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Pieces",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Vue eclatee ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Vue eclatee",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Piece trouvee ?",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-10T05:30:20.053Z",
+  "description": "Outil du bot : piece Toshiba par reference OU par modele + mots-cles (vue eclatee). Stock, prix indicatif client (portail +30 %). pieces.toshiba-confort.fr en acces invite, HTTP simple, lecture seule.",
+  "id": "4PjuGOfWCDdkuoPq",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Outil - Dispo Toshiba",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "5164da36-acfd-4fe9-b1bd-367da57b2108",
+      "name": "Appel outil",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "reference",
+              "type": "string"
+            },
+            {
+              "name": "modele",
+              "type": "string"
+            },
+            {
+              "name": "mots_cles",
+              "type": "string"
+            },
+            {
+              "name": "role",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        128
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "019fa3c6-a2f2-4f5f-9568-2343534ab6e8",
+      "name": "Catalogue Toshiba",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "method": "GET",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 45000
+        },
+        "sendHeaders": true,
+        "url": "https://pieces.toshiba-confort.fr/@list-items"
+      },
+      "position": [
+        448,
+        128
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "83539fce-7e59-4f6f-a85e-200b7c5ea9ed",
+      "name": "Entree",
+      "parameters": {
+        "jsCode": "const i = $input.first().json || {};\nconst ref = String(i.reference || '').toUpperCase().replace(/\\s+/g, '').replace(/[^A-Z0-9-]/g, '');\nconst modele = String(i.modele || '').toUpperCase().replace(/\\s+/g, '').replace(/[^A-Z0-9()\\/-]/g, '');\nconst mots_cles = String(i.mots_cles || '').slice(0, 200);\nconst role = String(i.role || 'technicien').toLowerCase();\nreturn [{ json: { ref, modele, mots_cles, role } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        224,
+        128
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "bf965e2f-dc41-497c-b4fa-62126ceff299",
+      "name": "Piece trouvee ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.etape }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "stock"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        1344,
+        224
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "327b1838-0ddd-491c-8c64-c6a9d7e35ede",
+      "name": "Pieces",
+      "parameters": {
+        "jsCode": "const e = $('Entree').first().json;\nconst h = String(($input.first().json || {}).html || '');\nconst rows = [];\nconst vus = new Set();\nconst re = /<tr class=\"componentsList__row[^\"]*\"([^>]*)>([\\s\\S]*?)<\\/tr>/g;\nlet m;\nwhile ((m = re.exec(h))) {\n  const a = m[1];\n  const g = n => { const x = new RegExp(n + '=\"([^\"]*)\"').exec(a); return x ? x[1] : ''; };\n  const dm = /js-componentsList-description\">([\\s\\S]*?)<\\/span>/.exec(m[2]);\n  const des = (dm ? dm[1] : '').replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&#0?39;/g, \"'\").replace(/\\s+/g, ' ').trim();\n  const ref = g('data-id');\n  if (!ref || vus.has(ref)) continue;\n  vus.add(ref);\n  const p = parseFloat(g('data-price'));\n  rows.push({ ref, des, zt: g('data-zt'), repere: g('data-reference'), prix: isNaN(p) ? null : p });\n}\nif (!rows.length) return [{ json: { liste: true, vide: true, zt: '', lignes: [] } }];\nconst norm = s => String(s || '').toUpperCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');\nconst syn = [\n  [/VENTIL/, ['MOTEUR VENT', 'FAN MOTOR', 'MOTOR FAN', 'MOTEUR VENTIL', 'MOTOR, FAN']],\n  [/HELICE|TURBINE/, ['PROPELLER', 'HELICE', 'TURBINE', 'FAN, PROPELLER', 'CROSS FLOW']],\n  [/CARTE|ELECTRONIQUE|PCB|PWB/, ['CARTE', 'P.C. BOARD', 'PC BOARD', 'PCB', 'BOARD', 'INVERTER']],\n  [/COMPRESS/, ['COMPRESSOR', 'COMPRESSEUR']],\n  [/SONDE|CAPTEUR|THERMISTANCE/, ['SONDE', 'THERMISTOR', 'SENSOR', 'TEMP']],\n  [/4 VOIES|VANNE 4|INVERSION/, ['4 VOIES', '4-WAY', 'REVERSING']],\n  [/DETENDEUR|PMV/, ['PMV', 'DETENDEUR', 'EXPANSION', 'BOBINE PMV', 'COIL']],\n  [/CONDENSATEUR/, ['CAPACITOR', 'CONDENSATEUR']],\n  [/TELECOMMANDE/, ['TELECOMMANDE', 'REMOTE', 'CONTROLLER']],\n  [/POMPE/, ['POMPE', 'PUMP']],\n  [/VOLET/, ['VOLET', 'LOUVER', 'MOTEUR VOLETS']],\n  [/PRESSOSTAT/, ['PRESSOSTAT', 'PRESSURE SWITCH']],\n  [/FLOTTEUR/, ['FLOTTEUR', 'FLOAT']],\n  [/FILTRE/, ['FILTRE', 'FILTER']],\n  [/BAC/, ['BAC', 'DRAIN PAN']]\n];\nconst demande = norm(e.mots_cles);\nconst kws = new Set(demande.split(/[,;\\/]+/).map(s => s.trim()).filter(s => s.length >= 3));\nfor (const [r, l] of syn) if (r.test(demande)) l.forEach(k => kws.add(k));\nconst cands = rows.map(r => { const d = norm(r.des); let s = 0; for (const k of kws) if (d.includes(k)) s += k.length; return { r, s }; }).filter(x => x.s > 0).sort((a, b) => b.s - a.s).slice(0, 5).map(x => x.r);\nif (!cands.length) return [{ json: { liste: true, zt: '', lignes: rows.map(r => 'rep ' + r.repere + ' | ' + r.ref + ' | ' + r.des) } }];\nreturn cands.map(c => ({ json: c }));",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1344,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "b9d23cb2-3cb3-4864-8945-3a000803a6ae",
+      "name": "Resultat",
+      "parameters": {
+        "jsCode": "function tous(n) { try { return $(n).all().map(i => i.json); } catch (x) { return null; } }\nconst e = $('Entree').first().json;\nconst s = $('Selection').first().json;\nconst admin = e.role === 'admin';\nconst MARGE = 1.30;\nconst fmt = n => n.toFixed(2).replace('.', ',') + ' EUR';\nif (s.etape === 'fin') return [{ json: { resultat: s.resultat } }];\nconst ps = s.etape === 'vue' ? (tous('Pieces') || []) : [s];\nconst st = $input.all().map(i => i.json || {});\nconst L = [];\nif (s.etape === 'vue') L.push('Modele Toshiba ' + s.modele + (s.description ? ' (' + s.description + (s.unite ? ', ' + s.unite : '') + ')' : '') + '.');\nif (ps.length && ps[0].liste) {\n  if (ps[0].vide) L.push('Vue eclatee introuvable pour ce modele sur le portail Toshiba. Verifier sur pieces.toshiba-confort.fr.');\n  else {\n    L.push('Aucune piece ne correspond a : ' + e.mots_cles + '. Liste des pieces du modele (repere | reference | designation) :');\n    ps[0].lignes.slice(0, 120).forEach(x => L.push(x));\n    L.push('Choisis la bonne ligne et rappelle l outil avec sa reference exacte.');\n  }\n  return [{ json: { resultat: L.join('\\n') } }];\n}\nL.push(s.etape === 'vue' ? 'Pieces correspondantes :' : 'Piece Toshiba :');\nps.forEach((p, i) => {\n  const q = st[i] && typeof st[i].quantity === 'number' ? st[i].quantity : null;\n  let v;\n  if (q !== null && q > 0) v = 'En stock chez Toshiba France (' + q + ' disponibles)';\n  else if (q === 0) v = 'Rupture de stock chez Toshiba France : demander le delai';\n  else v = 'Disponibilite non lue, verifier sur pieces.toshiba-confort.fr';\n  let l = '- ' + (p.des || 'Piece') + (p.repere ? ' (repere ' + p.repere + ')' : '') + ' : ' + p.ref + '. ' + v + '.';\n  if (p.prix != null && p.prix > 0) {\n    l += ' Prix indicatif client ' + fmt(Math.round(p.prix * MARGE * 100) / 100) + ' HT hors pose.';\n    if (admin) l += ' Prix portail Toshiba (a afficher a Laurent) ' + fmt(p.prix) + '.';\n  } else l += ' Prix non communique par le portail.';\n  L.push(l);\n});\nL.push('Le portail Toshiba n indique pas les references de remplacement.');\nL.push('Source : pieces.toshiba-confort.fr, ' + $now.setZone('Europe/Paris').toFormat('dd/MM/yyyy') + '.');\nreturn [{ json: { resultat: L.join('\\n') } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1792,
+        128
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "020c3c77-06a7-4943-96cb-8a978b5011e4",
+      "name": "Selection",
+      "parameters": {
+        "jsCode": "const e = $('Entree').first().json;\nconst raw = $input.first().json || {};\nconst d = Array.isArray(raw.aaData) ? raw.aaData : [];\nconst cle = s => String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, '');\nconst prix = s => { const v = parseFloat(String(s || '').replace(/[^0-9,.]/g, '').replace(/\\./g, '').replace(',', '.')); return isNaN(v) ? null : v; };\nconst unite = t => /^ZIU/.test(t) ? 'unite interieure' : (/^ZCDU/.test(t) ? 'groupe exterieur' : (/^ZESTIA/.test(t) ? 'ESTIA' : ''));\nconst fin = t => [{ json: { etape: 'fin', resultat: t } }];\nif (!d.length) return fin('Impossible de lire le catalogue pieces.toshiba-confort.fr pour le moment. Verifier sur le site ou demander a Laurent.');\nif (e.ref) {\n  const r = d.find(x => cle(x[1]) === cle(e.ref));\n  if (!r) {\n    const p = d.filter(x => x[4] === 'ZSPARTS' && cle(x[1]).startsWith(cle(e.ref).slice(0, 6))).slice(0, 5).map(x => x[1] + ' (' + x[2] + ')');\n    return fin('Reference ' + e.ref + ' introuvable sur pieces.toshiba-confort.fr.' + (p.length ? ' References proches : ' + p.join(', ') + '.' : ''));\n  }\n  return [{ json: { etape: 'stock', zt: r[0], ref: r[1], des: r[2], prix: prix(r[3]), repere: '' } }];\n}\nif (!e.modele) return fin('Ni reference de piece ni modele de machine : demander une photo de la plaque signaletique.');\nconst models = d.filter(x => x[4] !== 'ZSPARTS' && x[4] !== 'MISSING' && x[4] !== 'ZSERVICE');\nconst t = cle(e.modele);\nconst m = models.find(x => cle(x[1]) === t) || models.find(x => cle(x[1]).startsWith(t)) || models.find(x => cle(x[1]).length >= 8 && t.startsWith(cle(x[1])));\nif (!m) {\n  const p = models.filter(x => cle(x[1]).includes(t.slice(0, 7))).slice(0, 8).map(x => x[1]);\n  return fin('Modele ' + e.modele + ' introuvable sur pieces.toshiba-confort.fr.' + (p.length ? ' Modeles proches : ' + p.join(', ') + '.' : '') + ' Verifier la plaque (unite interieure ou groupe exterieur).');\n}\nreturn [{ json: { etape: 'vue', modele: m[1], description: m[2], unite: unite(m[4]) } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        672,
+        128
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "4cc38956-48e8-41f3-9286-f26be4f8f609",
+      "name": "Sticky Note 9b76566e",
+      "parameters": {
+        "color": 4,
+        "content": "## Outil - Dispo Toshiba\nAppele comme outil dispo_toshiba par Bot - Assistant. Portail pieces.toshiba-confort.fr en acces invite, simples requetes HTTP (pas de navigateur, pas d identifiants) :\n- @list-items : catalogue complet (modeles et pieces, prix)\n- part-selection?model= : vue eclatee du modele (repere, reference, designation, prix)\n- @stock/ZT... : quantite en stock\nPrix indicatif client = prix portail x 1,15 ; prix portail seulement pour le role admin. Lecture seule.",
+        "height": 220,
+        "width": 600
+      },
+      "position": [
+        640,
+        160
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "65a05b28-acde-43c5-889e-4d7021f5e46c",
+      "name": "Stock",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "method": "GET",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 20000
+        },
+        "sendHeaders": true,
+        "url": "=https://pieces.toshiba-confort.fr/@stock/{{ $json.zt || 'ZT0000000' }}"
+      },
+      "position": [
+        1568,
+        48
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "931e0075-1440-4f9e-859e-33140bfdebe9",
+      "name": "Vue eclatee",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "method": "GET",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "outputPropertyName": "html",
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 45000
+        },
+        "url": "=https://pieces.toshiba-confort.fr/part-selection?model={{ encodeURIComponent($json.modele) }}"
+      },
+      "position": [
+        1120,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "19dd46d3-253e-4fe4-a3df-6a582339c8cc",
+      "name": "Vue eclatee ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.etape }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "vue"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        896,
+        128
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-10T09:05:30.199Z"
+}

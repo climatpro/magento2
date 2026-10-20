@@ -1,0 +1,157 @@
+{
+  "active": true,
+  "connections": {
+    "Appel outil": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lignes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Centre": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Filtrer et formater",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lignes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Centre",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-11T05:28:26.000Z",
+  "description": "Outil du bot : clients avec une clim posée par ClimatPro et sans entretien depuis X mois (hors contrat), filtrables par ville ou autour d'un client. Lit la table clients_sans_entretien. Lecture seule.",
+  "id": "NvBI84JhjfoUH5FZ",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Outil - Clients sans entretien",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "684fcf87-cec0-4dc8-883c-3b04f6603cff",
+      "name": "Appel outil",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "villes",
+              "type": "string"
+            },
+            {
+              "name": "mois_min",
+              "type": "number"
+            },
+            {
+              "name": "client_id",
+              "type": "string"
+            },
+            {
+              "name": "rayon_km",
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "5576105d-9d0b-4296-9a3d-b9f54d40dc58",
+      "name": "Centre",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "xrWuLpFXi8qQWU86"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "client_id",
+              "keyValue": "={{ String($('Appel outil').first().json.client_id || 'aucun') }}"
+            }
+          ]
+        },
+        "limit": 1,
+        "matchType": "allConditions",
+        "operation": "get",
+        "resource": "row",
+        "returnAll": false
+      },
+      "position": [
+        448,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "380c10a7-76de-4f80-b18a-b7bbab6f164b",
+      "name": "Filtrer et formater",
+      "parameters": {
+        "jsCode": "const e = $('Appel outil').first().json;\nconst n = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');\nlet rows = $('Lignes').all().map(i => i.json).filter(r => r && r.client_id);\nif (!rows.length) return [{ json: { resultat: 'Liste pas encore calculee (mise a jour chaque nuit).' } }];\nconst maj = rows.map(r => String(r.maj || '')).sort().pop();\nrows = rows.filter(r => String(r.maj || '') === maj);\nconst mm = Number(e.mois_min) > 0 ? Number(e.mois_min) : 12;\nrows = rows.filter(r => Number(r.mois) >= mm);\nconst villes = n(e.villes).split(',').map(s => s.trim()).filter(s => s && s !== 'tous' && s !== 'toutes');\nif (villes.length) rows = rows.filter(r => villes.some(v => n(r.ville).includes(v) || n(r.adresse).includes(v)));\nlet g = null;\ntry { const x = $('Centre').first().json; if (e.client_id && x && x.lat !== null && x.lat !== undefined) g = x; } catch (err) {}\nconst rad = x => x * Math.PI / 180;\nconst km = (a, b, c, d) => { const h = Math.sin(rad(c - a) / 2) ** 2 + Math.cos(rad(a)) * Math.cos(rad(c)) * Math.sin(rad(d - b) / 2) ** 2; return 12742 * Math.asin(Math.sqrt(h)); };\nif (g) {\n  const R = Number(e.rayon_km) > 0 ? Number(e.rayon_km) : 3;\n  rows = rows.filter(r => r.lat !== null && r.lat !== undefined).map(r => Object.assign({}, r, { km: Math.round(km(Number(g.lat), Number(g.lon), Number(r.lat), Number(r.lon)) * 10) / 10 })).filter(r => r.km <= R).sort((a, b) => a.km - b.km);\n} else rows.sort((a, b) => Number(b.mois) - Number(a.mois));\nconst fr = d => d ? d.split('-').reverse().join('/') : '';\nconst entete = 'Clients avec une clim posee par ClimatPro et sans entretien depuis ' + mm + ' mois ou plus, hors contrat de maintenance' + (g ? ', a moins de ' + (Number(e.rayon_km) > 0 ? e.rayon_km : 3) + ' km de ' + g.nom : '') + (villes.length ? ', villes : ' + villes.join(', ') : '') + ' (historique Interfast depuis sept. 2023) : ' + rows.length + ' client(s).';\nif (!rows.length) return [{ json: { resultat: entete } }];\nconst L = rows.slice(0, 25).map(r => '- ' + r.nom + ' | ' + (r.ville || '?') + (r.km !== undefined ? ' (' + r.km + ' km)' : '') + ' | pose le ' + fr(r.install_le) + ' : ' + r.install_objet + ' | entretien : ' + (r.dernier_entretien ? 'dernier le ' + fr(r.dernier_entretien) : 'jamais') + ' | ' + r.mois + ' mois sans entretien | client_id: ' + r.client_id);\nreturn [{ json: { resultat: entete + '\\n' + L.join('\\n') + (rows.length > 25 ? '\\n(25 premiers seulement, preciser une ville pour affiner)' : '') } }];"
+      },
+      "position": [
+        672,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "3215a9be-bf28-480d-b154-2dd3cc529464",
+      "name": "Lignes",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "wdM1D4E3ZOAmhvoy"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-11T05:28:26.000Z"
+}

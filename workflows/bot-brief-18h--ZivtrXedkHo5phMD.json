@@ -1,0 +1,1277 @@
+{
+  "active": true,
+  "connections": {
+    "Ajuster vendredi": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Envoyer Telegram",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Chaque matin 8h15": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire planning",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Chaque soir 18h": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire planning",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Chercher devis": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Identifier devis",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Devis trouvé ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire devis",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Marquer introuvable",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Envoyer Telegram": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Journal",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extraire résumé": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Mettre en cache",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Identifier devis": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Devis trouvé ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Journée vide ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire cache brief",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Lire intervention",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire RDV": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Préparer interventions",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire cache brief": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire destinataires",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire cache devis": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Refs à résumer",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire client": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Mémoire client",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire destinataires": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Rédiger briefs",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire devis": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Préparer prompt",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire intervention": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire client",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire planning": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire RDV",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Marquer introuvable": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Mettre en cache",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Mémoire client": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire cache brief",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Préparer interventions": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire cache devis",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Journée vide ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Préparer prompt": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Résumer matériel (Haiku)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Refs à résumer": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Chercher devis",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Rédiger briefs": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ajuster vendredi",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Résumer matériel (Haiku)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Extraire résumé",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-08T06:53:46.658Z",
+  "description": "Brief Telegram 18h des interventions du lendemain (pilote : Laurent seul). Lecture Interfast via sous-workflow, cache matériel par devis (Haiku), destinataires dans bot_users.",
+  "id": "ZivtrXedkHo5phMD",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Bot - Brief 18h",
+  "nodeGroups": [
+    {
+      "description": "Lit chaque devis reference pas encore en cache, le resume avec Haiku et le stocke dans cache_devis",
+      "id": "b12d84b3-3ed8-460a-86ee-5d82c559bb69",
+      "name": "Cache materiel",
+      "nodeNames": [
+        "Lire cache devis",
+        "Refs à résumer",
+        "Chercher devis",
+        "Identifier devis",
+        "Devis trouvé ?",
+        "Lire devis",
+        "Préparer prompt",
+        "Résumer matériel (Haiku)",
+        "Extraire résumé",
+        "Marquer introuvable",
+        "Mettre en cache"
+      ]
+    },
+    {
+      "description": "Details RDV et fiche client, lecture cache et destinataires, redaction (vendredi soir = lundi) et envoi Telegram",
+      "id": "f9422ff9-8ed0-45dd-aee5-31048735e7da",
+      "name": "Brief Telegram",
+      "nodeNames": [
+        "Journée vide ?",
+        "Lire intervention",
+        "Lire client",
+        "Mémoire client",
+        "Lire cache brief",
+        "Lire destinataires",
+        "Rédiger briefs",
+        "Ajuster vendredi",
+        "Envoyer Telegram"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "274f6ccd-a250-407c-b451-f0564b10d2c3",
+      "name": "Ajuster vendredi",
+      "parameters": {
+        "jsCode": "// Le vendredi soir, le brief porte sur le lundi : on corrige l'en-tete\n// + en-tete de l'alerte camions : \"Lundi lundi 12 octobre\" -> \"Lundi 12 octobre\", \"Demain lundi 12 octobre\" -> \"Demain, lundi 12 octobre\"\nconst now = DateTime.now().setZone('Europe/Paris');\nlet matin = false;\ntry { matin = $('Chaque matin 8h15').isExecuted; } catch (e) {}\nconst nettoie = t => String(t || '')\n  .replace(/<b>Lundi lundi /, '<b>Lundi ')\n  .replace(/<b>Demain ([a-zé]+ \\d)/, '<b>Demain, $1');\nif (matin || now.weekday !== 5) return $input.all().map(i => ({ json: Object.assign({}, i.json, { text: nettoie(i.json.text) }) }));\nconst lundi = now.plus({ days: 3 }).setLocale('fr').toFormat('cccc d LLLL');\nreturn $input.all().map(i => ({ json: Object.assign({}, i.json, {\n  text: nettoie(String(i.json.text || '').replace(/<b>Demain, [^<]*<\\/b>/, '<b>Lundi : ' + lundi + '</b>').replace('Rien de prévu demain.', 'Rien de prévu lundi.'))\n}) }));"
+      },
+      "position": [
+        1910,
+        380
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "ccb507da-b1d0-4199-b516-7806135b93ac",
+      "name": "Chaque matin 8h15",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "expression": "0 15 8 * * 1-5",
+              "field": "cronExpression"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        -200
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "62428611-2645-40fe-9fbf-0958ec58b5d4",
+      "name": "Chaque soir 18h",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "expression": "0 0 18 * * 0-5",
+              "field": "cronExpression"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "00335189-dda2-40c7-b01a-e07d35b68787",
+      "name": "Chercher devis",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "devis_par_ref",
+            "params": "={{ ({ ref: $json.ref }) }}"
+          }
+        }
+      },
+      "position": [
+        1140,
+        -300
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "5e90e4cc-19d2-442a-b557-e9505be7fa58",
+      "name": "Devis trouvé ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.devisId }}",
+              "operator": {
+                "operation": "notEmpty",
+                "singleValue": true,
+                "type": "string"
+              }
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        1580,
+        -300
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "disabled": false,
+      "id": "d74f6f61-068a-4b84-93ac-6ee5264f9b34",
+      "name": "Envoyer Telegram",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        },
+        "chatId": "={{ $json.chat_id }}",
+        "operation": "sendMessage",
+        "resource": "message",
+        "text": "={{ $json.text }}"
+      },
+      "position": [
+        2020,
+        200
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "8ac51fb7-2d71-4f8d-bb02-c0af91728a9d",
+      "name": "Extraire résumé",
+      "parameters": {
+        "jsCode": "const src = $('Préparer prompt').all();\nreturn $input.all().map((it, i) => {\n  let t = '';\n  try { t = (it.json.content || []).map(c => c.text || '').join('').trim(); } catch (e) {}\n  t = t.replace(/\\s+/g, ' ').replace(/[\\u2013\\u2014]/g, '-').slice(0, 200);\n  const s = src[i].json;\n  return { json: { ref: s.ref, devis_id: s.devisId, statut: t ? 'ok' : 'erreur', resume: t } };\n});",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        2460,
+        -400
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "1dd03cd3-c9eb-4a61-bcac-d822559694a1",
+      "name": "Identifier devis",
+      "parameters": {
+        "jsCode": "const refs = $('Refs à résumer').all();\nreturn $input.all().map((it, i) => {\n  const ref = refs[i].json.ref;\n  const r = it.json || {};\n  const items = (r.ok && r.data && r.data.items) || [];\n  const exact = items.filter(d => String(d.reference || '').toUpperCase() === ref);\n  const d = exact.find(x => x.status === 'signed') || exact[0];\n  return { json: { ref, devisId: d ? String(d.id) : '', statutDevis: d ? d.status : '' } };\n});",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1360,
+        -300
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": false,
+      "id": "9e06aead-f595-45ef-928e-c71c8e15dc4a",
+      "name": "Journal",
+      "parameters": {
+        "authentication": "oAuth2",
+        "columns": {
+          "mappingMode": "defineBelow",
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "horodatage",
+              "id": "horodatage",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "workflow",
+              "id": "workflow",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "utilisateur",
+              "id": "utilisateur",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "question",
+              "id": "question",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "reponse",
+              "id": "reponse",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "horodatage": "={{ $now.setZone('Europe/Paris').toFormat('yyyy-MM-dd HH:mm:ss') }}",
+            "question": "={{ $('Chaque matin 8h15').isExecuted ? 'brief 8h15' : 'brief 18h' }}",
+            "reponse": "={{ $('Rédiger briefs').item.json.text }}",
+            "utilisateur": "={{ $('Rédiger briefs').item.json.nom }} ({{ $('Rédiger briefs').item.json.chat_id }})",
+            "workflow": "brief"
+          }
+        },
+        "documentId": {
+          "__rl": true,
+          "cachedResultName": "Journal Bot ClimatPro",
+          "mode": "id",
+          "value": "1AYGI1KRBJrVBRiE9VIcfq6i6-0Tcz0HF9Mjan12wJmg"
+        },
+        "operation": "append",
+        "options": {
+          "useAppend": true
+        },
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "cachedResultName": "Untitled",
+          "mode": "id",
+          "value": "282010760"
+        }
+      },
+      "position": [
+        2240,
+        200
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "id": "9e25f9b2-be68-4061-838a-a6fc51e8e5ad",
+      "name": "Journée vide ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.vide }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              }
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        700,
+        200
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "f0e747a6-750a-4e2a-aaeb-94a3b718a92a",
+      "name": "Lire RDV",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "rdv_jour",
+            "params": "={{ ({ date: $('Chaque matin 8h15').isExecuted ? $now.setZone('Europe/Paris').toISODate() : $now.setZone('Europe/Paris').plus({ days: $now.setZone('Europe/Paris').weekday === 5 ? 3 : 1 }).toISODate() }) }}"
+          }
+        }
+      },
+      "position": [
+        330,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "ffdfae4c-d8a0-4cde-bced-f5adeba6bfb8",
+      "name": "Lire cache brief",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "cache_devis",
+          "mode": "id",
+          "value": "F66omRHgUbs2aeoL"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        1360,
+        200
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "5e2b545a-2f69-4809-8fa1-e74dce61268b",
+      "name": "Lire cache devis",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "cache_devis",
+          "mode": "id",
+          "value": "F66omRHgUbs2aeoL"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        700,
+        -300
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "ece2593b-872d-474a-a37a-785b76c2683e",
+      "name": "Lire client",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "client",
+            "params": "={{ ({ id: $('Journée vide ?').item.json.clientId }) }}"
+          }
+        }
+      },
+      "position": [
+        1140,
+        300
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "executeOnce": true,
+      "id": "cd133901-8f2d-48a1-a5a1-fb66b6083ffc",
+      "name": "Lire destinataires",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "bot_users",
+          "mode": "id",
+          "value": "MAaqIFX2KBiCvHFa"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        1580,
+        200
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "d3932019-d41a-432b-b54b-5668f6f58729",
+      "name": "Lire devis",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "devis",
+            "params": "={{ ({ id: $json.devisId }) }}"
+          }
+        }
+      },
+      "position": [
+        1800,
+        -400
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "88b2db65-4dc2-487e-a9fa-680a53fcb708",
+      "name": "Lire intervention",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "intervention",
+            "params": "={{ ({ id: $json.eventId }) }}"
+          }
+        }
+      },
+      "position": [
+        920,
+        300
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "061ce368-c34f-49f6-9dc6-82358860705d",
+      "name": "Lire planning",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "events_jour",
+            "params": "={{ ({ date: $('Chaque matin 8h15').isExecuted ? $now.setZone('Europe/Paris').toISODate() : $now.setZone('Europe/Paris').plus({ days: $now.setZone('Europe/Paris').weekday === 5 ? 3 : 1 }).toISODate() }) }}"
+          }
+        }
+      },
+      "position": [
+        220,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "6d91fb3d-3877-42b3-84ee-99a0e06028b9",
+      "name": "Marquer introuvable",
+      "parameters": {
+        "jsCode": "return $input.all().map(it => ({ json: { ref: it.json.ref, devis_id: '', statut: 'introuvable', resume: '' } }));",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        2240,
+        -200
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "1c251b2a-b518-4942-b2e6-bef3ce912956",
+      "name": "Mettre en cache",
+      "parameters": {
+        "columns": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "ref",
+              "id": "ref",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "devis_id",
+              "id": "devis_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "statut",
+              "id": "statut",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "resume",
+              "id": "resume",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "devis_id": "={{ $json.devis_id }}",
+            "ref": "={{ $json.ref }}",
+            "resume": "={{ $json.resume }}",
+            "statut": "={{ $json.statut }}"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "cache_devis",
+          "mode": "id",
+          "value": "F66omRHgUbs2aeoL"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "ref",
+              "keyValue": "={{ $json.ref }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "upsert",
+        "resource": "row"
+      },
+      "position": [
+        2680,
+        -300
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "0e2bf021-525f-4235-a13c-b9abac5d7fa0",
+      "name": "Mémoire client",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Memoire client",
+          "mode": "id",
+          "value": "99B4KwoLPMWmJuNc"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "clientId",
+              "id": "clientId",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "eventId",
+              "id": "eventId",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "objet",
+              "id": "objet",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "actif",
+              "id": "actif",
+              "required": false,
+              "type": "boolean"
+            }
+          ],
+          "value": {
+            "actif": "={{ !$('Chaque matin 8h15').isExecuted && $('Journée vide ?').item.json.kind === 'intervention' && !!$('Journée vide ?').item.json.clientId }}",
+            "clientId": "={{ $('Journée vide ?').item.json.clientId || '' }}",
+            "eventId": "={{ $('Journée vide ?').item.json.eventId || '' }}",
+            "objet": "={{ [$('Journée vide ?').item.json.type, $('Journée vide ?').item.json.titre].filter(Boolean).join(' : ') }}"
+          }
+        }
+      },
+      "position": [
+        1250,
+        420
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "308f9859-d5cc-4438-b823-738a117f8a9e",
+      "name": "Préparer interventions",
+      "parameters": {
+        "jsCode": "const r = $('Lire planning').first().json;\nif (!r.ok) throw new Error('Interfast events KO : ' + (r.erreur || r.statusCode));\nconst rdv = $input.first().json;\nconst items = (r.data.items || []).concat(rdv && rdv.ok && rdv.data ? (rdv.data.items || []) : []);\nconst JULIEN = 5198, AXEL = 9965, LAURENT = 5066;\nconst out = [];\nconst vus = new Set();\nfor (const ev of items) {\n  if (vus.has(String(ev.id))) continue;\n  vus.add(String(ev.id));\n  const ids = ev.technicianIds || [];\n  const pourLaurent = ids.includes(LAURENT);\n  if (ev.category !== 'intervention' && ev.category !== 'meeting' && !pourLaurent) continue;\n  if (ev.finished || ev.lifecycleState === 'cancelled') continue;\n  const names = {};\n  for (const u of (ev.users || [])) names[u.id] = u.firstName || u.lastName || ('tech ' + u.id);\n  let techs = ids.slice();\n  let exJulien = false;\n  if (techs.includes(JULIEN)) {\n    techs = techs.filter(t => t !== JULIEN);\n    if (!techs.includes(AXEL)) { techs.push(AXEL); names[AXEL] = 'Axel'; exJulien = true; }\n  }\n  techs.sort((a, b) => a - b);\n  const m = String(ev.address || '').match(/(\\d{5})[\\s,]+(.+)$/);\n  out.push({ json: {\n    vide: false, kind: ev.category || 'intervention', eventId: String(ev.id), interventionRef: ev.reference || '',\n    start: ev.start, heure: ev.heureParis, code: ev.codeHoraire,\n    sansHeure: ev.category === 'meeting' && !techs.includes(LAURENT),\n    client: (ev.client && ev.client.name) || '',\n    clientId: (ev.client && ev.client.id) ? String(ev.client.id) : '',\n    ville: m ? m[2].trim() : (ev.address || '').trim(), adresse: ev.address || '',\n    type: ev.type || '', titre: ev.title || '',\n    ref: String(ev.secondReference || '').trim().toUpperCase(),\n    sousContrat: !!ev.sousContrat, techs, techNames: names, exJulien\n  } });\n}\nout.sort((a, b) => (a.json.sansHeure - b.json.sansHeure) || String(a.json.start).localeCompare(String(b.json.start)));\nreturn out.length ? out : [{ json: { vide: true } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        440,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "555f4260-df2a-4311-902d-ba652b1d7583",
+      "name": "Préparer prompt",
+      "parameters": {
+        "jsCode": "function lignes(items, out) {\n  for (const x of (items || [])) {\n    if (x.type === 'section') { lignes(x.items, out); continue; }\n    if (x.isOption) continue;\n    const nom = String(x.name || '').replace(/\\s+/g, ' ').trim();\n    if (!nom) continue;\n    out.push('- ' + (x.quantity == null ? 1 : x.quantity) + ' ' + (x.unit || '') + ' : ' + nom.slice(0, 300));\n  }\n  return out;\n}\nreturn $input.all().map(it => {\n  const r = it.json || {};\n  const d = r.data || {};\n  return { json: {\n    ref: String(d.reference || '').toUpperCase(), devisId: String(d.id || ''),\n    titre: d.name || '', ok: !!r.ok,\n    lignes: r.ok ? lignes(d.items, []).join('\\n').slice(0, 6000) : ''\n  } };\n});",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        2020,
+        -400
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "19446164-34ff-4583-bfe2-99fa0b16ce65",
+      "name": "Refs à résumer",
+      "parameters": {
+        "jsCode": "const ok = new Set($input.all().map(i => i.json).filter(r => r && r.ref && r.statut === 'ok').map(r => String(r.ref).toUpperCase()));\nconst refs = new Set();\nfor (const it of $('Préparer interventions').all()) {\n  const j = it.json;\n  if (!j.vide && j.ref && !ok.has(j.ref)) refs.add(j.ref);\n}\nreturn [...refs].map(ref => ({ json: { ref } }));",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        920,
+        -300
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "91bfb8b7-df53-41bd-994e-43a52a77490c",
+      "name": "Rédiger briefs",
+      "parameters": {
+        "jsCode": "const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nfunction safeAll(n) { try { return $(n).all().map(i => i.json); } catch (e) { return []; } }\nlet matin = false; try { matin = $('Chaque matin 8h15').isExecuted; } catch (e) {}\nconst maintenant = DateTime.now().setZone('Europe/Paris');\nconst dimanche = maintenant.weekday === 7;\nconst vendredi = maintenant.weekday === 5;\nconst norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/[^a-z0-9]/g, '');\nfunction coupe(s, n) { s = String(s || ''); if (s.length <= n) return s; const c = s.slice(0, n); const i = c.lastIndexOf(' '); return (i > n * 0.6 ? c.slice(0, i) : c) + '...'; }\nfunction plat(x) { return String(x || '').replace(/\\s*\\n\\s*/g, ', ').replace(/[,\\s]+$/, '').trim(); }\nconst inter = $('Préparer interventions').all().map(i => i.json).filter(j => !j.vide);\nconst det = {}; for (const r of safeAll('Lire intervention')) if (r && r.ok && r.data) det[String(r.data.id)] = r.data;\nconst cli = {}; for (const r of safeAll('Lire client')) if (r && r.ok && r.data) cli[String(r.data.id)] = r.data;\nconst cache = {}; for (const r of safeAll('Lire cache brief')) if (r && r.ref) cache[String(r.ref).toUpperCase()] = r;\nconst memo = {}; for (const r of safeAll('Mémoire client')) if (r && r.eventId) memo[String(r.eventId)] = r;\nconst users = $input.all().map(i => i.json).filter(u => u.actif && u.telegram_id);\nconst jour = maintenant.plus({ days: matin ? 0 : (vendredi ? 3 : 1) }).setLocale('fr').toFormat('cccc d LLLL');\nconst LIB = { 1: 'approx.', 2: 'demi-journée', 3: 'journée entière' };\nconst LIBLONG = { 1: 'approx., battement 15-30 min', 2: 'demi-journée', 3: 'journée entière' };\nfunction horaire(j, court) {\n  if (j.sansHeure) return 'Dans la journée';\n  const h = String(j.heure || '?').replace(':', 'h').replace(/^0/, '');\n  const lib = (court ? LIB : LIBLONG)[j.code];\n  return lib ? h + ' (' + lib + ')' : h;\n}\nfunction objet(j) {\n  if (j.kind && j.kind !== 'intervention') return (j.kind === 'task' ? 'Tâche : ' : '') + (j.titre || j.type);\n  const t = String(j.type || '').trim();\n  const generique = !t || /^(intervention|dépannage|depannage|tâche|tache)( - climatpro)?$/i.test(t);\n  if (generique) return j.titre || t;\n  return t.replace(/^Entretien - Maintenance de PAC et climatisation$/i, 'Entretien');\n}\nfunction nomTech(j, t) { return j.techNames[t] || ('tech ' + t); }\nfunction chantier(j) { return /install|pose/i.test((j.type || '') + ' ' + (j.titre || '')); }\nfunction contactsDe(c) {\n  const g = c.clientParticular || c.clientProfessional || c.clientOwnersAssociation || {};\n  const l = (g.contacts || []).slice();\n  if (g.contact) l.push(g.contact);\n  return { g, l };\n}\nfunction ficheClient(j) {\n  if ((j.kind && j.kind !== 'intervention') || !j.clientId) return null;\n  return cli[j.clientId] || null;\n}\nfunction telManquant(j) {\n  const c = ficheClient(j); if (!c) return false;\n  const { g, l } = contactsDe(c);\n  return !(l.some(x => x && (x.phoneNumber || x.secondaryPhoneNumber)) || g.phoneNumber || c.phoneNumber);\n}\nfunction emailManquant(j) {\n  const c = ficheClient(j); if (!c) return false;\n  const { g, l } = contactsDe(c);\n  return !(l.some(x => x && String(x.email || '').includes('@')) || String(g.email || '').includes('@') || String(c.email || '').includes('@'));\n}\nfunction materiel(j) {\n  if (j.kind && j.kind !== 'intervention') return null;\n  if (!j.ref) {\n    if (j.sousContrat) return 'entretien sous contrat';\n    return chantier(j) ? 'ATTENTION aucun devis lié (référence externe vide)' : null;\n  }\n  const c = cache[j.ref];\n  if (!c) return 'devis ' + j.ref + ' pas encore résumé';\n  if (c.statut === 'ok') return c.resume + ' (' + j.ref + ')';\n  if (c.statut === 'introuvable') return 'ATTENTION devis ' + j.ref + ' introuvable dans Interfast';\n  return 'résumé indisponible (' + j.ref + ')';\n}\nfunction infos(j) {\n  const L = [];\n  const d = det[j.eventId];\n  const a = d && d.address;\n  if (a && a.address) {\n    const extra = [a.additionalLine, a.comments].map(plat).filter(Boolean);\n    L.push('Adresse : ' + a.address + ', ' + (a.zipCode || '') + ' ' + (a.city || '') + (extra.length ? ' - ' + extra.join(' - ') : ''));\n  } else if (j.adresse) L.push('Adresse : ' + j.adresse);\n  const c = j.clientId && cli[j.clientId];\n  let nomContact = '';\n  if (c) {\n    const { l } = contactsDe(c);\n    const aid = a && a.id;\n    const ct = l.find(x => aid && x.phoneNumber && (x.addressIds || []).includes(aid)) || l.find(x => x.phoneNumber && (x.roles || []).includes('primary')) || l.find(x => x.phoneNumber);\n    if (ct) {\n      nomContact = [ct.firstName, ct.lastName].filter(Boolean).join(' ');\n      L.push('Contact : ' + [nomContact, ct.phoneNumber, plat(ct.comment)].filter(Boolean).join(' - '));\n    }\n    const com = plat(c.commentary);\n    if (com && norm(com) !== norm(j.client) && norm(com) !== norm(nomContact) && norm(com) !== norm(c.displayName)) L.push('Note fiche : ' + coupe(com, 300));\n  }\n  const desc = plat(d && d.description);\n  if (desc) {\n    const nd = norm(desc), nt = norm(j.titre);\n    if (!(nt.length > 15 && nd.startsWith(nt.slice(0, 40)))) L.push('Note RDV : ' + coupe(desc, 300));\n  }\n  return L;\n}\nfunction lieu(j) { return [j.client, j.ville].filter(Boolean).join(', '); }\nfunction blocTech(j, pour) {\n  const L = ['<b>' + esc(horaire(j, false)) + '</b>' + (lieu(j) ? ' - ' + esc(lieu(j)) : '')];\n  const o = j.titre && j.titre !== j.type ? j.type + ' : ' + j.titre : j.type;\n  if (o) L.push(esc(o));\n  const m = materiel(j);\n  if (m) L.push('Matériel : ' + esc(m));\n  for (const x of infos(j)) L.push(esc(x));\n  const mm = memo[j.eventId];\n  if (mm && mm.tech) L.push('<b>À retenir</b>\\n' + esc(mm.tech));\n  if (telManquant(j)) L.push('<b>ATTENTION : pas de téléphone client dans la fiche. Préviens Laurent ce soir.</b>');\n  if (emailManquant(j)) L.push('A faire sur place : demander l email du client (non renseigné dans la fiche).');\n  const noms = j.techs.filter(t => t !== pour).map(t => nomTech(j, t));\n  if (noms.length) L.push('Avec : ' + esc(noms.join(', ')));\n  if (j.exJulien) L.push('(planifié au nom de Julien, attribué à Axel : à confirmer)');\n  return L.join('\\n');\n}\nfunction finir(L) {\n  let t = L.join('\\n');\n  if (t.length > 4000) t = t.slice(0, 3900).replace(/<[^>]*$/, '') + '\\n... (suite tronquée)';\n  return t;\n}\nfunction aCaler(liste, L) {\n  const caler = liste.filter(j => j.code === 4);\n  if (!caler.length) return;\n  L.push('', '<b>À caler (date non fixée)</b>');\n  for (const j of caler) L.push('- ' + esc(lieu(j) || objet(j)) + (j.ref ? ' (' + esc(j.ref) + ')' : ''));\n}\nfunction recapMatin(liste) {\n  const prevus = liste.filter(j => j.code !== 4);\n  const L = ['<b>Planning du ' + esc(jour) + '</b>'];\n  if (!prevus.length) { L.push('Rien de prévu aujourd hui.'); aCaler(liste, L); return finir(L); }\n  const parTech = {}, noms = {};\n  for (const j of prevus) {\n    const ts = j.techs.length ? j.techs.map(String) : ['?'];\n    for (const t of ts) { (parTech[t] = parTech[t] || []).push(j); noms[t] = t === '?' ? 'Non attribué' : nomTech(j, t); }\n  }\n  const equipes = {};\n  for (const t of Object.keys(parTech)) {\n    const cle = parTech[t].map(j => j.eventId).join('|');\n    (equipes[cle] = equipes[cle] || { techs: [], rdv: parTech[t] }).techs.push(t);\n  }\n  const rang = t => t === '5066' ? -1 : (t === '?' ? 1e12 : Number(t));\n  const blocs = Object.values(equipes).sort((a, b) => rang(a.techs[0]) - rang(b.techs[0]));\n  for (const e of blocs) {\n    L.push('', '<b>' + esc(e.techs.map(t => noms[t]).join(' + ')) + '</b>');\n    for (const j of e.rdv) {\n      const autres = j.techs.map(String).filter(t => !e.techs.includes(t)).map(t => nomTech(j, t));\n      let l = esc(horaire(j, true)) + ' - ' + [lieu(j), coupe(objet(j), 70)].filter(Boolean).map(esc).join(' - ');\n      if (autres.length) l += ' (avec ' + esc(autres.join(', ')) + ')';\n      if (j.exJulien) l += ' (planifié Julien)';\n      if (telManquant(j)) l += ' <b>[tél manquant]</b>';\n      L.push(l);\n    }\n  }\n  aCaler(liste, L);\n  return finir(L);\n}\nfunction briefSoir(liste, pour) {\n  const prevus = liste.filter(j => j.code !== 4);\n  const L = ['<b>Demain, ' + esc(jour) + '</b>'];\n  if (!prevus.length) L.push('Rien de prévu demain.');\n  for (const j of prevus) L.push('', blocTech(j, pour));\n  aCaler(liste, L);\n  return finir(L);\n}\nfunction memoAdmin(liste) {\n  const avec = liste.filter(j => j.code !== 4 && memo[j.eventId] && (memo[j.eventId].admin || memo[j.eventId].tech));\n  if (!avec.length) return null;\n  const L = ['<b>Mémo clients du ' + esc(jour) + '</b>'];\n  for (const j of avec) {\n    const mm = memo[j.eventId];\n    const qui = j.techs.map(t => nomTech(j, t)).join(', ');\n    L.push('', '<b>' + esc(horaire(j, true)) + ' - ' + esc(lieu(j)) + '</b>' + (qui ? ' (' + esc(qui) + ')' : ''));\n    L.push(esc(mm.admin || mm.tech));\n  }\n  return finir(L);\n}\n// Alerte camions pour Laurent : Christophe et Axel ensemble (un camion) ou séparés (deux camions)\nfunction alerteCamions(liste) {\n  const CH = 5069, AX = 9965;\n  const quand = vendredi || dimanche ? 'Lundi ' + esc(jour) : 'Demain ' + esc(jour);\n  const prevus = liste.filter(j => j.code !== 4 && j.kind !== 'task');\n  const deC = prevus.filter(j => j.techs.includes(CH));\n  const deA = prevus.filter(j => j.techs.includes(AX));\n  const ligne = (j, qui) => (qui ? qui + ' ' : '') + esc(horaire(j, true)) + ' - ' + esc(coupe(lieu(j) || objet(j), 60));\n  if (!deC.length && !deA.length) return '<b>' + quand + ' : aucune intervention prévue pour Christophe et Axel.</b>';\n  if (!deA.length) return '<b>' + quand + ' : Christophe seul sur le terrain, Axel sans intervention. Un camion.</b>\\n' + deC.map(j => ligne(j, '')).join('\\n');\n  if (!deC.length) return '<b>' + quand + ' : Axel seul sur le terrain, Christophe sans intervention. Un camion.</b>\\n' + deA.map(j => ligne(j, '')).join('\\n');\n  const seulsC = deC.filter(j => !j.techs.includes(AX));\n  const seulsA = deA.filter(j => !j.techs.includes(CH));\n  const ensemble = deC.filter(j => j.techs.includes(AX));\n  if (!seulsC.length && !seulsA.length) return '<b>' + quand + ' : Christophe et Axel ensemble toute la journée. Un seul camion.</b>\\n' + ensemble.map(j => ligne(j, '')).join('\\n');\n  const L = ['<b>' + quand + ' : Christophe et Axel SÉPARÉS. Deux camions nécessaires.</b>'];\n  if (ensemble.length) L.push('Ensemble : ' + ensemble.map(j => esc(horaire(j, true)) + ' ' + esc(coupe(lieu(j), 40))).join(' ; '));\n  for (const j of seulsC) L.push(ligne(j, 'Christophe'));\n  for (const j of seulsA) L.push(ligne(j, 'Axel'));\n  return finir(L);\n}\nconst out = [];\nfor (const u of users) {\n  const admin = u.role === 'admin';\n  const id = Number(u.interfast_id);\n  if (matin && admin) out.push({ json: { chat_id: String(u.telegram_id), nom: u.nom, text: recapMatin(inter) } });\n  if (!matin && admin) {\n    out.push({ json: { chat_id: String(u.telegram_id), nom: u.nom, text: alerteCamions(inter) } });\n    const m = memoAdmin(inter);\n    if (m) out.push({ json: { chat_id: String(u.telegram_id), nom: u.nom, text: m } });\n  }\n  if (!matin && !admin && !dimanche && u.brief_18h) out.push({ json: { chat_id: String(u.telegram_id), nom: u.nom, text: briefSoir(inter.filter(j => j.techs.includes(id) || (id === 9965 && j.techs.includes(5198))), id) } });\n}\nreturn out;",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1800,
+        200
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "anthropicApi": {
+          "id": "UtZzlYk97MvjuDan",
+          "name": "Anthropic account 2"
+        }
+      },
+      "id": "bdfaa377-fbcc-4e08-841d-adbec25a3419",
+      "name": "Résumer matériel (Haiku)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "contentType": "json",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify({ model: \"claude-haiku-5-5\", max_tokens: 2000, system: \"Tu prepares la feuille de route d un technicien de climatisation. A partir des lignes d un devis, resume en UNE seule ligne de 120 caracteres maximum le materiel a charger dans le camion : marque, gamme ou modele, puissance, type (monosplit, multisplit, gainable, cassette, PAC air/eau...) et quantites. Termine par + fournitures si le devis contient des fournitures. Ne rien inventer : si une info manque, ne la mets pas. Aucun prix. Reponds uniquement par la ligne, sans phrase autour.\", messages: [{ role: \"user\", content: \"Titre du devis : \" + $json.titre + \"\\nLignes :\\n\" + $json.lignes }] }) }}",
+        "method": "POST",
+        "nodeCredentialType": "anthropicApi",
+        "options": {
+          "timeout": 30000
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://api.anthropic.com/v1/messages"
+      },
+      "position": [
+        2240,
+        -400
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5
+    },
+    {
+      "id": "08f4620d-5eda-400c-893d-10af04bbf787",
+      "name": "Sticky Note 7ad2a809",
+      "parameters": {
+        "color": 4,
+        "content": "## Bot - Brief 18h\nHaut (cache) : pour chaque n° de devis (référence externe) pas encore en cache, lecture du devis signé, résumé matériel par Haiku, stockage dans la table cache_devis. Tourne AVANT le bas.\n\nBas (brief) : détails RDV + fiche client, lecture du cache et des destinataires (table bot_users), rédaction, envoi Telegram.\n\nDestinataires : table bot_users (actif + brief_18h + telegram_id). admin = brief complet, tech = ses interventions.\nLecture Interfast uniquement via le sous-workflow Interfast - Lecture."
+      },
+      "position": [
+        100,
+        300
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "timezone": "Europe/Paris"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-15T21:54:26.194Z"
+}

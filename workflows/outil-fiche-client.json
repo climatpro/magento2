@@ -1,0 +1,264 @@
+{
+  "active": true,
+  "connections": {
+    "Appel outil": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire fiche",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire adresses": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire historique",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire fiche": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire adresses",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire historique": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Formater fiche",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-08T14:29:33.878Z",
+  "description": "Outil du bot : fiche client Interfast (contacts, téléphones, adresses, notes, historique des interventions). Lecture seule.",
+  "id": "yj2W2NXNAbFRiuN6",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Outil - Fiche client",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "dbfafcdd-8e6d-4047-98b7-d7787d8ae29c",
+      "name": "Appel outil",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "client_id",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "cd1c9c7b-d41b-422b-9992-5612088d2c5e",
+      "name": "Formater fiche",
+      "parameters": {
+        "jsCode": "const id = String($('Appel outil').first().json.client_id || '');\nfunction data(n) { try { const r = $(n).first().json; return (r && r.ok) ? r.data : null; } catch (e) { return null; } }\nconst c = data('Lire fiche');\nif (!c) return [{ json: { resultat: 'Client ' + id + ' introuvable.' } }];\nconst g = c.clientParticular || c.clientProfessional || c.clientOwnersAssociation || {};\nconst L = ['Client : ' + (c.displayName || g.name || [g.firstName, g.lastName].filter(Boolean).join(' ') || id) + ' (client_id ' + id + ')'];\nconst contacts = (g.contacts || []).slice();\nif (g.contact && !contacts.length) contacts.push(g.contact);\nfor (const ct of contacts.slice(0, 6)) {\n  const nom = [ct.civility, ct.firstName, ct.lastName].filter(Boolean).join(' ');\n  const info = [nom, ct.phoneNumber ? 'tel ' + ct.phoneNumber : '', ct.secondaryPhoneNumber ? 'tel2 ' + ct.secondaryPhoneNumber : '', ct.email ? 'mail ' + ct.email : '', (ct.roles || []).includes('primary') ? 'principal' : '', ct.comment ? 'note: ' + String(ct.comment).replace(/\\s+/g, ' ') : ''].filter(Boolean).join(' | ');\n  if (info) L.push('Contact : ' + info);\n}\nif (c.commentary) L.push('Note fiche : ' + String(c.commentary).replace(/\\s+/g, ' ').slice(0, 300));\nconst ad = data('Lire adresses');\nconst adresses = (ad && (ad.items || ad)) || [];\nif (Array.isArray(adresses)) for (const a of adresses.slice(0, 5)) {\n  L.push('Adresse : ' + [a.address, [a.zipCode, a.city].filter(Boolean).join(' '), a.additionalLine, a.comments].filter(Boolean).join(', ').replace(/\\s+/g, ' '));\n}\nconst ev = data('Lire historique');\nconst hist = ((ev && ev.items) || []).filter(e => e.start).sort((a, b) => String(b.start).localeCompare(String(a.start))).slice(0, 12);\nif (hist.length) {\n  L.push('Historique (plus recent en premier) :');\n  const NOMS = { 5066: 'Laurent', 5069: 'Christophe', 9965: 'Axel', 5198: 'Julien' };\n  for (const e of hist) {\n    const d = DateTime.fromISO(e.start, { zone: 'utc' }).setZone('Europe/Paris').toFormat('dd/MM/yyyy');\n    const t = [...new Set((e.technicianIds || (e.users || []).map(u => u.id)).map(x => NOMS[x] || x))].join('+');\n    L.push('- ' + d + ' | ' + [e.type, e.title && e.title !== e.type ? e.title : ''].filter(Boolean).join(' : ').replace(/\\s+/g, ' ').slice(0, 100) + (t ? ' | ' + t : '') + (e.finished ? ' | termine' : ''));\n  }\n}\nreturn [{ json: { resultat: L.join('\\n') } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        896,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "ec264ea8-5929-4746-bae7-9df57dbb4888",
+      "name": "Lire adresses",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "client_adresses",
+            "params": "={{ ({ id: $('Appel outil').first().json.client_id }) }}"
+          }
+        }
+      },
+      "position": [
+        448,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "4dda571d-a209-46bb-9998-88fad031249b",
+      "name": "Lire fiche",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "client",
+            "params": "={{ ({ id: $('Appel outil').first().json.client_id }) }}"
+          }
+        }
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "a3404a26-a6c6-4efb-b4f1-f636510c8d08",
+      "name": "Lire historique",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "client_events",
+            "params": "={{ ({ id: $('Appel outil').first().json.client_id }) }}"
+          }
+        }
+      },
+      "position": [
+        672,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-08T14:29:33.878Z"
+}

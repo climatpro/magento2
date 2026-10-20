@@ -1,0 +1,223 @@
+{
+  "active": true,
+  "connections": {
+    "Analyser": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enregistrer",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Chaque nuit 3h22": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Pages",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interfast - interventions": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Analyser",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Pages": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interfast - interventions",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-11T05:26:05.158Z",
+  "description": "Chaque nuit : relit toutes les interventions Interfast et liste les clients chez qui une clim a été posée, sans entretien depuis (hors contrat de maintenance, hors entretien planifié). Table clients_sans_entretien lue par le bot.",
+  "id": "H7muVNYi1nx8vEFs",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Climapro - Clients sans entretien",
+  "nodeGroups": [
+    {
+      "description": "Toutes les interventions Interfast, puis les clients avec une pose et sans entretien depuis 6 mois ou plus (hors contrat)",
+      "id": "d637d7da-542f-41d8-800c-c94801061a97",
+      "name": "Lire et analyser",
+      "nodeNames": [
+        "Pages",
+        "Interfast - interventions",
+        "Analyser",
+        "Enregistrer"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "e315e6aa-e879-47ad-b273-036e4e408d90",
+      "name": "Analyser",
+      "parameters": {
+        "jsCode": "// Clients chez qui on a pose une clim et sans entretien depuis (hors contrat de maintenance)\nconst now = DateTime.now().setZone('Europe/Paris');\n// Horodatage commun a toutes les lignes de ce passage : l outil ne lit que le dernier passage\nconst maj = now.toUTC().toISO();\nconst test = s => {\n  s = String(s || '').toLowerCase();\n  if (/devis|visite technique|visite avant|metre|métré|chiffrage/.test(s)) return 'devis';\n  if (/install|pose|mise en service/.test(s)) return 'installation';\n  if (/d[ée]pannage|panne|fuite|erreur|ne fonctionne|ne fait plus|ne d[ée]marre/.test(s)) return 'depannage';\n  if (/entretien|maintenance|nettoyage|r[ée]vision/.test(s)) return 'maintenance';\n  return null;\n};\nconst cat = ev => {\n  const ti = String(ev.title || '').toLowerCase();\n  // Une depose (travaux, stockage) sans repose n'est pas une installation\n  if (/d[ée]pose/.test(ti) && !/repose/.test(ti)) return 'autre';\n  return test(ev.type) || (ev.maintenance ? 'maintenance' : null) || test(ev.title) || 'autre';\n};\nconst vus = new Set();\nconst C = {};\nfor (const it of $input.all()) {\n  for (const ev of (it.json.items || [])) {\n    if (vus.has(String(ev.id))) continue;\n    vus.add(String(ev.id));\n    if (ev.lifecycleState === 'cancelled' || !ev.client || !ev.client.id || ev.category === 'task') continue;\n    const id = String(ev.client.id);\n    const d = DateTime.fromISO(ev.start, { zone: 'utc' }).setZone('Europe/Paris');\n    if (!d.isValid) continue;\n    const c = C[id] || (C[id] = { nom: ev.client.name, install: null, maint: null, maintFuture: false, contrat: false });\n    const k = cat(ev);\n    // Contrat de maintenance actif : visite de contrat recente ou planifiee\n    if (ev.maintenance && d > now.minus({ months: 18 })) c.contrat = true;\n    if (k === 'installation' && ev.finished && d <= now && (!c.install || d > c.install.d)) c.install = { d, ev };\n    if (k === 'maintenance') {\n      if (d > now) c.maintFuture = true;\n      else if (ev.finished && (!c.maint || d > c.maint)) c.maint = d;\n    }\n  }\n}\nconst out = [];\nfor (const [id, c] of Object.entries(C)) {\n  if (!c.install || c.contrat || c.maintFuture) continue;\n  if (/^toshiba$/i.test(String(c.nom || '').trim())) continue;\n  const ref = c.maint && c.maint > c.install.d ? c.maint : c.install.d;\n  const mois = Math.floor(now.diff(ref, 'months').months);\n  if (mois < 6) continue;\n  const ev = c.install.ev;\n  const m = String(ev.address || '').match(/(\\d{5})[\\s,]+(.+)$/);\n  out.push({ json: {\n    client_id: id, nom: String(c.nom || '').trim(), adresse: String(ev.address || ''), ville: m ? m[2].trim() : '',\n    lat: ev.lat || null, lon: ev.lon || null,\n    install_le: c.install.d.toISODate(), install_objet: [ev.type, ev.title].filter(Boolean).join(' : ').slice(0, 120),\n    dernier_entretien: c.maint ? c.maint.toISODate() : '', mois, maj\n  } });\n}\nreturn out;"
+      },
+      "position": [
+        720,
+        128
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "56d099c5-6822-4db7-b89f-8e98e6527cba",
+      "name": "Chaque nuit 3h22",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 3,
+              "triggerAtMinute": 22
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "c67ca792-c1a2-4532-b543-833477d3336b",
+      "name": "Enregistrer",
+      "parameters": {
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": null
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "wdM1D4E3ZOAmhvoy"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "client_id",
+              "keyValue": "={{ $json.client_id }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "upsert",
+        "resource": "row"
+      },
+      "position": [
+        944,
+        128
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "5c49fdd7-3bd9-4e35-aa75-a321b5048f6b",
+      "name": "Interfast - interventions",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "method": "GET",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchInterval": 300,
+              "batchSize": 5
+            }
+          }
+        },
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "start",
+              "value": "2018-01-01T00:00:00Z"
+            },
+            {
+              "name": "end",
+              "value": "={{ $json.fin }}"
+            },
+            {
+              "name": "page",
+              "value": "={{ $json.page }}"
+            },
+            {
+              "name": "count",
+              "value": "100"
+            },
+            {
+              "name": "archived",
+              "value": "false"
+            },
+            {
+              "name": "meeting",
+              "value": "false"
+            },
+            {
+              "name": "orderBy",
+              "value": "start"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://app.inter-fast.fr/v1/events"
+      },
+      "position": [
+        496,
+        128
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "e7a6fbe5-d56b-4e97-b8cf-a33383092659",
+      "name": "Pages",
+      "parameters": {
+        "jsCode": "const fin = DateTime.now().plus({ months: 13 }).toUTC().toISO();\nreturn Array.from({ length: 40 }, (_, i) => ({ json: { page: i, fin } }));"
+      },
+      "position": [
+        272,
+        128
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1",
+    "timezone": "Europe/Paris"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-11T05:27:41.943Z"
+}

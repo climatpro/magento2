@@ -1,0 +1,1223 @@
+{
+  "active": true,
+  "connections": {
+    "Aiguillage": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interfast - chercher le client",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Todoist - a rattacher (fournisseur ou interne)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Resultat : ignore",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Boucle": {
+      "main": [
+        [],
+        [
+          {
+            "index": 0,
+            "node": "Plaud - lire le fichier",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Classer": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Aiguillage",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Claude Sonnet": {
+      "ai_languageModel": [
+        [
+          {
+            "index": 0,
+            "node": "Classer",
+            "type": "ai_languageModel"
+          }
+        ]
+      ]
+    },
+    "Client trouve ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interfast - consigner la note",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Todoist - a rattacher (client non trouve)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Engagement a suivre ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Todoist - tache engagement",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Resultat : note",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Evaluer la correspondance": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Client trouve ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interfast - chercher le client": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Evaluer la correspondance",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interfast - consigner la note": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Engagement a suivre ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Marquer comme traite": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Boucle",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Marquer sans transcription": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Boucle",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Normaliser la liste": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Pas encore traite ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Pas encore traite ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Boucle",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Plaud - lire le fichier": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Transcript",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Plaud - lister les enregistrements": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Normaliser la liste",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Resultat : ignore": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Marquer comme traite",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Resultat : note": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Marquer comme traite",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Resultat : tache": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Marquer comme traite",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Schema JSON": {
+      "ai_outputParser": [
+        [
+          {
+            "index": 0,
+            "node": "Classer",
+            "type": "ai_outputParser"
+          }
+        ]
+      ]
+    },
+    "Todoist - a rattacher (client non trouve)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resultat : tache",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Todoist - a rattacher (fournisseur ou interne)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resultat : tache",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Todoist - tache engagement": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resultat : note",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Toutes les 15 min": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Plaud - lister les enregistrements",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Transcript": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Transcript pret ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Transcript pret ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Classer",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Marquer sans transcription",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Boucle",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-07T21:01:47.611Z",
+  "description": "Toutes les 15 min : lit les nouveaux enregistrements Plaud transcrits, les classe avec Claude Haiku, consigne une note CRM sur la fiche client Interfast (ou cree une tache Todoist a rattacher), et memorise les fichiers traites dans la Data Table plaud_tra",
+  "id": "jbzd2fq9MTIGLJK5",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp",
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Plaud vers Interfast CRM",
+  "nodeGroups": [
+    {
+      "description": "Liste les enregistrements Plaud des 2 derniers jours et ecarte ceux deja traites",
+      "id": "f11ebbeb-897c-4ecb-9d4c-c483518e6040",
+      "name": "Collecte Plaud",
+      "nodeNames": [
+        "Plaud - lister les enregistrements",
+        "Normaliser la liste",
+        "Pas encore traite ?"
+      ]
+    },
+    {
+      "description": "Lit le fichier Plaud, assemble le transcript, decide : classer / attendre / abandonner",
+      "id": "8e42dc49-c017-4248-b885-22a305501a21",
+      "name": "Lecture du transcript",
+      "nodeNames": [
+        "Plaud - lire le fichier",
+        "Transcript",
+        "Transcript pret ?"
+      ]
+    },
+    {
+      "description": "Sonnet classe l'enregistrement (client, prospect, fournisseur, interne, perso, bruit) et redige la note CRM",
+      "id": "9e7e915c-fd72-4502-bcb2-0f1f1d318f50",
+      "name": "Classification Sonnet",
+      "nodeNames": [
+        "Classer",
+        "Claude Sonnet",
+        "Schema JSON",
+        "Aiguillage"
+      ]
+    },
+    {
+      "description": "Cherche le client dans Interfast par nom, affine par telephone ou ville, exige un resultat unique",
+      "id": "1cbb16eb-6ca4-4617-9640-3413fc91980c",
+      "name": "Rapprochement Interfast",
+      "nodeNames": [
+        "Interfast - chercher le client",
+        "Evaluer la correspondance",
+        "Client trouve ?"
+      ]
+    },
+    {
+      "description": "Consigne la note sur la fiche client, cree une tache Todoist si un engagement a ete pris",
+      "id": "007f3324-0a68-4920-9374-65c47935f097",
+      "name": "Note CRM et engagement",
+      "nodeNames": [
+        "Interfast - consigner la note",
+        "Engagement a suivre ?",
+        "Todoist - tache engagement",
+        "Resultat : note"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "872a3312-da38-4795-94db-ddacbef7ed5c",
+      "name": "Aiguillage",
+      "parameters": {
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "perso ou bruit"
+        },
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "or",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.categorie }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "client"
+                  },
+                  {
+                    "leftValue": "={{ $json.output.categorie }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "prospect"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                }
+              },
+              "outputKey": "client ou prospect",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "or",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.categorie }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "fournisseur"
+                  },
+                  {
+                    "leftValue": "={{ $json.output.categorie }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "interne"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                }
+              },
+              "outputKey": "fournisseur ou interne",
+              "renameOutput": true
+            }
+          ]
+        }
+      },
+      "position": [
+        2448,
+        400
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "f95e1a49-499c-4dba-84c9-fe2b9b689329",
+      "name": "Boucle",
+      "parameters": {
+        "options": {}
+      },
+      "position": [
+        1040,
+        304
+      ],
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3
+    },
+    {
+      "id": "44b5c460-2c00-4e16-9083-5a5fa6fc4600",
+      "name": "Classer",
+      "parameters": {
+        "batching": {},
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "Tu es l'assistant de ClimatPro, entreprise de climatisation et pompes a chaleur sur la Cote d'Azur (Cannes, Mandelieu, Mougins et alentours). Le gerant est Laurent Banniere (souvent \"Laurent\", \"Speaker 1\", ou appele \"Monsieur Bannier\" par ses interlocuteurs) : ne le prends JAMAIS pour un client ou un fournisseur. Ses techniciens : Christophe et Axel. Tu recois la transcription d'un enregistrement du Plaud de Laurent : appel telephonique, conversation sur chantier, dictee, ou bruit. Classe-le et redige une note CRM.\n\nCategories :\n- client : conversation avec un client, ou a propos d'un client identifiable (y compris un point interne avec un technicien sur un client).\n- prospect : nouveau contact qui demande un devis ou un renseignement, pas encore client.\n- fournisseur : fournisseur, distributeur, commercial, sous-traitant.\n- interne : equipe ou organisation, sans client identifiable.\n- perso : vie privee, ou dictee de Laurent destinee a Claude, sans client.\n- bruit : rien d'exploitable. Exemples : enregistrement vide ou lance par erreur, inintelligible, television, appel sans reponse (sonnerie seule, Laurent qui dit allo sans interlocuteur), messagerie vocale sans message laisse par Laurent, un simple \"merci\", un enregistrement de test. Aussi : tout enregistrement ou Laurent demande, avec n'importe quels mots, de ne pas en tenir compte (\"a supprimer\", \"oublie ca\", \"ne pas en tenir compte\", \"appel pour rien\", \"inutile\").\n\nRegles :\n- Si Laurent laisse un vrai message sur le repondeur d'un client (ex. \"je vous rappelle pour le devis\"), ce n'est PAS du bruit : categorie client ou prospect, et la note commence par \"Message laisse sur repondeur\".\n- En cas de doute entre bruit et une information utile, meme tres courte (ex. \"rappeler Mme Martin demain pour le devis\"), ne classe PAS en bruit : mieux vaut une note en trop qu'une info perdue.\n- client_nom : nom de famille, raison sociale ou nom de l'etablissement (hotel, boutique, residence) le plus probable, orthographe plausible. Si Laurent dicte \"le client sur Interfast c'est X\", utilise exactement X. Vide si inconnu : ne devine pas.\n- client_tel et client_ville : seulement s'ils sont cites.\n- note : texte simple en francais, sans markdown, en DEUX parties, dans cet ordre :\n  1) Premiere ligne : \"Appel\" ou \"Echange\" suivi de la date et heure fournies. Puis \"Resume :\" et 3 a 5 lignes courtes, lisibles en 10 secondes par Laurent : l'essentiel, la decision prise, la prochaine etape.\n  2) Une ligne vide, puis une ligne \"[Note IA]\", puis le detail complet, une rubrique par ligne, en ne gardant que les rubriques qui ont du contenu : Objet ; Demande et contexte ; Installation existante (marques, modeles, pieces, age, etat) ; Constats techniques et pannes ; Acces, horaires, consignes, personnes a contacter (gardien, gestionnaire, voisin) ; Attentes, preferences et habitudes du client ; Budget, prix evoques, objections, negociation ; Engagements pris par ClimatPro (qui, quoi, quand) ; Engagements du client ; Prochaine etape ; Points sensibles ou a surveiller. Sois precis et complet : chiffres, references, dates, noms et quantites cites. Pas de mot a mot, aucune invention : si une info n'est pas dite, ne l'ecris pas. Ignore les passages ou Laurent dicte des instructions a Claude et les bruits de fond.\n- type_activite : \"call\" pour un appel telephonique, sinon \"note\".\n- titre : 5 a 8 mots.\n- tache : action concrete pour Laurent si un engagement a ete pris, sinon chaine vide.\n- Pour perso et bruit : note, titre et tache vides.\nReponds uniquement avec le JSON demande."
+            }
+          ]
+        },
+        "promptType": "define",
+        "text": "=Enregistrement Plaud : {{ $json.nom }}\nDate et heure (Paris) : {{ $json.debut }} ; duree : {{ $json.duree_min }} min\n\nTranscript :\n{{ $json.transcript }}"
+      },
+      "position": [
+        2128,
+        400
+      ],
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9
+    },
+    {
+      "credentials": {
+        "anthropicApi": {
+          "id": "GfYoRA9p0AV4WXlD",
+          "name": "Anthropic account"
+        }
+      },
+      "id": "78873dfa-9197-424e-b92d-c4f1dfb95e59",
+      "name": "Claude Sonnet",
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "id",
+          "value": "claude-sonnet-5-5"
+        },
+        "options": {
+          "maxTokensToSample": 8000
+        }
+      },
+      "position": [
+        2048,
+        624
+      ],
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.6
+    },
+    {
+      "id": "ce159d00-c0da-4042-bbf9-bf0314a7ea31",
+      "name": "Client trouve ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.match }}",
+              "operator": {
+                "operation": "true",
+                "type": "boolean"
+              }
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        3264,
+        208
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "b6f2675c-890e-44c4-9ecb-cee41ddc4e7d",
+      "name": "Engagement a suivre ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $(\"Classer\").item.json.output.tache }}",
+              "operator": {
+                "operation": "notEmpty",
+                "type": "string"
+              }
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        3808,
+        112
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "b2648d12-a762-4115-a6b3-993167523d05",
+      "name": "Evaluer la correspondance",
+      "parameters": {
+        "jsCode": "const cls = $('Classer').item.json.output || {};\nconst res = $input.item.json || {};\nconst all = Array.isArray(res.items) ? res.items : [];\nconst items = all.filter(c => String(c.reference || '').toUpperCase().startsWith('C') && String(c.category || 'client') !== 'supplier');\nconst norm = s => (s || '').toString().replace(/\\D/g, '');\nconst phone = norm(cls.client_tel);\nconst ville = (cls.client_ville || '').toString().toLowerCase();\nconst nomCherche = (cls.client_nom || '').toString().trim();\nlet cands = nomCherche ? items : [];\nif (cands.length > 1 && phone.length >= 9) {\n  const p = cands.filter(c => norm(c.phoneNumber).endsWith(phone.slice(-9)) || norm(c.secondaryPhoneNumber).endsWith(phone.slice(-9)));\n  if (p.length) cands = p;\n}\nif (cands.length > 1 && ville) {\n  const v = cands.filter(c => (((c.address || {}).city) || '').toLowerCase().includes(ville));\n  if (v.length) cands = v;\n}\nconst match = cands.length === 1 ? cands[0] : null;\nreturn { json: {\n  match: !!match,\n  client_id: match ? String(match.id) : '',\n  client_nom: match ? (match.name || '').trim() : '',\n  nb_resultats: nomCherche ? items.length : 0,\n  candidats: nomCherche ? items.map(c => (c.name || '').trim() + ' (' + c.reference + ')').join(', ') : 'nom du client non identifie dans la conversation'\n} };",
+        "mode": "runOnceForEachItem"
+      },
+      "position": [
+        3008,
+        208
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "d79ed6ff-2775-450c-b916-cbfbcb253511",
+      "name": "Interfast - chercher le client",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {},
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "page",
+              "value": "0"
+            },
+            {
+              "name": "size",
+              "value": "5"
+            },
+            {
+              "name": "archived",
+              "value": "false"
+            },
+            {
+              "name": "name",
+              "value": "={{ $json.output.client_nom || '__aucun__' }}"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://app.inter-fast.fr/v1/crm/search"
+      },
+      "position": [
+        2752,
+        208
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "4392fedc-4f11-44c0-b23d-5f07ee5c45dc",
+      "name": "Interfast - consigner la note",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "jsonBody": "={{ JSON.stringify({ type: ($(\"Classer\").item.json.output.type_activite || \"note\"), content: $(\"Classer\").item.json.output.note }) }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "=https://app.inter-fast.fr/v1/client/{{ $json.client_id }}/activities/notes"
+      },
+      "position": [
+        3552,
+        112
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5
+    },
+    {
+      "id": "9e31bd61-5d3e-4fbc-af41-e1675be51813",
+      "name": "Marquer comme traite",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "file_id",
+              "id": "file_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "nom",
+              "id": "nom",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "categorie",
+              "id": "categorie",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "resultat",
+              "id": "resultat",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "traite_le",
+              "id": "traite_le",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "categorie": "={{ $(\"Classer\").item.json.output.categorie }}",
+            "file_id": "={{ $(\"Transcript\").item.json.file_id }}",
+            "nom": "={{ $(\"Transcript\").item.json.nom }}",
+            "resultat": "={{ $json.resultat }}",
+            "traite_le": "={{ $now.setZone(\"Europe/Paris\").toFormat(\"yyyy-MM-dd HH:mm\") }}"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "plaud_traites",
+          "mode": "id",
+          "value": "5iiREQs0cwhwUqhB"
+        },
+        "options": {}
+      },
+      "position": [
+        4608,
+        320
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "6e4c1bce-3562-42ef-ab51-05a0d99778a1",
+      "name": "Marquer sans transcription",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "file_id",
+              "id": "file_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "nom",
+              "id": "nom",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "categorie",
+              "id": "categorie",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "resultat",
+              "id": "resultat",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "traite_le",
+              "id": "traite_le",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "categorie": "sans_transcription",
+            "file_id": "={{ $json.file_id }}",
+            "nom": "={{ $json.nom }}",
+            "resultat": "abandon apres 48 h sans transcription",
+            "traite_le": "={{ $now.setZone(\"Europe/Paris\").toFormat(\"yyyy-MM-dd HH:mm\") }}"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "plaud_traites",
+          "mode": "id",
+          "value": "5iiREQs0cwhwUqhB"
+        },
+        "options": {}
+      },
+      "position": [
+        2128,
+        768
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "a21936f7-a6bc-43a8-8ffa-e608b59176e6",
+      "name": "Normaliser la liste",
+      "parameters": {
+        "jsCode": "const DATE_MIN = '2026-10-07';\nconst out = [];\nconst seen = {};\nfunction parseLoose(s) {\n  const a = s.indexOf('{'); const b = s.lastIndexOf('}');\n  if (a === -1 || b === -1 || b <= a) return null;\n  try { return JSON.parse(s.slice(a, b + 1)); } catch (e) { return null; }\n}\nfunction collect(v) {\n  if (v === null || v === undefined) return;\n  if (typeof v === 'string') { const p = parseLoose(v); if (p) collect(p); return; }\n  if (Array.isArray(v)) { v.forEach(collect); return; }\n  if (typeof v === 'object') {\n    if (typeof v.id === 'string' && v.id.startsWith('of_') && !seen[v.id]) { seen[v.id] = true; out.push(v); return; }\n    Object.values(v).forEach(collect);\n  }\n}\nfor (const item of $input.all()) collect(item.json);\nreturn out\n  .filter(f => (Number(f.duration) || 0) >= 4000)\n  .filter(f => String(f.start_at || f.created_at || '').slice(0, 10) >= DATE_MIN)\n  .map(f => ({ json: {\n    file_id: f.id,\n    nom: f.name || '',\n    start_at: f.start_at || f.created_at || '',\n    duration_ms: Number(f.duration) || 0\n  } }));"
+      },
+      "position": [
+        528,
+        304
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "921a164d-d0a4-42ee-8a3f-6535504f1dba",
+      "name": "Pas encore traite ?",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "plaud_traites",
+          "mode": "id",
+          "value": "5iiREQs0cwhwUqhB"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "file_id",
+              "keyValue": "={{ $json.file_id }}"
+            }
+          ]
+        },
+        "operation": "rowNotExists"
+      },
+      "position": [
+        784,
+        304
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "mcpOAuth2Api": {
+          "id": "KxcxKLAx6oNuafZS",
+          "name": "Unnamed credential"
+        }
+      },
+      "id": "6631ad46-5605-4975-9216-2bd71bc0ee21",
+      "name": "Plaud - lire le fichier",
+      "parameters": {
+        "authentication": "mcpOAuth2Api",
+        "endpointUrl": "https://mcp.plaud.ai/mcp",
+        "inputMode": "json",
+        "jsonInput": "={\"file_id\": \"{{ $json.file_id }}\"}",
+        "options": {},
+        "tool": {
+          "__rl": true,
+          "cachedResultName": "get_file",
+          "mode": "list",
+          "value": "get_file"
+        }
+      },
+      "position": [
+        1312,
+        400
+      ],
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "mcpOAuth2Api": {
+          "id": "KxcxKLAx6oNuafZS",
+          "name": "Unnamed credential"
+        }
+      },
+      "executeOnce": true,
+      "id": "e2296fe3-1ae5-45fa-b848-6b13d0c629c0",
+      "name": "Plaud - lister les enregistrements",
+      "parameters": {
+        "authentication": "mcpOAuth2Api",
+        "endpointUrl": "https://mcp.plaud.ai/mcp",
+        "inputMode": "json",
+        "jsonInput": "={\"date_from\": \"{{ $today.minus({days: 2}).toFormat(\"yyyy-MM-dd\") }}\", \"date_to\": \"{{ $today.plus({days: 1}).toFormat(\"yyyy-MM-dd\") }}\"}",
+        "options": {},
+        "tool": {
+          "__rl": true,
+          "cachedResultName": "list_files",
+          "mode": "list",
+          "value": "list_files"
+        }
+      },
+      "position": [
+        272,
+        304
+      ],
+      "type": "@n8n/n8n-nodes-langchain.mcpClient",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "78cc98e8-d10c-4bdb-a151-3567529c32c0",
+      "name": "Resultat : ignore",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "r3",
+              "name": "resultat",
+              "type": "string",
+              "value": "ignore"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        4320,
+        560
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "2761e959-b4fe-4d3c-8f27-386d681c6579",
+      "name": "Resultat : note",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "r1",
+              "name": "resultat",
+              "type": "string",
+              "value": "=note Interfast {{ $(\"Evaluer la correspondance\").item.json.client_nom }} (id {{ $(\"Evaluer la correspondance\").item.json.client_id }})"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        4320,
+        112
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "58a480d5-ddc3-4964-9659-e5fc6fd85d7b",
+      "name": "Resultat : tache",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "r2",
+              "name": "resultat",
+              "type": "string",
+              "value": "tache Todoist a rattacher"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        4320,
+        320
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "e0cf5f67-0e7b-4a37-8e0c-e8842484e09c",
+      "name": "Schema JSON",
+      "parameters": {
+        "jsonSchemaExample": "{\"categorie\": \"client\", \"client_nom\": \"Rahmil\", \"client_tel\": \"\", \"client_ville\": \"Mandelieu\", \"type_activite\": \"call\", \"titre\": \"Appel client - sinistre assurance\", \"note\": \"Appel du 07/10/2026 16h47\\nResume :\\n- ...\\n- ...\\n- Prochaine etape : ...\\n\\n[Note IA]\\nObjet : ...\\nDemande et contexte : ...\\nInstallation existante : ...\\nAcces et consignes : ...\\nEngagements ClimatPro : ...\\nProchaine etape : ...\", \"tache\": \"Corriger devis + facture et renvoyer\", \"raison\": \"Le client cite son nom et un devis en cours\"}"
+      },
+      "position": [
+        2240,
+        624
+      ],
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3
+    },
+    {
+      "id": "eb569aba-2aa7-4219-b961-9e154cfbaaa0",
+      "name": "Sticky Note 3fe1f064",
+      "parameters": {
+        "color": 4,
+        "content": "## Plaud vers Interfast CRM\n\n1. Ouvrir le noeud \"Plaud - lister les enregistrements\" et creer la credential OAuth2 Plaud (Connect). La reutiliser dans \"Plaud - lire le fichier\".\n2. Verifier que la transcription automatique est activee dans l'app Plaud, sinon rien ne remonte.\n3. Les fichiers traites sont dans la Data Table plaud_traites (jamais de doublon).\n4. Un fichier non transcrit est reessaye pendant 48 h, puis abandonne.\n5. Aucun devis n'est cree : seulement des notes CRM Interfast et des taches Todoist.",
+        "height": 260,
+        "width": 520
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "credentials": {
+        "todoistApi": {
+          "id": "feB4B4HQds0e2tFC",
+          "name": "Todoist account"
+        }
+      },
+      "id": "d1b44a12-c5ff-4769-afe0-becd9de14a46",
+      "name": "Todoist - a rattacher (client non trouve)",
+      "parameters": {
+        "content": "=A rattacher : {{ $(\"Classer\").item.json.output.titre }} ({{ $(\"Classer\").item.json.output.client_nom || \"client inconnu\" }})",
+        "options": {
+          "description": "=Enregistrement Plaud du {{ $(\"Transcript\").item.json.debut }} ({{ $(\"Transcript\").item.json.nom }}).\nCategorie : {{ $(\"Classer\").item.json.output.categorie }}\nRecherche Interfast \"{{ $(\"Classer\").item.json.output.client_nom }}\" : {{ $json.nb_resultats }} resultat(s) {{ $json.candidats }}\n\n{{ $(\"Classer\").item.json.output.note }}\n\nAction suggeree : {{ $(\"Classer\").item.json.output.tache }}",
+          "dueLang": "en",
+          "dueString": "today",
+          "priority": 3
+        },
+        "project": {
+          "__rl": true,
+          "mode": "id",
+          "value": "6hh423vJrW7RvQQg"
+        }
+      },
+      "position": [
+        3552,
+        320
+      ],
+      "type": "n8n-nodes-base.todoist",
+      "typeVersion": 2.2
+    },
+    {
+      "credentials": {
+        "todoistApi": {
+          "id": "feB4B4HQds0e2tFC",
+          "name": "Todoist account"
+        }
+      },
+      "id": "05f247b4-2609-4d4a-adbd-08413a91262d",
+      "name": "Todoist - a rattacher (fournisseur ou interne)",
+      "parameters": {
+        "content": "=A rattacher : {{ $json.output.titre }} ({{ $json.output.categorie }})",
+        "options": {
+          "description": "=Enregistrement Plaud du {{ $(\"Transcript\").item.json.debut }} ({{ $(\"Transcript\").item.json.nom }}).\nCategorie : {{ $json.output.categorie }}\n\n{{ $json.output.note }}\n\nAction suggeree : {{ $json.output.tache }}",
+          "dueLang": "en",
+          "dueString": "today",
+          "priority": 2
+        },
+        "project": {
+          "__rl": true,
+          "mode": "id",
+          "value": "6hh423vJrW7RvQQg"
+        }
+      },
+      "position": [
+        2752,
+        432
+      ],
+      "type": "n8n-nodes-base.todoist",
+      "typeVersion": 2.2
+    },
+    {
+      "credentials": {
+        "todoistApi": {
+          "id": "feB4B4HQds0e2tFC",
+          "name": "Todoist account"
+        }
+      },
+      "id": "7ee3c91e-1131-49b7-8ae4-35b780f8fad7",
+      "name": "Todoist - tache engagement",
+      "parameters": {
+        "content": "={{ $(\"Evaluer la correspondance\").item.json.client_nom }} : {{ $(\"Classer\").item.json.output.tache }}",
+        "options": {
+          "description": "=Depuis l'enregistrement Plaud du {{ $(\"Transcript\").item.json.debut }}.\nNote consignee dans Interfast (client {{ $(\"Evaluer la correspondance\").item.json.client_nom }}).\n\n{{ $(\"Classer\").item.json.output.note }}",
+          "dueLang": "en",
+          "dueString": "tomorrow",
+          "priority": 3
+        },
+        "project": {
+          "__rl": true,
+          "mode": "id",
+          "value": "6hh423vJrW7RvQQg"
+        }
+      },
+      "position": [
+        4064,
+        0
+      ],
+      "type": "n8n-nodes-base.todoist",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "1ba707f2-0782-4b64-aa3a-49e4a6320879",
+      "name": "Toutes les 15 min",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        304
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "8376bf3e-0095-4fa8-8d14-0a49a19ef3ba",
+      "name": "Transcript",
+      "parameters": {
+        "jsCode": "const meta = $('Boucle').item.json;\nconst raw = $input.item.json;\nfunction parseLoose(s) {\n  if (typeof s !== 'string') return null;\n  const a = s.indexOf('{'); const b = s.lastIndexOf('}');\n  const c = s.indexOf('['); const d = s.lastIndexOf(']');\n  let start = a, end = b;\n  if (c !== -1 && (a === -1 || c < a)) { start = c; end = d; }\n  if (start === -1 || end === -1 || end <= start) return null;\n  try { return JSON.parse(s.slice(start, end + 1)); } catch (e) { return null; }\n}\nfunction find(v) {\n  if (v === null || v === undefined) return null;\n  if (typeof v === 'string') { const p = parseLoose(v); return p ? find(p) : null; }\n  if (Array.isArray(v)) { for (const x of v) { const r = find(x); if (r) return r; } return null; }\n  if (typeof v === 'object') {\n    if (Array.isArray(v.source_list)) return v;\n    for (const x of Object.values(v)) { const r = find(x); if (r) return r; }\n  }\n  return null;\n}\nconst file = find(raw) || {};\nconst sources = Array.isArray(file.source_list) ? file.source_list : [];\nconst byType = {};\nfor (const s of sources) {\n  const segs = Array.isArray(s.data_content) ? s.data_content : (parseLoose(s.data_content) || []);\n  if (Array.isArray(segs) && segs.length) byType[String(s.data_type || '')] = segs;\n}\nconst chosen = byType['transaction_polish'] || byType['transaction'] || Object.values(byType)[0] || [];\nconst lines = chosen\n  .map(s => ((s.speaker || 'Interlocuteur') + ': ' + (s.content || s.text || '')).trim())\n  .filter(l => l.length > 3);\nconst text = lines.join('\\n');\nconst start = DateTime.fromISO(meta.start_at, { zone: 'utc' });\nconst startLocal = start.isValid ? start.setZone('Europe/Paris') : null;\nconst ageH = start.isValid ? DateTime.now().diff(start, 'hours').hours : 0;\nconst ready = text.length > 40;\nlet action = 'classer';\nif (!ready) action = ageH > 48 ? 'abandonner' : 'attendre';\nreturn { json: {\n  file_id: meta.file_id,\n  nom: meta.nom,\n  debut: startLocal ? startLocal.toFormat('dd/MM/yyyy HH:mm') : '',\n  duree_min: Math.round((meta.duration_ms || 0) / 60000),\n  age_heures: Math.round(ageH),\n  action,\n  transcript: text.slice(0, 60000),\n  nb_segments: chosen.length,\n  types_dispo: Object.keys(byType).join(',')\n} };",
+        "mode": "runOnceForEachItem"
+      },
+      "position": [
+        1568,
+        400
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "b7256172-e67a-42fb-a632-6fa61a055cd6",
+      "name": "Transcript pret ?",
+      "parameters": {
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "attendre"
+        },
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "classer"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                }
+              },
+              "outputKey": "classer",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "abandonner"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 1
+                }
+              },
+              "outputKey": "abandonner",
+              "renameOutput": true
+            }
+          ]
+        }
+      },
+      "position": [
+        1824,
+        400
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "binaryMode": "separate",
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-16T09:37:05.911Z"
+}

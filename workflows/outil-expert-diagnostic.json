@@ -1,0 +1,447 @@
+{
+  "active": true,
+  "connections": {
+    "Appel outil": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Entree",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Client connu ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Historique client",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Contexte",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Contexte": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Expert",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Donnees test": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Entree",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Entree": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire codes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Expert": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resultat",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Fiche code": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Client connu ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Historique client": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Contexte",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire codes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Fiche code",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Sonnet": {
+      "ai_languageModel": [
+        [
+          {
+            "index": 0,
+            "node": "Expert",
+            "type": "ai_languageModel"
+          }
+        ]
+      ]
+    },
+    "Test manuel": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Donnees test",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-10T06:18:37.815Z",
+  "description": "Expert du bot (architecture standardiste/experts) : diagnostic de panne complexe par Sonnet avec reflexion, sans memoire. Sources : codes_defaut + notes terrain, symptomes, historique client. Lecture seule.",
+  "id": "LA38f9HqFWwMlXjY",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Outil - Expert diagnostic",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "6ef595c2-2258-4c69-9f0d-99088fcafa0e",
+      "name": "Appel outil",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "marque",
+              "type": "string"
+            },
+            {
+              "name": "modele",
+              "type": "string"
+            },
+            {
+              "name": "code",
+              "type": "string"
+            },
+            {
+              "name": "symptomes",
+              "type": "string"
+            },
+            {
+              "name": "client_id",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "position": [
+        224,
+        208
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "b9a9506d-72f5-4cb5-a158-9c790a08c95f",
+      "name": "Client connu ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $('Entree').first().json.client_id }}",
+              "operator": {
+                "operation": "notEmpty",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        1120,
+        112
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "4db011ee-697d-426e-a640-ceef2818ddbb",
+      "name": "Contexte",
+      "parameters": {
+        "jsCode": "const e = $('Entree').first().json;\nconst fiche = $('Fiche code').first().json.fiche;\nlet hist = 'Client non precise : pas d historique.';\ntry {\n  const h = String($('Historique client').first().json.resultat || '');\n  if (h) hist = h.split('\\n').filter(l => !/^(Contact|Adresse) :/.test(l)).join('\\n');\n} catch (x) {}\nconst t = [\n  'Marque : ' + (e.marque || 'inconnue'),\n  'Modele lu sur la plaque : ' + (e.modele || 'inconnu'),\n  'Code affiche : ' + (e.code || 'aucun'),\n  'Symptomes decrits par le technicien : ' + (e.symptomes || 'aucun detail'),\n  '',\n  'FICHE OFFICIELLE DU CODE ET NOTES TERRAIN :',\n  fiche,\n  '',\n  'HISTORIQUE CLIENT :',\n  hist\n].join('\\n');\nreturn [{ json: { contexte: t } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1568,
+        112
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "85356bd5-a022-4e7c-90a5-bcf0d1d37a56",
+      "name": "Donnees test",
+      "parameters": {
+        "jsCode": "return [{ json: { marque: 'Toshiba', modele: 'RAS-B10E2KVG-E', code: '0011', symptomes: 'Le ventilateur interieur demarre puis s arrete apres quelques secondes, leger bruit de frottement a l arret. Le client dit que ca a commence apres un orage.', client_id: '' } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        224,
+        16
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "19d17748-768d-480d-ab23-6b4f5cc81e84",
+      "name": "Entree",
+      "parameters": {
+        "jsCode": "const i = $input.first().json || {};\nconst modele = String(i.modele || '').toUpperCase().replace(/\\s+/g, '').trim();\nlet marque = String(i.marque || '').trim();\nif (/^tosh/i.test(marque)) marque = 'Toshiba';\nelse if (/^daik/i.test(marque)) marque = 'Daikin';\nif (!marque && /^(RAS|RAV|MMY|MCY|MM[A-Z]|HWT|HWS)-?/.test(modele)) marque = 'Toshiba';\nif (!marque && /^(FTX|ATX|ARX|CTX|FVX|FDX|RX[A-Z]|FBA|FCA|FFA|FHA|AZA|RZA|RZQ|FX[A-Z]|REY|RYY|RXY|EH[A-Z]|ER[A-Z]|EB[A-Z]|ED[A-Z])/.test(modele)) marque = 'Daikin';\nconst code = String(i.code || '').toUpperCase().replace(/^(CODE|ERREUR|ERROR)\\s*/, '').replace(/[-_.]+/g, ' ').replace(/\\s+/g, ' ').trim();\nreturn [{ json: { marque, modele, code, cle: code.replace(/[^A-Z0-9]/g, ''), symptomes: String(i.symptomes || '').slice(0, 2000), client_id: String(i.client_id || '').trim() } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        448,
+        112
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "6577b31d-eb29-4d1f-b02f-3d0d8287cc31",
+      "name": "Expert",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "messages": {
+          "messageValues": [
+            {
+              "message": "Tu es l expert diagnostic de ClimatPro (climatisation et pompes a chaleur). Un technicien est devant la machine en panne. Tu recois la fiche officielle du code defaut (si elle existe), les notes terrain ClimatPro, les symptomes decrits et l historique d intervention du client (si connu).\nTa mission : classer les hypotheses de panne et dire dans quel ordre controler, pour ne jamais commander une piece pour rien.\n\nREGLES :\n- Les hypotheses viennent UNIQUEMENT de la fiche officielle, des notes terrain, des symptomes et de l historique fournis. N invente aucune cause absente de ces sources.\n- Pour les controles, tu peux t appuyer sur les pratiques courantes d un frigoriste (continuite, resistance de bobinage, controle visuel, rotation a la main, connecteurs, alimentation), mais sans jamais donner de valeur chiffree (resistance, tension, pression, temperature) qui ne figure pas dans les sources.\n- Rappelle les consignes de securite presentes dans la fiche (ex : ne pas brancher ou debrancher un moteur DC sous tension).\n- Croise les informations : une piece deja changee dans l historique, un evenement cite par le technicien (orage, coupure, travaux), un symptome precis peuvent rendre une hypothese plus ou moins probable. Dis-le quand c est le cas.\n- Une note terrain ClimatPro passe avant tout le reste.\n- Si une information decisive manque (sous-code, modele exact, unite interieure ou groupe exterieur, symptome precis), dis laquelle.\n- Ne presente jamais une hypothese comme certaine.\n\nFORMAT (texte simple, pas de markdown, pas d emoji, pas de tiret long, court et lisible sur un telephone) :\nHypotheses, de la plus probable a la moins probable :\n1. [hypothese] - pourquoi : ... - controle : ...\n2. ...\nOrdre des controles : ...\nPiece a envisager : uniquement si un controle la designe, avec sa designation probable en anglais et en francais (ex FAN MOTOR, MOTEUR VENTILATEUR) et l unite concernee (interieure ou exterieure). Sinon ecris : aucune piece a commander avant les controles.\nInformation manquante : seulement s il en manque une.",
+              "type": "SystemMessagePromptTemplate"
+            }
+          ]
+        },
+        "promptType": "define",
+        "text": "={{ $json.contexte }}"
+      },
+      "position": [
+        1792,
+        112
+      ],
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9
+    },
+    {
+      "id": "14053185-b655-4551-ba3a-62dc023e84cf",
+      "name": "Fiche code",
+      "parameters": {
+        "jsCode": "const e = $('Entree').first().json;\nconst rows = $input.all().map(i => i.json).filter(r => r && r.code_cle);\nlet fiche = '';\nif (!e.cle) fiche = 'Aucun code defaut fourni.';\nelse if (!rows.length) fiche = 'Pas de base de codes defaut pour la marque ' + (e.marque || 'inconnue') + '.';\nelse {\n  const sp = s => String(s || '').toUpperCase().replace(/\\s+/g, ' ').trim();\n  const exact = rows.filter(r => r.code_cle === e.cle);\n  const sous = rows.filter(r => r.code_cle !== e.cle && sp(r.code).startsWith(e.code + ' ')).slice(0, 10);\n  const v = new Set();\n  const m = /^E?0*(\\d{1,3})$/.exec(e.cle);\n  if (m) { const n = m[1]; const p2 = n.padStart(2, '0'); [n, p2, 'E' + p2, 'E' + n, n.padStart(4, '0')].forEach(x => v.add(x)); }\n  const proches = rows.filter(r => v.has(r.code_cle) && r.code_cle !== e.cle);\n  const f = r => 'Code ' + r.code + ' : ' + r.designation + (r.notes ? ' | Consignes Toshiba : ' + r.notes : '') + (r.notes_climatpro ? ' | Note terrain ClimatPro : ' + r.notes_climatpro : '');\n  const L = [];\n  exact.forEach(r => L.push(f(r)));\n  if (proches.length) { L.push('Meme code sous un autre affichage :'); proches.forEach(r => L.push(f(r))); }\n  if (sous.length) { L.push('Sous-codes existants :'); sous.forEach(r => L.push(f(r))); }\n  fiche = L.length ? L.join('\\n') : 'Code ' + e.code + ' absent de la base officielle ' + e.marque + '.';\n}\nreturn [{ json: { fiche } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        896,
+        112
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "5ae9e320-8454-46f9-b739-44d8539b63a3",
+      "name": "Historique client",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Fiche client",
+          "mode": "id",
+          "value": "yj2W2NXNAbFRiuN6"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "client_id",
+              "id": "client_id",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "client_id": "={{ $('Entree').first().json.client_id }}"
+          }
+        }
+      },
+      "position": [
+        1344,
+        32
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "35480cef-e261-4275-a4d9-df1fd6632efa",
+      "name": "Lire codes",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "codes_defaut",
+          "mode": "id",
+          "value": "ko1b5qPW0nF5yYBm"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "marque",
+              "keyValue": "={{ $json.marque || 'aucune' }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        672,
+        112
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "311f78c2-ec43-47f6-92bb-64fcf9ec1f25",
+      "name": "Resultat",
+      "parameters": {
+        "jsCode": "const r = $input.first().json || {};\nlet t = String(r.text || '').trim();\nif (!t) t = 'Expert diagnostic indisponible pour le moment' + (r.error ? ' (' + String(r.error).slice(0, 200) + ')' : '') + '. Utilise la fiche du code defaut.';\nt = t.replace(/\\*\\*/g, '').replace(/[\\u2013\\u2014]/g, '-');\nreturn [{ json: { resultat: 'Analyse de l expert diagnostic (Sonnet) :\\n' + t } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        2144,
+        112
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "anthropicApi": {
+          "id": "UtZzlYk97MvjuDan",
+          "name": "Anthropic account 2"
+        }
+      },
+      "id": "4471eb2c-450f-4581-b127-bfefea43546b",
+      "name": "Sonnet",
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "id",
+          "value": "claude-sonnet-5"
+        },
+        "options": {
+          "effort": "medium",
+          "maxTokensToSample": 6000,
+          "thinkingMode": "adaptive"
+        }
+      },
+      "position": [
+        1872,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.6
+    },
+    {
+      "id": "95cec756-7ab1-4a89-a7ff-6e646c9f2a91",
+      "name": "Sticky Note 43914249",
+      "parameters": {
+        "color": 4,
+        "content": "## Outil - Expert diagnostic\nArchitecture standardiste / experts : appele comme outil expert_diagnostic par Bot - Assistant (Haiku, sans reflexion) pour les pannes complexes (plusieurs symptomes, panne qui revient, code incoherent, demande de diagnostic).\nSonnet avec reflexion adaptative, SANS memoire (pas de bug de signature).\nSources : Data Table codes_defaut (fiche officielle + notes_climatpro), symptomes, historique client via Outil - Fiche client (contacts et adresses retires).\nLecture seule. Test manuel : declencheur Test manuel + Donnees test.",
+        "height": 220,
+        "width": 620
+      },
+      "position": [
+        816,
+        256
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "f536e774-b113-4c7a-9cf8-eef770427494",
+      "name": "Test manuel",
+      "parameters": {},
+      "position": [
+        0,
+        16
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-10T09:38:43.652Z"
+}

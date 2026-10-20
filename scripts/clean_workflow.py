@@ -15,7 +15,10 @@ KEEP = ["id", "name", "active", "description", "createdAt", "updatedAt",
         "settings", "tags", "nodes", "connections", "nodeGroups", "meta"]
 DROP_IN_NODE = {"webhookId"}  # identifiant volatil regenere a l'import
 
-SECRET_KEY = re.compile(r"(key|cle|clé|token|secret|password|mot_de_passe|passwd|authorization|apikey|api_key|bearer)", re.I)
+# Cle de parametre dont la valeur en dur est un secret (nom exact, pas "outputKey" ni "keyName")
+SECRET_KEY = re.compile(r"^(x-)?(api[-_]?key|key|token|secret|password|mot_de_passe|passwd|authorization|bearer|access[-_]?token|bot[-_]?token|x-cle|x-key)$", re.I)
+# Nom d'en-tete / de parametre HTTP (paire {name, value}) considere comme sensible
+SECRET_NAME = re.compile(r"(api[-_]?key|x-cle|x-key|token|secret|password|authorization|bearer)", re.I)
 SECRET_VALUE = [
     re.compile(r"\b\d{8,10}:[A-Za-z0-9_-]{35}\b"),     # jeton bot Telegram
     re.compile(r"\bsk-ant-[A-Za-z0-9_-]{20,}"),       # cle Anthropic
@@ -38,14 +41,13 @@ def scrub(obj, parent_key=""):
         out = {}
         # Paire {name, value} des parametres HTTP (headers / query)
         if "name" in obj and "value" in obj and isinstance(obj.get("name"), str) \
-                and SECRET_KEY.search(obj["name"]) and isinstance(obj.get("value"), str) \
+                and SECRET_NAME.search(obj["name"]) and isinstance(obj.get("value"), str) \
                 and obj["value"] and not obj["value"].startswith("="):
             obj = dict(obj, value=REDACTED)
         for k, v in obj.items():
             if k in DROP_IN_NODE:
                 continue
-            if isinstance(v, str) and SECRET_KEY.search(k) and v and not v.startswith("=") \
-                    and k not in ("keyName", "keyValue", "name", "cle", "code_cle"):
+            if isinstance(v, str) and SECRET_KEY.match(k) and v and not v.startswith("="):
                 out[k] = REDACTED
             else:
                 out[k] = scrub(v, k)
@@ -69,6 +71,16 @@ def clean(raw: dict) -> dict:
         nodes.append(scrub(n))
     out["nodes"] = sorted(nodes, key=lambda n: (n.get("name", ""), n.get("id", "")))
     out["connections"] = scrub(out.get("connections", {}))
+    # Version publiee differente du brouillon : on la garde (c'est elle qui tourne)
+    av = wf.get("activeVersion") or {}
+    if av and av.get("sameAsDraft") is False and av.get("nodes"):
+        pub = {k: av[k] for k in ("nodes", "connections", "nodeGroups") if k in av}
+        pub["nodes"] = sorted([scrub(dict(n, credentials={t: {"id": c.get("id"), "name": c.get("name")}
+                                                          for t, c in (n.get("credentials") or {}).items()}))
+                               for n in pub["nodes"]], key=lambda n: (n.get("name", ""), n.get("id", "")))
+        pub["connections"] = scrub(pub.get("connections", {}))
+        out["versionPubliee"] = pub
+        out["_note"] = "versionPubliee = version active sur le serveur, differente du brouillon (nodes/connections)."
     return out
 
 

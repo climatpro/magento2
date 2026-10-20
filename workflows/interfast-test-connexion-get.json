@@ -1,0 +1,65 @@
+{
+  "active": false,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "HTTP Request",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-07T17:58:22.104Z",
+  "id": "sNz4QD6CaaipqSyT",
+  "meta": null,
+  "name": "Interfast — Test connexion GET",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "ce1ff9e0-2a49-4081-b257-fd48f296039b",
+      "name": "HTTP Request",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {},
+        "url": "https://app.inter-fast.fr/v1/events?page=1&count=1"
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5
+    },
+    {
+      "id": "d2af05d5-0099-4157-b82b-9557a698972c",
+      "name": "When clicking ‘Execute workflow’",
+      "parameters": {},
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "binaryMode": "separate",
+    "callerPolicy": "workflowsFromSameOwner",
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-07T20:51:25.260Z"
+}

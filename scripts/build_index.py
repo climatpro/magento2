@@ -66,15 +66,61 @@ def main():
                     edges.add((d["id"], tgt, "-.->"))
     for a, b, _ in edges:
         used.update([a, b])
+    names = {}
+    for d in data:
+        names[d["name"]] = names.get(d["name"], 0) + 1
+    def label(wid):
+        d = by_id[wid]
+        l = d["name"].replace('"', "'")
+        if names[d["name"]] > 1:
+            l += f" [{wid[:6]}]"
+        return l + ("" if d["active"] else " (inactif)")
     for wid in sorted(used, key=lambda x: by_id[x]["name"]):
-        label = by_id[wid]["name"].replace('"', "'")
-        lines.append(f'  {nid(wid)}["{label}"]')
+        lines.append(f'  {nid(wid)}["{label(wid)}"]')
     for a, b, arrow in sorted(edges, key=lambda e: (by_id[e[0]]["name"], by_id[e[1]]["name"])):
         lines.append(f"  {nid(a)} {arrow} {nid(b)}")
     inactive = [nid(w) for w in used if not by_id[w]["active"]]
     if inactive:
         lines.append("  classDef off fill:#eee,stroke:#999,color:#666")
         lines.append("  class " + ",".join(inactive) + " off")
+    lines += ["```", ""]
+    # Second schema : dependances par Data Table (ecrivain -> table -> lecteur)
+    tp = os.path.join(DOCS, "_tables.json")
+    tnames = json.load(open(tp, encoding="utf-8")) if os.path.exists(tp) else {}
+    SECRET_TABLES = {"daikin_spb_acces", "quartix_acces", "tableau_secrets", "sonepar_acces", "hiparts_acces"}
+    lines += ["## Dépendances via les Data Tables n8n", "",
+              "Un workflow écrit une table (flèche pleine), un autre la lit (flèche pointillée). Les tables d'identifiants",
+              "(`*_acces`, `tableau_secrets`) sont en rouge : leur contenu n'est jamais exporté.", "", "```mermaid", "graph LR"]
+    ids2, tid = {}, {}
+    def n2(wid):
+        if wid not in ids2:
+            ids2[wid] = f"W{len(ids2)}"
+        return ids2[wid]
+    def t2(t):
+        if t not in tid:
+            tid[t] = f"T{len(tid)}"
+        return tid[t]
+    tedges = set()
+    for d in data:
+        for t in d["data_tables"]:
+            tname = tnames.get(t["id"], t["id"])
+            tedges.add((d["id"], tname, "lecture" if t["mode"] == "lecture" else "ecriture"))
+    wused = sorted({e[0] for e in tedges}, key=lambda x: by_id[x]["name"])
+    tused = sorted({e[1] for e in tedges})
+    for wid in wused:
+        lines.append(f'  {n2(wid)}["{label(wid)}"]')
+    for t in tused:
+        lines.append(f'  {t2(t)}[("{t}")]')
+    for wid, t, mode in sorted(tedges, key=lambda e: (e[1], by_id[e[0]]["name"])):
+        lines.append(f"  {n2(wid)} -.-> {t2(t)}" if mode == "lecture" else f"  {n2(wid)} --> {t2(t)}")
+    lines.append("  classDef secret fill:#fdd,stroke:#c00")
+    sec = [t2(t) for t in tused if t in SECRET_TABLES]
+    if sec:
+        lines.append("  class " + ",".join(sec) + " secret")
+    off2 = [n2(w) for w in wused if not by_id[w]["active"]]
+    if off2:
+        lines.append("  classDef off fill:#eee,stroke:#999,color:#666")
+        lines.append("  class " + ",".join(off2) + " off")
     lines += ["```", ""]
     isolated = [d["name"] for d in data if d["id"] not in used]
     if isolated:

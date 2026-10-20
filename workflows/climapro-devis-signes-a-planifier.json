@@ -1,0 +1,304 @@
+{
+  "active": true,
+  "connections": {
+    "Comparer": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enregistrer",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Devis signes a planifier (Interfast)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Pages",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interfast - interventions": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire table",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire table": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Comparer",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Pages": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interfast - interventions",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Toutes les 30 min": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Devis signes a planifier (Interfast)",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-17T23:26:15.188Z",
+  "description": "Toutes les 30 min : devis signes Interfast (filtre natif toPlan) sans intervention portant le n° de devis -> table devis_a_planifier, lue par le tableau de bord (encadre Devis signes a planifier). Lecture seule Interfast, aucune IA.",
+  "id": "41rkj8mIgjXlAuat",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Climapro - Devis signes a planifier",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "c7d9d269-559f-4b78-8333-7954fc1e0b49",
+      "name": "Comparer",
+      "parameters": {
+        "jsCode": "// Devis signes (filtre natif Interfast toPlan) moins ceux qui sont deja pris en charge :\n//  1. une intervention porte le n° de devis (reference externe / secondReference, ou n° dans le titre) ;\n//  2. ou une intervention existe chez le meme client a partir du jour de la signature ;\n//  3. ou le devis est deja facture a plus de 80 % (travaux faits).\n// Lecture seule Interfast, aucune IA.\nconst DEPUIS = '2026-01-01';           // devis signes avant cette date ignores (anti-cimetiere)\n// Repartition : Christophe planifie depannages, entretiens, reparations et petits travaux ; Laurent les nouvelles installations.\nconst CHRISTOPHE = /entretien|maintenance|contrat|d[ée]pannage|r[ée]paration|relevage|fuite|diagnostic|nettoyage|filtre|r[ée]vision|recharge|thermostat|compresseur|carte|moteur|ventilat|condensateur|sonde|vanne|pi[eè]ce/i;\nconst LAURENT = /install|\\bpose\\b|nouvel|split|multi|gainable|\\bvrv\\b|\\bvrf\\b|\\bdrv\\b|\\bpac\\b|pompe [àa] chaleur|climatisation|cassette|console|murale|yukai|haori|daikin|toshiba|mitsubishi|hitachi|fujitsu|haier|ballon|chauffe-eau|vmc|plancher|chaudi[eè]re/i;\nconst responsable = t => CHRISTOPHE.test(t) ? 'christophe' : (LAURENT.test(t) ? 'laurent' : 'christophe');\nconst now = DateTime.now().toUTC().toISO();\nconst body = $('Devis signes a planifier (Interfast)').first().json || {};\nif (!Array.isArray(body.items)) throw new Error('Reponse Interfast devis inattendue : rien n est modifie');\nconst liste = body.items.filter(d => d && d.reference && (d.signedAt || d.updatedAt) >= DEPUIS && !d.isTestData && !d.isTemplate);\nconst parRef = {};\nconst parClient = {};\nconst vus = new Set();\nfor (const it of $('Interfast - interventions').all()) {\n  for (const ev of (it.json.items || [])) {\n    if (!ev || vus.has(String(ev.id))) continue;\n    vus.add(String(ev.id));\n    if (ev.lifecycleState === 'cancelled' || ev.category === 'task') continue;\n    const nom = ev.reference || String(ev.id);\n    const txt = [ev.secondReference, ev.title].filter(Boolean).join(' ').toUpperCase();\n    for (const m of txt.matchAll(/\\bD[CE]\\s?\\d{3,6}\\b/g)) { const r = m[0].replace(/\\s/g, ''); if (!parRef[r]) parRef[r] = nom; }\n    const cid = ev.client && ev.client.id ? String(ev.client.id) : '';\n    if (cid && ev.start) (parClient[cid] = parClient[cid] || []).push({ start: ev.start, nom });\n  }\n}\nfunction lien(d) {\n  const ref = String(d.reference).toUpperCase();\n  if (parRef[ref]) return parRef[ref];\n  const cid = d.client && d.client.id ? String(d.client.id) : '';\n  const depuis = DateTime.fromISO(d.signedAt || d.updatedAt).minus({ days: 1 }).toUTC().toISO();\n  const ev = (parClient[cid] || []).filter(e => e.start >= depuis).sort((a, b) => a.start < b.start ? -1 : 1)[0];\n  if (ev) return ev.nom;\n  if (Number(d.amountVAT) > 0 && Number(d.balance) <= 0.2 * Number(d.amountVAT)) return 'facture';\n  return '';\n}\nconst table = {};\nfor (const it of $('Lire table').all()) { const r = it.json || {}; if (r.reference) table[r.reference] = r; }\nconst out = [];\nconst enCours = new Set();\nconst pris = {};\nfor (const d of liste) {\n  const ref = String(d.reference).toUpperCase();\n  const l = lien(d);\n  if (l) { pris[ref] = l; continue; }\n  enCours.add(ref);\n  const ex = table[ref];\n  const c = d.client || {};\n  out.push({ json: {\n    reference: ref, devis_id: String(d.id), titre: String(d.name || '').slice(0, 200),\n    client: String(c.name || '').trim(), client_id: String(c.id || ''), ville: String(d.addressCity || ''),\n    telephone: String(c.phoneNumber || ''), signe_le: d.signedAt || d.updatedAt,\n    responsable: responsable(String(d.name || '')),\n    planifie: false, planifie_le: null, intervention_ref: '', vu_le: (ex && ex.vu_le) || now, source: 'interfast'\n  } });\n}\n// Lignes encore ouvertes dans la table mais sorties de la liste : planifiees (ou devis annule / facture).\n// Exception : les devis acceptes par mail (source = mail) restent tant qu'aucune intervention n'existe\n// (le workflow « Devis acceptes par mail » les ferme si le devis est annule, refuse ou solde).\nfor (const [ref, r] of Object.entries(table)) {\n  if (r.planifie || enCours.has(ref)) continue;\n  if (r.source === 'mail') {\n    const l = parRef[ref] || ((parClient[String(r.client_id || '')] || []).filter(e => e.start >= DateTime.fromISO(String(r.signe_le || now)).minus({ days: 1 }).toUTC().toISO()).sort((a, b) => a.start < b.start ? -1 : 1)[0] || {}).nom;\n    if (l) out.push({ json: { reference: ref, planifie: true, planifie_le: now, intervention_ref: l } });\n    continue;\n  }\n  out.push({ json: { reference: ref, planifie: true, planifie_le: now, intervention_ref: pris[ref] || '' } });\n}\nreturn out;\n"
+      },
+      "position": [
+        1120,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "04e342e5-85c0-4d0c-95cf-e568cff0f28c",
+      "name": "Devis signes a planifier (Interfast)",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "method": "GET",
+        "options": {},
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "toPlan",
+              "value": "true"
+            },
+            {
+              "name": "page",
+              "value": "0"
+            },
+            {
+              "name": "size",
+              "value": "100"
+            },
+            {
+              "name": "orderBy",
+              "value": "signedAt"
+            },
+            {
+              "name": "isDesc",
+              "value": "true"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://app.inter-fast.fr/v1/billing/quotations"
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "bb231311-91a8-4247-9002-99f3b7309184",
+      "name": "Enregistrer",
+      "parameters": {
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": null
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "0U759buKi8psn4V5"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "reference",
+              "keyValue": "={{ $json.reference }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "upsert",
+        "resource": "row"
+      },
+      "position": [
+        1344,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "e50c7f8a-4a19-4e22-92d6-21043ff0fc5c",
+      "name": "Interfast - interventions",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "method": "GET",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchInterval": 300,
+              "batchSize": 5
+            }
+          }
+        },
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "start",
+              "value": "={{ $json.debut }}"
+            },
+            {
+              "name": "end",
+              "value": "={{ $json.fin }}"
+            },
+            {
+              "name": "page",
+              "value": "={{ $json.page }}"
+            },
+            {
+              "name": "count",
+              "value": "100"
+            },
+            {
+              "name": "archived",
+              "value": "false"
+            },
+            {
+              "name": "meeting",
+              "value": "false"
+            },
+            {
+              "name": "orderBy",
+              "value": "start"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://app.inter-fast.fr/v1/events"
+      },
+      "position": [
+        672,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "dfd7b174-e538-4394-8548-f94b96c2bd6d",
+      "name": "Lire table",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "0U759buKi8psn4V5"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        896,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "executeOnce": true,
+      "id": "1915e66f-cab2-4f5a-ac05-f77a619d4669",
+      "name": "Pages",
+      "parameters": {
+        "jsCode": "const debut = DateTime.now().minus({ months: 8 }).toUTC().toISO();\nconst fin = DateTime.now().plus({ months: 13 }).toUTC().toISO();\nreturn Array.from({ length: 15 }, (_, i) => ({ json: { page: i, debut, fin } }));"
+      },
+      "position": [
+        448,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "5b3e582e-1834-4972-9912-be47ed376e2f",
+      "name": "Toutes les 30 min",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "timezone": "Europe/Paris"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-19T08:51:38.341Z"
+}

@@ -1,0 +1,536 @@
+{
+  "active": false,
+  "connections": {
+    "Aiguiller": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Publier le texte",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Publier la piece jointe",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Retirer libelle Telegram",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Mails libelle Telegram": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Trouver le groupe",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer envois": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Aiguiller",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Publier le texte": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enregistrer dans le fil",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Retirer libelle Telegram": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ajouter libelle Telegram-envoye",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Toutes les 5 min": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Mails libelle Telegram",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Trouver le groupe": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer envois",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-19T09:32:39.670Z",
+  "description": "Toutes les 5 min : mails Gmail portant le libelle « Telegram » -> publies dans le groupe Telegram ClimatPro par @Team_ClimatPro_bot (texte + vraies pieces jointes, logos ignores), ligne dans le fil equipe, puis libelle bascule sur « Telegram-envoyé ».",
+  "id": "SCv8Qb03TbUB56NM",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Equipe - Mail vers groupe Telegram",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "d1fa9e87-0099-4a22-98ad-ac6a5ac485d1",
+      "name": "Aiguiller",
+      "parameters": {
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "texte"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                }
+              },
+              "outputKey": "texte"
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "doc"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                }
+              },
+              "outputKey": "doc"
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "fin"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                }
+              },
+              "outputKey": "fin"
+            }
+          ]
+        }
+      },
+      "position": [
+        896,
+        176
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2
+    },
+    {
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "QkVJEJmojKI4yW63",
+          "name": "Gmail account"
+        }
+      },
+      "id": "419e196a-ad41-48b3-ac38-17ba743521f2",
+      "name": "Ajouter libelle Telegram-envoye",
+      "parameters": {
+        "labelIds": [
+          "Label_38"
+        ],
+        "messageId": "={{ $('Aiguiller').item.json.messageId }}",
+        "operation": "addLabels",
+        "resource": "message"
+      },
+      "position": [
+        1344,
+        384
+      ],
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "d8076552-0d84-422f-ad4e-a0aebeb1f08c",
+      "name": "Enregistrer dans le fil",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "date",
+              "id": "date",
+              "required": false,
+              "type": "dateTime"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "chat_id",
+              "id": "chat_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "tg_message_id",
+              "id": "tg_message_id",
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "telegram_id",
+              "id": "telegram_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "auteur",
+              "id": "auteur",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "texte",
+              "id": "texte",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "type",
+              "id": "type",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "photo_drive_id",
+              "id": "photo_drive_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "source",
+              "id": "source",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "note_interfast",
+              "id": "note_interfast",
+              "required": false,
+              "type": "boolean"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "traite",
+              "id": "traite",
+              "required": false,
+              "type": "boolean"
+            }
+          ],
+          "value": {
+            "auteur": "Mail",
+            "chat_id": "={{ $('Aiguiller').item.json.chat_id }}",
+            "date": "={{ $now.toUTC().toISO() }}",
+            "note_interfast": false,
+            "photo_drive_id": "",
+            "source": "mail",
+            "telegram_id": "",
+            "texte": "={{ $('Aiguiller').item.json.texte_fil }}",
+            "tg_message_id": "={{ $json.result.message_id }}",
+            "traite": true,
+            "type": "texte"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "JtuuDgi9yHe84lHj"
+        },
+        "operation": "insert",
+        "options": {},
+        "resource": "row"
+      },
+      "position": [
+        1344,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "QkVJEJmojKI4yW63",
+          "name": "Gmail account"
+        }
+      },
+      "id": "6890e392-e3d1-445c-84bd-1d73c6c20bcc",
+      "name": "Mails libelle Telegram",
+      "parameters": {
+        "filters": {
+          "labelIds": [
+            "Label_37"
+          ],
+          "readStatus": "both"
+        },
+        "limit": 10,
+        "operation": "getAll",
+        "options": {
+          "dataPropertyAttachmentsPrefixName": "attachment_",
+          "downloadAttachments": true
+        },
+        "resource": "message",
+        "returnAll": false,
+        "simple": false
+      },
+      "position": [
+        224,
+        192
+      ],
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "13036191-36c0-402d-adf5-9297bd9597f1",
+      "name": "Preparer envois",
+      "parameters": {
+        "jsCode": "// Pour chaque mail portant le libelle Telegram : 1 message texte + 1 envoi par vraie piece jointe (les logos de signature sont ignores), puis bascule des libelles.\nconst chatId = String(($input.first() || {}).json.chat_id || '');\nif (!chatId) throw new Error('Groupe Telegram introuvable dans la table equipe_messages');\nconst mails = $('Mails libelle Telegram').all();\nconst esc = t => String(t || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst ko = s => { const m = String(s || '').match(/([\\d.,]+)\\s*(B|kB|KB|MB|GB)/i); if (!m) return 0; const n = parseFloat(m[1].replace(',', '.')); const u = m[2].toUpperCase(); return u === 'B' ? n / 1024 : u === 'KB' ? n : u === 'MB' ? n * 1024 : n * 1048576; };\n// Un seul envoi par conversation (le message le plus recent), libelles bascules sur tous.\nconst parFil = {};\nfor (const it of mails) { const j = it.json; const k = j.threadId || j.id; const d = Number(j.internalDate || 0); if (!parFil[k] || d > Number(parFil[k].json.internalDate || 0)) parFil[k] = it; }\nconst out = [];\nfor (const it of Object.values(parFil)) {\n  const j = it.json;\n  const de = (j.from && j.from.text) || j.From || '';\n  const objet = j.subject || j.Subject || '';\n  let corps = String(j.text || '').replace(/\\r/g, '').replace(/\\[\\]\\([^)]*\\)/g, '').replace(/\\n{3,}/g, '\\n\\n').trim();\n  const coupe = corps.search(/Conform[ée]ment au RGPD|Ce message et toutes les pi[eè]ces jointes|This e-?mail and any attachments/i);\n  if (coupe > 0) corps = corps.slice(0, coupe).trim();\n  if (corps.length > 2500) corps = corps.slice(0, 2500) + '\\n[...]';\n  const docs = []; const tropLourds = [];\n  for (const [cle, b] of Object.entries(it.binary || {})) {\n    const nom = b.fileName || cle; const mime = b.mimeType || ''; const taille = ko(b.fileSize);\n    const logo = mime.startsWith('image/') && (/^CID_|^image\\d*\\.|^Outlook-|^logo/i.test(nom) || (taille > 0 && taille < 40));\n    if (logo) continue;\n    if (taille > 45 * 1024) { tropLourds.push(nom); continue; }\n    docs.push({ cle, nom });\n  }\n  let html = '<b>Mail transfere</b>\\n<b>De :</b> ' + esc(de) + '\\n<b>Objet :</b> ' + esc(objet);\n  if (corps) html += '\\n\\n' + esc(corps);\n  if (docs.length) html += '\\n\\n' + docs.length + ' piece(s) jointe(s) ci-dessous.';\n  if (tropLourds.length) html += '\\n\\nTrop lourd pour Telegram, voir le mail : ' + esc(tropLourds.join(', '));\n  out.push({ json: { type: 'texte', chat_id: chatId, html: html.slice(0, 4000), texte_fil: ('Mail transfere - ' + objet).slice(0, 500) } });\n  for (const d of docs) out.push({ json: { type: 'doc', chat_id: chatId, nom: d.nom }, binary: { data: it.binary[d.cle] } });\n}\nfor (const it of mails) out.push({ json: { type: 'fin', messageId: it.json.id } });\nreturn out;",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        672,
+        192
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "gQjbmvis03Oi1VtD",
+          "name": "Bot Telegram - groupe climatpro"
+        }
+      },
+      "id": "b7504583-dd35-4c7f-b9e0-5f720e0cbd14",
+      "name": "Publier la piece jointe",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "additionalFields": {
+          "fileName": "={{ $json.nom }}"
+        },
+        "binaryData": true,
+        "binaryPropertyName": "data",
+        "chatId": "={{ $json.chat_id }}",
+        "operation": "sendDocument",
+        "resource": "message"
+      },
+      "position": [
+        1120,
+        192
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "gQjbmvis03Oi1VtD",
+          "name": "Bot Telegram - groupe climatpro"
+        }
+      },
+      "id": "74604542-0b44-4f75-ab53-12fb83aec714",
+      "name": "Publier le texte",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        },
+        "chatId": "={{ $json.chat_id }}",
+        "operation": "sendMessage",
+        "resource": "message",
+        "text": "={{ $json.html }}"
+      },
+      "position": [
+        1120,
+        0
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "QkVJEJmojKI4yW63",
+          "name": "Gmail account"
+        }
+      },
+      "id": "aaaa1627-dd6e-4408-ba05-7f23ad66d49c",
+      "name": "Retirer libelle Telegram",
+      "parameters": {
+        "labelIds": [
+          "Label_37"
+        ],
+        "messageId": "={{ $json.messageId }}",
+        "operation": "removeLabels",
+        "resource": "message"
+      },
+      "position": [
+        1120,
+        384
+      ],
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "dc2651dc-95dc-44e7-943e-9dbde9294d9e",
+      "name": "Toutes les 5 min",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        192
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "executeOnce": true,
+      "id": "6022f659-2e09-4562-9f4d-eed950a9938f",
+      "name": "Trouver le groupe",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "JtuuDgi9yHe84lHj"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "source",
+              "keyValue": "telegram"
+            }
+          ]
+        },
+        "limit": 1,
+        "matchType": "allConditions",
+        "operation": "get",
+        "orderBy": true,
+        "orderByColumn": "id",
+        "orderByDirection": "DESC",
+        "resource": "row",
+        "returnAll": false
+      },
+      "position": [
+        448,
+        192
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-19T09:32:39.670Z"
+}

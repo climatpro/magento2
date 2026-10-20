@@ -1,0 +1,941 @@
+{
+  "active": true,
+  "connections": {
+    "A rattacher": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Tache prete",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Classer (Haiku)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Router",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Client proche": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Theme",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Client trouve ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interfast - consigner la note",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "A rattacher",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Clients GPS": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Client proche",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Evaluer la correspondance": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Client trouve ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Films": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Note client ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Geocoder le lieu": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Clients GPS",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Icones existantes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Precisions commande",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interfast - chercher le client": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Evaluer la correspondance",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interfast - consigner la note": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Message : note Interfast",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "A rattacher",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Memo vide ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Message : vide",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Icones existantes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Message : OK": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Repondre a l'iPhone",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Message : note Interfast": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Repondre a l'iPhone",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Message : secours": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Repondre a l'iPhone",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Message : vide": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Repondre a l'iPhone",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Note client ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interfast - chercher le client",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Tache prete",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Precisions commande": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Classer (Haiku)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Memo vide ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Router": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Geocoder le lieu",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Secours : Boite de reception": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Message : secours",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Tache prete": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Todoist - creer la tache",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Theme": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Films",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Todoist - creer la tache": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Message : OK",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Secours : Boite de reception",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook Climapro": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-05T22:37:05.078Z",
+  "description": "Raccourci iPhone Climapro : memo dicte > Haiku classe > Todoist (bon projet) ou fiche client Interfast > notification de confirmation sur l'iPhone.",
+  "id": "VGZmIR5xPPzUFpMP",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Climapro - Mémos vocaux",
+  "nodeGroups": [
+    {
+      "description": "Si aucun client n'est dicté : cherche une fiche Interfast à moins de 200 m du lieu du mémo et la propose (titre, notif)",
+      "id": "044e50d0-3dcd-4153-85ae-7a36bda386bf",
+      "name": "Client proche (GPS)",
+      "nodeNames": [
+        "Geocoder le lieu",
+        "Clients GPS",
+        "Client proche"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "c3a55997-5a35-44a3-ae07-961fc2d72a8b",
+      "name": "A rattacher",
+      "parameters": {
+        "jsCode": "const r = $('Router').first().json;\nlet ev = {};\ntry { ev = $('Evaluer la correspondance').first().json || {}; } catch (e) {}\nconst t = Object.assign({}, r.todoist_rattacher);\nconst raison = ev.match\n  ? 'Client trouvé (' + ev.client_nom + ') mais la note n\\'a pas pu être consignée dans Interfast.'\n  : 'Pas de correspondance unique dans Interfast. Candidats : ' + (ev.candidats || 'aucun') + '.';\nt.description = r.note_crm + '\\n\\nClient dicté : \"' + r.client + '\". ' + raison + '\\nCopier la note sur la bonne fiche client, puis cocher.';\nconst message = (ev.match ? 'Interfast indisponible' : 'Client \"' + r.client + '\" introuvable dans Interfast') + '\\nTâche à rattacher > ' + r.dest_rattacher;\nreturn [{ json: { todoist: t, message } }];"
+      },
+      "position": [
+        2250,
+        50
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "anthropicApi": {
+          "id": "UtZzlYk97MvjuDan",
+          "name": "Anthropic account 2"
+        }
+      },
+      "id": "1d520cc2-2edc-4ea3-8905-ebecc0166648",
+      "maxTries": 2,
+      "name": "Classer (Haiku)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify($json.requete) }}",
+        "method": "POST",
+        "nodeCredentialType": "anthropicApi",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://api.anthropic.com/v1/messages"
+      },
+      "position": [
+        750,
+        100
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "waitBetweenTries": 1500
+    },
+    {
+      "id": "5711c418-c413-4ca0-a182-aeb968a2cbc3",
+      "name": "Client proche",
+      "parameters": {
+        "jsCode": "// Suggere le client Interfast le plus proche du lieu du memo (moins de 200 m)\nconst r = JSON.parse(JSON.stringify($('Router').first().json));\nconst p = $('Preparer').first().json;\nconst RAYON = 200;\nlet lat = null, lon = null;\nif (p.lat && p.lon) { lat = Number(p.lat); lon = Number(p.lon); }\nelse {\n  try {\n    const f = (($('Geocoder le lieu').first().json || {}).features || [])[0];\n    if (f && (f.properties.score || 0) >= 0.5) { lon = f.geometry.coordinates[0]; lat = f.geometry.coordinates[1]; }\n  } catch (e) {}\n}\n// Pas de suggestion : client deja dicte, perso/holding, domicile ou depot, ou lieu inconnu\nconst chezSoi = /impasse du moulin|chemin de dandon/i.test(p.lieu || '');\nif (r.client || ['PERSO', 'HOLDING'].includes(r.domaine) || chezSoi || lat === null) return [{ json: r }];\nconst rad = x => x * Math.PI / 180;\nconst dist = (a, b, c, d) => { const R = 6371000, dl = rad(c - a), dn = rad(d - b); const h = Math.sin(dl / 2) ** 2 + Math.cos(rad(a)) * Math.cos(rad(c)) * Math.sin(dn / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); };\nconst proches = $input.all().map(i => i.json)\n  .filter(c => c && c.lat !== null && c.lat !== undefined && (c.score || 0) >= 0.5)\n  .map(c => ({ nom: c.nom, ref: c.ref, id: c.client_id, m: Math.round(dist(lat, lon, Number(c.lat), Number(c.lon))) }))\n  .filter(c => c.m <= RAYON)\n  .sort((a, b) => a.m - b.m)\n  .slice(0, 2);\nif (!proches.length) return [{ json: r }];\nconst c0 = proches[0];\nconst autre = proches[1] ? ' Autre fiche proche : ' + proches[1].nom + ' (' + proches[1].ref + ', ' + proches[1].m + ' m).' : '';\nr.client_proche = c0.nom;\nr.todoist.content = r.todoist.content + ' - ' + c0.nom + ' ?';\nr.todoist.description = 'Client à proximité au moment du mémo : ' + c0.nom + ' (' + c0.ref + ', ' + c0.m + ' m). À confirmer.' + autre + '\\n\\n' + r.todoist.description;\nr.todoist.labels = (r.todoist.labels || []).concat(['client-proche']);\nr.message = r.message + '\\nPrès de : ' + c0.nom + ' (' + c0.m + ' m) ?';\nreturn [{ json: r }];"
+      },
+      "position": [
+        1400,
+        300
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "c5ea222c-8ccb-4d1f-8383-64902bce56f0",
+      "name": "Client trouve ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.match }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        2000,
+        -100
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "eaad8bfc-5b2f-4594-97f2-7230566f01f2",
+      "name": "Clients GPS",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "xrWuLpFXi8qQWU86"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        1250,
+        300
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "251667e1-f888-4af2-ad43-5bd2507b234a",
+      "name": "Evaluer la correspondance",
+      "parameters": {
+        "jsCode": "const r = $('Router').first().json;\nconst res = $input.first().json || {};\nconst all = Array.isArray(res.items) ? res.items : [];\nconst items = all.filter(c => String(c.reference || '').toUpperCase().startsWith('C') && String(c.category || 'client') !== 'supplier');\nconst n = s => String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');\nlet cands = items;\nif (cands.length > 1) {\n  const cible = n(r.client);\n  const ex = cands.filter(c => n(c.name) === cible || n(c.name).split(/\\s+/).includes(cible));\n  if (ex.length) cands = ex;\n}\nconst match = cands.length === 1 ? cands[0] : null;\nreturn [{ json: {\n  match: !!match,\n  client_id: match ? String(match.id) : '',\n  client_nom: match ? String(match.name || '').trim() : '',\n  candidats: items.length ? items.slice(0, 5).map(c => String(c.name || '').trim() + ' (' + c.reference + ')').join(', ') : 'aucun'\n} }];"
+      },
+      "position": [
+        1750,
+        -100
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "3d496bcd-1274-4eca-9f26-819aa6a399e9",
+      "name": "Films",
+      "parameters": {
+        "jsCode": "// Film a voir dicte par Laurent -> Perso / Films a voir, titre = nom du film seul\nconst r = JSON.parse(JSON.stringify($input.first().json));\nconst p = $('Preparer').first().json;\nconst texte = String(p.note || '');\nconst estFilm = /(liste|list)\\s+(de|des)?\\s*films?|films?\\s+(a|à)\\s+(voir|regarder)|(regarder|voir)\\s+(le\\s+)?film/i.test(texte);\nif (!estFilm || p.auteur !== 'laurent' || r.action !== 'todoist' || !r.todoist) return [{ json: r }];\nlet t = String(r.titre || texte);\nt = t.replace(/^(info|idée|idee|à trier|a trier)\\s*:\\s*/i, '')\n  .replace(/^(ajouter|noter|regarder|voir)\\s+(le\\s+film\\s+)?/i, '')\n  .replace(/^film\\s+/i, '')\n  .replace(/\\s+(à|a|dans)\\s+(la|ma|mon)\\s+(liste|film).*$/i, '')\n  .replace(/^[«\"\\s]+|[»\"\\s]+$/g, '')\n  .trim();\nif (!t) t = String(r.titre || texte);\nt = t.charAt(0).toUpperCase() + t.slice(1);\nconst td = r.todoist;\ntd.content = t;\ntd.project_id = '6hh423vGr88f287j';\ntd.section_id = '6hjQhj2hr8ff5wGC';\ntd.labels = [...new Set(['memo', 'film'].concat((td.labels || []).filter(l => !['a-trier', 'pro-ou-perso', 'client-proche', 'commande', 'devis'].includes(l))))];\ndelete td.due_date;\nr.message = 'Film > Perso / Films à voir\\n' + t;\nreturn [{ json: r }];"
+      },
+      "position": [
+        1700,
+        300
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "alwaysOutputData": true,
+      "id": "8de1cafe-6df1-420b-aa64-a3819e7f2a84",
+      "name": "Geocoder le lieu",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "method": "GET",
+        "options": {
+          "timeout": 4000
+        },
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $('Preparer').first().json.lieu || 'inconnu' }}"
+            },
+            {
+              "name": "limit",
+              "value": "1"
+            },
+            {
+              "name": "index",
+              "value": "address"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://data.geopf.fr/geocodage/search"
+      },
+      "position": [
+        1100,
+        300
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "c732dccf-640b-479b-851a-fb4de0a2c8f9",
+      "name": "Icones existantes",
+      "notes": "Table images_tableau : les lignes icones/<mot>.png sont les icônes déjà disponibles, données à Haiku pour qu'il réutilise les mêmes mots.",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "gkJQL9liZvE8M2Op"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        560,
+        250
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "853dc396-1a96-46ab-8d13-50eb17666c2a",
+      "name": "Interfast - chercher le client",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {},
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "page",
+              "value": "0"
+            },
+            {
+              "name": "size",
+              "value": "10"
+            },
+            {
+              "name": "archived",
+              "value": "false"
+            },
+            {
+              "name": "name",
+              "value": "={{ $json.client }}"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://app.inter-fast.fr/v1/crm/search"
+      },
+      "position": [
+        1500,
+        -100
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "6246d808-539d-490c-83ec-101861bfc33b",
+      "name": "Interfast - consigner la note",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "jsonBody": "={{ JSON.stringify({ type: 'note', content: $('Router').first().json.note_crm }) }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "=https://app.inter-fast.fr/v1/client/{{ $json.client_id }}/activities/notes"
+      },
+      "position": [
+        2250,
+        -200
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "47dadc27-2d1e-4c87-b4aa-c9caee872f09",
+      "name": "Memo vide ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "v1",
+              "leftValue": "={{ $json.vide }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        500,
+        0
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "8ef92f59-2e1a-4d77-b0f4-62d15d77d980",
+      "name": "Message : OK",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "m3",
+              "name": "message",
+              "type": "string",
+              "value": "={{ $('Tache prete').first().json.message }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        3000,
+        100
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "6c0932be-5fb0-4a99-b11e-9369aa608283",
+      "name": "Message : note Interfast",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "m2",
+              "name": "message",
+              "type": "string",
+              "value": "={{ 'Info client > Interfast, fiche ' + $('Evaluer la correspondance').first().json.client_nom + '\\n' + $('Router').first().json.titre }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        2500,
+        -300
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "7c3d7fd5-51d2-4a8e-81fe-17eb798deda5",
+      "name": "Message : secours",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "m4",
+              "name": "message",
+              "type": "string",
+              "value": "Rangement en échec : mémo sauvé tel quel dans la Boîte de réception Todoist."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        3250,
+        350
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "a8eab5ab-64fe-4a01-b392-60e7315b0814",
+      "name": "Message : vide",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "m1",
+              "name": "message",
+              "type": "string",
+              "value": "Mémo vide : la dictée n'a rien capté. Rien n'a été rangé, recommence."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "position": [
+        750,
+        -200
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "f56ef299-b93d-46c8-bfd3-580189673d27",
+      "name": "Note client ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "n1",
+              "leftValue": "={{ $json.action }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "interfast"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1250,
+        100
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "8609d3ee-f281-4540-b633-3e19026fcb4c",
+      "name": "Precisions commande",
+      "parameters": {
+        "jsCode": "// Complete le prompt de Preparer : le materiel manquant est une COMMANDE, meme dit en trois mots\n// + la cle objet (icone du memo), en reutilisant les icones deja presentes dans la banque\nconst p = JSON.parse(JSON.stringify($('Preparer').first().json));\nconst dispo = [];\ntry {\n  for (const it of $input.all()) {\n    const nom = String((it.json || {}).nom || '');\n    if (nom.startsWith('icones/')) dispo.push(nom.slice(7).replace(/\\.[a-z0-9]+$/i, ''));\n  }\n} catch (e) {}\nconst ajout = [\n  `Précision sur le theme COMMANDE : tout matériel, outillage, consommable ou pièce qui manque ou qu'il faut prendre, commander, acheter ou récupérer, même sans le mot commander (\"il manque\", \"il n'y a plus de\", \"on n'a plus de\", \"il faut une pince coupante\", \"plus de Colson\").`,\n  `Dans ce cas : type TACHE, domaine EQUIPE, theme COMMANDE, titre = l'article avec la quantité ou la marque si elles sont dites, sans verbe (exemples : \"Colson\", \"Pince coupante\", \"2 bobines de câble 3G1,5\"), et confiance HAUTE même si le mémo est très court. Une demande de matériel n'est jamais un DEVIS.`,\n  `Ajoute toujours la clé perso_possible : true si le mémo pourrait aussi bien être personnel (maison, famille, courses, bricolage à la maison) parce que rien ne le relie clairement à ClimatPro (ni client, ni chantier, ni technicien, ni fournisseur, ni dépôt, ni camion, ni matériel de clim). Exemples : \"acheter des piles\" = true, \"acheter du scotch\" = true, \"plus de Colson\" = false, \"acheter des piles pour la télécommande de Mme Martin\" = false, \"acheter du papier toilette\" = false si tu le ranges déjà en PERSO. Sinon false.`,\n  `Ajoute toujours la clé objet : l'objet physique principal du mémo, pour choisir son icône. Un seul nom commun, au singulier, en minuscules, sans accent, sans article, sans espace (un tiret entre deux mots : \"bouteille-fluide\", \"pompe-a-vide\"). Exemples : \"prendre le balai pour demain\" = \"balai\", \"il n'y a plus de goulottes\" = \"goulotte\", \"changer les filtres chez Mme Martin\" = \"filtre\", \"acheter deux échelles\" = \"echelle\". Si le mémo n'a pas d'objet concret (relancer quelqu'un, une idée, un rendez-vous, une facture à faire), mets null.`\n  + (dispo.length ? ` Icônes déjà disponibles, à réutiliser telles quelles quand l'objet correspond ou est très proche (synonyme, même famille) : ${dispo.sort().join(', ')}.` : '')\n].join('\\n');\np.requete.system = p.requete.system + '\\n' + ajout;\nreturn [{ json: p }];\n",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        620,
+        100
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "acb31384-a165-441a-8b38-ef822ce4d9db",
+      "name": "Preparer",
+      "parameters": {
+        "jsCode": "const b = ($input.first().json.body) || {};\nconst note = String(b.note || '').trim();\nconst appareil = String(b.appareil || '').trim();\n// Appareils de Laurent. Tout autre iPhone est considere comme l'equipe (Equipe ClimatPro uniquement).\nconst APPAREILS_LAURENT = ['iphone klb'];\nconst auteur = APPAREILS_LAURENT.includes(appareil.toLowerCase()) ? 'laurent' : 'equipe';\nconst now = DateTime.now().setZone('Europe/Paris').setLocale('fr');\nconst lieu = String(b.lieu || '').split('\\n').map(s => s.trim()).filter(Boolean).join(', ');\nconst vide = note.replace(/[^\\p{L}\\p{N}]/gu, '').length < 4;\nconst qui = auteur === 'laurent' ? `Laurent Bannière, le gérant` : `un technicien de l'équipe (${appareil})`;\nconst system = [\n  `Tu ranges les mémos vocaux dictés sur iPhone chez ClimatPro.`,\n  `Contexte : Laurent Bannière est gérant de ClimatPro (climatisation et pompes à chaleur sur la Côte d'Azur, techniciens Christophe et Axel) et de la holding KLB (SCI LARENA, SCI B4 Azur, immobilier, placements).`,\n  `Vocabulaire de Laurent : quand il dit ClimatPro ou les techniciens ClimatPro, il parle de toute l'équipe. Quand il nomme Christophe ou Axel, le mémo concerne cette personne. Ce qui est pour lui seul, il le dit (pour moi, moi seul, à moi de...).`,\n  `Réponds UNIQUEMENT par un objet JSON, sans texte autour, avec ces clés :`,\n  `- type : TACHE (une action concrète à faire), IDEE (une idée, une piste, un projet à creuser, sans action immédiate), NOTE (une information à garder sur un client ou un chantier), DEVIS (un devis à faire ou un besoin de chiffrage).`,\n  `- domaine : EQUIPE par défaut pour tout ce qui touche au métier et au terrain de ClimatPro, même dicté par Laurent : matériel, pièces ou filtres à prendre, commander ou récupérer, chantiers, interventions, entretiens, dépannages, client à recontacter pour une intervention, info technique, tout mémo qui parle des techniciens ClimatPro, de Christophe ou d'Axel. CLIMATPRO (c'est-à-dire Laurent ClimatPro, réservé au gérant) uniquement pour la gestion : devis et chiffrages, relances commerciales ou de paiement, factures, comptabilité, banque, administratif, RH et salaires, prix et négociations avec les fournisseurs, stratégie de l'entreprise, ou quand Laurent dit explicitement que c'est pour lui. En cas de doute entre EQUIPE et CLIMATPRO, choisis EQUIPE. HOLDING (KLB, SCI, immobilier, investissements, banque et comptable de la holding), PERSO (famille, maison, piscine, loisirs, santé, voiture perso, achats perso).`,\n  `- destinataire : CHRISTOPHE ou AXEL si le mémo vise nommément cette personne, EQUIPE s'il vise les techniciens ou toute l'équipe, LAURENT seulement si Laurent dit explicitement que c'est pour lui, sinon null.`,\n  `- client : nom du client ClimatPro tel que dicté (nom de famille, société, résidence), sinon null. Jamais Laurent, Sophie, Christophe ou Axel. Si le mémo dit seulement \"ce client\", \"lui\", \"ici\" sans nom, mets null.`,\n  `- titre : reformulation courte et claire, verbe à l'infinitif pour une tâche, 70 caractères maximum. Ne mets PAS le nom du client dans le titre, il est ajouté à part.`,\n  `- echeance : date au format AAAA-MM-JJ si une date ou un délai est dit (demain, lundi, avant la fin du mois...), calculée à partir de la date du jour fournie, sinon null.`,\n  `- urgent : true seulement si l'urgence est dite explicitement, sinon false.`,\n  `- resume : le mémo reformulé proprement, fidèle, sans rien ajouter, sans interpréter ni supposer la raison. Si le mémo fait moins de 12 mots, le résumé est simplement le mémo avec les fautes de dictée corrigées, rien de plus.`,\n  `- confiance : HAUTE si le sens du mémo et son rangement (type et domaine) sont évidents. BASSE si le mémo est ambigu, trop court pour savoir ce qu'il faut en faire, ou si tu dois deviner (exemple : \"Belle-mère Renault pompe à chaleur\" = BASSE, on ne sait pas si c'est un prospect ou une info perso). Hésiter entre EQUIPE et CLIMATPRO ne rend pas la confiance BASSE : choisis EQUIPE.`,\n  `- theme : ENTRETIEN (entretien, maintenance, nettoyage, révision, contrat ou visite d'entretien à proposer ; \"relancer un client pour un entretien\" = ENTRETIEN), RELANCE (relancer un client sur un devis ou une réponse attendue, hors entretien), DEPANNAGE (panne, fuite, code erreur, réparation), COMMANDE (matériel ou pièce à commander, acheter ou récupérer), sinon null.`,\n  `Corrige les fautes de dictée évidentes. En cas de doute entre TACHE et IDEE, choisis TACHE si une action concrète est dite. Mieux vaut confiance BASSE qu'un rangement deviné.`\n].join('\\n');\nconst user = 'Date du jour : ' + now.toFormat('cccc dd LLLL yyyy') + ' (' + now.toFormat('yyyy-MM-dd') + ')\\nAuteur : ' + qui + '\\nLieu : ' + (lieu || 'inconnu') + '\\nMémo : ' + note;\nreturn [{ json: {\n  note, appareil, auteur, lieu, vide,\n  lat: b.lat || null, lon: b.lon || null,\n  date: String(b.date || now.toFormat('dd/MM/yyyy HH:mm')),\n  requete: { model: 'claude-haiku-4-5-20251001', max_tokens: 500, system, messages: [{ role: 'user', content: user }] }\n} }];"
+      },
+      "position": [
+        250,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "5cf7c8ec-5b70-4dbd-8d4a-ad816ec2816e",
+      "name": "Repondre a l'iPhone",
+      "parameters": {
+        "options": {},
+        "respondWith": "text",
+        "responseBody": "={{ $json.message }}"
+      },
+      "position": [
+        3500,
+        0
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "0617a96d-76f9-4e82-be2e-121afe7ca24a",
+      "name": "Router",
+      "parameters": {
+        "jsCode": "const p = $('Preparer').first().json;\nconst r = $input.first().json || {};\nlet txt = '';\ntry { txt = (r.content || []).map(x => x.text || '').join(''); } catch (e) {}\nlet c = null;\ntry { const m = txt.match(/\\{[\\s\\S]*\\}/); c = JSON.parse(m ? m[0] : txt); } catch (e) { c = null; }\n\n// Projets et sections Todoist (le projet climatpro s'appelle \"Laurent ClimatPro\" : reserve au gerant)\nconst P = { climatpro: '6hh423vJrW7RvQQg', equipe: '6hh423vw4vGgHFPw', holding: '6hh423wC29ffmXQp', perso: '6hh423vGr88f287j', idees: '6hhwGHjgC54vV2xr' };\nconst S = { cpAFaire: '6hh4246PVq2H9Fp8', cpDevis: '6hh4248WJ2ppj3M8', ideeCp: '6hhwGJMmm2rRX82J', ideeHolding: '6hhwGJMwRjxcjRwr', ideePerso: '6hhwGJMrrcJWGv8r' };\nconst NOM_LAURENT = 'Laurent ClimatPro';\n\nconst up = v => String(v || '').trim().toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '');\nconst n = s => String(s || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');\nlet type = c ? up(c.type) : '';\nif (!['TACHE', 'IDEE', 'NOTE', 'DEVIS'].includes(type)) type = 'A_QUALIFIER';\nlet dom = c ? up(c.domaine) : '';\nif (!['CLIMATPRO', 'EQUIPE', 'HOLDING', 'PERSO'].includes(dom)) dom = 'CLIMATPRO';\n// Destinataire : Laurent seulement s'il l'a dit ; un technicien nomme ou les techniciens = Equipe\nconst dst = c ? up(c.destinataire) : '';\nif (dst === 'LAURENT') { if (dom === 'EQUIPE') dom = 'CLIMATPRO'; }\nelse {\n  if (['CHRISTOPHE', 'AXEL', 'EQUIPE'].includes(dst) && dom === 'CLIMATPRO') dom = 'EQUIPE';\n  // Filet de securite : un memo terrain (entretien, depannage, commande) va toujours a l'equipe\n  if (dom === 'CLIMATPRO' && c && ['ENTRETIEN', 'DEPANNAGE', 'COMMANDE'].includes(up(c.theme))) dom = 'EQUIPE';\n}\n// Decision de Laurent (option B) : ses memos restent prives dans Laurent ClimatPro, commandes comprises.\n// Il les partage en nommant le technicien (label christophe / axel) ou depuis le tableau de bord (bouton avatar).\nif (p.auteur === 'laurent' && dom === 'EQUIPE') dom = 'CLIMATPRO';\nconst cl = c && c.client ? String(c.client).trim() : '';\nconst client = cl && !/^(null|none|aucun|inconnu|-)$/i.test(cl) ? cl : null;\nconst titre = String((c && c.titre) || p.note).slice(0, 120);\nconst resume = String((c && c.resume) || p.note);\nconst echeance = c && /^\\d{4}-\\d{2}-\\d{2}$/.test(String(c.echeance || '')) ? String(c.echeance) : null;\nconst urgent = !!c && (c.urgent === true || String(c.urgent).toLowerCase() === 'true');\n// Doute : Haiku n'a pas repondu, type inconnu, ou confiance BASSE\nconst douteux = !c || type === 'A_QUALIFIER' || up(c.confiance) === 'BASSE';\nconst laurent = p.auteur === 'laurent';\nconst typeFr = { TACHE: 'Tâche', IDEE: 'Idée', NOTE: 'Info', DEVIS: 'Devis à faire', A_QUALIFIER: 'Mémo à trier' }[type];\n\n// Memo de Laurent avec un doute (sens incertain, ou pro qui pourrait etre perso) et sans client ni technicien nomme :\n// Perso par defaut, le raccourci iPhone pose la question Pro ou perso\nconst persoPossible = !!c && (c.perso_possible === true || String(c.perso_possible).toLowerCase() === 'true');\nconst doutePersoPro = persoPossible && ['EQUIPE', 'CLIMATPRO'].includes(dom);\nconst question = laurent && (douteux || doutePersoPro)\n  && !['CHRISTOPHE', 'AXEL', 'EQUIPE', 'LAURENT'].includes(dst) && !client && ['TACHE', 'NOTE', 'A_QUALIFIER'].includes(type);\nif (question) dom = 'PERSO';\n\nlet projet = null, section = null, dest = 'Boîte de réception', prefixe = '', action = 'todoist';\nconst labels = ['memo'];\n// Memo qui vise nommement un technicien : label a son nom (c'est ce label qui le rend visible a ce technicien)\nif (dst === 'CHRISTOPHE' || dst === 'AXEL') labels.push(n(dst));\n// Laurent qui parle aux techniciens ou a toute l'equipe : partage avec les deux\nif (dst === 'EQUIPE' && laurent) labels.push('christophe', 'axel');\nif (!laurent) {\n  // Memo d'un technicien : toujours et uniquement dans Equipe ClimatPro\n  projet = P.equipe; dest = 'Équipe ClimatPro';\n  if (douteux) { prefixe = 'À trier : '; labels.push('a-trier'); }\n  else {\n    if (type === 'IDEE') prefixe = 'Idée : ';\n    if (type === 'DEVIS') { prefixe = 'Devis : '; labels.push('devis'); }\n    if (type === 'NOTE') { if (client) action = 'interfast'; else prefixe = 'Info : '; }\n  }\n} else if (question) {\n  projet = P.perso; dest = 'Perso'; labels.push('pro-ou-perso');\n} else if (douteux) {\n  // Pas sur du rangement : Boite de reception, Laurent tranche\n  prefixe = 'À trier : '; labels.push('a-trier'); dest = 'Boîte de réception';\n} else if (type === 'IDEE') {\n  projet = P.idees;\n  section = dom === 'HOLDING' ? S.ideeHolding : dom === 'PERSO' ? S.ideePerso : S.ideeCp;\n  dest = 'Idées / ' + (dom === 'HOLDING' ? 'Holding & SCI' : dom === 'PERSO' ? 'Perso' : 'ClimatPro');\n} else if (type === 'DEVIS') {\n  projet = P.climatpro; section = S.cpDevis; dest = NOM_LAURENT + ' / Devis à faire'; labels.push('devis');\n} else {\n  if (type === 'NOTE') { if (client) action = 'interfast'; else prefixe = 'Info : '; }\n  if (dom === 'EQUIPE') { projet = P.equipe; dest = 'Équipe ClimatPro'; }\n  else if (dom === 'HOLDING') { projet = P.holding; dest = 'Holding & SCI'; }\n  else if (dom === 'PERSO') { projet = P.perso; dest = 'Perso'; }\n  else { projet = P.climatpro; section = S.cpAFaire; dest = NOM_LAURENT; }\n}\nif (dst === 'CHRISTOPHE' || dst === 'AXEL') dest = dest + ' (pour ' + dst.charAt(0) + dst.slice(1).toLowerCase() + ')';\nelse if (dst === 'EQUIPE' && laurent && projet === P.climatpro) dest = dest + ' (partagé avec Christophe et Axel)';\nelse if (laurent && projet === P.climatpro) dest = dest + ' (privé)';\n\n// Le client n'est ajoute au titre que s'il n'y figure pas deja\nconst clientDejaDansTitre = !!client && n(titre).includes(n(client));\nconst suffixeClient = client && !clientDejaDansTitre ? ' - ' + client : '';\n\nconst origine = 'Dicté le ' + p.date + (p.lieu ? ' à ' + p.lieu : '') + ' (' + p.appareil + ')';\nconst todoist = {\n  content: prefixe + titre + suffixeClient,\n  description: resume + '\\n\\n' + origine + '\\nTexte dicté : ' + p.note,\n  labels,\n  priority: urgent ? 4 : 1\n};\nif (projet) todoist.project_id = projet;\nif (section) todoist.section_id = section;\nif (echeance) todoist.due_date = echeance;\nconst quand = echeance ? ' (pour le ' + echeance.split('-').reverse().join('/') + ')' : '';\nconst entete = question ? 'Pro ou perso ? En attendant > Perso' : douteux ? 'Pas sûr d\\'avoir compris > ' + dest : typeFr + ' > ' + dest + quand;\nconst message = entete + '\\n' + todoist.content;\n\n// Si la note client ne peut pas aller dans Interfast\nconst todoistRattacher = { content: 'Note à rattacher : ' + titre + (client && !clientDejaDansTitre ? ' (' + client + ')' : ''), labels: ['memo', 'a-rattacher'], priority: 1, project_id: laurent ? P.climatpro : P.equipe };\nif (laurent) todoistRattacher.section_id = S.cpAFaire;\nconst noteCrm = 'Mémo vocal du ' + p.date + ' (' + p.appareil + ')\\n' + resume + '\\n\\nTexte dicté : ' + p.note;\n\nreturn [{ json: {\n  action, type, domaine: dom, client, titre, resume, echeance, auteur: p.auteur, douteux, question,\n  todoist, message, todoist_rattacher: todoistRattacher, note_crm: noteCrm,\n  dest_rattacher: laurent ? NOM_LAURENT : 'Équipe ClimatPro',\n  haiku_ok: !!c\n} }];\n"
+      },
+      "position": [
+        1000,
+        100
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "todoistApi": {
+          "id": "feB4B4HQds0e2tFC",
+          "name": "Todoist account"
+        }
+      },
+      "id": "5a89a397-9b43-4bba-a2ca-090548091126",
+      "name": "Secours : Boite de reception",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "jsonBody": "={{ JSON.stringify({ content: 'Mémo à ranger : ' + $('Preparer').first().json.note.slice(0, 100), description: 'Le rangement automatique a échoué.\\nDicté le ' + $('Preparer').first().json.date + ' (' + $('Preparer').first().json.appareil + ')\\nTexte dicté : ' + $('Preparer').first().json.note, labels: ['memo'] }) }}",
+        "method": "POST",
+        "nodeCredentialType": "todoistApi",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://api.todoist.com/api/v1/tasks"
+      },
+      "position": [
+        3000,
+        350
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "67c7a64a-69b2-467f-972b-9d94d5e12ad7",
+      "name": "Tache prete",
+      "parameters": {},
+      "position": [
+        2500,
+        200
+      ],
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1
+    },
+    {
+      "id": "0654b6db-5a45-4fb6-a175-cd9a08cc071f",
+      "name": "Theme",
+      "parameters": {
+        "jsCode": "// Ajoute le label de theme (entretien, relance, depannage, commande) donne par Haiku\n// Commande de materiel d'un technicien : Equipe ClimatPro / Commandes materiel (vue par Laurent et l'equipe)\n// Commande de Laurent (option B) : Laurent ClimatPro, privee sauf label christophe / axel (partage depuis le tableau de bord)\n// Sauf si le memo est en attente de la question Pro ou perso (il reste dans Perso)\n// + Icone : l'objet du memo (cle objet de Haiku) est note dans la description Todoist (\"Icône : mot\"),\n//   le tableau de bord affiche l'icone correspondante et la liste d'attente pour Codex se remplit toute seule\nconst r = JSON.parse(JSON.stringify($input.first().json));\nlet c = null;\ntry {\n  const t = (($('Classer (Haiku)').first().json || {}).content || []).map(x => x.text || '').join('');\n  const m = t.match(/\\{[\\s\\S]*\\}/);\n  c = JSON.parse(m ? m[0] : t);\n} catch (e) { c = null; }\nconst T = { ENTRETIEN: 'entretien', RELANCE: 'relance', DEPANNAGE: 'depannage', COMMANDE: 'commande' };\nconst cle = c ? String(c.theme || '').trim().toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '') : '';\nconst th = T[cle] || null;\nif (th) {\n  r.theme = th;\n  if (r.todoist) r.todoist.labels = [...new Set([...(r.todoist.labels || []), th])];\n  if (r.todoist_rattacher) r.todoist_rattacher.labels = [...new Set([...(r.todoist_rattacher.labels || []), th])];\n}\nif (th === 'commande' && r.action === 'todoist' && r.todoist && !r.question) {\n  const t = r.todoist;\n  const prive = r.auteur === 'laurent';\n  t.project_id = prive ? '6hh423vJrW7RvQQg' : '6hh423vw4vGgHFPw';\n  t.section_id = prive ? '6hh4246PVq2H9Fp8' : '6hjM3Rw4RPRw474w';\n  t.labels = (t.labels || []).filter(l => !['a-trier', 'client-proche', 'devis'].includes(l));\n  let base = String(t.content || '').replace(/^(À trier|Idée|Info|Devis) : /, '');\n  if (r.client_proche) base = base.replace(' - ' + r.client_proche + ' ?', '');\n  t.content = 'À commander : ' + base;\n  const pour = ['christophe', 'axel'].filter(l => t.labels.includes(l)).map(l => l.charAt(0).toUpperCase() + l.slice(1));\n  const ou = prive ? 'Laurent ClimatPro' + (pour.length ? ' (partagée avec ' + pour.join(' et ') + ')' : ' (privée)') : 'Équipe ClimatPro / Commandes matériel';\n  r.message = 'Commande > ' + ou + '\\n' + t.content;\n}\n// Objet du memo -> icone\nlet objet = c ? String(c.objet || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '') : '';\nif (/^(null|none|aucun|-)?$/.test(objet) || objet.length < 2 || objet.length > 40) objet = '';\nif (objet) {\n  r.objet = objet;\n  if (r.todoist) r.todoist.description = String(r.todoist.description || '') + '\\n\\nIcône : ' + objet;\n  if (r.todoist_rattacher) r.todoist_rattacher.description = String(r.todoist_rattacher.description || '') + '\\n\\nIcône : ' + objet;\n}\nreturn [{ json: r }];\n"
+      },
+      "position": [
+        1550,
+        300
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "todoistApi": {
+          "id": "feB4B4HQds0e2tFC",
+          "name": "Todoist account"
+        }
+      },
+      "id": "75a20a50-f3b7-4eab-91b8-4ffd3ceb3f73",
+      "maxTries": 2,
+      "name": "Todoist - creer la tache",
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "jsonBody": "={{ JSON.stringify($json.todoist) }}",
+        "method": "POST",
+        "nodeCredentialType": "todoistApi",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://api.todoist.com/api/v1/tasks"
+      },
+      "position": [
+        2750,
+        200
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "waitBetweenTries": 1500
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "TzXvxzRIPrc4mWME",
+          "name": "Climapro X-Key"
+        }
+      },
+      "id": "1cea53ad-1ae3-4893-abaf-4b3e13163fb0",
+      "name": "Webhook Climapro",
+      "parameters": {
+        "authentication": "headerAuth",
+        "httpMethod": "POST",
+        "options": {},
+        "path": "climapro",
+        "responseMode": "responseNode"
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-12T17:05:12.777Z"
+}

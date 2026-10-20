@@ -1,0 +1,1317 @@
+{
+  "active": true,
+  "connections": {
+    "Ajouter (lien)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Marquer valide",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Analyser (Haiku)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire reponse Haiku",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Candidat ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Analyser (Haiku)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Hors sujet",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Decider": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Mail traite",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Ligne a ajouter",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Doutes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Devis Interfast": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Decider",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Devis Interfast (lien)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ligne (lien)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Devis clos ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Fermer lignes closes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Devis identifie ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Telegram - doute (bouton)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Telegram - doute",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Devis trouve ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ligne valide",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Reponse refus",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Doutes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Devis identifie ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Gmail - lire": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Pre-filtre",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Gmail - liste": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire mails traites",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Hors sujet": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enregistrer hors sujet",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lien valide ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Devis Interfast (lien)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Reponse refus",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lien valider": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire le mail",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Ligne (lien)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Devis trouve ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Ligne a ajouter": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ajouter au tableau",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Ligne valide": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ajouter (lien)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lignes mail ouvertes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Statut devis",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire le mail": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Verifier lien",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire mails traites": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Nouveaux mails",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire reponse Haiku": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Devis Interfast",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Mail traite": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enregistrer mail",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Marquer valide": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Reponse OK",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Nouveaux mails": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Gmail - lire",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Pre-filtre": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Candidat ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Statut devis": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Devis clos ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Toutes les 15 min": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Gmail - liste",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Lignes mail ouvertes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Verifier lien": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lien valide ?",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-19T08:51:06.426Z",
+  "description": "Toutes les 15 min : mails recus (3 derniers jours) parlant d'un devis + mot d'accord -> Haiku. Acceptation claire d'un devis trouve dans Interfast -> table devis_a_planifier (source mail). Doute -> Telegram a Laurent avec lien Valider. Ferme les lignes ma",
+  "id": "9eDmOWAeUc9LwYlM",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Climapro - Devis acceptes par mail",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "5952b15d-386a-4384-8fdc-9f634fd4b451",
+      "name": "Ajouter (lien)",
+      "parameters": {
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": null
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "0U759buKi8psn4V5"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "reference",
+              "keyValue": "={{ $json.reference }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "upsert",
+        "resource": "row"
+      },
+      "position": [
+        1792,
+        800
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "b9bb3ab9-e3fa-4bf9-9bd0-57e2ec394ee9",
+      "name": "Ajouter au tableau",
+      "parameters": {
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": null
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "0U759buKi8psn4V5"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "reference",
+              "keyValue": "={{ $json.reference }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "upsert",
+        "resource": "row"
+      },
+      "position": [
+        2688,
+        192
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "anthropicApi": {
+          "id": "UtZzlYk97MvjuDan",
+          "name": "Anthropic account 2"
+        }
+      },
+      "id": "a849683c-da44-4dd2-80a8-abb1dcbcb96b",
+      "name": "Analyser (Haiku)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "contentType": "json",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify({ model: 'claude-haiku-5-5', max_tokens: 400, system: \"Tu analyses un email recu par ClimatPro (climatisation, pompes a chaleur, Cote d'Azur). Question unique : dans ce NOUVEAU message, le client ACCEPTE-t-il un devis de ClimatPro ? Exemples d'acceptation : bon pour accord, j'accepte votre devis, nous validons, c'est d'accord pour le devis, vous pouvez commander le materiel, on lance les travaux. Ne sont PAS une acceptation : une question, une demande de modification ou d'un nouveau devis, une negociation de prix, un remerciement seul, un accord pour un rendez-vous ou une visite. Un accord avec condition (ok si..., ok mais..., d'accord sous reserve...) = accepte true mais certain false. reference : le numero du devis accepte (format DC suivi de chiffres) s'il est ecrit dans le message ou deductible sans ambiguite de la liste des references vues dans le fil ; sinon chaine vide. certain = true seulement si l'acceptation est claire, sans condition, et que le devis concerne est identifiable. Reponds uniquement par un objet JSON : {\\\"accepte\\\": true, \\\"certain\\\": true, \\\"reference\\\": \\\"DC4693\\\", \\\"raison\\\": \\\"phrase courte en francais\\\"}.\", messages: [{ role: 'user', content: 'Objet : ' + $json.sujet + '\\nExpediteur : ' + $json.expediteur + '\\nReferences de devis vues dans le fil : ' + (($json.refs || []).join(', ') || 'aucune') + '\\n\\nNouveau message :\\n' + $json.neuf }] }) }}",
+        "method": "POST",
+        "nodeCredentialType": "anthropicApi",
+        "options": {
+          "timeout": 60000
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://api.anthropic.com/v1/messages"
+      },
+      "position": [
+        1568,
+        192
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "6d5f915e-c503-4494-aa46-6e04f9b78da2",
+      "name": "Candidat ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.candidat }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        1344,
+        288
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "afba65b1-a8b4-4301-be7e-c6574713069b",
+      "name": "Decider",
+      "parameters": {
+        "jsCode": "// Meme repartition que le workflow « Climapro - Devis signes a planifier ».\nconst CHRISTOPHE = /entretien|maintenance|contrat|d[ée]pannage|r[ée]paration|relevage|fuite|diagnostic|nettoyage|filtre|r[ée]vision|recharge|thermostat|compresseur|carte|moteur|ventilat|condensateur|sonde|vanne|pi[eè]ce/i;\nconst LAURENT = /install|\\bpose\\b|nouvel|split|multi|gainable|\\bvrv\\b|\\bvrf\\b|\\bdrv\\b|\\bpac\\b|pompe [àa] chaleur|climatisation|cassette|console|murale|yukai|haori|daikin|toshiba|mitsubishi|hitachi|fujitsu|haier|ballon|chauffe-eau|vmc|plancher|chaudi[eè]re/i;\nconst responsable = t => CHRISTOPHE.test(t) ? 'christophe' : (LAURENT.test(t) ? 'laurent' : 'christophe');\nconst ligne = (d, dateMail, msgId) => {\n  const c = d.client || {};\n  return { reference: String(d.reference).toUpperCase(), devis_id: String(d.id), titre: String(d.name || '').slice(0, 200),\n    client: String(c.name || '').trim(), client_id: String(c.id || ''), ville: String(d.addressCity || ''), telephone: String(c.phoneNumber || ''),\n    signe_le: dateMail, responsable: responsable(String(d.name || '')), planifie: false, planifie_le: null, intervention_ref: '',\n    vu_le: new Date().toISOString(), source: 'mail' };\n};\n\n// Decision par mail : ajouter (acceptation claire + devis trouve et pas encore accepte dans Interfast),\n// doute (a confirmer par Laurent via le lien Telegram), deja_signe, non (pas une acceptation).\nconst m = $('Lire reponse Haiku').item.json;\nconst res = $input.item.json || {};\nconst d = (Array.isArray(res.items) ? res.items : []).find(x => String(x.reference || '').toUpperCase() === m.reference) || null;\nconst st = d ? String(d.status || '') : '';\nlet decision = 'non';\nif (m.accepte) {\n  if (d && ['signed', 'paid'].includes(st)) decision = 'deja_signe';\n  else if (d && m.certain && ['sent', 'finalized', 'draft'].includes(st)) decision = 'ajouter';\n  else decision = 'doute';\n}\nconst jeton = decision === 'doute' ? Array.from({ length: 24 }, () => 'abcdefghijkmnpqrstuvwxyz23456789'[Math.floor(Math.random() * 32)]).join('') : '';\nconst esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nlet texte = '';\nif (decision === 'doute') {\n  texte = '<b>📩 Devis accepté par mail ?</b>\\n'\n    + (d ? '<b>' + esc(d.reference) + '</b> ' + esc(d.name) + ' · ' + esc((d.client || {}).name) + ' (statut Interfast : ' + esc(st) + ')\\n' : 'N° de devis non trouvé' + (m.reference ? ' (' + esc(m.reference) + ' ?)' : '') + '\\n')\n    + 'De : ' + esc(m.expediteur) + '\\nObjet : ' + esc(m.sujet) + '\\n\\n<blockquote expandable>' + esc(m.neuf.slice(0, 900)) + '</blockquote>\\n'\n    + '<i>' + esc(m.raison) + '</i>' + (d ? '' : '\\n\\nSans n° de devis, passe le bon devis en Accepté dans Interfast : il arrivera tout seul au tableau.');\n}\nreturn { json: {\n  decision, jeton, texte, avec_bouton: !!(d && decision === 'doute'),\n  lien: 'https://n8n.climatpro.fr/webhook/devis-mail-valider?m=' + encodeURIComponent(m.message_id) + '&t=' + jeton,\n  mail: { message_id: m.message_id, date_mail: m.date_mail, expediteur: m.expediteur, decision, reference: d ? String(d.reference) : m.reference, raison: m.raison, jeton, statut: decision === 'doute' ? 'doute' : 'fait' },\n  ligne: decision === 'ajouter' ? ligne(d, m.date_mail, m.message_id) : null\n} };\n",
+        "mode": "runOnceForEachItem"
+      },
+      "position": [
+        2240,
+        192
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "fcbb38c3-7930-4a24-b5a1-002ed7722cc6",
+      "name": "Devis Interfast",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "method": "GET",
+        "options": {},
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $json.reference || '__aucun__' }}"
+            },
+            {
+              "name": "page",
+              "value": "0"
+            },
+            {
+              "name": "size",
+              "value": "5"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://app.inter-fast.fr/v1/billing/quotations"
+      },
+      "position": [
+        2016,
+        192
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "b70fb3c5-6e1c-4048-b51a-c3fcd011c541",
+      "name": "Devis Interfast (lien)",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "method": "GET",
+        "options": {},
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{ $json.reference }}"
+            },
+            {
+              "name": "page",
+              "value": "0"
+            },
+            {
+              "name": "size",
+              "value": "5"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://app.inter-fast.fr/v1/billing/quotations"
+      },
+      "position": [
+        896,
+        848
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "5cae8649-dabd-46fa-a0ae-b0e1cda49bab",
+      "name": "Devis clos ?",
+      "parameters": {
+        "jsCode": "// Lignes « acceptees par mail » encore ouvertes : si le devis a ete annule, refuse ou solde dans Interfast, on les ferme.\n// (S'il passe en Accepte, le workflow « Devis signes a planifier » le reprend tout seul.)\nconst lignes = $('Lignes mail ouvertes').all().map(i => i.json);\nconst out = [];\n$input.all().forEach((it, i) => {\n  const r = lignes[i] || {};\n  const st = String((it.json || {}).status || '');\n  if (r.reference && ['canceled', 'refused', 'paid'].includes(st)) out.push({ json: { reference: r.reference, planifie: true, planifie_le: new Date().toISOString(), intervention_ref: 'devis ' + st } });\n});\nreturn out;\n"
+      },
+      "position": [
+        672,
+        480
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "de74b375-decb-4662-9693-280f31d1ab1c",
+      "name": "Devis identifie ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.avec_bouton }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        2688,
+        384
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "480718bf-7d02-4a9a-a90a-d32ca72575e4",
+      "name": "Devis trouve ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.ok }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        1344,
+        848
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "1c83d298-ca2f-4026-b04f-d69b84254dcc",
+      "name": "Doutes",
+      "parameters": {
+        "jsCode": "return $input.all().filter(i => i.json.decision === 'doute').map(i => ({ json: { texte: i.json.texte, lien: i.json.lien, avec_bouton: i.json.avec_bouton } }));\n"
+      },
+      "position": [
+        2464,
+        384
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "a70fb5d0-889a-432e-a1d0-5be02809bce6",
+      "name": "Enregistrer hors sujet",
+      "parameters": {
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": null
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "kX8WPJnw2JlUsq51"
+        },
+        "operation": "insert",
+        "resource": "row"
+      },
+      "position": [
+        1792,
+        384
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "3690ce1e-61ae-42d2-baa3-950b7a421bfa",
+      "name": "Enregistrer mail",
+      "parameters": {
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": null
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "kX8WPJnw2JlUsq51"
+        },
+        "operation": "insert",
+        "resource": "row"
+      },
+      "position": [
+        2688,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "72784890-70f7-438e-ab9d-bda78eb91736",
+      "name": "Fermer lignes closes",
+      "parameters": {
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": null
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "0U759buKi8psn4V5"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "reference",
+              "keyValue": "={{ $json.reference }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "upsert",
+        "resource": "row"
+      },
+      "position": [
+        896,
+        480
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "QkVJEJmojKI4yW63",
+          "name": "Gmail account"
+        }
+      },
+      "id": "2ed621e0-ef0a-4b9f-8eeb-381edfffeb71",
+      "name": "Gmail - lire",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "method": "GET",
+        "nodeCredentialType": "gmailOAuth2",
+        "options": {},
+        "url": "=https://gmail.googleapis.com/gmail/v1/users/me/messages/{{ $json.id }}?format=full"
+      },
+      "position": [
+        896,
+        288
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "QkVJEJmojKI4yW63",
+          "name": "Gmail account"
+        }
+      },
+      "id": "d5c8d42d-ece2-4d85-be40-b692c2c75e24",
+      "name": "Gmail - liste",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "method": "GET",
+        "nodeCredentialType": "gmailOAuth2",
+        "options": {},
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "in:inbox newer_than:3d -from:me"
+            },
+            {
+              "name": "maxResults",
+              "value": "60"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://gmail.googleapis.com/gmail/v1/users/me/messages"
+      },
+      "position": [
+        224,
+        288
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "1e02717c-5978-4df2-b13e-9c9c5cc2b442",
+      "name": "Hors sujet",
+      "parameters": {
+        "jsCode": "// Mails sans lien avec une acceptation de devis : notes pour ne pas etre relus.\nreturn $input.all().map(i => ({ json: { message_id: i.json.message_id, date_mail: i.json.date_mail, expediteur: i.json.expediteur, decision: 'hors_sujet', reference: '', raison: '', jeton: '', statut: 'fait' } }));\n"
+      },
+      "position": [
+        1568,
+        384
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "a94fe53b-3d7a-4921-af08-bb878e5440eb",
+      "name": "Lien valide ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.ok }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        672,
+        928
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "0d011c18-a9ef-427a-aca1-61be4cd53e0b",
+      "name": "Lien valider",
+      "parameters": {
+        "httpMethod": "GET",
+        "options": {},
+        "path": "devis-mail-valider",
+        "responseMode": "responseNode"
+      },
+      "position": [
+        0,
+        928
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2
+    },
+    {
+      "id": "000e8c78-3a9e-479b-b873-b5a0ee99148a",
+      "name": "Ligne (lien)",
+      "parameters": {
+        "jsCode": "// Meme repartition que le workflow « Climapro - Devis signes a planifier ».\nconst CHRISTOPHE = /entretien|maintenance|contrat|d[ée]pannage|r[ée]paration|relevage|fuite|diagnostic|nettoyage|filtre|r[ée]vision|recharge|thermostat|compresseur|carte|moteur|ventilat|condensateur|sonde|vanne|pi[eè]ce/i;\nconst LAURENT = /install|\\bpose\\b|nouvel|split|multi|gainable|\\bvrv\\b|\\bvrf\\b|\\bdrv\\b|\\bpac\\b|pompe [àa] chaleur|climatisation|cassette|console|murale|yukai|haori|daikin|toshiba|mitsubishi|hitachi|fujitsu|haier|ballon|chauffe-eau|vmc|plancher|chaudi[eè]re/i;\nconst responsable = t => CHRISTOPHE.test(t) ? 'christophe' : (LAURENT.test(t) ? 'laurent' : 'christophe');\nconst ligne = (d, dateMail, msgId) => {\n  const c = d.client || {};\n  return { reference: String(d.reference).toUpperCase(), devis_id: String(d.id), titre: String(d.name || '').slice(0, 200),\n    client: String(c.name || '').trim(), client_id: String(c.id || ''), ville: String(d.addressCity || ''), telephone: String(c.phoneNumber || ''),\n    signe_le: dateMail, responsable: responsable(String(d.name || '')), planifie: false, planifie_le: null, intervention_ref: '',\n    vu_le: new Date().toISOString(), source: 'mail' };\n};\n\nconst v = $('Verifier lien').first().json;\nconst d = ((($input.first() || {}).json || {}).items || []).find(x => String(x.reference || '').toUpperCase() === v.reference);\nif (!d) return [{ json: { ok: false } }];\nreturn [{ json: { ok: true, ligne: ligne(d, v.date_mail, v.message_id) } }];\n"
+      },
+      "position": [
+        1120,
+        848
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "10765f7c-1cd8-40eb-9825-2ab43ec7828f",
+      "name": "Ligne a ajouter",
+      "parameters": {
+        "jsCode": "return $input.all().filter(i => i.json.ligne).map(i => ({ json: i.json.ligne }));\n"
+      },
+      "position": [
+        2464,
+        192
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "2494ff9b-9c52-4257-b687-8ec7ba076dfb",
+      "name": "Ligne valide",
+      "parameters": {
+        "jsCode": "return $input.all().filter(i => i.json.ok).map(i => ({ json: i.json.ligne }));"
+      },
+      "position": [
+        1568,
+        800
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "executeOnce": true,
+      "id": "6ab679ca-7ec5-4fe5-b5ca-e4f94f5d988c",
+      "name": "Lignes mail ouvertes",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "0U759buKi8psn4V5"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "source",
+              "keyValue": "mail"
+            },
+            {
+              "condition": "isFalse",
+              "keyName": "planifie"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        224,
+        480
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "alwaysOutputData": true,
+      "id": "e9d2b259-34d3-4622-b672-ee7ef9034230",
+      "name": "Lire le mail",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "kX8WPJnw2JlUsq51"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "message_id",
+              "keyValue": "={{ String($json.query.m || '__aucun__') }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        224,
+        928
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "59cdcc0f-9f41-4e13-a85d-e5b9b957b6b4",
+      "name": "Lire mails traites",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "kX8WPJnw2JlUsq51"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        448,
+        288
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "bd98a819-2ec2-4d24-a712-a746d7f5ea14",
+      "name": "Lire reponse Haiku",
+      "parameters": {
+        "jsCode": "// Reponse de Haiku -> decision. Le devis cite est verifie juste apres dans Interfast.\nconst src = $('Candidat ?').item.json;\nlet t = '';\ntry { t = ($input.item.json.content || []).map(c => c.text || '').join('').trim(); } catch (e) {}\nlet o = null;\ntry { const a = t.indexOf('{'), b = t.lastIndexOf('}'); o = JSON.parse(t.slice(a, b + 1)); } catch (e) { o = null; }\no = o || { accepte: false, certain: false, reference: '', raison: 'reponse illisible' };\nlet ref = String(o.reference || '').toUpperCase().replace(/\\s/g, '');\nif (!/^D[CE]\\d{3,6}$/.test(ref)) ref = (src.refs || []).length === 1 ? src.refs[0] : '';\nreturn { json: { ...src, accepte: !!o.accepte, certain: !!o.certain, reference: ref, raison: String(o.raison || '').slice(0, 200) } };\n",
+        "mode": "runOnceForEachItem"
+      },
+      "position": [
+        1792,
+        192
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "0e2695ac-5b58-4ff5-b395-a94215b49634",
+      "name": "Mail traite",
+      "parameters": {
+        "jsCode": "return $input.all().map(i => ({ json: i.json.mail }));\n"
+      },
+      "position": [
+        2464,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "executeOnce": true,
+      "id": "3775fe6e-5e52-47ca-b355-ab3fe5bdb289",
+      "name": "Marquer valide",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "statut",
+              "id": "statut",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "statut": "valide"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "kX8WPJnw2JlUsq51"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "message_id",
+              "keyValue": "={{ $('Verifier lien').first().json.message_id }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "update",
+        "options": {},
+        "resource": "row"
+      },
+      "position": [
+        2016,
+        800
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "executeOnce": true,
+      "id": "5fde8bea-98bf-461d-9b5e-38cb8b7f5417",
+      "name": "Nouveaux mails",
+      "parameters": {
+        "jsCode": "// Messages Gmail recents pas encore vus (table devis_mails). 25 max par passage.\nconst liste = (($('Gmail - liste').first() || {}).json || {}).messages || [];\nconst vus = new Set($('Lire mails traites').all().map(i => String((i.json || {}).message_id || '')).filter(Boolean));\nreturn liste.filter(m => m && m.id && !vus.has(m.id)).slice(0, 25).map(m => ({ json: { id: m.id } }));\n"
+      },
+      "position": [
+        672,
+        288
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "202d98f6-c18c-4a11-8394-631c3334a25d",
+      "name": "Pre-filtre",
+      "parameters": {
+        "jsCode": "// Lit chaque mail, isole le nouveau texte (sans la partie citee) et garde seulement ceux qui parlent d'un devis\n// avec un mot d'accord. Les autres sont notes « hors_sujet » pour ne pas etre relus. Aucune IA ici.\nconst dec = s => { try { return Buffer.from(String(s || '').replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8'); } catch (e) { return ''; } };\nconst html2txt = s => String(s || '').replace(/<br\\s*\\/?>/gi, '\\n').replace(/<\\/(p|div|tr|li)>/gi, '\\n').replace(/<blockquote[\\s\\S]*$/i, '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&#39;/g, \"'\").replace(/&quot;/g, '\"').replace(/[ \\t]+/g, ' ');\nfunction corps(p) {\n  let txt = '', html = '';\n  (function walk(x) {\n    if (!x) return;\n    if (x.mimeType === 'text/plain' && x.body && x.body.data && !txt) txt = dec(x.body.data);\n    if (x.mimeType === 'text/html' && x.body && x.body.data && !html) html = dec(x.body.data);\n    (x.parts || []).forEach(walk);\n  })(p);\n  return txt || html2txt(html);\n}\nconst out = [];\nfor (const it of $input.all()) {\n  const m = it.json || {};\n  if (!m.id || !m.payload) continue;\n  const h = {};\n  for (const x of (m.payload.headers || [])) h[String(x.name).toLowerCase()] = x.value;\n  const de = String(h.from || '');\n  const email = ((de.match(/<([^>]+)>/) || [])[1] || de).trim().toLowerCase();\n  const sujet = String(h.subject || '');\n  const tout = corps(m.payload);\n  const coupe = tout.search(/^\\s*(Le .{3,160}a [ée]crit ?:|On .{3,160}wrote:|-{2,}\\s*(Original|Message d.origine)|De ?: |From: |Envoy[ée] ?: )/mi);\n  let neuf = (coupe > 0 ? tout.slice(0, coupe) : tout).split('\\n').filter(l => !/^\\s*>/.test(l)).join('\\n').replace(/\\n{3,}/g, '\\n\\n').trim();\n  const refs = [...new Set(((sujet + '\\n' + neuf + '\\n' + tout).toUpperCase().match(/\\bD[CE]\\s?\\d{3,6}\\b/g) || []).map(r => r.replace(/\\s/g, '')))];\n  const interne = /climatpro\\.fr|inter-fast|klb\\.fr|no-?reply|noreply/i.test(email);\n  const parleDevis = /devis|\\bD[CE]\\s?\\d{3,}/i.test(sujet + ' ' + tout);\n  const accord = /accept|accord|valid|bon pour|ok pour|c.est ok|\\bok\\b|on (y )?va|allez-y|allez y|\\bgo\\b|lancer|on part|command|confirm|sign[ée]|feu vert|retenu|on prend|nous prenons/i.test(neuf);\n  out.push({ json: {\n    message_id: m.id, thread_id: m.threadId || '', date_mail: new Date(Number(m.internalDate) || Date.now()).toISOString(),\n    expediteur: email, sujet: sujet.slice(0, 200), neuf: neuf.slice(0, 3000), refs,\n    candidat: !interne && parleDevis && accord && neuf.length > 0\n  } });\n}\nreturn out;\n"
+      },
+      "position": [
+        1120,
+        288
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "20b6dacb-984f-4042-9e5e-0af03ae4f553",
+      "name": "Reponse OK",
+      "parameters": {
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              },
+              {
+                "name": "X-Robots-Tag",
+                "value": "noindex"
+              }
+            ]
+          }
+        },
+        "respondWith": "text",
+        "responseBody": "=<html><meta name=viewport content='width=device-width'><body style='font-family:sans-serif;padding:24px'><h2>OK</h2><p>{{ $('Verifier lien').first().json.reference }} est dans « Devis signés à planifier ».</p><p>Pense à le passer en Accepté dans Interfast.</p></body></html>"
+      },
+      "position": [
+        2240,
+        800
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "021870fc-13f2-4016-ab7f-483fe83e99e0",
+      "name": "Reponse refus",
+      "parameters": {
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              },
+              {
+                "name": "X-Robots-Tag",
+                "value": "noindex"
+              }
+            ]
+          }
+        },
+        "respondWith": "text",
+        "responseBody": "<html><meta name=viewport content='width=device-width'><body style='font-family:sans-serif;padding:24px'><h2>Lien invalide ou déjà utilisé</h2></body></html>"
+      },
+      "position": [
+        1568,
+        1024
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "6754ba4b-7e3e-4e88-b4da-3e0503821eab",
+      "name": "Statut devis",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "method": "GET",
+        "options": {},
+        "url": "=https://app.inter-fast.fr/v1/billing/quotations/{{ $json.devis_id }}"
+      },
+      "position": [
+        448,
+        480
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "id": "39f54479-e088-4b34-9e89-d08fd756fe40",
+      "name": "Telegram - doute",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        },
+        "chatId": "1857340429",
+        "operation": "sendMessage",
+        "resource": "message",
+        "text": "={{ $json.texte }}"
+      },
+      "position": [
+        2912,
+        576
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "id": "8c389105-aa84-4c53-8ca6-231e5b83964f",
+      "name": "Telegram - doute (bouton)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        },
+        "chatId": "1857340429",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "additionalFields": {
+                      "url": "={{ $json.lien }}"
+                    },
+                    "text": "Oui, accepté : au tableau"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "operation": "sendMessage",
+        "replyMarkup": "inlineKeyboard",
+        "resource": "message",
+        "text": "={{ $json.texte }}"
+      },
+      "position": [
+        2912,
+        384
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "14015a12-9f52-4724-a7b8-19d897bb28d3",
+      "name": "Toutes les 15 min",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        384
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "d5ad5f79-8ba5-47c3-a159-7dc1093d8f0c",
+      "name": "Verifier lien",
+      "parameters": {
+        "jsCode": "// Lien « Valider » envoye a Laurent sur Telegram : verifie le jeton (usage unique).\nconst q = ($('Lien valider').first().json || {}).query || {};\nconst r = $input.all().map(i => i.json).find(x => x && x.message_id === String(q.m || '')) || {};\nconst ok = !!(r.jeton && String(q.t || '') === r.jeton && r.statut === 'doute' && /^D[CE]\\d{3,6}$/.test(String(r.reference || '')));\nreturn [{ json: { ok, reference: r.reference || '', message_id: r.message_id || '', date_mail: r.date_mail || new Date().toISOString() } }];\n"
+      },
+      "position": [
+        448,
+        928
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-19T08:51:06.426Z"
+}

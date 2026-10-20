@@ -1,0 +1,690 @@
+{
+  "active": true,
+  "connections": {
+    "A detailler ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Detail piece",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Resultat",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Appel outil": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Entree",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Choix modele": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Modele trouve ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Connexion": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Session",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Detail piece": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resultat",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Donnees test": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Entree",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Entree": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire acces",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire acces": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Connexion",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Liste pieces": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Pieces",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Modele trouve ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Liste pieces",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Resultat",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Par modele ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Recherche exacte",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Par reference ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Par reference ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Detail piece",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Resultat",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Pieces": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "A detailler ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Recherche exacte": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Recherche large",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Recherche large": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Choix modele",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Session": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Par modele ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Test manuel": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Donnees test",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-15T13:53:40.018Z",
+  "description": "Outil du bot : piece Daikin par reference OU par modele + mots-cles (Spare Parts Bank). Reference, remplacement, stock FR/BE (date affichee), prix indicatif client. Identifiants dans daikin_spb_acces. Lecture seule.",
+  "id": "di2cU3TRSnyS2BdQ",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Outil - Dispo Daikin",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "7a9f2831-96a3-4fc0-b598-ad3325d1ddb5",
+      "name": "A detailler ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.etape }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "detail"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        2912,
+        80
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "4769d5a6-3bcc-4928-921f-3b37a7ea7f65",
+      "name": "Appel outil",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "reference",
+              "type": "string"
+            },
+            {
+              "name": "modele",
+              "type": "string"
+            },
+            {
+              "name": "mots_cles",
+              "type": "string"
+            },
+            {
+              "name": "role",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "position": [
+        224,
+        336
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "5c8801c6-65a1-4242-b5ba-9388c2b79541",
+      "name": "Choix modele",
+      "parameters": {
+        "jsCode": "const e = $('Entree').first().json;\nconst s = $('Session').first().json;\nconst fin = t => [{ json: { etape: 'fin', resultat: t } }];\nconst h1 = String($('Recherche exacte').first().json.html || '');\nconst h2 = String($input.first().json.html || '');\nif (/timed out/i.test(h1 + h2)) return fin('Session du portail pieces Daikin expiree pendant la recherche. Reessayer dans un instant.');\nconst parse = t => [...t.matchAll(/'unitName'\\s*:\\s*'([^']*)'[\\s\\S]*?'bookNo'\\s*:\\s*'([^']*)'[\\s\\S]*?'unitInfo'\\s*:\\s*'([^']*)'[\\s\\S]*?'factory'\\s*:\\s*'([^']*)'[\\s\\S]*?'bookFolder'\\s*:\\s*'([^']*)'/g)].map(m => ({ u: m[1], b: m[2], info: m[3], fab: m[4], f: m[5] })).filter(r => r.u !== 'UnitName');\nconst cle = x => String(x).toUpperCase().replace(/[^A-Z0-9]/g, '');\nconst ex = parse(h1), lg = parse(h2);\nlet c = ex.filter(r => cle(r.u) === e.modele);\nif (!c.length) c = ex;\nif (!c.length) c = lg.filter(r => e.modele.startsWith(cle(r.u)));\nif (!c.length) c = lg;\nif (!c.length) return fin('Modele ' + e.modele + ' introuvable sur le portail pieces Daikin. Verifier la plaque (unite interieure ou groupe exterieur) et recopier le modele complet.');\nconst eu = c.filter(r => r.fab === 'DENV');\nconst pick = (eu.length ? eu : c)[0];\nconst autres = c.filter(r => r !== pick).slice(0, 6).map(r => r.u);\nreturn [{ json: { etape: 'liste', unite: pick.u, book: pick.b, folder: pick.f, exact: cle(pick.u) === e.modele, autres } }];"
+      },
+      "position": [
+        2016,
+        144
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "executeOnce": true,
+      "id": "614eb3d1-248b-41eb-bc2d-47b03f57dda5",
+      "name": "Connexion",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "F_Id",
+              "value": "={{ $json.identifiant }}"
+            },
+            {
+              "name": "F_Pass",
+              "value": "={{ $json.mot_de_passe }}"
+            },
+            {
+              "name": "T_Lang",
+              "value": "1"
+            }
+          ]
+        },
+        "contentType": "form-urlencoded",
+        "method": "POST",
+        "options": {
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          },
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 30000
+        },
+        "sendBody": true,
+        "specifyBody": "keypair",
+        "url": "={{ String($json.url_base || 'https://www.spb-dev.daikin.co.jp').replace(/\\/+$/, '') + '/gsdb/login.asp' }}"
+      },
+      "position": [
+        896,
+        240
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3
+    },
+    {
+      "id": "234eb5fe-7bc3-4365-a1eb-d190fcb2b595",
+      "name": "Detail piece",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Cookie",
+              "value": "={{ $('Session').first().json.cookie }}"
+            }
+          ]
+        },
+        "method": "GET",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "outputPropertyName": "html",
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 30000
+        },
+        "sendHeaders": true,
+        "url": "={{ $('Session').first().json.base + '/gsdb/spb/spb_partsDetail.asp?pn=' + encodeURIComponent($json.pn) }}"
+      },
+      "position": [
+        3136,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3
+    },
+    {
+      "id": "86a10332-2e80-47a9-a495-52468d8cfa4f",
+      "name": "Donnees test",
+      "parameters": {
+        "jsCode": "return [{ json: { reference: '', modele: 'FTXM35R2V1B', mots_cles: 'PCB, CARTE ELECTRONIQUE', role: 'admin' } }];"
+      },
+      "position": [
+        224,
+        144
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "ce18a4ad-a5fb-4c99-9ab6-9959786fb5c5",
+      "name": "Entree",
+      "parameters": {
+        "jsCode": "const i = $input.first().json || {};\nconst ref = String(i.reference || '').toUpperCase().replace(/[^A-Z0-9]/g, '');\nconst modele = String(i.modele || '').toUpperCase().replace(/[^A-Z0-9]/g, '');\nconst m = /^([A-Z]+\\d+[A-Z]?)/.exec(modele);\nreturn [{ json: { ref, modele, prefixe: m ? m[1] : modele, mots_cles: String(i.mots_cles || '').slice(0, 200), role: String(i.role || 'technicien').toLowerCase() } }];"
+      },
+      "position": [
+        448,
+        240
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "3880c616-ec6c-405f-8b5c-1787a5b94fe7",
+      "name": "Lire acces",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "pU9JwmOAxlYmPcvL"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        672,
+        240
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "executeOnce": true,
+      "id": "9b9f6adf-7359-4d89-aeb4-211e08a2d1ba",
+      "name": "Liste pieces",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Cookie",
+              "value": "={{ $('Session').first().json.cookie }}"
+            }
+          ]
+        },
+        "method": "GET",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "outputPropertyName": "xml",
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 30000
+        },
+        "sendHeaders": true,
+        "url": "={{ $('Session').first().json.base + '/gsdb/spb/partslist.asp?Parts_Unit=' + encodeURIComponent($json.unite) + '&Parts_Book=' + encodeURIComponent($json.book) + '&Parts_Folder=' + encodeURIComponent($json.folder) }}"
+      },
+      "position": [
+        2464,
+        80
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3
+    },
+    {
+      "id": "34fb077a-e899-45db-a77f-b04cbe76a17e",
+      "name": "Modele trouve ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.etape }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "liste"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        2240,
+        144
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "f8618953-8040-45d1-8264-62881eacd6c6",
+      "name": "Par modele ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.etape }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "modele"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        1344,
+        240
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "f41c2726-5c8d-4c5d-9357-2c831ddc8eb4",
+      "name": "Par reference ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.etape }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "detail"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        2912,
+        432
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "cfacedba-02e9-44e2-b7a2-d71f336bd575",
+      "name": "Pieces",
+      "parameters": {
+        "jsCode": "const e = $('Entree').first().json;\nconst x = String($input.first().json.xml || '');\nconst tag = (b, t) => { const m = new RegExp('<' + t + '>([\\\\s\\\\S]*?)</' + t + '>').exec(b); return m ? m[1].replace(/&amp;/g, '&').trim() : ''; };\nconst rows = [];\nconst vus = new Set();\nfor (const m of x.matchAll(/<parts>([\\s\\S]*?)<\\/parts>/g)) {\n  const b = m[1];\n  const pn = tag(b, 'pn');\n  if (!/^[0-9A-Z]{5,}$/.test(pn) || vus.has(pn)) continue;\n  vus.add(pn);\n  rows.push({ pn, des: tag(b, 'Name'), repere: tag(b, 'loc'), spec: tag(b, 'Spec'), note: tag(b, 'Note') });\n}\nif (!rows.length) return [{ json: { etape: 'liste_complete', vide: true, lignes: [] } }];\nconst norm = s => String(s || '').toUpperCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');\nconst syn = [\n  [/VENTIL|MOTEUR VENT/, ['FAN MOTOR', 'MOTOR FAN', 'DC FAN MOTOR']],\n  [/HELICE|TURBINE/, ['PROPELLER FAN', 'CROSS FLOW FAN', 'FAN ROTOR', 'TURBO FAN']],\n  [/CARTE|ELECTRONIQUE|PCB|PWB|PLATINE/, ['PCB ASSY', 'PCB', 'PRINTED CIRCUIT', 'P.C.B']],\n  [/COMPRESS/, ['COMPRESSOR']],\n  [/SONDE|CAPTEUR|THERMISTANCE/, ['THERMISTOR', 'SENSOR']],\n  [/4 VOIES|VANNE 4|INVERSION/, ['FOUR WAY', '4 WAY', '4-WAY', 'REVERSING']],\n  [/DETENDEUR|EXPANSION/, ['MOTOR OPERATED VALVE', 'EXPANSION VALVE', 'ELECTRONIC EXPANSION', 'COIL']],\n  [/CONDENSATEUR/, ['CAPACITOR']],\n  [/TELECOMMANDE/, ['REMOTE CONTROLLER', 'REMOTE CONTROL', 'WIRELESS REMOTE']],\n  [/POMPE/, ['DRAIN PUMP', 'PUMP']],\n  [/VOLET|SWING/, ['STEPPING MOTOR', 'SWING MOTOR', 'SWING FLAP', 'BLADE', 'FLAP']],\n  [/PRESSOSTAT/, ['PRESSURE SWITCH', 'HIGH PRESSURE SWITCH']],\n  [/CAPTEUR PRESSION/, ['PRESSURE SENSOR']],\n  [/FLOTTEUR/, ['FLOAT SWITCH']],\n  [/FILTRE/, ['AIR FILTER', 'FILTER']],\n  [/BAC/, ['DRAIN PAN']],\n  [/FUSIBLE/, ['FUSE']],\n  [/BATTERIE|ECHANGEUR|EVAPORATEUR/, ['HEAT EXCHANGER', 'COIL']],\n  [/BORNIER/, ['TERMINAL STRIP', 'TERMINAL BLOCK']],\n  [/SELF|REACTANCE/, ['REACTOR']]\n];\nconst demande = norm(e.mots_cles);\nconst kws = new Set(demande.split(/[,;\\/]+/).map(s => s.trim()).filter(s => s.length >= 3));\nfor (const [r, l] of syn) if (r.test(demande)) l.forEach(k => kws.add(k));\nconst cands = rows.map(r => { const d = norm(r.des); let s = 0; for (const k of kws) if (d.includes(k)) s += k.length; return { r, s }; }).filter(o => o.s > 0).sort((a, b) => b.s - a.s).slice(0, 3).map(o => o.r);\nif (!cands.length) return [{ json: { etape: 'liste_complete', lignes: rows.map(r => 'rep ' + r.repere + ' | ' + r.pn + ' | ' + r.des + (r.spec ? ' ' + r.spec : '')) } }];\nreturn cands.map(c => ({ json: Object.assign({ etape: 'detail' }, c) }));"
+      },
+      "position": [
+        2688,
+        80
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "executeOnce": true,
+      "id": "ec1b567d-9089-4ad9-9f24-83535d05f8e2",
+      "name": "Recherche exacte",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Cookie",
+              "value": "={{ $('Session').first().json.cookie }}"
+            }
+          ]
+        },
+        "method": "GET",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "outputPropertyName": "html",
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 30000
+        },
+        "sendHeaders": true,
+        "url": "={{ $('Session').first().json.base + '/gsdb/spb/spb_modelSearch.asp?modelname=' + encodeURIComponent($('Entree').first().json.modele) + '&page=1' }}"
+      },
+      "position": [
+        1568,
+        144
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3
+    },
+    {
+      "executeOnce": true,
+      "id": "3ccd21c0-2d41-48bc-afda-55b6bc196410",
+      "name": "Recherche large",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Cookie",
+              "value": "={{ $('Session').first().json.cookie }}"
+            }
+          ]
+        },
+        "method": "GET",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true,
+              "outputPropertyName": "html",
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 30000
+        },
+        "sendHeaders": true,
+        "url": "={{ $('Session').first().json.base + '/gsdb/spb/spb_modelSearch.asp?modelname=' + encodeURIComponent($('Entree').first().json.prefixe) + '&page=1' }}"
+      },
+      "position": [
+        1792,
+        144
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3
+    },
+    {
+      "id": "f890019f-6ab7-4ccd-a6b0-5157dd2d2c15",
+      "name": "Resultat",
+      "parameters": {
+        "jsCode": "function tous(n) { try { return $(n).all().map(i => i.json); } catch (x) { return null; } }\nfunction un(n) { try { return $(n).first().json; } catch (x) { return null; } }\nconst e = $('Entree').first().json;\nconst admin = e.role === 'admin';\nconst MARGE = 1.30;\nconst fmt = n => n.toFixed(2).replace('.', ',') + ' EUR';\nconst s = un('Session') || {};\nif (s.etape === 'fin') return [{ json: { resultat: s.resultat } }];\nconst ch = un('Choix modele');\nif (ch && ch.etape === 'fin') return [{ json: { resultat: ch.resultat } }];\nconst pc = tous('Pieces');\nconst L = [];\nif (ch && ch.unite) {\n  L.push('Modele Daikin ' + ch.unite + (ch.exact ? '' : ' (le plus proche de ' + e.modele + ')') + '.');\n  if (ch.autres && ch.autres.length) L.push('Autres variantes : ' + ch.autres.join(', ') + '. Si la plaque indique une autre variante, les pieces peuvent differer.');\n}\nif (pc && pc[0] && pc[0].etape === 'liste_complete') {\n  if (pc[0].vide) L.push('Vue eclatee introuvable pour ce modele sur le portail Daikin.');\n  else {\n    L.push('Aucune piece ne correspond a : ' + e.mots_cles + '. Liste des pieces du modele (repere | reference | designation) :');\n    pc[0].lignes.slice(0, 120).forEach(l => L.push(l));\n    L.push('Choisis la bonne ligne et rappelle l outil avec sa reference exacte.');\n  }\n  return [{ json: { resultat: L.join('\\n') } }];\n}\nconst cands = (pc && pc[0] && pc[0].etape === 'detail') ? pc : [s];\nconst det = $input.all().map(i => String((i.json || {}).html || ''));\nconst TR = { 'available': 'disponible', 'available in low quantity': 'disponible, petite quantite', 'available in very low quantity': 'disponible, tres petite quantite', 'available in average quantity': 'disponible, quantite moyenne', '(to be confirmed)': 'a confirmer' };\nconst tr = v => TR[String(v || '').toLowerCase().trim()] || String(v || '').trim() || 'inconnu';\nconst prix = v => { const m = /([\\d.,]+)/.exec(String(v || '')); if (!m) return null; const n = parseFloat(m[1].replace(/,/g, '')); return isNaN(n) || n <= 0 ? null : n; };\nconst rowRe = /\\{\\s*\"pn\"\\s*:\\s*\"([^\"]*)\"\\s*,\\s*\"name\"\\s*:\\s*\"([^\"]*)\"[\\s\\S]*?\"ListPrice0\"\\s*:\\s*\"([^\"]*)\"\\s*,\\s*\"Stc0\"\\s*:\\s*\"([^\"]*)\"\\s*,\\s*\"_qty0\"\\s*:\\s*(-?\\d+)\\s*,\\s*\"Stc1\"\\s*:\\s*\"([^\"]*)\"\\s*,\\s*\"_qty1\"\\s*:\\s*(-?\\d+)[\\s\\S]*?\"stockType\"\\s*:\\s*\"(\\w+)\"/g;\nlet dateStock = '';\nL.push(cands.length > 1 ? 'Pieces correspondantes :' : 'Piece Daikin :');\ncands.forEach((c, i) => {\n  const h = det[i] || '';\n  if (/timed out/i.test(h) || !h) { L.push('- ' + (c.des || c.pn) + ' : ' + c.pn + '. Detail illisible sur le portail.'); return; }\n  const rows = [...h.matchAll(rowRe)].map(m => ({ pn: m[1], name: m[2], prix: prix(m[3]), s0: m[4], q0: +m[5], s1: m[6], q1: +m[7], type: m[8] }));\n  const d = /\"label\"\\s*:\\s*\"France\"\\s*,\\s*\"date\"\\s*:\\s*\"(\\d+)-(\\d+)-(\\d+)/.exec(h);\n  if (d && !dateStock) dateStock = String(d[3]).padStart(2, '0') + '/' + String(d[2]).padStart(2, '0') + '/' + d[1];\n  const o = rows.find(r => r.type === 'original');\n  if (!o) { L.push('- Reference ' + c.pn + ' introuvable sur le portail pieces Daikin.'); return; }\n  const sub = rows.find(r => r.type === 'substitute');\n  const eff = sub || o;\n  let l = '- ' + (c.des || o.name) + (c.repere ? ' (repere ' + c.repere + ')' : '') + ' : ' + o.pn + '.';\n  if (sub) l += ' Remplacee par ' + sub.pn + ' (' + sub.name + ').';\n  l += ' Stock Daikin France : ' + tr(eff.s1) + (eff.q1 > 0 ? ' (' + eff.q1 + ')' : '') + ' ; Belgique : ' + tr(eff.s0) + (eff.q0 > 0 ? ' (' + eff.q0 + ')' : '') + '.';\n  if (eff.prix) {\n    l += ' Prix indicatif client ' + fmt(Math.round(eff.prix * MARGE * 100) / 100) + ' HT hors pose.';\n    if (admin) l += ' Prix catalogue Daikin (a afficher a Laurent) ' + fmt(eff.prix) + '.';\n  } else l += ' Prix non communique : a demander au distributeur.';\n  L.push(l);\n});\nconst test = /spb-dev/.test(s.base || '');\nL.push('Attention : stock Daikin' + (dateStock ? ' arrete au ' + dateStock : '') + (test ? ' (portail de test Daikin, stock probablement ancien)' : '') + ', a confirmer avec le distributeur avant de commander.');\nL.push('Source : Daikin Spare Parts Bank, consulte le ' + $now.setZone('Europe/Paris').toFormat('dd/MM/yyyy') + '.');\nreturn [{ json: { resultat: L.join('\\n') } }];"
+      },
+      "position": [
+        3360,
+        224
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "52f8aa92-0e07-4ec3-b1b2-c81c7d2dd0ab",
+      "name": "Session",
+      "parameters": {
+        "jsCode": "const a = $('Lire acces').first().json || {};\nconst e = $('Entree').first().json;\nconst r = $input.first().json || {};\nconst base = String(a.url_base || 'https://www.spb-dev.daikin.co.jp').replace(/\\/+$/, '');\nconst fin = t => [{ json: { etape: 'fin', resultat: t } }];\nif (!a.mot_de_passe) return fin('Acces au portail pieces Daikin non configure (mot de passe absent de la Data Table daikin_spb_acces). Pour Daikin, applique la regle Demande de prix.');\nconst h = r.headers || {};\nlet sc = h['set-cookie'] || [];\nif (!Array.isArray(sc)) sc = [sc];\nconst cookie = sc.map(c => String(c).split(';')[0]).filter(Boolean).join('; ');\nconst loc = String(h.location || '');\nconst body = String(r.body || r.data || '');\nconst echec = !cookie || /login\\.asp/i.test(loc) || (/name=\"F_Pass\"/i.test(body) && !/spbank/i.test(loc));\nif (echec) return fin('Connexion au portail pieces Daikin impossible (identifiants refuses ou portail indisponible). Pour Daikin, applique la regle Demande de prix.');\nif (e.ref) return [{ json: { etape: 'detail', base, cookie, pn: e.ref, des: '', repere: '' } }];\nif (!e.modele) return fin('Ni reference de piece ni modele de machine : demander une photo de la plaque signaletique.');\nreturn [{ json: { etape: 'modele', base, cookie } }];"
+      },
+      "position": [
+        1120,
+        240
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "01f4e868-3918-4f1a-b507-4e2ad29b53a4",
+      "name": "Test manuel",
+      "parameters": {},
+      "position": [
+        0,
+        144
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-15T21:39:47.872Z"
+}

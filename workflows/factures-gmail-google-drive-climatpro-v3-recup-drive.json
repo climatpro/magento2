@@ -1,0 +1,1447 @@
+{
+  "_note": "versionPubliee = version active sur le serveur, differente du brouillon (nodes/connections).",
+  "active": true,
+  "connections": {
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "📧 Marquer comme lu",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "✏️ Construire le nom de fichier": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "❓ Est une facture ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "❓ Dossier existe ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "📁 Upload dans dossier du mois",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "📁 Créer dossier du mois",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "❓ Est une facture ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "📅 Extraire le mois",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "❌ Pas une facture - Ignore",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "📁 Créer dossier du mois": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "📋 Préparer upload (nouveau dossier)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "📁 Upload dans dossier du mois": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Append or update row in sheet",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "📅 Extraire le mois": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "🔎 Chercher dossier du mois",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "📋 Evaluer résultat recherche": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "❓ Dossier existe ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "📋 Préparer upload (nouveau dossier)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "📁 Upload dans dossier du mois",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "📧 Gmail - Nouveaux emails": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "🔍 Extraire les PDFs",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "🔍 Extraire les PDFs": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "🤖 Claude Haiku - Analyser la facture",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "🔎 Chercher dossier du mois": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "📋 Evaluer résultat recherche",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "🤖 Claude Haiku - Analyser la facture": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "✏️ Construire le nom de fichier",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-12T20:54:31.583Z",
+  "id": "MdI9Kjjo1itBbbXC",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp",
+    "templateCredsSetupCompleted": true
+  },
+  "name": "📧 Factures Gmail → Google Drive (ClimatPro) v3 - recup drive",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "id": "fd063d5f-4f0c-4729-abca-10f42444eb19",
+      "name": "Append or update row in sheet",
+      "parameters": {
+        "columns": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "Clé"
+          ],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Libellé",
+              "id": "Libellé",
+              "removed": false,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Date facture",
+              "id": "Date facture",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Montant TTC",
+              "id": "Montant TTC",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Montant HT",
+              "id": "Montant HT",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Statut",
+              "id": "Statut",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "N° facture",
+              "id": "N° facture",
+              "removed": false,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Fournisseur",
+              "id": "Fournisseur",
+              "removed": false,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Client",
+              "id": "Client",
+              "removed": false,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Lien Drive",
+              "id": "Lien Drive",
+              "removed": false,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Email ID",
+              "id": "Email ID",
+              "removed": false,
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "Clé",
+              "id": "Clé",
+              "removed": false,
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "Client": "={{ $('✏️ Construire le nom de fichier').item.json.client }}",
+            "Clé": "={{ $('✏️ Construire le nom de fichier').item.json.cle }}",
+            "Date facture": "={{ $('✏️ Construire le nom de fichier').item.json.date_facture.split('-').reverse().join('/') }}",
+            "Email ID": "={{ $('✏️ Construire le nom de fichier').item.json.gmail_message_id }}",
+            "Fournisseur": "={{ $('✏️ Construire le nom de fichier').item.json.fournisseur }}",
+            "Libellé": "={{ $('✏️ Construire le nom de fichier').item.json.fournisseur }} - {{ $('✏️ Construire le nom de fichier').item.json.objet }}",
+            "Lien Drive": "={{ 'https://drive.google.com/file/d/' + $json.id + '/view' }}",
+            "Montant TTC": "={{ $('✏️ Construire le nom de fichier').item.json.montant_ttc }}",
+            "N° facture": "={{ $('✏️ Construire le nom de fichier').item.json.numero_facture }}"
+          }
+        },
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "15wNATo6gpL-rDyTdPjaQemLx8GXgd_4TtFbJtfk-tVY"
+        },
+        "operation": "appendOrUpdate",
+        "options": {},
+        "sheetName": {
+          "__rl": true,
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15wNATo6gpL-rDyTdPjaQemLx8GXgd_4TtFbJtfk-tVY/edit#gid=0",
+          "mode": "list",
+          "value": "gid=0"
+        }
+      },
+      "position": [
+        5120,
+        1616
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "id": "11142730-2b7f-433a-8072-f9430cec38a3",
+      "name": "✏️ Construire le nom de fichier",
+      "parameters": {
+        "jsCode": "const allItems = $input.all();\nconst extractItems = $('🔍 Extraire les PDFs').all();\nconst results = [];\n\nfor (let i = 0; i < allItems.length; i++) {\n  const item = allItems[i];\n  const src = extractItems[i] || { json: {}, binary: {} };\n\n  let isFacture = false;\n  let isAvoir = false;\n  let emiseParClimatPro = false;\n  let fournisseur = 'Inconnu';\n  let client = '';\n  let objet = 'Facture';\n  let montant = '0,00';\n  let dateFacture = new Date().toISOString().split('T')[0];\n  let numeroFacture = '';\n  let raison = '';\n\n  try {\n    // Reponse Claude : content[] -> premier bloc de type text (content[0].text en pratique)\n    const blocks = Array.isArray(item.json.content) ? item.json.content : [];\n    const textBlock = blocks.find(b => b && b.type === 'text') || blocks[0] || {};\n    const responseText = textBlock.text || '{}';\n    let cleanText = responseText.replace(/```json\\n?/gi, '').replace(/```\\n?/g, '').trim();\n    const a = cleanText.indexOf('{');\n    const b = cleanText.lastIndexOf('}');\n    if (a !== -1 && b > a) cleanText = cleanText.slice(a, b + 1);\n    const data = JSON.parse(cleanText);\n\n    isFacture = data.is_facture === true;\n    isAvoir = data.is_avoir === true;\n    emiseParClimatPro = data.emise_par_climatpro === true;\n    raison = data.raison || '';\n\n    if (isFacture || isAvoir) {\n      if (data.fournisseur && data.fournisseur !== null) fournisseur = data.fournisseur;\n      if (data.client && data.client !== null) client = data.client;\n      if (data.objet && data.objet !== null) objet = data.objet;\n      if (data.montant_ttc && data.montant_ttc !== null) montant = String(data.montant_ttc).replace('.', ',');\n      if (data.date_facture && data.date_facture !== null) dateFacture = data.date_facture;\n      if (data.numero_facture && data.numero_facture !== null) numeroFacture = String(data.numero_facture).trim();\n    }\n  } catch (e) {\n    raison = 'Erreur parsing Claude: ' + e.message;\n  }\n\n  // Garde-fou : un document emis par ClimatPro n'est JAMAIS une depense\n  const fournisseurNorm = String(fournisseur).toLowerCase().replace(/[\\s\\-_.]/g, '');\n  const numeroNorm = numeroFacture.toUpperCase();\n  const isClimatPro = emiseParClimatPro\n    || fournisseurNorm.includes('climatpro')\n    || /^FA1\\d{4}$/.test(numeroNorm);\n  if (isClimatPro && (isFacture || isAvoir)) {\n    isFacture = false;\n    isAvoir = false;\n    raison = 'REJET ClimatPro (document emis par ClimatPro) - ' + raison;\n  }\n\n  const clean = (str) => str\n    .normalize('NFD').replace(/[̀-ͯ]/g, '')\n    .replace(/[\\\\/:*?\"<>|]/g, '-').replace(/\\s+/g, '-')\n    .replace(/-+/g, '-').replace(/^-|-$/g, '').substring(0, 50);\n\n  let fileName = null;\n  if (isAvoir) {\n    fileName = 'AVOIR_' + clean(fournisseur) + '_' + clean(objet) + '_' + montant + 'EUR.pdf';\n  } else if (isFacture) {\n    fileName = clean(fournisseur) + '_' + clean(objet) + '_' + montant + 'EUR.pdf';\n  }\n\n  // Cle de dedoublonnage pour le Sheet : fournisseur + numero si connu, sinon email + piece jointe\n  const gmailMessageId = src.json.gmailMessageId || '';\n  const attachmentName = src.json.attachmentName || '';\n  const cle = numeroFacture\n    ? clean(fournisseur).toLowerCase() + '|' + numeroFacture\n    : (gmailMessageId || 'noid') + '|' + (attachmentName || 'nofile');\n\n  results.push({\n    json: {\n      is_facture: isFacture,\n      is_avoir: isAvoir,\n      emise_par_climatpro: isClimatPro,\n      raison: raison,\n      fournisseur: fournisseur,\n      client: client,\n      objet: objet,\n      montant_ttc: montant,\n      date_facture: dateFacture,\n      numero_facture: numeroFacture,\n      fileName: fileName,\n      gmail_message_id: gmailMessageId,\n      attachment_name: attachmentName,\n      cle: cle\n    },\n    binary: src.binary,\n    pairedItem: { item: i }\n  });\n}\n\nreturn results;\n"
+      },
+      "position": [
+        3120,
+        1472
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "cc70d98b-73b6-45dd-954d-95377e47020f",
+      "name": "❌ Pas une facture - Ignore",
+      "parameters": {},
+      "position": [
+        3568,
+        1680
+      ],
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1
+    },
+    {
+      "id": "30754bf1-3dad-4152-9fa1-16cf539b61d9",
+      "name": "❓ Dossier existe ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "folder-found",
+              "leftValue": "={{ $json.folderFound }}",
+              "operator": {
+                "operation": "true",
+                "type": "boolean"
+              },
+              "rightValue": true
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        4240,
+        1472
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "c9989944-4d69-4dd4-8d78-03088a67a544",
+      "name": "❓ Est une facture ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "is-facture",
+              "leftValue": "={{ $json.is_facture }}",
+              "operator": {
+                "operation": "true",
+                "type": "boolean"
+              },
+              "rightValue": true
+            },
+            {
+              "id": "de453f38-357c-438f-9a7e-5a4ed2319761",
+              "leftValue": "={{ $json.fournisseur }}",
+              "operator": {
+                "operation": "notStartsWith",
+                "type": "string"
+              },
+              "rightValue": "ClimatPro"
+            }
+          ],
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          }
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "position": [
+        3344,
+        1472
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "59c2032d-1b72-4ae4-b4f3-e4586a050aa7",
+      "name": "📁 Créer dossier du mois",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "body": "={{ JSON.stringify({ name: $json.folderName, mimeType: 'application/vnd.google-apps.folder', parents: ['1qiVL5cq9nCdEFGMCOIsZsiKJEQJdTQrD'] }) }}",
+        "contentType": "raw",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "method": "POST",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "options": {},
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "supportsAllDrives",
+              "value": "true"
+            }
+          ]
+        },
+        "rawContentType": "application/json",
+        "sendBody": true,
+        "sendHeaders": true,
+        "sendQuery": true,
+        "url": "https://www.googleapis.com/drive/v3/files"
+      },
+      "position": [
+        4464,
+        1568
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "cf5efa48-663e-4ca7-9215-c2b9fe86710d",
+      "name": "📁 Upload dans dossier du mois",
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.monthFolderId }}"
+        },
+        "name": "={{ $json.fileName }}",
+        "options": {}
+      },
+      "position": [
+        4912,
+        1472
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "id": "b71540a6-399d-46df-be3e-4cec2c7bde80",
+      "name": "📅 Extraire le mois",
+      "parameters": {
+        "jsCode": "// Convertir la date de facture en nom de dossier \"DEPENSES MOIS ANNEE\"\n// Traite TOUS les items (plusieurs factures par email possibles)\nconst moisFR = {\n  '01': 'JANVIER', '02': 'FEVRIER', '03': 'MARS',\n  '04': 'AVRIL', '05': 'MAI', '06': 'JUIN',\n  '07': 'JUILLET', '08': 'AOUT', '09': 'SEPTEMBRE',\n  '10': 'OCTOBRE', '11': 'NOVEMBRE', '12': 'DECEMBRE'\n};\n\nreturn $input.all().map((item, i) => {\n  const dateFacture = item.json.date_facture || '';\n  let folderName = 'DEPENSES NON-DATE';\n\n  if (dateFacture && dateFacture.length >= 7) {\n    const annee = dateFacture.substring(0, 4);\n    const moisNum = dateFacture.substring(5, 7);\n    const moisNom = moisFR[moisNum] || 'INCONNU';\n    folderName = 'DEPENSES ' + moisNom + ' ' + annee;\n  }\n\n  return {\n    json: { ...item.json, folderName: folderName },\n    binary: item.binary,\n    pairedItem: { item: i }\n  };\n});\n"
+      },
+      "position": [
+        3568,
+        1472
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "6a0f26b4-1dde-4f55-8ddd-a81830b382b5",
+      "name": "📋 Evaluer résultat recherche",
+      "parameters": {
+        "jsCode": "// Verifier si le dossier du mois a ete trouve, pour CHAQUE item\nreturn $input.all().map((item, i) => {\n  const searchResults = item.json;\n  const source = $('📅 Extraire le mois').itemMatching(i);\n\n  let folderId = null;\n  // L'API Google Drive retourne { files: [...] }\n  if (searchResults.files && searchResults.files.length > 0) {\n    folderId = searchResults.files[0].id;\n  }\n\n  return {\n    json: {\n      ...source.json,\n      monthFolderId: folderId,\n      folderFound: folderId !== null\n    },\n    binary: source.binary,\n    pairedItem: { item: i }\n  };\n});\n"
+      },
+      "position": [
+        4016,
+        1472
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "7fa27650-3b45-4319-9da1-7a6a7e730a66",
+      "name": "📋 Préparer upload (nouveau dossier)",
+      "parameters": {
+        "jsCode": "// Apres creation du dossier, recuperer son ID et les donnees de la facture, pour CHAQUE item\nreturn $input.all().map((item, i) => {\n  const newFolder = item.json;\n  const source = $('📅 Extraire le mois').itemMatching(i);\n\n  return {\n    json: {\n      ...source.json,\n      monthFolderId: newFolder.id\n    },\n    binary: source.binary,\n    pairedItem: { item: i }\n  };\n});\n"
+      },
+      "position": [
+        4688,
+        1568
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "QkVJEJmojKI4yW63",
+          "name": "Gmail account"
+        }
+      },
+      "id": "db39b7dd-485a-4e8a-ba1e-81164f7de239",
+      "name": "📧 Gmail - Nouveaux emails",
+      "parameters": {
+        "filters": {
+          "labelIds": [
+            "INBOX"
+          ],
+          "q": "in:inbox has:attachment filename:pdf -in:draft {to:scan@climatpro.fr deliveredto:scan@climatpro.fr (-in:sent -from:climatpro.fr)}"
+        },
+        "options": {
+          "dataPropertyAttachmentsPrefixName": "attachment_",
+          "downloadAttachments": true
+        },
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false
+      },
+      "position": [
+        2448,
+        1472
+      ],
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1
+    },
+    {
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "QkVJEJmojKI4yW63",
+          "name": "Gmail account"
+        }
+      },
+      "id": "e289e9b5-2e71-4edf-9950-242d5e584d63",
+      "name": "📧 Marquer comme lu",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "body": "{\"removeLabelIds\": [\"UNREAD\"]}",
+        "contentType": "raw",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "method": "POST",
+        "nodeCredentialType": "gmailOAuth2",
+        "options": {},
+        "rawContentType": "application/json",
+        "sendBody": true,
+        "sendHeaders": true,
+        "url": "=https://gmail.googleapis.com/gmail/v1/users/me/messages/{{ $('📧 Gmail - Nouveaux emails').item.json.id }}/modify"
+      },
+      "position": [
+        5360,
+        1472
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "190097c8-7e9b-4105-99ed-2174dbcbcc75",
+      "name": "🔍 Extraire les PDFs",
+      "parameters": {
+        "jsCode": "const items = [];\nconst emails = $input.all();\n\nfor (let e = 0; e < emails.length; e++) {\n  const email = emails[e];\n  const binaryData = email.binary || {};\n  const binaryKeys = Object.keys(binaryData).filter(k => k.startsWith('attachment_'));\n\n  for (const binaryKey of binaryKeys) {\n    const bin = binaryData[binaryKey];\n    const isPDF = bin.mimeType === 'application/pdf' || (bin.fileName && bin.fileName.toLowerCase().endsWith('.pdf'));\n    if (!isPDF) continue;\n\n    const buffer = await this.helpers.getBinaryDataBuffer(e, binaryKey);\n    const base64Data = buffer.toString('base64');\n\n    const claudeBody = {\n      model: 'claude-haiku-5-5',\n      max_tokens: 1024,\n      system: \"Tu es un assistant comptable expert en analyse de documents. On te fournit un document PDF en piece jointe.\\n\\nCONTEXTE OBLIGATOIRE : l'entreprise qui recoit ce document est CLIMATPRO (ClimatPro climatisation, contact@climatpro.fr). CLIMATPRO EST LE CLIENT, jamais le fournisseur. Les factures de vente emises par ClimatPro portent un numero commencant par FA1 (exemple : FA10234) et l'en-tete ClimatPro. Ce ne sont JAMAIS des factures fournisseurs.\\n\\nEtape 1 : Determine si ce document est une FACTURE ou un AVOIR (note de credit).\\n- Une facture contient : un numero de facture, une date, un fournisseur, des lignes de prestations/produits, un montant TTC.\\n- Un avoir (ou note de credit) est similaire a une facture mais avec des montants negatifs ou la mention avoir/credit.\\n- NE SONT PAS des factures ni des avoirs : devis, bons de commande, bons de livraison, releves bancaires, attestations, contrats, courriers.\\n\\nEtape 2 : Determine qui EMET le document. Le fournisseur est toujours l'EMETTEUR (en-tete, logo, SIRET, coordonnees bancaires), jamais le destinataire. Si l'emetteur est ClimatPro (en-tete ClimatPro, numero FA1xxxx, ClimatPro comme vendeur), alors emise_par_climatpro = true. Si ClimatPro apparait seulement comme destinataire ou client, emise_par_climatpro = false et le fournisseur est l'autre societe.\\n\\nEtape 3 : Si c'est une facture ou un avoir, extrais les informations suivantes.\\n\\nReponds UNIQUEMENT avec ce JSON (aucun texte autour, aucun backtick markdown) :\\n{\\n  \\\"is_facture\\\": true ou false,\\n  \\\"is_avoir\\\": true ou false,\\n  \\\"emise_par_climatpro\\\": true ou false,\\n  \\\"raison\\\": \\\"explication courte\\\",\\n  \\\"fournisseur\\\": \\\"nom court de l'EMETTEUR sans forme juridique\\\",\\n  \\\"client\\\": \\\"nom court du destinataire\\\",\\n  \\\"objet\\\": \\\"description courte 3 a 5 mots\\\",\\n  \\\"montant_ttc\\\": \\\"nombre uniquement avec point decimal\\\",\\n  \\\"date_facture\\\": \\\"YYYY-MM-DD\\\",\\n  \\\"numero_facture\\\": \\\"numero tel qu'il apparait\\\"\\n}\\n\\nSi ce n'est ni une facture ni un avoir, remplis uniquement is_facture, is_avoir, emise_par_climatpro et raison, les autres champs a null.\",\n      messages: [{\n        role: 'user',\n        content: [\n          { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: base64Data } },\n          { type: 'text', text: 'Analyse ce document. Contexte email :\\n- Objet : ' + (email.json.subject || 'N/A') + '\\n- Expediteur : ' + (email.json.from || 'N/A') }\n        ]\n      }]\n    };\n\n    items.push({\n      json: {\n        gmailMessageId: email.json.id,\n        emailFrom: email.json.from,\n        emailSubject: email.json.subject,\n        emailDate: email.json.date,\n        attachmentName: bin.fileName || binaryKey,\n        claudeBodyString: JSON.stringify(claudeBody)\n      },\n      binary: { data: binaryData[binaryKey] },\n      pairedItem: { item: e }\n    });\n  }\n}\n\nreturn items;\n"
+      },
+      "position": [
+        2672,
+        1472
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "76652e7c-ed22-4fa4-90e4-4869d6085224",
+      "name": "🔎 Chercher dossier du mois",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "options": {},
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "=mimeType = 'application/vnd.google-apps.folder' and name = '{{ $json.folderName }}' and '1qiVL5cq9nCdEFGMCOIsZsiKJEQJdTQrD' in parents and trashed = false"
+            },
+            {
+              "name": "fields",
+              "value": "files(id, name)"
+            },
+            {
+              "name": "supportsAllDrives",
+              "value": "true"
+            },
+            {
+              "name": "includeItemsFromAllDrives",
+              "value": "true"
+            },
+            {
+              "name": "corpora",
+              "value": "allDrives"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://www.googleapis.com/drive/v3/files"
+      },
+      "position": [
+        3792,
+        1472
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "anthropicApi": {
+          "id": "GfYoRA9p0AV4WXlD",
+          "name": "Anthropic account"
+        }
+      },
+      "id": "e9e3687d-8c01-452a-8c28-948744f548e3",
+      "name": "🤖 Claude Haiku - Analyser la facture",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "body": "={{ $json.claudeBodyString }}",
+        "contentType": "raw",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "method": "POST",
+        "nodeCredentialType": "anthropicApi",
+        "options": {
+          "timeout": 120000
+        },
+        "rawContentType": "application/json",
+        "sendBody": true,
+        "sendHeaders": true,
+        "url": "https://api.anthropic.com/v1/messages"
+      },
+      "position": [
+        2896,
+        1472
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "binaryMode": "separate",
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-13T10:32:35.733Z",
+  "versionPubliee": {
+    "connections": {
+      "Append or update row in sheet": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "📧 Marquer comme lu",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "✏️ Construire le nom de fichier": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "❓ Est une facture ?",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "❓ Dossier existe ?": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "📁 Upload dans dossier du mois",
+              "type": "main"
+            }
+          ],
+          [
+            {
+              "index": 0,
+              "node": "📁 Créer dossier du mois",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "❓ Est une facture ?": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "📅 Extraire le mois",
+              "type": "main"
+            }
+          ],
+          [
+            {
+              "index": 0,
+              "node": "❌ Pas une facture - Ignore",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "📁 Créer dossier du mois": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "📋 Préparer upload (nouveau dossier)",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "📁 Upload dans dossier du mois": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "Append or update row in sheet",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "📅 Extraire le mois": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "🔎 Chercher dossier du mois",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "📋 Evaluer résultat recherche": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "❓ Dossier existe ?",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "📋 Préparer upload (nouveau dossier)": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "📁 Upload dans dossier du mois",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "📧 Gmail - Nouveaux emails": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "🔍 Extraire les PDFs",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "🔍 Extraire les PDFs": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "🤖 Gemini - Analyser la facture",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "🔎 Chercher dossier du mois": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "📋 Evaluer résultat recherche",
+              "type": "main"
+            }
+          ]
+        ]
+      },
+      "🤖 Gemini - Analyser la facture": {
+        "main": [
+          [
+            {
+              "index": 0,
+              "node": "✏️ Construire le nom de fichier",
+              "type": "main"
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "nodes": [
+      {
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "fKAETwT6ij09juV8",
+            "name": "Google Sheets account"
+          }
+        },
+        "id": "fd063d5f-4f0c-4729-abca-10f42444eb19",
+        "name": "Append or update row in sheet",
+        "parameters": {
+          "columns": {
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false,
+            "mappingMode": "defineBelow",
+            "matchingColumns": [
+              "Clé"
+            ],
+            "schema": [
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Libellé",
+                "id": "Libellé",
+                "removed": false,
+                "required": false,
+                "type": "string"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Date facture",
+                "id": "Date facture",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Montant TTC",
+                "id": "Montant TTC",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Montant HT",
+                "id": "Montant HT",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Statut",
+                "id": "Statut",
+                "required": false,
+                "type": "string"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "N° facture",
+                "id": "N° facture",
+                "removed": false,
+                "required": false,
+                "type": "string"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Fournisseur",
+                "id": "Fournisseur",
+                "removed": false,
+                "required": false,
+                "type": "string"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Client",
+                "id": "Client",
+                "removed": false,
+                "required": false,
+                "type": "string"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Lien Drive",
+                "id": "Lien Drive",
+                "removed": false,
+                "required": false,
+                "type": "string"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Email ID",
+                "id": "Email ID",
+                "removed": false,
+                "required": false,
+                "type": "string"
+              },
+              {
+                "canBeUsedToMatch": true,
+                "defaultMatch": false,
+                "display": true,
+                "displayName": "Clé",
+                "id": "Clé",
+                "removed": false,
+                "required": false,
+                "type": "string"
+              }
+            ],
+            "value": {
+              "Client": "={{ $('✏️ Construire le nom de fichier').item.json.client }}",
+              "Clé": "={{ $('✏️ Construire le nom de fichier').item.json.cle }}",
+              "Date facture": "={{ $('✏️ Construire le nom de fichier').item.json.date_facture.split('-').reverse().join('/') }}",
+              "Email ID": "={{ $('✏️ Construire le nom de fichier').item.json.gmail_message_id }}",
+              "Fournisseur": "={{ $('✏️ Construire le nom de fichier').item.json.fournisseur }}",
+              "Libellé": "={{ $('✏️ Construire le nom de fichier').item.json.fournisseur }} - {{ $('✏️ Construire le nom de fichier').item.json.objet }}",
+              "Lien Drive": "={{ 'https://drive.google.com/file/d/' + $json.id + '/view' }}",
+              "Montant TTC": "={{ $('✏️ Construire le nom de fichier').item.json.montant_ttc }}",
+              "N° facture": "={{ $('✏️ Construire le nom de fichier').item.json.numero_facture }}"
+            }
+          },
+          "documentId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "15wNATo6gpL-rDyTdPjaQemLx8GXgd_4TtFbJtfk-tVY"
+          },
+          "operation": "appendOrUpdate",
+          "options": {},
+          "sheetName": {
+            "__rl": true,
+            "cachedResultName": "Feuille 1",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15wNATo6gpL-rDyTdPjaQemLx8GXgd_4TtFbJtfk-tVY/edit#gid=0",
+            "mode": "list",
+            "value": "gid=0"
+          }
+        },
+        "position": [
+          5120,
+          1616
+        ],
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7
+      },
+      {
+        "credentials": {},
+        "id": "11142730-2b7f-433a-8072-f9430cec38a3",
+        "name": "✏️ Construire le nom de fichier",
+        "parameters": {
+          "jsCode": "const allItems = $input.all();\nconst extractItems = $('🔍 Extraire les PDFs').all();\nconst results = [];\n\nfor (let i = 0; i < allItems.length; i++) {\n  const item = allItems[i];\n  const src = extractItems[i] || { json: {}, binary: {} };\n\n  let isFacture = false;\n  let isAvoir = false;\n  let emiseParClimatPro = false;\n  let fournisseur = 'Inconnu';\n  let client = '';\n  let objet = 'Facture';\n  let montant = '0,00';\n  let dateFacture = new Date().toISOString().split('T')[0];\n  let numeroFacture = '';\n  let raison = '';\n\n  try {\n    const responseText = item.json.candidates?.[0]?.content?.parts?.[0]?.text || '{}';\n    const cleanText = responseText.replace(/```json\\n?/gi, '').replace(/```\\n?/g, '').trim();\n    const data = JSON.parse(cleanText);\n\n    isFacture = data.is_facture === true;\n    isAvoir = data.is_avoir === true;\n    emiseParClimatPro = data.emise_par_climatpro === true;\n    raison = data.raison || '';\n\n    if (isFacture || isAvoir) {\n      if (data.fournisseur && data.fournisseur !== null) fournisseur = data.fournisseur;\n      if (data.client && data.client !== null) client = data.client;\n      if (data.objet && data.objet !== null) objet = data.objet;\n      if (data.montant_ttc && data.montant_ttc !== null) montant = String(data.montant_ttc).replace('.', ',');\n      if (data.date_facture && data.date_facture !== null) dateFacture = data.date_facture;\n      if (data.numero_facture && data.numero_facture !== null) numeroFacture = String(data.numero_facture).trim();\n    }\n  } catch (e) {\n    raison = 'Erreur parsing Gemini: ' + e.message;\n  }\n\n  // Garde-fou : un document emis par ClimatPro n'est JAMAIS une depense\n  const fournisseurNorm = String(fournisseur).toLowerCase().replace(/[\\s\\-_.]/g, '');\n  const numeroNorm = numeroFacture.toUpperCase();\n  const isClimatPro = emiseParClimatPro\n    || fournisseurNorm.includes('climatpro')\n    || /^FA1\\d{4}$/.test(numeroNorm);\n  if (isClimatPro && (isFacture || isAvoir)) {\n    isFacture = false;\n    isAvoir = false;\n    raison = 'REJET ClimatPro (document emis par ClimatPro) - ' + raison;\n  }\n\n  const clean = (str) => str\n    .normalize('NFD').replace(/[̀-ͯ]/g, '')\n    .replace(/[\\\\/:*?\"<>|]/g, '-').replace(/\\s+/g, '-')\n    .replace(/-+/g, '-').replace(/^-|-$/g, '').substring(0, 50);\n\n  let fileName = null;\n  if (isAvoir) {\n    fileName = 'AVOIR_' + clean(fournisseur) + '_' + clean(objet) + '_' + montant + 'EUR.pdf';\n  } else if (isFacture) {\n    fileName = clean(fournisseur) + '_' + clean(objet) + '_' + montant + 'EUR.pdf';\n  }\n\n  // Cle de dedoublonnage pour le Sheet : fournisseur + numero si connu, sinon email + piece jointe\n  const gmailMessageId = src.json.gmailMessageId || '';\n  const attachmentName = src.json.attachmentName || '';\n  const cle = numeroFacture\n    ? clean(fournisseur).toLowerCase() + '|' + numeroFacture\n    : (gmailMessageId || 'noid') + '|' + (attachmentName || 'nofile');\n\n  results.push({\n    json: {\n      is_facture: isFacture,\n      is_avoir: isAvoir,\n      emise_par_climatpro: isClimatPro,\n      raison: raison,\n      fournisseur: fournisseur,\n      client: client,\n      objet: objet,\n      montant_ttc: montant,\n      date_facture: dateFacture,\n      numero_facture: numeroFacture,\n      fileName: fileName,\n      gmail_message_id: gmailMessageId,\n      attachment_name: attachmentName,\n      cle: cle\n    },\n    binary: src.binary,\n    pairedItem: { item: i }\n  });\n}\n\nreturn results;\n"
+        },
+        "position": [
+          3120,
+          1472
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "credentials": {},
+        "id": "cc70d98b-73b6-45dd-954d-95377e47020f",
+        "name": "❌ Pas une facture - Ignore",
+        "parameters": {},
+        "position": [
+          3568,
+          1680
+        ],
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1
+      },
+      {
+        "credentials": {},
+        "id": "30754bf1-3dad-4152-9fa1-16cf539b61d9",
+        "name": "❓ Dossier existe ?",
+        "parameters": {
+          "conditions": {
+            "combinator": "and",
+            "conditions": [
+              {
+                "id": "folder-found",
+                "leftValue": "={{ $json.folderFound }}",
+                "operator": {
+                  "operation": "true",
+                  "type": "boolean"
+                },
+                "rightValue": true
+              }
+            ],
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            }
+          },
+          "options": {}
+        },
+        "position": [
+          4240,
+          1472
+        ],
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2
+      },
+      {
+        "credentials": {},
+        "id": "c9989944-4d69-4dd4-8d78-03088a67a544",
+        "name": "❓ Est une facture ?",
+        "parameters": {
+          "conditions": {
+            "combinator": "and",
+            "conditions": [
+              {
+                "id": "is-facture",
+                "leftValue": "={{ $json.is_facture }}",
+                "operator": {
+                  "operation": "true",
+                  "type": "boolean"
+                },
+                "rightValue": true
+              },
+              {
+                "id": "de453f38-357c-438f-9a7e-5a4ed2319761",
+                "leftValue": "={{ $json.fournisseur }}",
+                "operator": {
+                  "operation": "notStartsWith",
+                  "type": "string"
+                },
+                "rightValue": "ClimatPro"
+              }
+            ],
+            "options": {
+              "caseSensitive": false,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            }
+          },
+          "options": {
+            "ignoreCase": true
+          }
+        },
+        "position": [
+          3344,
+          1472
+        ],
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2
+      },
+      {
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "54fd9ApHaDydoOJv",
+            "name": "Google Drive account 2"
+          }
+        },
+        "id": "59c2032d-1b72-4ae4-b4f3-e4586a050aa7",
+        "name": "📁 Créer dossier du mois",
+        "parameters": {
+          "authentication": "predefinedCredentialType",
+          "body": "={{ JSON.stringify({ name: $json.folderName, mimeType: 'application/vnd.google-apps.folder', parents: ['1qiVL5cq9nCdEFGMCOIsZsiKJEQJdTQrD'] }) }}",
+          "contentType": "raw",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "method": "POST",
+          "nodeCredentialType": "googleDriveOAuth2Api",
+          "options": {},
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "supportsAllDrives",
+                "value": "true"
+              }
+            ]
+          },
+          "rawContentType": "application/json",
+          "sendBody": true,
+          "sendHeaders": true,
+          "sendQuery": true,
+          "url": "https://www.googleapis.com/drive/v3/files"
+        },
+        "position": [
+          4464,
+          1568
+        ],
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2
+      },
+      {
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "54fd9ApHaDydoOJv",
+            "name": "Google Drive account 2"
+          }
+        },
+        "id": "cf5efa48-663e-4ca7-9215-c2b9fe86710d",
+        "name": "📁 Upload dans dossier du mois",
+        "parameters": {
+          "driveId": {
+            "__rl": true,
+            "mode": "list",
+            "value": "My Drive"
+          },
+          "folderId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "={{ $json.monthFolderId }}"
+          },
+          "name": "={{ $json.fileName }}",
+          "options": {}
+        },
+        "position": [
+          4912,
+          1472
+        ],
+        "type": "n8n-nodes-base.googleDrive",
+        "typeVersion": 3
+      },
+      {
+        "credentials": {},
+        "id": "b71540a6-399d-46df-be3e-4cec2c7bde80",
+        "name": "📅 Extraire le mois",
+        "parameters": {
+          "jsCode": "// Convertir la date de facture en nom de dossier \"DEPENSES MOIS ANNEE\"\n// Traite TOUS les items (plusieurs factures par email possibles)\nconst moisFR = {\n  '01': 'JANVIER', '02': 'FEVRIER', '03': 'MARS',\n  '04': 'AVRIL', '05': 'MAI', '06': 'JUIN',\n  '07': 'JUILLET', '08': 'AOUT', '09': 'SEPTEMBRE',\n  '10': 'OCTOBRE', '11': 'NOVEMBRE', '12': 'DECEMBRE'\n};\n\nreturn $input.all().map((item, i) => {\n  const dateFacture = item.json.date_facture || '';\n  let folderName = 'DEPENSES NON-DATE';\n\n  if (dateFacture && dateFacture.length >= 7) {\n    const annee = dateFacture.substring(0, 4);\n    const moisNum = dateFacture.substring(5, 7);\n    const moisNom = moisFR[moisNum] || 'INCONNU';\n    folderName = 'DEPENSES ' + moisNom + ' ' + annee;\n  }\n\n  return {\n    json: { ...item.json, folderName: folderName },\n    binary: item.binary,\n    pairedItem: { item: i }\n  };\n});\n"
+        },
+        "position": [
+          3568,
+          1472
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "credentials": {},
+        "id": "6a0f26b4-1dde-4f55-8ddd-a81830b382b5",
+        "name": "📋 Evaluer résultat recherche",
+        "parameters": {
+          "jsCode": "// Verifier si le dossier du mois a ete trouve, pour CHAQUE item\nreturn $input.all().map((item, i) => {\n  const searchResults = item.json;\n  const source = $('📅 Extraire le mois').itemMatching(i);\n\n  let folderId = null;\n  // L'API Google Drive retourne { files: [...] }\n  if (searchResults.files && searchResults.files.length > 0) {\n    folderId = searchResults.files[0].id;\n  }\n\n  return {\n    json: {\n      ...source.json,\n      monthFolderId: folderId,\n      folderFound: folderId !== null\n    },\n    binary: source.binary,\n    pairedItem: { item: i }\n  };\n});\n"
+        },
+        "position": [
+          4016,
+          1472
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "credentials": {},
+        "id": "7fa27650-3b45-4319-9da1-7a6a7e730a66",
+        "name": "📋 Préparer upload (nouveau dossier)",
+        "parameters": {
+          "jsCode": "// Apres creation du dossier, recuperer son ID et les donnees de la facture, pour CHAQUE item\nreturn $input.all().map((item, i) => {\n  const newFolder = item.json;\n  const source = $('📅 Extraire le mois').itemMatching(i);\n\n  return {\n    json: {\n      ...source.json,\n      monthFolderId: newFolder.id\n    },\n    binary: source.binary,\n    pairedItem: { item: i }\n  };\n});\n"
+        },
+        "position": [
+          4688,
+          1568
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "QkVJEJmojKI4yW63",
+            "name": "Gmail account"
+          }
+        },
+        "id": "db39b7dd-485a-4e8a-ba1e-81164f7de239",
+        "name": "📧 Gmail - Nouveaux emails",
+        "parameters": {
+          "filters": {
+            "labelIds": [
+              "INBOX"
+            ],
+            "q": "in:inbox has:attachment filename:pdf -in:draft {to:scan@climatpro.fr deliveredto:scan@climatpro.fr (-in:sent -from:climatpro.fr)}"
+          },
+          "options": {
+            "dataPropertyAttachmentsPrefixName": "attachment_",
+            "downloadAttachments": true
+          },
+          "pollTimes": {
+            "item": [
+              {
+                "mode": "everyMinute"
+              }
+            ]
+          },
+          "simple": false
+        },
+        "position": [
+          2448,
+          1472
+        ],
+        "type": "n8n-nodes-base.gmailTrigger",
+        "typeVersion": 1
+      },
+      {
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "QkVJEJmojKI4yW63",
+            "name": "Gmail account"
+          }
+        },
+        "id": "e289e9b5-2e71-4edf-9950-242d5e584d63",
+        "name": "📧 Marquer comme lu",
+        "onError": "continueRegularOutput",
+        "parameters": {
+          "authentication": "predefinedCredentialType",
+          "body": "{\"removeLabelIds\": [\"UNREAD\"]}",
+          "contentType": "raw",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "method": "POST",
+          "nodeCredentialType": "gmailOAuth2",
+          "options": {},
+          "rawContentType": "application/json",
+          "sendBody": true,
+          "sendHeaders": true,
+          "url": "=https://gmail.googleapis.com/gmail/v1/users/me/messages/{{ $('📧 Gmail - Nouveaux emails').item.json.id }}/modify"
+        },
+        "position": [
+          5360,
+          1472
+        ],
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2
+      },
+      {
+        "credentials": {},
+        "id": "190097c8-7e9b-4105-99ed-2174dbcbcc75",
+        "name": "🔍 Extraire les PDFs",
+        "parameters": {
+          "jsCode": "const items = [];\nconst emails = $input.all();\n\nfor (let e = 0; e < emails.length; e++) {\n  const email = emails[e];\n  const binaryData = email.binary || {};\n  const binaryKeys = Object.keys(binaryData).filter(k => k.startsWith('attachment_'));\n\n  for (const binaryKey of binaryKeys) {\n    const bin = binaryData[binaryKey];\n    const isPDF = bin.mimeType === 'application/pdf' || (bin.fileName && bin.fileName.toLowerCase().endsWith('.pdf'));\n    if (!isPDF) continue;\n\n    const buffer = await this.helpers.getBinaryDataBuffer(e, binaryKey);\n    const base64Data = buffer.toString('base64');\n\n    const geminiBody = {\n      system_instruction: {\n        parts: [{\n          text: \"Tu es un assistant comptable expert en analyse de documents. On te fournit un document PDF en piece jointe.\\n\\nCONTEXTE OBLIGATOIRE : l'entreprise qui recoit ce document est CLIMATPRO (ClimatPro climatisation, contact@climatpro.fr). CLIMATPRO EST LE CLIENT, jamais le fournisseur. Les factures de vente emises par ClimatPro portent un numero commencant par FA1 (exemple : FA10234) et l'en-tete ClimatPro. Ce ne sont JAMAIS des factures fournisseurs.\\n\\nEtape 1 : Determine si ce document est une FACTURE ou un AVOIR (note de credit).\\n- Une facture contient : un numero de facture, une date, un fournisseur, des lignes de prestations/produits, un montant TTC.\\n- Un avoir (ou note de credit) est similaire a une facture mais avec des montants negatifs ou la mention avoir/credit.\\n- NE SONT PAS des factures ni des avoirs : devis, bons de commande, bons de livraison, releves bancaires, attestations, contrats, courriers.\\n\\nEtape 2 : Determine qui EMET le document. Le fournisseur est toujours l'EMETTEUR (en-tete, logo, SIRET, coordonnees bancaires), jamais le destinataire. Si l'emetteur est ClimatPro (en-tete ClimatPro, numero FA1xxxx, ClimatPro comme vendeur), alors emise_par_climatpro = true. Si ClimatPro apparait seulement comme destinataire ou client, emise_par_climatpro = false et le fournisseur est l'autre societe.\\n\\nEtape 3 : Si c'est une facture ou un avoir, extrais les informations suivantes.\\n\\nReponds UNIQUEMENT avec ce JSON (aucun texte autour, aucun backtick markdown) :\\n{\\n  \\\"is_facture\\\": true ou false,\\n  \\\"is_avoir\\\": true ou false,\\n  \\\"emise_par_climatpro\\\": true ou false,\\n  \\\"raison\\\": \\\"explication courte\\\",\\n  \\\"fournisseur\\\": \\\"nom court de l'EMETTEUR sans forme juridique\\\",\\n  \\\"client\\\": \\\"nom court du destinataire\\\",\\n  \\\"objet\\\": \\\"description courte 3 a 5 mots\\\",\\n  \\\"montant_ttc\\\": \\\"nombre uniquement avec point decimal\\\",\\n  \\\"date_facture\\\": \\\"YYYY-MM-DD\\\",\\n  \\\"numero_facture\\\": \\\"numero tel qu'il apparait\\\"\\n}\\n\\nSi ce n'est ni une facture ni un avoir, remplis uniquement is_facture, is_avoir, emise_par_climatpro et raison, les autres champs a null.\"\n        }]\n      },\n      contents: [{\n        parts: [\n          { inline_data: { mime_type: 'application/pdf', data: base64Data } },\n          { text: 'Analyse ce document. Contexte email :\\n- Objet : ' + (email.json.subject || 'N/A') + '\\n- Expediteur : ' + (email.json.from || 'N/A') }\n        ]\n      }]\n    };\n\n    items.push({\n      json: {\n        gmailMessageId: email.json.id,\n        emailFrom: email.json.from,\n        emailSubject: email.json.subject,\n        emailDate: email.json.date,\n        attachmentName: bin.fileName || binaryKey,\n        geminiBodyString: JSON.stringify(geminiBody)\n      },\n      binary: { data: binaryData[binaryKey] },\n      pairedItem: { item: e }\n    });\n  }\n}\n\nreturn items;\n"
+        },
+        "position": [
+          2672,
+          1472
+        ],
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2
+      },
+      {
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "54fd9ApHaDydoOJv",
+            "name": "Google Drive account 2"
+          }
+        },
+        "id": "76652e7c-ed22-4fa4-90e4-4869d6085224",
+        "name": "🔎 Chercher dossier du mois",
+        "parameters": {
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "googleDriveOAuth2Api",
+          "options": {},
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "q",
+                "value": "=mimeType = 'application/vnd.google-apps.folder' and name = '{{ $json.folderName }}' and '1qiVL5cq9nCdEFGMCOIsZsiKJEQJdTQrD' in parents and trashed = false"
+              },
+              {
+                "name": "fields",
+                "value": "files(id, name)"
+              },
+              {
+                "name": "supportsAllDrives",
+                "value": "true"
+              },
+              {
+                "name": "includeItemsFromAllDrives",
+                "value": "true"
+              },
+              {
+                "name": "corpora",
+                "value": "allDrives"
+              }
+            ]
+          },
+          "sendQuery": true,
+          "url": "https://www.googleapis.com/drive/v3/files"
+        },
+        "position": [
+          3792,
+          1472
+        ],
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2
+      },
+      {
+        "credentials": {
+          "httpQueryAuth": {
+            "id": "Kzyo5YdstGMrLjn6",
+            "name": "Query Auth account"
+          }
+        },
+        "id": "cd4aabfc-2a39-447b-812d-0bf0b190aefb",
+        "name": "🤖 Gemini - Analyser la facture",
+        "parameters": {
+          "authentication": "genericCredentialType",
+          "body": "={{ $json.geminiBodyString }}",
+          "contentType": "raw",
+          "genericAuthType": "httpQueryAuth",
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "method": "POST",
+          "options": {
+            "timeout": 120000
+          },
+          "rawContentType": "application/json",
+          "sendBody": true,
+          "sendHeaders": true,
+          "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+        },
+        "position": [
+          2896,
+          1472
+        ],
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2
+      }
+    ]
+  }
+}

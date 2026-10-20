@@ -1,0 +1,426 @@
+{
+  "active": true,
+  "connections": {
+    "Appel outil": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Entree",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Entree": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Identifiants",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Identifiants": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Mode modele ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire reponse": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resultat",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire reponse modele": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resultat modele",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Mode modele ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer modele",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Preparer script",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Navigateur hi-parts": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire reponse",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Navigateur modele": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire reponse modele",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer modele": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Navigateur modele",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer script": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Navigateur hi-parts",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-09T15:02:04.512Z",
+  "description": "Outil du bot : piece Hitachi par reference OU par modele + mots-cles (vue eclatee). Dispo, remplacement, verdict, prix indicatif client (+15 %). hi-parts.fr, lecture seule.",
+  "id": "p7VfJ2HTKTctJBsv",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Outil - Dispo Hitachi",
+  "nodeGroups": [
+    {
+      "description": "Mode reference : script Puppeteer browserless (connexion, recherche, vue eclatee, stock), puis mise en forme",
+      "id": "5487217e-6738-4836-8b4c-d1af275e45ae",
+      "name": "Navigateur headless",
+      "nodeNames": [
+        "Preparer script",
+        "Navigateur hi-parts",
+        "Lire reponse",
+        "Resultat"
+      ]
+    },
+    {
+      "description": "Mode modele : vues eclatees du modele, recherche de la piece par mots-cles, stock, prix et verdict",
+      "id": "d92aa392-91c4-4213-95f5-2db07c2d4b2a",
+      "name": "Mode modele",
+      "nodeNames": [
+        "Preparer modele",
+        "Navigateur modele",
+        "Lire reponse modele",
+        "Resultat modele"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "5ea221e8-47a0-43fe-9d86-1483dffd2671",
+      "name": "Appel outil",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "reference",
+              "type": "string"
+            },
+            {
+              "name": "role",
+              "type": "string"
+            },
+            {
+              "name": "modele",
+              "type": "string"
+            },
+            {
+              "name": "mots_cles",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "7cd4f664-6b27-49d2-95ff-15d9fba14a60",
+      "name": "Entree",
+      "parameters": {
+        "jsCode": "const i = $input.first().json || {};\nconst pick = o => o && (o.reference || o.modele);\nconst src = pick(i.query) ? i.query : (pick(i.body) ? i.body : i);\nconst ref = String(src.reference || '').toUpperCase().replace(/[^A-Z0-9-]/g, '');\nconst modele = String(src.modele || '').toUpperCase().replace(/\\s+/g, '').replace(/[^A-Z0-9()\\/-]/g, '');\nconst mots_cles = String(src.mots_cles || '').slice(0, 200);\nconst role = String(src.role || 'technicien').toLowerCase();\nconst mode = (!ref && modele) ? 'modele' : 'ref';\nreturn [{ json: { ref, modele, mots_cles, role, mode } }];\n",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        220,
+        100
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "2b4ccc57-c600-4025-ba66-b02529cbe5e8",
+      "name": "Identifiants",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "hiparts_acces",
+          "mode": "id",
+          "value": "VrTMPgLga7GykpX2"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        440,
+        100
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "2c28d6d1-e117-4ceb-b7a6-1672e7e5c07d",
+      "name": "Lire reponse",
+      "parameters": {
+        "binaryPropertyName": "data",
+        "destinationKey": "data",
+        "operation": "text"
+      },
+      "position": [
+        1100,
+        100
+      ],
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1
+    },
+    {
+      "id": "98637b7b-c79b-45c6-b6ed-2e8b852801a9",
+      "name": "Lire reponse modele",
+      "parameters": {
+        "binaryPropertyName": "data",
+        "destinationKey": "data",
+        "operation": "text"
+      },
+      "position": [
+        1100,
+        350
+      ],
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1
+    },
+    {
+      "id": "f0ecfa1c-e0ce-48a9-af6e-fa57f36d3ef2",
+      "name": "Mode modele ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $('Entree').first().json.mode }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "modele"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        550,
+        100
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "43aa2c0d-af00-4f9a-8fd9-dd489e6f4ac1",
+      "name": "Navigateur hi-parts",
+      "parameters": {
+        "body": "={{ $json.body }}",
+        "contentType": "raw",
+        "method": "POST",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false,
+              "neverError": true,
+              "responseFormat": "file"
+            }
+          },
+          "timeout": 90000
+        },
+        "rawContentType": "application/json",
+        "sendBody": true,
+        "url": "=http://browserless:3000/function?token={{ $json.token }}"
+      },
+      "position": [
+        880,
+        100
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "742f5da9-4c7b-406c-9b0b-60a8e48fd0c4",
+      "name": "Navigateur modele",
+      "parameters": {
+        "body": "={{ $json.body }}",
+        "contentType": "raw",
+        "method": "POST",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": false,
+              "neverError": true,
+              "responseFormat": "file"
+            }
+          },
+          "timeout": 120000
+        },
+        "rawContentType": "application/json",
+        "sendBody": true,
+        "url": "=http://browserless:3000/function?token={{ $json.token }}"
+      },
+      "position": [
+        880,
+        350
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "f9a3d014-83e6-4fa4-b892-2b2428deb639",
+      "name": "Preparer modele",
+      "parameters": {
+        "jsCode": "const acc = $('Identifiants').first().json || {};\nconst e = $('Entree').first().json;\nif (!acc.identifiant || !acc.mot_de_passe || !acc.browserless_token) return [{ json: { ok: false, erreur: 'table hiparts_acces incomplete (identifiant, mot_de_passe, browserless_token)' } }];\n\nconst script = async ({ page, context }) => {\n  const base = 'https://www.hi-parts.fr';\n  const out = { ok: false, etapes: [] };\n  try {\n    page.setDefaultTimeout(30000);\n    page.setDefaultNavigationTimeout(40000);\n    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36');\n    await page.goto(base + '/Login.aspx?ReturnUrl=%2f', { waitUntil: 'networkidle2' });\n    const login = await page.$('input[name$=\"TextBoxLOGIN\"]');\n    const pass = await page.$('input[name$=\"TextBoxPASSWORD\"]');\n    if (!login || !pass) { out.erreur = 'champs de connexion introuvables'; return { data: out, type: 'application/json' }; }\n    await login.type(String(context.identifiant));\n    await pass.type(String(context.mot_de_passe));\n    const btn = await page.$('[name$=\"LinkValider\"]');\n    await Promise.all([page.waitForNavigation({ waitUntil: 'networkidle2' }), btn ? btn.click() : pass.press('Enter')]);\n    if (/Login\\.aspx/i.test(page.url())) { out.erreur = 'connexion refusee'; return { data: out, type: 'application/json' }; }\n    out.etapes.push('connecte');\n\n    const res = await page.evaluate(async (ctx) => {\n      const norm = s => String(s || '').toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '');\n      const cle = s => norm(s).replace(/[^A-Z0-9]/g, '');\n      const post = async (url, body) => {\n        const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json; charset=utf-8', 'X-Requested-With': 'XMLHttpRequest' }, body: JSON.stringify(body) });\n        try { return await r.json(); } catch (e) { return {}; }\n      };\n      const o = {};\n\n      // 1. modele\n      const target = cle(ctx.modele);\n      const chercher = async kw => ((await post('/mvc/Search/SearchProducts', { pageSize: 25, pageNumber: 0, keyword: kw, idFam: 0 })).ResultList) || [];\n      let prods = await chercher(ctx.modele);\n      if (!prods.length && !ctx.modele.includes('-')) prods = await chercher(ctx.modele.replace(/^([A-Z]+)(\\d)/, '$1-$2'));\n      let g = prods.find(p => cle(p.GAMME_CODE) === target) || prods.find(p => cle(p.GAMME_LIB) === target);\n      if (!g) g = prods.find(p => { const c = cle(p.GAMME_CODE); return c && (c.startsWith(target) || target.startsWith(c)); });\n      if (!g) {\n        if (!prods.length && ctx.modele.length > 5) prods = await chercher(ctx.modele.slice(0, -2));\n        o.found = false;\n        o.proches = prods.slice(0, 8).map(p => p.GAMME_CODE);\n        return o;\n      }\n      o.found = true;\n      o.modele = g.GAMME_CODE;\n      o.famille = g.FAMILLE_LIB;\n\n      // 2. vues eclatees\n      const lh = await (await fetch('/ListSchema.aspx?IDGAM=' + g.GAMME_ID + '&IDRUB=1')).text();\n      let ids = [...new Set([...lh.matchAll(/FicheSchema\\.aspx\\?IDSCG=(\\d+)/g)].map(m => m[1]))];\n      if (!ids.length) {\n        const r = await fetch('/FicheProduit.aspx?IDFAM=' + g.FAMILLE_ID + '&IDGAM=' + g.GAMME_ID);\n        const m = /IDSCG=(\\d+)/.exec(r.url);\n        const h = await r.text();\n        ids = m ? [m[1]] : [...new Set([...h.matchAll(/FicheSchema\\.aspx\\?IDSCG=(\\d+)/g)].map(x => x[1]))];\n      }\n      ids = ids.slice(0, 8);\n\n      // 3. lignes de nomenclature\n      const pages = await Promise.all(ids.map(async id => ({ id, h: await (await fetch('/FicheSchema.aspx?IDSCG=' + id)).text() })));\n      const rows = [];\n      const vues = [];\n      for (const p of pages) {\n        const d = new DOMParser().parseFromString(p.h, 'text/html');\n        const vue = String(d.title || '').split('-->').pop().trim();\n        if (vue && !vues.includes(vue)) vues.push(vue);\n        for (const t of d.querySelectorAll('table[refarticle]')) {\n          const cells = [...t.querySelectorAll('td')].map(c => c.textContent.replace(/\\s+/g, ' ').trim());\n          rows.push({ vue, rel: t.getAttribute('rel') || '', ref: String(t.getAttribute('refarticle') || '').toUpperCase(), des: cells[1] || '', nid: t.id });\n        }\n      }\n      o.vues = vues;\n      o.nb_lignes = rows.length;\n\n      // 4. designations manquantes : lues sur l article ou sur sa reference de remplacement\n      const sansDes = rows.filter(r => !r.des || cle(r.des) === cle(r.ref)).slice(0, 12);\n      await Promise.all(sansDes.map(async r => {\n        try {\n          const l = ((await post('/mvc/Search/SearchItems', { pageSize: 10, pageNumber: 0, keyword: r.ref, idFam: 0 })).ResultList) || [];\n          const a = l.find(x => String(x.ARTICLE_REF || '').toUpperCase() === r.ref);\n          let des = a ? String(a.DESIGNATION || '') : '';\n          if (!des || cle(des) === cle(r.ref)) {\n            const subs = a ? String(a.ARTICLE_SUBSTITUT || '') + ' ' + String(a.ARTICLE_SUBSTITUTPARENT || '') : '';\n            const toks = (subs.toUpperCase().match(/[A-Z0-9-]{5,}/g) || []).filter(t => t !== r.ref).reverse();\n            for (const tk of toks) {\n              const l2 = ((await post('/mvc/Search/SearchItems', { pageSize: 10, pageNumber: 0, keyword: tk, idFam: 0 })).ResultList) || [];\n              const b = l2.find(x => String(x.ARTICLE_REF || '').toUpperCase() === tk);\n              if (b && b.DESIGNATION && cle(b.DESIGNATION) !== cle(tk)) { des = String(b.DESIGNATION); break; }\n            }\n          }\n          if (!des || cle(des) === cle(r.ref)) {\n            const alt = l.find(x => String(x.ARTICLE_REF || '').toUpperCase() !== r.ref && x.DESIGNATION && cle(x.DESIGNATION) !== cle(x.ARTICLE_REF));\n            if (alt) des = String(alt.DESIGNATION);\n          }\n          if (des && cle(des) !== cle(r.ref)) r.des = des;\n        } catch (e) {}\n      }));\n\n      // 5. correspondance mots-cles\n      const syn = [\n        [/VENTIL/, ['FAN MOTOR', 'MOTEUR VENT', 'MOTOR FAN', 'MOTEUR VENTIL']],\n        [/HELICE/, ['PROPELLER', 'HELICE', 'TURBINE']],\n        [/CARTE|ELECTRONIQUE/, ['PWB', 'PCB', 'P.W.B', 'CARTE', 'BOARD', 'INVERTER']],\n        [/COMPRESS/, ['COMPRESSOR', 'COMPRESSEUR']],\n        [/SONDE|CAPTEUR/, ['THERMISTOR', 'SONDE', 'SENSOR']],\n        [/4 VOIES|VANNE 4|INVERSION/, ['REVERSING', '4 VOIES', '4-WAY']],\n        [/DETENDEUR/, ['EXPANSION', 'DETENDEUR']],\n        [/CONDENSATEUR/, ['CAPACITOR', 'CONDENSATEUR']],\n        [/TELECOMMANDE/, ['REMOTE', 'TELECOMMANDE', 'CONTROLLER']],\n        [/POMPE/, ['PUMP', 'POMPE']],\n        [/ECHANGEUR|BATTERIE/, ['EXCHANGER', 'CONDENSER', 'EVAPORATOR', 'ECHANGEUR', 'BATTERIE']],\n        [/FILTRE/, ['FILTER', 'FILTRE', 'STRAINER']],\n        [/VOLET/, ['LOUVER', 'VOLET', 'STEPPING']],\n        [/PRESSOSTAT/, ['PRESSURE SWITCH', 'PRESSOSTAT']]\n      ];\n      const demande = norm(ctx.mots);\n      const kws = new Set(demande.split(/[,;\\/]+/).map(s => s.trim()).filter(s => s.length >= 3));\n      for (const [re, l] of syn) if (re.test(demande)) l.forEach(k => kws.add(k));\n      const scored = rows.map(r => {\n        const d = norm(r.des);\n        let s = 0;\n        for (const k of kws) if (d.includes(k)) s += k.length;\n        return { r, s };\n      }).filter(x => x.s > 0).sort((a, b) => b.s - a.s);\n      const vus = new Set();\n      const cands = [];\n      for (const x of scored) { const k = x.r.ref + '|' + x.r.vue; if (!vus.has(k)) { vus.add(k); cands.push(x.r); } if (cands.length >= 5) break; }\n\n      if (!cands.length) {\n        o.candidats = [];\n        o.liste = rows.map(r => r.vue + ' | rep ' + r.rel + ' | ' + r.ref + ' | ' + r.des);\n        return o;\n      }\n\n      // 6. stock, prix, remplacement des candidats\n      await Promise.all(cands.map(async c => {\n        try {\n          const r = await fetch('/ajax/SpelogWeb.Libraries.Core.ajax.SpelogAjaxObjects,SpelogWeb.ashx?_method=GetNomenclature&_session=r', { method: 'POST', headers: { 'Content-Type': 'text/plain; charset=utf-8', 'X-Requested-With': 'XMLHttpRequest' }, body: 'idNomenclature=' + c.nid + '\\r\\ntypeRub=PR\\r\\nidIncident=0\\r\\nmultirepere=false' });\n          const h = await r.text();\n          const st = /ImageSTOCK\"[^>]*title=\"([^\"]*)\"/.exec(h) || /title=\"([^\"]*)\"[^>]*ImageSTOCK/.exec(h);\n          c.stock = st ? st[1] : '';\n          const txt = h.replace(/<script[\\s\\S]*?<\\/script>/gi, ' ').replace(/\\\\r\\\\n/g, ' ').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\\s+/g, ' ');\n          const rp = /remplacement\\s*:\\s*([A-Z0-9-]+)/i.exec(txt);\n          c.remplacement = rp ? rp[1].toUpperCase() : '';\n          const px = /Prix unitaire HT\\s*:\\s*([\\d .,]+)/i.exec(txt);\n          const v = px ? parseFloat(px[1].replace(/\\s/g, '').replace(',', '.')) : NaN;\n          c.prix = isNaN(v) ? null : v;\n        } catch (e) { c.stock = ''; }\n        delete c.nid;\n      }));\n      o.candidats = cands;\n      return o;\n    }, { modele: String(context.modele || ''), mots: String(context.mots || '') });\n\n    Object.assign(out, res);\n    out.ok = true;\n    return { data: out, type: 'application/json' };\n  } catch (e) {\n    out.erreur = 'exception: ' + (e && e.message ? e.message : String(e));\n    return { data: out, type: 'application/json' };\n  }\n};\n\nconst code = 'export default ' + script.toString() + ';\\n';\nreturn [{ json: { ok: true, token: acc.browserless_token, body: JSON.stringify({ code, context: { identifiant: acc.identifiant, mot_de_passe: acc.mot_de_passe, modele: e.modele, mots: e.mots_cles } }) } }];\n",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        660,
+        350
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "66d238cb-f81a-4d87-8158-0cd27f5935cc",
+      "name": "Preparer script",
+      "parameters": {
+        "jsCode": "const acc = $('Identifiants').first().json || {};\nconst e = $('Entree').first().json;\nconst code = \"export default async ({ page, context }) => {\\n  const base = 'https://www.hi-parts.fr';\\n  const out = { ok: false, etapes: [] };\\n  const ref = String(context.ref || '').toUpperCase();\\n  try {\\n    page.setDefaultTimeout(30000);\\n    page.setDefaultNavigationTimeout(40000);\\n    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36');\\n    await page.goto(base + '/Login.aspx?ReturnUrl=%2f', { waitUntil: 'networkidle2' });\\n    out.etapes.push('login page');\\n    const login = await page.$('input[name$=\\\"TextBoxLOGIN\\\"]');\\n    const pass = await page.$('input[name$=\\\"TextBoxPASSWORD\\\"]');\\n    if (!login || !pass) { out.erreur = 'champs de connexion introuvables'; return { data: out, type: 'application/json' }; }\\n    await login.type(String(context.identifiant));\\n    await pass.type(String(context.mot_de_passe));\\n    const btn = await page.$('[name$=\\\"LinkValider\\\"], #ctl00_MainContent_TAB_LOGIN_LinkValider, input[type=\\\"submit\\\"]');\\n    await Promise.all([\\n      page.waitForNavigation({ waitUntil: 'networkidle2' }),\\n      btn ? btn.click() : pass.press('Enter')\\n    ]);\\n    out.url_apres_login = page.url();\\n    if (/Login\\\\.aspx/i.test(page.url())) {\\n      out.erreur = 'connexion refusee';\\n      out.extrait = (await page.evaluate(() => document.body.innerText.slice(0, 500)));\\n      return { data: out, type: 'application/json' };\\n    }\\n    out.etapes.push('connecte');\\n    if (!ref) { out.ok = true; return { data: out, type: 'application/json' }; }\\n\\n    // 1. recherche de l article\\n    const search = await page.evaluate(async (ref) => {\\n      const r = await fetch('/mvc/Search/SearchItems', {\\n        method: 'POST',\\n        headers: { 'Content-Type': 'application/json; charset=utf-8', 'X-Requested-With': 'XMLHttpRequest' },\\n        body: JSON.stringify({ pageSize: 25, pageNumber: 0, keyword: ref, idFam: 0 })\\n      });\\n      return { status: r.status, text: await r.text() };\\n    }, ref);\\n    out.etapes.push('search ' + search.status);\\n    let d = null;\\n    try { d = JSON.parse(search.text); } catch (e) {}\\n    if (!d || !Array.isArray(d.ResultList)) {\\n      out.erreur = 'reponse recherche illisible';\\n      out.extrait = search.text.slice(0, 800);\\n      return { data: out, type: 'application/json' };\\n    }\\n    const list = d.ResultList;\\n    const a = list.find(x => String(x.ARTICLE_REF || '').toUpperCase() === ref);\\n    if (!a) {\\n      out.ok = true; out.found = false; out.introuvable = true;\\n      out.suggestions = list.slice(0, 5).map(x => x.ARTICLE_REF + ' (' + (x.DESIGNATION || '') + ')');\\n      return { data: out, type: 'application/json' };\\n    }\\n    function refs(v) {\\n      const o = [];\\n      try { const j = JSON.parse(v || '[]'); for (const g of j) for (const x of (g || [])) o.push(String(x).toUpperCase()); } catch (e) {}\\n      return o;\\n    }\\n    const parent = refs(a.ARTICLE_SUBSTITUTPARENT);\\n    const sub = refs(a.ARTICLE_SUBSTITUT);\\n    const tarif = String(a.TARIFHT || '').replace(/&nbsp;|&euro;|€|\\\\s/g, '').replace(',', '.');\\n    const prix = parseFloat(tarif);\\n    out.found = true;\\n    out.article_id = a.ARTICLE_ID;\\n    out.ref_article = String(a.ARTICLE_REF);\\n    out.designation = String(a.DESIGNATION || '');\\n    out.vendable = Number(a.ARTICLE_VENDABLE) === 1;\\n    out.prix_public = isNaN(prix) ? null : prix;\\n    out.chaine = parent.length ? parent : sub;\\n    if (!out.chaine.length) {\\n      const rep = list.find(x => String(x.ARTICLE_REF || '').toUpperCase() !== ref && refs(x.ARTICLE_SUBSTITUTPARENT).includes(ref));\\n      if (rep) out.chaine = refs(rep.ARTICLE_SUBSTITUTPARENT);\\n    }\\n    out.sub = sub;\\n\\n    // 2. cas d utilisation (vue eclatee)\\n    const uses = await page.evaluate(async (id) => {\\n      const r = await fetch('/mvc/Search/GetUsesCasesItem', {\\n        method: 'POST',\\n        headers: { 'Content-Type': 'application/json; charset=utf-8', 'X-Requested-With': 'XMLHttpRequest' },\\n        body: JSON.stringify({ id: id })\\n      });\\n      return { status: r.status, text: await r.text() };\\n    }, a.ARTICLE_ID);\\n    out.etapes.push('uses ' + uses.status);\\n    let l = [];\\n    try { l = JSON.parse(uses.text); } catch (e) { l = []; }\\n    if (!Array.isArray(l)) l = [];\\n    const u = l[0] || {};\\n    out.modeles = [];\\n    for (const x of l) { const n = String(x.GAMME_LIB || ''); if (n && !out.modeles.includes(n)) out.modeles.push(n); }\\n    out.modeles = out.modeles.slice(0, 6);\\n    out.modele = String(u.GAMME_LIB || '');\\n    out.repere = String(u.ARTSCHEMAGAMME_REP || '');\\n    const idscg = u.SCHEMAGAMME_ID ? String(u.SCHEMAGAMME_ID) : '';\\n    out.idscg = idscg;\\n    if (!idscg) { out.ok = true; return { data: out, type: 'application/json' }; }\\n\\n    // 3. vue eclatee : trouver la ligne de nomenclature\\n    await page.goto(base + '/FicheSchema.aspx?IDSCG=' + idscg, { waitUntil: 'networkidle2' });\\n    out.etapes.push('schema');\\n    const wanted = [out.ref_article].concat(out.chaine, out.sub).map(x => String(x).toUpperCase());\\n    const ligne = await page.evaluate((wanted, repere) => {\\n      const rows = Array.from(document.querySelectorAll('table[refarticle]'));\\n      const all = rows.map(t => ({ id: t.getAttribute('id'), ref: String(t.getAttribute('refarticle') || '').toUpperCase(), rel: t.getAttribute('rel') || '' }));\\n      const l = all.find(x => x.rel === repere && wanted.includes(x.ref)) || all.find(x => wanted.includes(x.ref)) || null;\\n      return { l, nb: all.length, sample: all.slice(0, 3) };\\n    }, wanted, out.repere);\\n    out.nb_lignes = ligne.nb;\\n    out.sample_lignes = ligne.sample;\\n    if (!ligne.l) { out.ok = true; return { data: out, type: 'application/json' }; }\\n    out.nomenc_id = ligne.l.id;\\n\\n    // 4. lire la disponibilite\\n    const nom = await page.evaluate(async (nid) => {\\n      const r = await fetch('/ajax/SpelogWeb.Libraries.Core.ajax.SpelogAjaxObjects,SpelogWeb.ashx?_method=GetNomenclature&_session=r', {\\n        method: 'POST',\\n        headers: { 'Content-Type': 'text/plain; charset=utf-8', 'X-Requested-With': 'XMLHttpRequest' },\\n        body: 'idNomenclature=' + nid + '\\\\r\\\\ntypeRub=PR\\\\r\\\\nidIncident=0\\\\r\\\\nmultirepere=false'\\n      });\\n      return { status: r.status, text: await r.text() };\\n    }, ligne.l.id);\\n    out.etapes.push('nomenclature ' + nom.status);\\n    const h = nom.text;\\n    const t = /ImageSTOCK\\\"[^>]*title=\\\"([^\\\"]*)\\\"/.exec(h) || /title=\\\"([^\\\"]*)\\\"[^>]*ImageSTOCK/.exec(h);\\n    out.stock = t ? t[1] : '';\\n    const p = /class=\\\"labelpuht\\\">([^<]*)</i.exec(h);\\n    if (p) { const v = parseFloat(p[1].replace(/&nbsp;|&euro;|€|\\\\s/g, '').replace(',', '.')); if (!isNaN(v)) out.prix_nomenclature = v; }\\n    const rs = /class=\\\"LabelRefSubstitution\\\">\\\\s*(?:<span[^>]*>)?\\\\s*([A-Z0-9-]+)\\\\s*</.exec(h) || /articleref=\\\"([A-Z0-9-]+)\\\"/.exec(h);\\n    out.ref_remplacement = rs ? rs[1].toUpperCase() : '';\\n    out.ok = true;\\n    return { data: out, type: 'application/json' };\\n  } catch (e) {\\n    out.erreur = 'exception: ' + (e && e.message ? e.message : String(e));\\n    return { data: out, type: 'application/json' };\\n  }\\n};\\n\";\nif (!acc.identifiant || !acc.mot_de_passe || !acc.browserless_token) return [{ json: { ok: false, erreur: 'table hiparts_acces incomplete (identifiant, mot_de_passe, browserless_token)' } }];\nreturn [{ json: { ok: true, token: acc.browserless_token, body: JSON.stringify({ code, context: { identifiant: acc.identifiant, mot_de_passe: acc.mot_de_passe, ref: e.ref } }) } }];\n",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        660,
+        100
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "6afbfea7-cfec-407e-87b5-70dec3da6681",
+      "name": "Resultat",
+      "parameters": {
+        "jsCode": "function js(n) { try { return $(n).first().json; } catch (e) { return {}; } }\nconst e = js('Entree');\nconst ref = e.ref;\nconst admin = e.role === 'admin';\nconst fmt = n => n.toFixed(2).replace('.', ',') + ' EUR';\nif (!ref) return [{ json: { resultat: 'Aucune reference de piece fournie.' } }];\nconst p = js('Preparer script');\nif (!p.ok) return [{ json: { resultat: 'Impossible de consulter hi-parts.fr pour le moment (' + p.erreur + ').' } }];\nconst r = $input.first().json || {};\nlet a = r;\nif (typeof r.data === 'string') { try { a = JSON.parse(r.data); } catch (e2) { a = { erreur: 'reponse navigateur illisible: ' + String(r.data).slice(0, 200) }; } }\nelse if (r.data && typeof r.data === 'object') a = r.data;\nif (a && a.data && typeof a.data === 'object' && !('ok' in a)) a = a.data;\nif (!a.ok) return [{ json: { resultat: 'Impossible de consulter hi-parts.fr pour le moment (' + (a.erreur || 'erreur navigateur') + '). Verifier sur le site ou demander a Laurent.' } }];\nif (!a.found) {\n  const sug = (a.suggestions || []).length ? ' References proches : ' + a.suggestions.join(', ') + '.' : '';\n  return [{ json: { resultat: 'Reference ' + ref + ' introuvable sur hi-parts.fr (catalogue Hitachi).' + sug } }];\n}\nconst out = [];\nout.push('Piece Hitachi ' + a.ref_article + (a.designation && a.designation !== a.ref_article ? ' : ' + a.designation : ''));\nconst ch = a.chaine || [];\nlet remp = a.ref_remplacement && a.ref_remplacement !== a.ref_article ? a.ref_remplacement : '';\nconst derniere = ch.length ? ch[ch.length - 1] : '';\nif (!remp && derniere && derniere !== a.ref_article) remp = derniere;\nif (remp) out.push('Attention : cette reference est remplacee par ' + remp + '. Disponibilite et prix ci-dessous concernent la nouvelle reference.');\nelse if (ch.length > 1) out.push('Remplace l ancienne reference ' + ch.slice(0, -1).join(', ') + '.');\nif (!a.vendable && !remp) out.push('Article indique non vendable sur le site.');\nconst pp = (a.prix_nomenclature != null) ? a.prix_nomenclature : (a.prix_public != null ? a.prix_public : null);\nconst st = String(a.stock || '');\nlet v;\nif (/seuil minimal/i.test(st)) v = 'disponible, stock faible';\nelse if (/en stock/i.test(st)) v = 'disponible';\nelse if (/aucun stock/i.test(st) && pp != null) v = 'rupture de stock, piece toujours vendue : demander le delai de reappro';\nelse if (/aucun stock/i.test(st) && !remp) v = 'ni stock ni prix ni remplacement : piece tres probablement en fin de vie, prevoir un chiffrage de remplacement de la machine';\nelse if (/aucun stock/i.test(st)) v = 'ni stock ni prix, remplacement annonce : a confirmer avec Hitachi';\nelse v = 'disponibilite non lue, verifier sur hi-parts.fr';\nout.push('Verdict : ' + v + (st ? ' (' + st + ')' : '') + '.');\nif (pp != null) {\n  out.push('Prix indicatif client : ' + fmt(Math.round(pp * 115) / 100) + ' HT, hors pose');\n  if (admin) out.push('Prix public Hitachi (a afficher a Laurent) : ' + fmt(pp) + ' HT');\n}\nif (a.modele) out.push('Utilisee sur : ' + (a.modeles || [a.modele]).join(', ') + (a.repere ? ' (repere ' + a.repere + ' sur ' + a.modele + ')' : ''));\nout.push('Source : hi-parts.fr');\nreturn [{ json: { resultat: out.join('\\n') } }];\n",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1320,
+        100
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "3aac7656-ae89-43dc-b08c-6805b3b22dbe",
+      "name": "Resultat modele",
+      "parameters": {
+        "jsCode": "function js(n) { try { return $(n).first().json; } catch (e) { return {}; } }\nconst e = js('Entree');\nconst admin = e.role === 'admin';\nconst fmt = n => n.toFixed(2).replace('.', ',') + ' EUR';\nconst p = js('Preparer modele');\nif (!p.ok) return [{ json: { resultat: 'Impossible de consulter hi-parts.fr pour le moment (' + p.erreur + ').' } }];\nconst r = $input.first().json || {};\nlet a = r;\nif (typeof r.data === 'string') { try { a = JSON.parse(r.data); } catch (x) { a = { erreur: 'reponse navigateur illisible: ' + String(r.data).slice(0, 200) }; } }\nelse if (r.data && typeof r.data === 'object') a = r.data;\nif (a && a.data && typeof a.data === 'object' && !('ok' in a)) a = a.data;\nif (!a.ok) return [{ json: { resultat: 'Impossible de consulter hi-parts.fr pour le moment (' + (a.erreur || 'erreur navigateur') + '). Verifier sur le site ou demander a Laurent.' } }];\nif (a.found === false) {\n  const pr = (a.proches || []).length ? ' Modeles proches sur le site : ' + a.proches.join(', ') + '.' : '';\n  return [{ json: { resultat: 'Modele ' + e.modele + ' introuvable sur hi-parts.fr.' + pr + ' Verifier la plaque (chez Hitachi, RAC = groupe exterieur, RAK = unite interieure).' } }];\n}\nconst L = [];\nL.push('Modele Hitachi ' + a.modele + (a.famille ? ' (' + a.famille + ')' : '') + '. Vues eclatees : ' + (a.vues || []).join(', ') + '.');\nconst c = a.candidats || [];\nif (!c.length) {\n  L.push('Aucune piece ne correspond a : ' + e.mots_cles + '. Liste des pieces du modele (vue | repere | reference | designation) :');\n  (a.liste || []).slice(0, 150).forEach(x => L.push(x));\n  L.push('Choisis la bonne ligne et rappelle l outil avec sa reference exacte.');\n  return [{ json: { resultat: L.join('\\n') } }];\n}\nL.push('Pieces correspondantes :');\nfor (const x of c) {\n  const st = String(x.stock || '');\n  let v;\n  if (/seuil minimal/i.test(st)) v = 'disponible, stock faible';\n  else if (/en stock/i.test(st)) v = 'disponible';\n  else if (/aucun stock/i.test(st) && x.prix != null) v = 'rupture de stock, piece toujours vendue : demander le delai de reappro';\n  else if (/aucun stock/i.test(st) && !x.remplacement) v = 'ni stock ni prix ni remplacement : piece tres probablement en fin de vie, prevoir un chiffrage de remplacement de la machine';\n  else if (/aucun stock/i.test(st)) v = 'ni stock ni prix, remplacement annonce : a confirmer avec Hitachi';\n  else v = 'disponibilite non lue, verifier sur hi-parts.fr';\n  let s = '- ' + x.des + ' (vue ' + x.vue + ', repere ' + x.rel + ') : ' + x.ref;\n  if (x.remplacement && x.remplacement !== x.ref) s += ', remplacee par ' + x.remplacement;\n  s += '. ' + v.charAt(0).toUpperCase() + v.slice(1) + '.';\n  if (x.prix != null) {\n    s += ' Prix indicatif client ' + fmt(Math.round(x.prix * 115) / 100) + ' HT hors pose.';\n    if (admin) s += ' Prix public Hitachi (a afficher a Laurent) ' + fmt(x.prix) + ' HT.';\n  }\n  L.push(s);\n}\nL.push('Source : hi-parts.fr, ' + $now.setZone('Europe/Paris').toFormat('dd/MM/yyyy') + '.');\nreturn [{ json: { resultat: L.join('\\n') } }];\n",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1320,
+        350
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "8402d796-b2cf-4e38-9be6-e328492e37a5",
+      "name": "Sticky Note c7ebf9e3",
+      "parameters": {
+        "color": 4,
+        "content": "## Outil - Dispo Hitachi\nConsulte hi-parts.fr via browserless (Chromium headless sur le VPS, conteneur browserless, reseau Docker n8n-net, aucun port ouvert) : designation, reference de remplacement, disponibilite stock, prix indicatif client (prix public + 15 %).\nIdentifiants hi-parts et token browserless dans la Data Table hiparts_acces. Le prix public n est renvoye que pour le role admin.\nAppele comme outil dispo_hitachi par Bot - Assistant. Duree : environ 10 s.",
+        "height": 200,
+        "width": 600
+      },
+      "position": [
+        0,
+        -260
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-09T16:41:08.357Z"
+}

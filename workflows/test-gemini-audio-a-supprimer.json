@@ -1,0 +1,115 @@
+{
+  "active": false,
+  "connections": {
+    "Telecharger audio": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Transcrire",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Test": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Telecharger audio",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-09T09:40:31.901Z",
+  "description": "Test temporaire de transcription audio Gemini pour le bot.",
+  "id": "EpLk9dpFfWTMW3Y6",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "TEST - Gemini audio (a supprimer)",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "9426ef86-8a4a-43ba-964d-307c20a83ad2",
+      "name": "Telecharger audio",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "User-Agent",
+              "value": "ClimatProBot/1.0 (contact@climatpro.fr)"
+            }
+          ]
+        },
+        "method": "GET",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        },
+        "sendHeaders": true,
+        "url": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Example.ogg"
+      },
+      "position": [
+        112,
+        200
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "ed462806-e7c6-400c-a299-e087140ab7fb",
+      "name": "Test",
+      "parameters": {},
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "credentials": {
+        "googlePalmApi": {
+          "id": "dbBozPeQkcHzKBdI",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      },
+      "id": "6448aedf-2182-4d97-914d-54fafc8a25a5",
+      "name": "Transcrire",
+      "parameters": {
+        "audioUrls": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Example.ogg",
+        "binaryPropertyName": "data",
+        "inputType": "binary",
+        "modelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "models/gemini-2.5-flash"
+        },
+        "operation": "transcribe",
+        "options": {},
+        "resource": "audio",
+        "simplify": true
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-09T09:41:15.893Z"
+}

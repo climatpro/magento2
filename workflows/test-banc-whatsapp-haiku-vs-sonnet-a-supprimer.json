@@ -1,0 +1,261 @@
+{
+  "active": false,
+  "connections": {
+    "Analyser": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resultats",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Croiser": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Analyser",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire planning": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Planning",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lots": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire planning",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Planning": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Croiser",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Recevoir les lots": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lots",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-16T21:41:34.074Z",
+  "id": "HJKoe6RKxIEKlKSt",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "TEST - Banc WhatsApp Haiku vs Sonnet (a supprimer)",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "anthropicApi": {
+          "id": "UtZzlYk97MvjuDan",
+          "name": "Anthropic account 2"
+        }
+      },
+      "id": "e07a2fda-7ed1-4b9e-b1a9-b153e7a61c16",
+      "name": "Analyser",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "contentType": "json",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify({ model: $json.model, max_tokens: 3000, system: \"Tu es l'assistant de ClimatPro (climatisation et pompes a chaleur, Cote d'Azur). Le gerant est Laurent ; les techniciens sont Christophe et Axel. Tu recois les derniers messages du groupe Telegram interne de l'equipe (texte, photos signalees par \\\"(photo jointe)\\\"), et le planning des interventions du jour. Ton travail : reperer les informations utiles a garder dans la fiche d'un client, et rien d'autre.\\n\\nEst utile : constat technique, panne, code erreur, materiel en place (marque, modele), travaux faits ou a faire, piece a commander, mesure, acces au site (code, gardien, cle), demande ou remarque du client, rendez-vous a prevoir, photo de chantier liee a un client.\\nN'est PAS utile : bavardage, salutations, \\\"j'arrive\\\", \\\"je suis en retard\\\", organisation interne sans client, blagues, achats de l'atelier sans client, messages vides.\\n\\nRattachement au client :\\n- Si le message nomme le client, client_nom = le nom tel qu'ecrit, avec le prenom s'il est cite (ex. Claude Dienot), ou la raison sociale.\\n- Sinon, si l'auteur a une intervention dans le planning du jour a cette heure-la ou juste avant et que le message parle visiblement de ce chantier, reprends le client_id et le nom du planning.\\n- client_id seulement si tu le lis dans le planning, sinon chaine vide. Ne devine jamais.\\n- Une photo seule juste avant ou apres un texte du meme auteur sur un client va avec ce texte.\\n- Plusieurs messages sur le meme client se regroupent dans une seule note.\\n\\nresume : 1 a 4 lignes courtes en francais, faits uniquement, sans markdown, sans tiret long, chaque ligne commence par \\\"- \\\".\\nReponds uniquement par un objet JSON : {\\\"notes\\\": [{\\\"message_ids\\\": [12, 13], \\\"client_nom\\\": \\\"DUPONT\\\", \\\"client_id\\\": \\\"\\\", \\\"resume\\\": \\\"- ...\\\"}]}. Si rien d'utile : {\\\"notes\\\": []}.\", messages: [{ role: 'user', content: 'Planning des interventions du ' + $json.jour + ' :\\n' + $json.planning + '\\n\\nMessages du groupe (format [id] date heure auteur : texte) :\\n' + $json.texte }] }) }}",
+        "method": "POST",
+        "nodeCredentialType": "anthropicApi",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchInterval": 1000,
+              "batchSize": 4
+            }
+          },
+          "timeout": 120000
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://api.anthropic.com/v1/messages"
+      },
+      "position": [
+        1100,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "485131a1-e60a-485b-bf0e-478217d22e79",
+      "name": "Croiser",
+      "parameters": {
+        "jsCode": "const out = [];\nfor (const it of $input.all()) for (const model of ['claude-haiku-5-5', 'claude-sonnet-5-5']) out.push({ json: { ...it.json, model } });\nreturn out;",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        880,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "c61e4f2e-6af3-45bf-8102-e7ac5808d92e",
+      "name": "Lire planning",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "events_jour",
+            "params": "={{ ({ date: $json.jour, jours: 1 }) }}"
+          }
+        }
+      },
+      "position": [
+        440,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "05d94a25-70da-4865-bfa4-0ea2b0211105",
+      "name": "Lots",
+      "parameters": {
+        "jsCode": "// Lots par journee, recus en JSON { lots: [...] }.\nconst b = $input.first().json.body || {};\nconst L = Array.isArray(b) ? b : (b.lots || []);\nif (!L.length) throw new Error('Aucun lot recu');\nreturn L.map(l => ({ json: { jour: l.jour, texte: l.texte } }));",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        220,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "69795db6-fb95-47fb-93fd-31bc61edff23",
+      "name": "Planning",
+      "parameters": {
+        "jsCode": "// Planning du jour de chaque lot (meme mise en forme que le workflow de production).\nconst lots = $('Lots').all();\nconst res = $input.all();\nreturn lots.map((l, i) => {\n  const r = (res[i] || {}).json || {};\n  const items = (r.ok && r.data && Array.isArray(r.data.items)) ? r.data.items : [];\n  const lignes = items.map(ev => {\n    const c = ev.client || {};\n    const a = ev.address || c.address || {};\n    const techs = (ev.users || []).map(u => u.firstName || u.name || u.id).join(', ');\n    return '- ' + (ev.heureParis || '') + ' ' + String(c.name || ev.clientName || '?').trim() + ' (client_id ' + (c.id || ev.clientId || '?') + ') ' + (a.city || '') + ' ; ' + String(ev.title || ev.name || ev.type || '').replace(/<[^>]+>/g, ' ').slice(0, 120) + ' ; techniciens : ' + techs;\n  });\n  return { json: { jour: l.json.jour, texte: l.json.texte, planning: lignes.join('\\n').slice(0, 6000) || '(aucune intervention trouvee ce jour-la)' } };\n});",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        660,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "40e37b03-3009-4a4f-bbc5-0eba08a01a0e",
+      "name": "Recevoir les lots",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "banc-whatsapp",
+        "responseMode": "onReceived"
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2
+    },
+    {
+      "id": "fd059bcd-657c-494b-ba7c-45380215ca08",
+      "name": "Resultats",
+      "parameters": {
+        "jsCode": "// Une ligne par lot et par modele : notes retenues + tokens.\nconst src = $('Croiser').all();\nreturn $input.all().map((it, i) => {\n  const s = (src[i] || {}).json || {};\n  const r = it.json || {};\n  let t = ''; try { t = (r.content || []).map(c => c.text || '').join('').trim(); } catch (e) {}\n  let notes = null; try { const a = t.indexOf('{'), b = t.lastIndexOf('}'); notes = JSON.parse(t.slice(a, b + 1)).notes; } catch (e) {}\n  return { json: { jour: s.jour, model: s.model, ok: Array.isArray(notes), notes: notes || [], brut: Array.isArray(notes) ? '' : (t || JSON.stringify(r.error || r).slice(0, 300)), out_tokens: (r.usage || {}).output_tokens || 0, in_tokens: (r.usage || {}).input_tokens || 0 } };\n});",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1320,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-16T21:51:44.932Z"
+}

@@ -1,0 +1,493 @@
+{
+  "active": true,
+  "connections": {
+    "Auth Quartix": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire journees (lecture seule)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Chaque soir 19h25": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Jours a lire",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Enregistrer journee": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Purger plus d un an (RGPD)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interventions du jour": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "RDV du jour",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Journee en cours (15 min)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Jours a lire",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Jours a lire": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Un item par jour",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire clients_gps": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Auth Quartix",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire journees (lecture seule)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enregistrer journee",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "RDV du jour": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire clients_gps",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Rattrapage (manuel)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Jours a lire",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Un item par jour": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interventions du jour",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-17T22:18:36.118Z",
+  "description": "Lecture seule Quartix. Chaque soir 19h25 (hier + aujourd'hui) ou rattrapage manuel (45 jours) : trajets, arrêts et tracé GPS par jour et par véhicule dans la table quartix_jours. Purge > 1 an (RGPD).",
+  "id": "cOF8qLkXSnyAfyth",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Quartix - Historique",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "httpCustomAuth": {
+          "id": "JVvofvrQJHHfTNQ3",
+          "name": "Custom Auth account"
+        }
+      },
+      "executeOnce": true,
+      "id": "89a03776-5eff-4ce3-b1b9-a536aa41d05e",
+      "name": "Auth Quartix",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "contentType": "json",
+        "genericAuthType": "httpCustomAuth",
+        "jsonBody": "{}",
+        "method": "POST",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://qws.quartix.net/v2/api/auth"
+      },
+      "position": [
+        1120,
+        100
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "c240a79c-c92a-447d-b85c-305dbbc25635",
+      "name": "Chaque soir 19h25",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "expression": "0 25 19 * * *",
+              "field": "cronExpression"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "f6da4395-063f-4aee-83a1-ec43c084ab1e",
+      "name": "Enregistrer journee",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "immat": "={{ $json.immat }}",
+            "jour": "={{ $json.jour }}",
+            "journal_json": "={{ $json.journal_json }}",
+            "maj": "={{ $json.maj }}"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "dJ4ZIO2PdhYlt95o"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "jour",
+              "keyValue": "={{ $json.jour }}"
+            },
+            {
+              "condition": "eq",
+              "keyName": "immat",
+              "keyValue": "={{ $json.immat }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "upsert",
+        "resource": "row"
+      },
+      "position": [
+        1568,
+        100
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "aaaf1d44-6808-48fa-8d00-a4ba2785cb65",
+      "name": "Interventions du jour",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "events_jour",
+            "params": "={{ ({ date: $json.date, jours: 1 }) }}"
+          }
+        }
+      },
+      "position": [
+        448,
+        320
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "c549fe77-4a0e-4ccb-b6a1-f8d926d5f36c",
+      "name": "Journee en cours (15 min)",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "expression": "0 */15 8-19 * * 1-5",
+              "field": "cronExpression"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        -200
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "c7ea7c7d-6c0e-4227-be32-cbfb3ee4ed91",
+      "name": "Jours a lire",
+      "parameters": {
+        "jsCode": "// Journée en cours : toutes les 15 min en semaine (8h-19h45) -> aujourd'hui seulement.\n// Passage de 19h25 (tous les jours) : hier + aujourd'hui (rattrape les trajets faits après 19h25 la veille).\n// Rattrapage manuel : les 45 derniers jours.\nconst it = $input.first().json || {};\nconst auto = !!(it.timestamp || it['Readable date']);\nconst now = DateTime.now().setZone('Europe/Paris');\nconst soir = now.hour === 19 && now.minute >= 20 && now.minute < 30;\nconst n = !auto ? 45 : (soir ? 2 : 1);\nconst jours = [];\nfor (let i = n - 1; i >= 0; i--) jours.push(now.minus({ days: i }).toISODate());\nreturn [{ json: { jours, mode: !auto ? 'rattrapage' : (soir ? 'soir' : 'journee') } }];\n",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        224,
+        100
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "512b4137-f2a3-4a6d-bd81-48370863829a",
+      "name": "Lire clients_gps",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "xrWuLpFXi8qQWU86"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "isNotEmpty",
+              "keyName": "client_id"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        896,
+        320
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "863f7ed8-cc04-4d31-85c6-b2accfd1396d",
+      "name": "Lire journees (lecture seule)",
+      "parameters": {
+        "jsCode": "// Historique Quartix (LECTURE SEULE) : une ligne par jour et par véhicule dans la table quartix_jours.\n// Pour chaque jour : trajets (heures, lieux, km, durée, tracé GPS simplifié) + arrêts entre les trajets.\n// L'authentification est faite par le nœud « Auth Quartix » (identifiant n8n chiffré).\n// Chaque arrêt est rattaché à l'intervention ou au RDV Interfast du jour le plus proche (< 350 m), adresse géocodée par la Géoplateforme (BAN),\n// avec repli sur la table clients_gps. Arrêt sans RDV = « hors intervention ». Dépôt et maison de Laurent reconnus à la distance.\nconst r = $('Auth Quartix').first().json || {};\nconst jours = $('Jours a lire').first().json.jours || [];\nconst b = r.body || {};\nconst d = b.Data || b.data || {};\nconst tok = d.AccessToken || d.accessToken;\nconst maintenant = DateTime.now().setZone('Europe/Paris').toISO();\nif (!tok) {\n  return [{ json: { jour: '_bilan', immat: '_bilan', journal_json: JSON.stringify({ erreur: 'Connexion Quartix refusée', code: r.statusCode || null }), maj: maintenant } }];\n}\nconst base = 'https://qws.quartix.net/v2/api';\nconst H = { AccessToken: tok };\nconst get = async (p) => { const x = await this.helpers.httpRequest({ method: 'GET', url: base + p, headers: H, json: true, timeout: 30000 }); return x && (x.Data || x.data); };\n// Lecture insensible à la casse (Quartix répond en PascalCase, la doc montre du camelCase)\nconst g = (o, k) => { if (!o) return undefined; if (o[k] !== undefined) return o[k]; const K = k.toLowerCase(); for (const n of Object.keys(o)) if (n.toLowerCase() === K) return o[n]; return undefined; };\nconst lieu = s => String(s || '').replace(/, France$/, '').trim();\nconst estDepot = s => /^climatpro$/i.test(String(s || '').trim()) || /Chem(in|\\.) de Dandon/i.test(String(s || ''));\nconst jourParis = iso => DateTime.fromISO(String(iso), { setZone: true }).setZone('Europe/Paris').toISODate();\nconst dist = (a, c) => { const R = 6371000, t = Math.PI / 180; const dLa = (c[0] - a[0]) * t, dLo = (c[1] - a[1]) * t; const x = Math.sin(dLa / 2) ** 2 + Math.cos(a[0] * t) * Math.cos(c[0] * t) * Math.sin(dLo / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(x)); };\n// ---------- Interventions et RDV Interfast (sous-workflow Interfast - Lecture, lecture seule) ----------\nconst evParJour = {};\nconst vusEv = new Set();\nfor (const n of ['Interventions du jour', 'RDV du jour']) {\n  let L = []; try { L = $(n).all(); } catch (e) { L = []; }\n  for (const it of L) {\n    const items = (it.json && it.json.ok && it.json.data && it.json.data.items) || [];\n    for (const ev of items) {\n      if (!ev || vusEv.has(String(ev.id)) || ev.lifecycleState === 'cancelled' || ev.category === 'task') continue;\n      vusEv.add(String(ev.id));\n      const j = ev.dateParis || (ev.start ? DateTime.fromISO(ev.start, { zone: 'utc' }).setZone('Europe/Paris').toISODate() : null);\n      if (!j) continue;\n      (evParJour[j] = evParJour[j] || []).push(ev);\n    }\n  }\n}\nconst gpsClient = {};\ntry { for (const it of $('Lire clients_gps').all()) { const c = it.json || {}; if (c.client_id && typeof c.lat === 'number') gpsClient[String(c.client_id)] = { lat: c.lat, lon: c.lon, adresse: c.adresse }; } } catch (e) {}\nconst sGeo = $getWorkflowStaticData('global');\nsGeo.geo = sGeo.geo || {};\nif (Object.keys(sGeo.geo).length > 3000) sGeo.geo = {}; // cache des géocodages, vidé s'il devient trop gros\nlet nbGeo = 0, geoKo = 0;\nconst geocoder = async (adr) => {\n  const k = String(adr || '').trim().toLowerCase().replace(/\\s+/g, ' ');\n  if (!k) return null;\n  if (sGeo.geo[k] !== undefined) return sGeo.geo[k];\n  let res = null;\n  for (const url of ['https://data.geopf.fr/geocodage/search?limit=1&q=', 'https://api-adresse.data.gouv.fr/search/?limit=1&q=']) {\n    try {\n      const x = await this.helpers.httpRequest({ method: 'GET', url: url + encodeURIComponent(k), json: true, timeout: 10000 });\n      const f = x && x.features && x.features[0];\n      if (f && f.geometry && f.properties && f.properties.score >= 0.5) res = { lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], score: Math.round(f.properties.score * 100) / 100, type: f.properties.type || '' };\n      nbGeo++;\n      break;\n    } catch (e) { geoKo++; }\n  }\n  sGeo.geo[k] = res;\n  return res;\n};\nconst posEv = async (ev) => {\n  const g1 = ev.address ? await geocoder(ev.address) : null;\n  if (g1) return g1;\n  const c = ev.client && gpsClient[String(ev.client.id)];\n  return c ? { lat: c.lat, lon: c.lon, score: null, type: 'clients_gps' } : null;\n};\n// Comparaison d'adresses en texte (repli quand le géocodage est approximatif) : même code postal + même nom de voie\nconst sansAccent = x => String(x || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();\nconst ABR = [[/\\brte\\b/g, 'route'], [/\\bav\\b\\.?/g, 'avenue'], [/\\bbd\\b/g, 'boulevard'], [/\\bchem\\b\\.?/g, 'chemin'], [/\\bimp\\b\\.?/g, 'impasse'], [/\\bdom\\b\\.?/g, 'domaine'], [/\\ballee\\b/g, 'allee'], [/\\bst\\b/g, 'saint']];\nconst voie = adr => {\n  let t = sansAccent(adr).replace(/[.,]/g, ' ');\n  for (const [re, v] of ABR) t = t.replace(re, v);\n  const cp = (t.match(/\\b(\\d{5})\\b/) || [])[1] || '';\n  const m = t.replace(/\\b\\d{5}\\b.*$/, '').match(/^\\s*\\d+\\s*(bis|ter)?\\s+(.+?)\\s*$/);\n  const nom = (m ? m[2] : t.replace(/\\b\\d{5}\\b.*$/, '')).replace(/\\s+-\\s+.*$/, '').replace(/\\s+/g, ' ').trim();\n  return { cp, nom, num: m ? parseInt(t.match(/^\\s*(\\d+)/)[1], 10) : null };\n};\n// Les numeros doivent etre proches : <= 150 en numerotation metrique (>= 1000, ex. 6933 / 6963), <= 10 sinon\nconst memeVoie = (a, b) => {\n  const x = voie(a), y = voie(b);\n  if (!(x.cp && x.cp === y.cp && x.nom && x.nom.length > 4 && x.nom === y.nom && x.num && y.num)) return false;\n  return Math.abs(x.num - y.num) <= (Math.max(x.num, y.num) >= 1000 ? 150 : 10);\n};\nconst DEPOT = [43.5788, 6.95012], MAISON = [43.57814, 6.96076];\n// Lieux connus (fournisseurs) : adresse geocodee une fois puis gardee en cache. A completer au fil de l'eau.\nconst LIEUX = [\n  { nom: 'Sonepar', role: 'fournisseur', adresse: '4 avenue du Centre 06150 Cannes', rayon: 90 },\n  { nom: 'La Plateforme du Bâtiment', role: 'fournisseur', adresse: '51 avenue des Arlucs 06150 Cannes', rayon: 90 }\n];\nfor (const l of LIEUX) { const p = await geocoder(l.adresse); if (p) { l.lat = p.lat; l.lon = p.lon; } }\nconst TYPE = ev => String(ev.title && ev.title !== ev.type ? ev.title : (ev.type || (ev.category === 'meeting' ? 'Rendez-vous' : 'Intervention'))).replace(/\\s+/g, ' ').trim().slice(0, 80);\nlet nbRattaches = 0, nbArrets = 0;\nconst vehicules = (await get('/vehicles')) || [];\nconst out = [];\nconst erreurs = [];\nlet exemple = null;\nconst debut = Date.now();\nlet interrompu = null;\nfor (const jour of jours) {\n  if (Date.now() - debut > 240000) { interrompu = jour; break; } // limite de durée d'un nœud Code : relancer pour la suite\n  const evsJour = [];\n  for (const ev of (evParJour[jour] || [])) { const p = await posEv(ev); if (p) evsJour.push({ ev, p }); }\n  for (const v of vehicules) {\n    const vid = g(v, 'VehicleId');\n    const immat = g(v, 'RegistrationNumber');\n    let data;\n    try { data = await get('/vehicles/route?VehicleId=' + vid + '&StartDay=' + jour + '&EndDay=' + jour); }\n    catch (e) { erreurs.push(jour + ' ' + immat + ' : ' + String((e && e.message) || e).slice(0, 120)); continue; }\n    const brut = (g(data, 'Trips') || []).filter(t => jourParis(g(t, 'StartDateTime')) === jour)\n      .sort((a, c) => String(g(a, 'StartDateTime')).localeCompare(String(g(c, 'StartDateTime'))));\n    if (!exemple && brut.length) {\n      const t0 = brut[0]; const p0 = (g(t0, 'Route') || [])[0];\n      exemple = { champsTrajet: Object.keys(t0), champsPoint: p0 ? Object.keys(p0) : null, nbPoints: (g(t0, 'Route') || []).length };\n    }\n    const T = brut.filter(t => (g(t, 'Distance') || 0) >= 0.15); // micro-déplacements (< 150 m) ignorés : ils ne coupent pas un arrêt\n    if (!T.length) continue;\n    const trajets = T.map(t => {\n      const pts = [];\n      for (const p of (g(t, 'Route') || [])) {\n        const la = g(p, 'Latitude'), lo = g(p, 'Longitude');\n        if (typeof la !== 'number' || typeof lo !== 'number' || (!la && !lo)) continue;\n        const q = [Math.round(la * 1e5) / 1e5, Math.round(lo * 1e5) / 1e5];\n        if (!pts.length || dist(pts[pts.length - 1], q) >= 40) pts.push(q);\n      }\n      const dep = g(t, 'StartDateTime'), arr = g(t, 'EndDateTime');\n      return {\n        dep, arr, de: lieu(g(t, 'StartLocation')), a: lieu(g(t, 'EndLocation')),\n        deLat: g(t, 'StartLat'), deLon: g(t, 'StartLong'), aLat: g(t, 'EndLat'), aLon: g(t, 'EndLong'),\n        km: Math.round((g(t, 'Distance') || 0) * 10) / 10,\n        min: Math.max(0, Math.round((Date.parse(arr) - Date.parse(dep)) / 60000)),\n        trace: pts\n      };\n    });\n    const total = trajets.reduce((s, t) => s + t.trace.length, 0);\n    if (total > 2500) { const pas = Math.ceil(total / 2500); trajets.forEach(t => { t.trace = t.trace.filter((_, i) => i % pas === 0 || i === t.trace.length - 1); }); }\n    const arrets = [];\n    for (let i = 0; i < trajets.length; i++) {\n      const a = trajets[i], n = trajets[i + 1];\n      const min = n ? Math.round((Date.parse(n.dep) - Date.parse(a.arr)) / 60000) : null;\n      if (min !== null && min < 5) continue; // arrêts de moins de 5 min ignorés\n      const pt = [a.aLat, a.aLon];\n      const depot = estDepot(a.a) || (typeof a.aLat === 'number' && dist(pt, DEPOT) < 200);\n      const maison = !depot && typeof a.aLat === 'number' && dist(pt, MAISON) < 200;\n      const st = { lieu: a.a, lat: a.aLat, lon: a.aLon, arrivee: a.arr, depart: n ? n.dep : null, minutes: min, depot, maison, type: depot ? 'depot' : maison ? 'maison' : 'autre', client: null };\n      if (st.type === 'autre' && typeof a.aLat === 'number') {\n        // le lieu connu le plus proche (meme adresse = prioritaire) ; Sonepar et la Plateforme du Batiment sont a ~110 m l'un de l'autre\n        let l = null, lb = Infinity;\n        for (const x of LIEUX) {\n          const dx = memeVoie(a.a, x.adresse) ? 0 : (x.lat ? dist(pt, [x.lat, x.lon]) : Infinity);\n          if (dx <= (x.rayon || 150) && dx < lb) { l = x; lb = dx; }\n        }\n        if (l) { st.type = l.role; st.lieuNom = l.nom; }\n      }\n      if (st.type === 'autre' && typeof a.aLat === 'number') {\n        nbArrets++;\n        let best = null;\n        for (const c of evsJour) {\n          const dd = dist(pt, [c.p.lat, c.p.lon]);\n          const precis = c.p.type === 'housenumber' && (c.p.score || 0) >= 0.7;\n          const texte = memeVoie(a.a, c.ev.address);\n          if (!(dd <= 350 || (!precis && dd <= 800) || texte)) continue;\n          const ecart = Math.abs(Date.parse(c.ev.start) - Date.parse(a.arr)) / 60000;\n          const note = (texte ? Math.min(dd, 50) : dd) + ecart; // le plus proche en distance (adresse identique = tres proche), puis en heure\n          if (!best || note < best.note) best = { c, dd, note };\n        }\n        if (best) {\n          const ev = best.c.ev;\n          st.type = 'client';\n          st.client = { nom: (ev.client && ev.client.name) || '', id: ev.client ? String(ev.client.id) : null, evId: String(ev.id), objet: TYPE(ev), adresse: String(ev.address || '').trim(), prevu: ev.heureParis || null, techniciens: ev.technicianIds || [], rdv: ev.category === 'meeting', distance: Math.round(best.dd), parTexte: best.dd > 350 };\n          nbRattaches++;\n        }\n      }\n      arrets.push(st);\n    }\n    const journal = {\n      jour, immat, nom: g(v, 'Description'),\n      km: Math.round(trajets.reduce((s, t) => s + t.km, 0) * 10) / 10,\n      conduiteMin: trajets.reduce((s, t) => s + t.min, 0),\n      trajets, arrets\n    };\n    out.push({ json: { jour, immat, journal_json: JSON.stringify(journal), maj: maintenant } });\n  }\n}\n// Ligne de contrôle (lue par Claude, ignorée par la page)\nout.push({ json: { jour: '_bilan', immat: '_bilan', journal_json: JSON.stringify({ jours: jours.length, du: jours[0], au: jours[jours.length - 1], lignes: out.length, interrompuA: interrompu, arretsHorsDepot: nbArrets, rattaches: nbRattaches, evenementsInterfast: vusEv.size, geocodages: nbGeo, geocodagesKo: geoKo, erreurs: erreurs.slice(0, 20), nbErreurs: erreurs.length, exemple }), maj: maintenant } });\nreturn out;\n",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1344,
+        100
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "executeOnce": true,
+      "id": "31dde110-32a8-4ebe-a9bc-3dc87dc5b6f6",
+      "name": "Purger plus d un an (RGPD)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "dJ4ZIO2PdhYlt95o"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "lt",
+              "keyName": "jour",
+              "keyValue": "={{ $now.setZone('Europe/Paris').minus({ days: 365 }).toISODate() }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "deleteRows",
+        "resource": "row"
+      },
+      "position": [
+        1792,
+        100
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "b9c0e74a-3681-4acf-99dc-6fa04354dd13",
+      "name": "RDV du jour",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "rdv_jour",
+            "params": "={{ ({ date: $('Un item par jour').item.json.date, jours: 1 }) }}"
+          }
+        }
+      },
+      "position": [
+        672,
+        320
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "46788367-c782-423d-9195-cd11db8f37a6",
+      "name": "Rattrapage (manuel)",
+      "parameters": {},
+      "position": [
+        0,
+        200
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "id": "8244c012-f3bc-4d59-af15-d3eb297dba7a",
+      "name": "Un item par jour",
+      "parameters": {
+        "jsCode": "// Un item par jour, pour lire les interventions Interfast jour par jour (100 max par appel)\nreturn ($input.first().json.jours || []).map(date => ({ json: { date } }));\n",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        224,
+        320
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false,
+    "timezone": "Europe/Paris"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-17T23:12:36.568Z"
+}

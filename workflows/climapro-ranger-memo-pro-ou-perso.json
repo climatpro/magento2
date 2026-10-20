@@ -1,0 +1,268 @@
+{
+  "active": true,
+  "connections": {
+    "Choisir la destination": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Memo trouve ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Deplacer le memo": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Repondre a l'iPhone",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Memo trouve ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Mettre a jour le memo",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Repondre a l'iPhone",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Memos en attente": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Choisir la destination",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Mettre a jour le memo": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Deplacer le memo",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "POST /climapro-ranger": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Memos en attente",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-11T09:00:16.040Z",
+  "description": "Réponse au menu iPhone « Pro ou perso ? » : range le dernier mémo marqué pro-ou-perso dans Perso, Équipe ClimatPro (ou Commandes matériel) ou Laurent ClimatPro. Même clé X-Key que Climapro - Mémos vocaux.",
+  "id": "WioaHhSBgYJ2EbmU",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Climapro - Ranger mémo (pro ou perso)",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "bcea53ed-4f33-491f-96ed-c22ba33f8fc7",
+      "name": "Choisir la destination",
+      "parameters": {
+        "jsCode": "// Range le dernier memo en attente (label pro-ou-perso) selon la reponse du menu iPhone\nconst b = $('POST /climapro-ranger').first().json.body || {};\nconst n = s => String(s || '').trim().toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');\nconst ch = n(b.choix);\nconst choix = /equipe/.test(ch) ? 'equipe' : /laurent|pro/.test(ch) ? 'pro' : 'perso';\nconst tasks = (($input.first().json || {}).results) || [];\nconst t = tasks.filter(x => !x.checked).sort((a, z) => String(z.added_at || '').localeCompare(String(a.added_at || '')))[0];\nif (!t) return [{ json: { ok: false, message: 'Aucun mémo en attente de rangement.' } }];\nconst labels = (t.labels || []).filter(l => l !== 'pro-ou-perso');\nlet content = t.content;\nlet move = { project_id: '6hh423vGr88f287j' };\nlet dest = 'Perso';\nif (choix === 'equipe') {\n  if (labels.includes('commande')) { move = { section_id: '6hjM3Rw4RPRw474w' }; dest = 'Équipe ClimatPro / Commandes matériel'; if (!/^À commander : /.test(content)) content = 'À commander : ' + content; }\n  else { move = { project_id: '6hh423vw4vGgHFPw' }; dest = 'Équipe ClimatPro'; }\n} else if (choix === 'pro') { move = { section_id: '6hh4246PVq2H9Fp8' }; dest = 'Laurent ClimatPro'; }\nreturn [{ json: { ok: true, id: t.id, maj: { labels, content }, move, message: 'Rangé > ' + dest + '\\n' + content } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        440,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "todoistApi": {
+          "id": "feB4B4HQds0e2tFC",
+          "name": "Todoist account"
+        }
+      },
+      "id": "72848bb0-945b-4de5-92a5-5eb1ffd73e74",
+      "name": "Deplacer le memo",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "jsonBody": "={{ JSON.stringify($('Choisir la destination').first().json.move) }}",
+        "method": "POST",
+        "nodeCredentialType": "todoistApi",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "=https://api.todoist.com/api/v1/tasks/{{ $('Choisir la destination').first().json.id }}/move"
+      },
+      "position": [
+        1100,
+        -100
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "abd82006-7d5c-4065-b831-39e1819bf734",
+      "name": "Memo trouve ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.ok }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              }
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        660,
+        0
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "credentials": {
+        "todoistApi": {
+          "id": "feB4B4HQds0e2tFC",
+          "name": "Todoist account"
+        }
+      },
+      "id": "92046a23-f4f2-42f1-b293-57203f846ae1",
+      "name": "Memos en attente",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "method": "GET",
+        "nodeCredentialType": "todoistApi",
+        "options": {},
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "label",
+              "value": "pro-ou-perso"
+            },
+            {
+              "name": "limit",
+              "value": "50"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://api.todoist.com/api/v1/tasks"
+      },
+      "position": [
+        220,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "todoistApi": {
+          "id": "feB4B4HQds0e2tFC",
+          "name": "Todoist account"
+        }
+      },
+      "id": "8aea99c0-06b6-4340-8379-48542ea79909",
+      "name": "Mettre a jour le memo",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "jsonBody": "={{ JSON.stringify($json.maj) }}",
+        "method": "POST",
+        "nodeCredentialType": "todoistApi",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "=https://api.todoist.com/api/v1/tasks/{{ $json.id }}"
+      },
+      "position": [
+        880,
+        -100
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "TzXvxzRIPrc4mWME",
+          "name": "Climapro X-Key"
+        }
+      },
+      "id": "a120b130-09b9-46d5-aae8-588d3d70ddb9",
+      "name": "POST /climapro-ranger",
+      "parameters": {
+        "authentication": "headerAuth",
+        "httpMethod": "POST",
+        "options": {},
+        "path": "climapro-ranger",
+        "responseMode": "responseNode"
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "aa3784ca-ffea-4e41-89cb-33c68f00404f",
+      "name": "Repondre a l'iPhone",
+      "parameters": {
+        "options": {},
+        "respondWith": "text",
+        "responseBody": "={{ $('Choisir la destination').first().json.message }}"
+      },
+      "position": [
+        1320,
+        0
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-11T09:00:16.040Z"
+}

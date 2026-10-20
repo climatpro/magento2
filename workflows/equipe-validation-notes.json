@@ -1,0 +1,673 @@
+{
+  "active": true,
+  "connections": {
+    "Apres ecriture": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Mettre a jour la note",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Bouton ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Repondre au bouton",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Repondre au message",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Chercher client": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Decider",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Comprendre": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire la note",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Decider": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ecrire ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Ecrire ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interfast - consigner la note",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Mettre a jour la note",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Entree": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire admins",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interfast - consigner la note": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Apres ecriture",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire admins": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Comprendre",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire la note": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Chercher client",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Mettre a jour la note": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Reponse finale",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Note close ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Modifier la note",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Repondre au bouton": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Note close ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Repondre au message": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Note close ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Reponse finale": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Bouton ?",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-16T22:18:33.083Z",
+  "description": "Appele par l'Archiviste : boutons Valider/Ignorer sous une note a valider, ou reponse de Laurent (nom ou id client). Ecrit la note dans Interfast. PRODUCTION (MODE_TEST = false dans Decider) : toutes les fiches.",
+  "id": "7NeZSKB3GXm3tXOB",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Equipe - Validation notes",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "2d1170de-7fe7-4a46-8c5d-8c83b36f9933",
+      "name": "Apres ecriture",
+      "parameters": {
+        "jsCode": "// Resultat de l'ecriture dans Interfast.\nconst d = $('Decider').first().json;\nconst r = $input.first().json || {};\nconst ok = !r.error && !(r.statusCode && r.statusCode >= 400);\nreturn [{ json: { ...d, statut: ok ? 'envoyee' : '', final: ok, reponse: ok ? 'Note ajoutee sur la fiche ' + (d.client_nom || d.client_id) + '.' : 'Echec Interfast (' + String((r.error && (r.error.message || r.error)) || r.statusCode || '?').slice(0, 120) + '). La note reste a valider.' } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1760,
+        -120
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "033eb6d4-3a98-45cf-8d7d-3771e50b65ef",
+      "name": "Bouton ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.source === 'bouton' }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        2420,
+        0
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "executeOnce": true,
+      "id": "64b91089-681a-48f0-b910-9bd03583a57a",
+      "name": "Chercher client",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "method": "GET",
+        "options": {
+          "timeout": 15000
+        },
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "page",
+              "value": "0"
+            },
+            {
+              "name": "size",
+              "value": "8"
+            },
+            {
+              "name": "archived",
+              "value": "false"
+            },
+            {
+              "name": "name",
+              "value": "={{ $('Comprendre').first().json.action === 'nom' ? (String($('Comprendre').first().json.saisie || '').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').split(' ').filter(w => w.length > 1 && !['client', 'clients', 'cliente', 'chez', 'monsieur', 'madame', 'mr', 'mme', 'la', 'le', 'les', 'de', 'du', 'des', 'et', 'sarl', 'sas', 'sci', 'societe', 'famille', 'villa', 'residence'].includes(w)).sort((a, b) => b.length - a.length)[0] || '__aucun__') : '__aucun__' }}"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://app.inter-fast.fr/v1/crm/search"
+      },
+      "position": [
+        880,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "c3db9e56-3c75-4fb0-90e7-3c1a959be754",
+      "name": "Comprendre",
+      "parameters": {
+        "jsCode": "// Comprend la demande de Laurent : bouton sous une note a valider, ou reponse a une note (nom ou id Interfast).\n// Seuls les admins de bot_users sont ecoutes. Tout le reste est ignore.\nconst u = ($('Entree').first().json || {}).update || {};\nconst admins = $input.all().map(i => i.json).filter(r => r && String(r.role || '') === 'admin' && r.actif !== false).map(r => String(r.telegram_id).trim());\nconst cb = u.callback_query;\nif (cb) {\n  if (!admins.includes(String((cb.from || {}).id))) return [];\n  const p = String(cb.data || '').split(':');\n  if (p[0] !== 'nv' || !/^\\d+$/.test(p[1] || '')) return [];\n  const msg = cb.message || {};\n  return [{ json: { source: 'bouton', note_id: Number(p[1]), tg_id: -1, action: p[2] === 'ok' ? 'ok' : 'no', saisie: '', cb_id: cb.id, chat_id: String((msg.chat || {}).id || ''), msg_id: msg.message_id || 0, note_msg_id: msg.message_id || 0, texte_origine: msg.text || '' } }];\n}\nconst m = u.message || {};\nif (((m.chat || {}).type === 'private') && admins.includes(String((m.from || {}).id)) && m.reply_to_message) {\n  const t = String(m.text || '').trim();\n  if (!t) return [];\n  const estId = /^\\d{3,10}$/.test(t);\n  return [{ json: { source: 'reponse', note_id: -1, tg_id: m.reply_to_message.message_id, action: estId ? 'id' : 'nom', saisie: t.slice(0, 80), cb_id: '', chat_id: String(m.chat.id), msg_id: m.message_id, note_msg_id: m.reply_to_message.message_id, texte_origine: m.reply_to_message.text || '' } }];\n}\nreturn [];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        440,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "823b41fd-a811-4ce5-b4b6-5d380624aa4e",
+      "name": "Decider",
+      "parameters": {
+        "jsCode": "// Decide quoi faire de la note validee par Laurent. Production : toutes les fiches clients sont autorisees.\n// Reponse a une note deja ignoree = motif (sert a affiner les consignes).\nconst MODE_TEST = false;\nconst AUTORISES = ['406157', '405318'];\nconst VIDES = ['client', 'clients', 'cliente', 'chez', 'monsieur', 'madame', 'mr', 'mme', 'la', 'le', 'les', 'de', 'du', 'des', 'et', 'sarl', 'sas', 'sci', 'societe', 'famille', 'villa', 'residence'];\nconst c = $('Comprendre').first().json;\nconst note = ($('Lire la note').first() || {}).json || {};\nconst res = $input.first().json || {};\nconst norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();\nconst out = { ...c, note_id: note.id || null, contenu: note.contenu || '', ecrire: false, client_id: '', client_nom: '', statut: '', motif: '', final: false, reponse: '' };\nif (!note.id) { out.reponse = 'Note introuvable.'; return [{ json: out }]; }\nif (note.statut === 'ignoree' && c.source === 'reponse') { out.statut = 'ignoree'; out.motif = c.saisie; out.reponse = 'Motif note : ' + c.saisie + '. Merci, ca servira a affiner les consignes.'; return [{ json: out }]; }\nif (note.statut !== 'a_valider') { out.reponse = 'Cette note est deja traitee (' + note.statut + ').'; return [{ json: out }]; }\nif (c.action === 'no') { out.statut = 'ignoree'; out.final = true; out.reponse = 'Note ignoree. Pourquoi ? Reponds a ce message d un mot si tu veux (facultatif).'; }\nelse if (c.action === 'ok') {\n  if (note.client_id) { out.ecrire = true; out.client_id = String(note.client_id); out.client_nom = note.client_nom || ''; }\n  else out.reponse = 'Pas de client propose : reponds a ce message avec le nom du client ou son id Interfast.';\n}\nelse if (c.action === 'id') { out.ecrire = true; out.client_id = c.saisie; out.client_nom = 'id ' + c.saisie; }\nelse if (c.action === 'nom') {\n  const mots = norm(c.saisie).split(' ').filter(w => w.length > 1 && !VIDES.includes(w));\n  let items = (Array.isArray(res.items) ? res.items : []).filter(x => String(x.reference || '').toUpperCase().startsWith('C') && String(x.category || 'client') !== 'supplier');\n  const tous = items;\n  items = mots.length ? items.filter(x => mots.every(w => norm(x.name).split(' ').some(m => m === w || (w.length >= 4 && m.startsWith(w))))) : [];\n  const liste = l => l.slice(0, 6).map(x => '- ' + String(x.name || '').trim() + ' (' + x.reference + ') : id ' + x.id).join('\\n');\n  if (items.length === 1) { out.ecrire = true; out.client_id = String(items[0].id); out.client_nom = String(items[0].name || '').trim(); }\n  else if (items.length > 1) out.reponse = 'Plusieurs fiches correspondent :\\n' + liste(items) + '\\nReponds a la note avec le bon id.';\n  else out.reponse = 'Aucune fiche trouvee pour \"' + c.saisie + '\".' + (tous.length ? '\\nFiches proches :\\n' + liste(tous) + '\\nReponds a la note avec le bon id.' : ' Essaie un autre nom ou l id Interfast.');\n}\nif (out.ecrire && MODE_TEST && !AUTORISES.includes(out.client_id)) {\n  out.ecrire = false;\n  out.reponse = 'Mode test : rien ecrit sur ' + (out.client_nom || out.client_id) + '. La note reste a valider.';\n}\nreturn [{ json: out }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1100,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "a1488a83-38b1-4791-bb89-267cb4888f66",
+      "name": "Ecrire ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.ecrire }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        1320,
+        0
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "df17f0d1-fb50-44d9-ac0f-f40253fbac97",
+      "name": "Entree",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "update",
+              "type": "object"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "097491d5-ad59-46d4-9b7b-0bff3093ae64",
+      "name": "Interfast - consigner la note",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "jsonBody": "={{ JSON.stringify({ type: \"note\", content: $json.contenu }) }}",
+        "method": "POST",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "=https://app.inter-fast.fr/v1/client/{{ $json.client_id }}/activities/notes"
+      },
+      "position": [
+        1540,
+        -120
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "bc077368-e036-4ad1-af2b-5b3e4b8d8359",
+      "name": "Lire admins",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "MAaqIFX2KBiCvHFa"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        220,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "alwaysOutputData": true,
+      "id": "bbebfc9a-625f-4fd6-973e-ed5f55fca552",
+      "name": "Lire la note",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "yUbZrUGS9DHJX3ss"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "id",
+              "keyValue": "={{ $json.note_id }}"
+            },
+            {
+              "condition": "eq",
+              "keyName": "tg_message_id",
+              "keyValue": "={{ $json.tg_id }}"
+            }
+          ]
+        },
+        "limit": 1,
+        "matchType": "anyCondition",
+        "operation": "get",
+        "resource": "row"
+      },
+      "position": [
+        660,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "0e7f6b05-7432-4c86-9c1b-491b744e6709",
+      "name": "Mettre a jour la note",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "statut",
+              "id": "statut",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "client_id",
+              "id": "client_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "client_nom",
+              "id": "client_nom",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "motif",
+              "id": "motif",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "client_id": "={{ $json.statut === 'envoyee' ? $json.client_id : ($('Lire la note').first().json.client_id || '') }}",
+            "client_nom": "={{ $json.statut === 'envoyee' ? $json.client_nom : ($('Lire la note').first().json.client_nom || '') }}",
+            "motif": "={{ $json.motif || $('Lire la note').first().json.motif || '' }}",
+            "statut": "={{ $json.statut || $('Lire la note').first().json.statut || 'a_valider' }}"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "yUbZrUGS9DHJX3ss"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "id",
+              "keyValue": "={{ $json.note_id || -1 }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "update",
+        "options": {},
+        "resource": "row"
+      },
+      "position": [
+        1980,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "gQjbmvis03Oi1VtD",
+          "name": "Bot Telegram - groupe climatpro"
+        }
+      },
+      "id": "631a6eaa-8a03-4ffc-a9b7-2879fe448fef",
+      "name": "Modifier la note",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "additionalFields": {
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        },
+        "chatId": "={{ $('Reponse finale').first().json.chat_id }}",
+        "messageId": "={{ $('Reponse finale').first().json.note_msg_id || $('Reponse finale').first().json.msg_id }}",
+        "messageType": "message",
+        "operation": "editMessageText",
+        "replyMarkup": "none",
+        "resource": "message",
+        "text": "={{ $('Reponse finale').first().json.nouveau_texte }}"
+      },
+      "position": [
+        3080,
+        -200
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "2d7b9123-222e-42b4-978f-3980ab6b7412",
+      "name": "Note close ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $('Reponse finale').first().json.final }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        2860,
+        -120
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "gQjbmvis03Oi1VtD",
+          "name": "Bot Telegram - groupe climatpro"
+        }
+      },
+      "id": "566db333-7a3e-4de2-ac55-98e94742f7a8",
+      "name": "Repondre au bouton",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "additionalFields": {
+          "show_alert": "={{ !$json.final }}",
+          "text": "={{ $json.alerte }}"
+        },
+        "operation": "answerQuery",
+        "queryId": "={{ $json.cb_id }}",
+        "resource": "callback"
+      },
+      "position": [
+        2640,
+        -120
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "gQjbmvis03Oi1VtD",
+          "name": "Bot Telegram - groupe climatpro"
+        }
+      },
+      "id": "52912e7c-5a6b-406c-b50a-fddcebbc177f",
+      "name": "Repondre au message",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML",
+          "reply_to_message_id": "={{ $json.msg_id }}"
+        },
+        "chatId": "={{ $json.chat_id }}",
+        "operation": "sendMessage",
+        "resource": "message",
+        "text": "={{ $json.reponse_html }}"
+      },
+      "position": [
+        2640,
+        120
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "9aa08960-81ff-4911-b618-105455760f4e",
+      "name": "Reponse finale",
+      "parameters": {
+        "jsCode": "// Reponse a renvoyer a Laurent (une seule, quelle que soit la branche).\nlet d = null;\ntry { d = $('Apres ecriture').first().json; } catch (e) { d = null; }\nif (!d) d = $('Decider').first().json;\nconst esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst icone = d.statut === 'envoyee' ? '✅ ' : (d.statut === 'ignoree' ? '🗑 ' : 'ℹ️ ');\nconst nouveauTexte = esc(String(d.texte_origine || '').slice(0, 3200)) + '\\n\\n<b>' + icone + esc(d.reponse) + '</b>';\nreturn [{ json: { ...d, alerte: (icone + d.reponse).slice(0, 190), nouveau_texte: nouveauTexte, reponse_html: icone + esc(d.reponse) } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        2200,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-18T08:06:19.991Z"
+}

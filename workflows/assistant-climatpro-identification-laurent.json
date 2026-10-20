@@ -1,0 +1,42 @@
+{
+  "active": false,
+  "connections": {},
+  "createdAt": "2026-10-07T17:43:18.636Z",
+  "id": "UdHjR65FGA29FGQ4",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Assistant ClimatPro — Identification Laurent",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "id": "f777e8c7-2ce6-4708-b8d6-9006017153b5",
+      "name": "Telegram Trigger",
+      "parameters": {
+        "additionalFields": {},
+        "updates": [
+          "message"
+        ]
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.5
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "binaryMode": "separate",
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-07T21:13:28.323Z"
+}

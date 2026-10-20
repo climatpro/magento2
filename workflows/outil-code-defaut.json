@@ -1,0 +1,467 @@
+{
+  "active": true,
+  "connections": {
+    "Alerter Laurent": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resultat",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Analyse": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code absent ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Appel outil": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Entree",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Code absent ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire utilisateurs",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Resultat",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Entree": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Hitachi ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Fiche Hitachi": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Code absent ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Hitachi ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Fiche Hitachi",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Lire codes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire codes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Analyse",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire utilisateurs": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Message alerte",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Message alerte": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Alerter Laurent",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-10T05:07:55.943Z",
+  "description": "Outil du bot : signification d'un code defaut Toshiba, Daikin (table codes_defaut) et Hitachi (sous-outil fiche officielle airCloud). Alerte Laurent si code absent. Lecture seule.",
+  "id": "uWkW4FbbnjkmwTXb",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Outil - Code defaut",
+  "nodeGroups": [
+    {
+      "description": "Si le code est introuvable, previent les admins du bot sur Telegram pour completer la table",
+      "id": "55bfab0a-ec89-4dcf-86a2-6438006c6f9e",
+      "name": "Alerte code absent",
+      "nodeNames": [
+        "Lire utilisateurs",
+        "Message alerte",
+        "Alerter Laurent"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "id": "328945c9-b2d0-4f9e-863c-f859b28f4027",
+      "name": "Alerter Laurent",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        },
+        "chatId": "={{ $json.chat_id }}",
+        "operation": "sendMessage",
+        "resource": "message",
+        "text": "={{ String($json.text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }}"
+      },
+      "position": [
+        1568,
+        0
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "02c09b91-ae9a-4760-b751-2e463f2323fa",
+      "name": "Analyse",
+      "parameters": {
+        "jsCode": "const e = $('Entree').first().json;\nconst rows = $input.all().map(i => i.json).filter(r => r && r.code_cle);\nconst SOURCES = { Toshiba: 'base officielle des codes defaut Toshiba France (Espace Pro)', Daikin: 'document officiel Daikin France SM-TS3 (autodiagnostic par code de dysfonctionnement)' };\nif (!SOURCES[e.marque]) {\n  return [{ json: { absent: false, resultat: 'Pas encore de table de codes defaut pour la marque ' + (e.marque || 'inconnue') + ' (Toshiba et Daikin seulement pour l instant). Ne devine pas : dis au technicien de consulter la notice de la machine ou d appeler Laurent.' } }];\n}\nif (!e.cle) return [{ json: { absent: false, resultat: 'Aucun code defaut fourni : demander le code exact affiche (telecommande ou LED).' } }];\nconst sp = s => String(s || '').toUpperCase().replace(/\\s+/g, ' ').trim();\nconst exact = rows.filter(r => r.code_cle === e.cle);\nconst sous = rows.filter(r => r.code_cle !== e.cle && sp(r.code).startsWith(e.code + ' ')).slice(0, 10);\nconst v = new Set();\nconst m = e.marque === 'Toshiba' ? /^E?0*(\\d{1,3})$/.exec(e.cle) : null;\nif (m) { const n = m[1]; const p2 = n.padStart(2, '0'); [n, p2, 'E' + p2, 'E' + n, n.padStart(4, '0')].forEach(x => v.add(x)); }\nconst proches = rows.filter(r => v.has(r.code_cle) && r.code_cle !== e.cle);\nconst fiche = r => 'Code ' + r.code + ' : ' + r.designation + (r.notes ? '\\n' + (e.marque === 'Toshiba' ? 'A verifier selon Toshiba : ' : '') + r.notes : '') + (r.notes_climatpro ? '\\nNote terrain ClimatPro : ' + r.notes_climatpro : '');\nconst L = [];\nL.push('Source : ' + SOURCES[e.marque] + ', mise a jour le ' + ((exact[0] || proches[0] || rows[0] || {}).maj || '?') + '.');\nL.push('Gamme de la machine : ' + e.gamme + '. Si plusieurs fiches ou plusieurs gammes sont donnees pour ce code, ne garde que celle qui correspond a la machine.');\nif (exact.length) exact.forEach(r => L.push(fiche(r)));\nif (proches.length) { L.push(exact.length ? 'Meme code sous un autre affichage (selon la commande ou la gamme) :' : 'Code exact absent, mais ce code existe sous un autre affichage :'); proches.forEach(r => L.push(fiche(r))); }\nif (sous.length) { L.push('Sous-codes existants (si la machine affiche un sous-code, le demander) :'); sous.forEach(r => L.push('- ' + fiche(r))); }\nconst absent = !exact.length && !proches.length && !sous.length;\nif (absent) {\n  L.length = 0;\n  L.push('Code ' + e.code + ' introuvable dans la ' + SOURCES[e.marque] + '. Ne devine pas sa signification. Demande au technicien de verifier la lecture (code complet avec sous-code, affichage telecommande ou clignotements LED).' + (/Altherma/.test(e.gamme) ? ' Les codes Altherma (PAC air/eau) ne sont pas dans ce document.' : '') + ' Laurent a ete prevenu.');\n}\nreturn [{ json: { absent, resultat: L.join('\\n').slice(0, 6000) } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        672,
+        80
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "8136be39-0423-409b-8f78-5f2d703e6762",
+      "name": "Appel outil",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "marque",
+              "type": "string"
+            },
+            {
+              "name": "code",
+              "type": "string"
+            },
+            {
+              "name": "modele",
+              "type": "string"
+            },
+            {
+              "name": "demandeur",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        80
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "2930d100-6a66-4045-9f8a-9e027294f890",
+      "name": "Code absent ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.absent }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              }
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        896,
+        80
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "81d93f51-438d-4eaa-8b70-3f0f40926320",
+      "name": "Entree",
+      "parameters": {
+        "jsCode": "const i = $input.first().json || {};\nconst modele = String(i.modele || '').toUpperCase().replace(/\\s+/g, '').trim();\nlet marque = String(i.marque || '').trim();\nif (/^tosh/i.test(marque)) marque = 'Toshiba';\nelse if (/^daik/i.test(marque)) marque = 'Daikin';\nelse if (/^hit/i.test(marque)) marque = 'Hitachi';\nif (!marque && /^(RAK|RAC|RAD|RAF|RAI|RAM|RCI|RCD|RPI|RPK|RPC|RPF|RWM|RWD|RWH|RASC|RASM|KPI|RCUE|RHUE|RCME|RHME|RCMA|RHMA|YUTAKI)/.test(modele)) marque = 'Hitachi';\nif (!marque && /^(RAS|RAV|MMY|MCY|MM[A-Z]|HWT|HWS)-?/.test(modele)) marque = 'Toshiba';\nif (!marque && /^(FTX|ATX|ARX|CTX|FVX|FDX|RX[A-Z]|FBA|FCA|FFA|FHA|AZA|RZA|RZQ|FX[A-Z]|REY|RYY|RXY|EH[A-Z]|ER[A-Z]|EB[A-Z]|ED[A-Z])/.test(modele)) marque = 'Daikin';\nconst code = String(i.code || '').toUpperCase().replace(/^(CODE|ERREUR|ERROR)\\s*/, '').replace(/[-_.]+/g, ' ').replace(/\\s+/g, ' ').trim();\nconst cle = code.replace(/[^A-Z0-9]/g, '');\nlet gamme = 'inconnue (modele non fourni)';\nif (marque === 'Toshiba') {\n  if (/^RAS/.test(modele)) gamme = 'RAS (residentiel : muraux, multisplits)';\n  else if (/^RAV/.test(modele)) gamme = 'RAV (petit tertiaire Digital Inverter : cassettes, gainables, consoles, plafonniers)';\n  else if (/^(MMY|MCY|MM[A-Z])/.test(modele)) gamme = 'DRV / VRF (SMMS, MiNi-SMMS, SHRM)';\n  else if (/^HW[ST]/.test(modele)) gamme = 'ESTIA (PAC air/eau)';\n  else if (modele) gamme = 'non reconnue a partir du modele ' + modele;\n} else if (marque === 'Daikin') {\n  if (/^(FTX|ATX|ARX|CTX|FVX|FDX|RX[MPAJFCGLNT])/.test(modele)) gamme = 'RA (residentiel : muraux, consoles, multisplits)';\n  else if (/^(FBA|FCA|FFA|FHA|AZA|RZA|RZQ)/.test(modele)) gamme = 'SkyAir (petit tertiaire)';\n  else if (/^(FX[A-Z]|REY|RYY|RXY)/.test(modele)) gamme = 'VRV';\n  else if (/^(EH[A-Z]|ER[A-Z]|EB[A-Z]|ED[A-Z])/.test(modele)) gamme = 'Altherma (PAC air/eau) : ce document Daikin ne couvre PAS les codes Altherma';\n  else if (modele) gamme = 'non reconnue a partir du modele ' + modele;\n}\nreturn [{ json: { marque, code, cle, modele, gamme, code_brut: String(i.code || '').trim(), modele_brut: String(i.modele || '').trim(), demandeur: String(i.demandeur || '') } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        224,
+        80
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "c3c605ea-31a9-46b1-ba04-03e9dbfccdd1",
+      "name": "Fiche Hitachi",
+      "parameters": {
+        "options": {},
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Code defaut Hitachi",
+          "mode": "id",
+          "value": "OOM7WyEjdrj5JnKy"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "code",
+              "id": "code",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "modele",
+              "id": "modele",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "demandeur",
+              "id": "demandeur",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "code": "={{ $json.code_brut }}",
+            "demandeur": "={{ $json.demandeur }}",
+            "modele": "={{ $json.modele_brut }}"
+          }
+        }
+      },
+      "position": [
+        560,
+        288
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "4beea777-09b2-4db1-9a61-5aa823338bad",
+      "name": "Hitachi ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.marque }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "Hitachi"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        336,
+        80
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "a7706beb-839b-4607-a43f-7fa56415c8d1",
+      "name": "Lire codes",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "codes_defaut",
+          "mode": "id",
+          "value": "ko1b5qPW0nF5yYBm"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "marque",
+              "keyValue": "={{ $json.marque || 'aucune' }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        448,
+        80
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "executeOnce": true,
+      "id": "803f1c9e-c709-42ef-846c-4f5857210e34",
+      "name": "Lire utilisateurs",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "bot_users",
+          "mode": "id",
+          "value": "MAaqIFX2KBiCvHFa"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        1120,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "aa0ff5d5-1659-4567-b190-a7c2c13cd3bf",
+      "name": "Message alerte",
+      "parameters": {
+        "jsCode": "const e = $('Entree').first().json;\nconst admins = $input.all().map(i => i.json).filter(u => u.actif && u.role === 'admin' && u.telegram_id);\nconst t = 'Code defaut absent de la base : ' + e.marque + ' ' + e.code + (e.modele ? ' (modele ' + e.modele + ')' : '') + ', demande par ' + (e.demandeur || '?') + '.' + (e.marque === 'Hitachi' ? '\\nBase Hitachi : appli officielle airCloud Alarm Code (table codes_hitachi).' : '\\nSi tu le connais, ajoute une ligne dans la Data Table codes_defaut (colonne notes_climatpro).');\nreturn admins.map(a => ({ json: { chat_id: String(a.telegram_id), text: t } }));",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1344,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "9587bb6f-b412-4137-a724-c574558d987a",
+      "name": "Resultat",
+      "parameters": {
+        "jsCode": "const src = $('Fiche Hitachi').isExecuted ? $('Fiche Hitachi') : $('Analyse');\nreturn [{ json: { resultat: src.first().json.resultat } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1792,
+        80
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "058dbd56-942e-4e87-ae87-11d8adac99a0",
+      "name": "Sticky Note bc23c698",
+      "parameters": {
+        "color": 4,
+        "content": "## Outil - Code defaut\nAppele comme outil code_defaut par Bot - Assistant. Cherche le code dans la Data Table codes_defaut (base officielle Toshiba France, importee chaque mois par Import - Codes defaut Toshiba).\nRenvoie le code exact, le meme code sous un autre affichage (04 / E04) et les sous-codes. Si rien n est trouve, Laurent recoit une alerte Telegram.\nLecture seule.",
+        "height": 200,
+        "width": 560
+      },
+      "position": [
+        672,
+        32
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-10T10:20:14.957Z"
+}

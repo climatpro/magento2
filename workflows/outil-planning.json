@@ -1,0 +1,245 @@
+{
+  "active": true,
+  "connections": {
+    "Appel outil": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer requete",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire RDV": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Formater planning",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire interventions": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire RDV",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer requete": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire interventions",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-08T14:28:37.870Z",
+  "description": "Outil du bot : planning Interfast sur une période, filtrable par catégorie (installation, devis, maintenance, dépannage...) et technicien. Lecture seule.",
+  "id": "zA9fv7IqJnrBuRRy",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Outil - Planning",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "cd952b5f-0c44-4617-87cf-7147a0ae6a2f",
+      "name": "Appel outil",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "date_debut",
+              "type": "string"
+            },
+            {
+              "name": "jours",
+              "type": "number"
+            },
+            {
+              "name": "categorie",
+              "type": "string"
+            },
+            {
+              "name": "technicien",
+              "type": "string"
+            },
+            {
+              "name": "user_id",
+              "type": "number"
+            },
+            {
+              "name": "role",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "8b897550-7cfb-4125-ba4b-46da46406338",
+      "name": "Formater planning",
+      "parameters": {
+        "jsCode": "const req = $('Preparer requete').first().json;\nconst moi = Number($('Appel outil').first().json.user_id);\nfunction items(n) { try { const r = $(n).first().json; return (r && r.ok && r.data && r.data.items) || []; } catch (e) { return []; } }\nconst now = DateTime.now().setZone('Europe/Paris');\nconst NOMS = { 5066: 'Laurent', 5069: 'Christophe', 9965: 'Axel', 5198: 'Axel' };\nconst moiIds = moi === 9965 ? [9965, 5198] : [moi];\nconst LIB = { 1: ' (approx.)', 2: ' (demi-journee)', 3: ' (journee entiere)' };\nfunction test(s) {\n  s = String(s || '').toLowerCase();\n  if (/devis|visite technique|visite avant|metre|métré|chiffrage/.test(s)) return 'devis';\n  if (/install|pose|mise en service/.test(s)) return 'installation';\n  if (/d[ée]pannage|panne|fuite|erreur|ne fonctionne|ne fait plus|ne d[ée]marre/.test(s)) return 'depannage';\n  if (/entretien|maintenance|nettoyage|r[ée]vision/.test(s)) return 'maintenance';\n  return null;\n}\nfunction cat(ev) {\n  if (ev.category === 'task') return 'tache';\n  return test(ev.type) || (ev.maintenance ? 'maintenance' : null) || test(ev.title) || (ev.category === 'meeting' ? 'rdv' : 'intervention');\n}\nconst vus = new Set();\nconst lignes = [];\nconst tous = items('Lire interventions').concat(items('Lire RDV'))\n  .filter(ev => { if (vus.has(String(ev.id))) return false; vus.add(String(ev.id)); return ev.lifecycleState !== 'cancelled'; })\n  .sort((a, b) => String(a.start).localeCompare(String(b.start)));\nfor (const ev of tous) {\n  const c = cat(ev);\n  if (req.categorie !== 'tous' && c !== req.categorie) continue;\n  const dt = DateTime.fromISO(ev.start, { zone: 'utc' }).setZone('Europe/Paris');\n  const jour = dt.setLocale('fr').toFormat('ccc dd/MM');\n  const heure = ev.codeHoraire === 4 ? 'date a caler' : dt.toFormat(\"HH'h'mm\") + (LIB[ev.codeHoraire] || '');\n  const ids = ev.technicianIds || [];\n  const avecMoi = ids.some(t => moiIds.includes(t));\n  const autres = [...new Set(ids.filter(t => !moiIds.includes(t)).map(t => NOMS[t] || ('tech ' + t)))];\n  const techTxt = avecMoi ? ('toi' + (autres.length ? ' + ' + autres.join('+') : '')) : (autres.join('+') || 'non attribue');\n  const statut = ev.finished ? 'termine' : (dt < now ? 'passe' : 'a venir');\n  const m = String(ev.address || '').match(/(\\d{5})[\\s,]+(.+)$/);\n  const ville = m ? m[2].trim() : (ev.address || '');\n  const objet = [ev.type, ev.title && ev.title !== ev.type ? ev.title : ''].filter(Boolean).join(' : ').replace(/\\s+/g, ' ').slice(0, 120);\n  lignes.push([jour + ' ' + heure, c, (ev.client && ev.client.name) || '-', ville || '-', objet, 'qui: ' + techTxt, 'statut: ' + statut, 'event_id: ' + ev.id, 'client_id: ' + ((ev.client && ev.client.id) || '-'), ev.secondReference ? 'devis: ' + ev.secondReference : '', ev.sousContrat ? 'sous contrat' : ''].filter(Boolean).join(' | '));\n}\nconst entete = 'Planning du ' + req.date + ' sur ' + req.jours + ' jour(s), categorie ' + req.categorie + ' (qui: toi = la personne qui pose la question) :';\nconst corps = lignes.length ? lignes.slice(0, 60).join('\\n') + (lignes.length > 60 ? '\\n(' + (lignes.length - 60) + ' autres non affiches)' : '') : 'Aucun evenement.';\nreturn [{ json: { resultat: entete + '\\n' + corps } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        896,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "49dbe83f-3ecf-426f-96b6-5bc56d28ec45",
+      "name": "Lire RDV",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "rdv_jour",
+            "params": "={{ ({ date: $('Preparer requete').item.json.date, jours: $('Preparer requete').item.json.jours, technicianIds: $('Preparer requete').item.json.techIds }) }}"
+          }
+        }
+      },
+      "position": [
+        672,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "0db88a27-e6a0-40ec-ace0-38b37b32c986",
+      "name": "Lire interventions",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "events_jour",
+            "params": "={{ ({ date: $json.date, jours: $json.jours, technicianIds: $json.techIds }) }}"
+          }
+        }
+      },
+      "position": [
+        448,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "2abb49ff-1118-449a-8f81-cdd65f27bd8f",
+      "name": "Preparer requete",
+      "parameters": {
+        "jsCode": "const i = $input.first().json;\nconst now = DateTime.now().setZone('Europe/Paris');\nlet d = DateTime.fromISO(String(i.date_debut || ''), { zone: 'Europe/Paris' });\nif (!d.isValid) d = now;\nconst ecart = d.startOf('day').diff(now.startOf('day'), 'days').days;\nif (ecart < -90 || ecart > 120) d = now;\nconst jours = Math.min(Math.max(parseInt(i.jours || 1, 10) || 1, 1), 31);\nconst IDS = { laurent: [5066], christophe: [5069], axel: [9965, 5198] };\nconst t = String(i.technicien || 'tous').toLowerCase().trim();\nconst role = String(i.role || '');\nconst libre = role === 'admin' || role === 'manager';\nconst moi = String(i.user_id) === '9965' ? [9965, 5198] : [Number(i.user_id)];\nlet techIds = [];\nif (!libre) techIds = moi;\nelse if (t === 'moi') techIds = moi;\nelse if (IDS[t]) techIds = IDS[t];\nreturn [{ json: { date: d.toISODate(), jours, techIds: techIds.map(String), categorie: String(i.categorie || 'tous').toLowerCase().trim() } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-09T09:15:51.211Z"
+}

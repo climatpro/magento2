@@ -1,0 +1,127 @@
+{
+  "active": true,
+  "connections": {
+    "Appel outil": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Todoist - memos",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Todoist - memos": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Filtrer et formater",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-11T05:19:59.158Z",
+  "description": "Outil du bot : mémos vocaux non cochés (Todoist, label memo). Droits dans le code : admin = Laurent ClimatPro + Équipe ; technicien = Équipe + mémos de Laurent partagés avec lui (label à son prénom). Jamais Perso, Holding, Idées. Lecture seule.",
+  "id": "6jYK4PkJgDjs4Zf2",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Outil - Memos",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "64da579d-c03e-43c2-9b73-025c68867416",
+      "name": "Appel outil",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "theme",
+              "type": "string"
+            },
+            {
+              "name": "client",
+              "type": "string"
+            },
+            {
+              "name": "role",
+              "type": "string"
+            },
+            {
+              "name": "nom",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "7294e29e-1ebb-4d42-b785-6831415dee86",
+      "name": "Filtrer et formater",
+      "parameters": {
+        "jsCode": "// Droits fixes dans le code, jamais decides par l IA\nconst e = $('Appel outil').first().json;\nconst role = String(e.role || '').toLowerCase();\nconst P = { climatpro: '6hh423vJrW7RvQQg', equipe: '6hh423vw4vGgHFPw' };\nconst NOMS = { '6hh423vJrW7RvQQg': 'Laurent ClimatPro', '6hh423vw4vGgHFPw': 'Equipe' };\nconst n = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');\nconst tasks = (($input.first().json || {}).results) || [];\nconst estEntretien = t => (t.labels || []).includes('entretien') || /entretien|maintenance|contrat|revision|nettoyage/.test(n(t.content + ' ' + t.description));\n// admin : memos Laurent ClimatPro + Equipe ; technicien : tout Equipe + les memos de Laurent partages avec lui (label a son prenom)\nconst nom = n(e.nom).trim();\nlet vis = tasks.filter(t => t.project_id === P.equipe || (t.project_id === P.climatpro && (role === 'admin' || (!!nom && (t.labels || []).includes(nom)))));\nconst theme = n(e.theme).trim();\nif (theme && theme !== 'tous') vis = vis.filter(t => theme === 'entretien' ? estEntretien(t) : (t.labels || []).includes(theme) || n(t.content + ' ' + t.description).includes(theme));\nconst cl = n(e.client).trim();\nif (cl) vis = vis.filter(t => n(t.content + ' ' + t.description).includes(cl));\nif (!vis.length) return [{ json: { resultat: 'Aucun memo trouve' + (theme && theme !== 'tous' ? ' pour le theme ' + theme : '') + (cl ? ' pour ' + e.client : '') + '.' } }];\nvis.sort((a, b) => String(b.added_at || '').localeCompare(String(a.added_at || '')));\nconst L = vis.slice(0, 40).map(t => {\n  const d = String(t.description || '');\n  const quand = (d.match(/Dicté le (.+?)(?: à | \\()/) || [])[1] || String(t.added_at || '').slice(0, 10);\n  const app = (d.match(/\\((iPhone[^)]*)\\)/i) || [])[1] || '';\n  const qui = /klb/i.test(app) ? 'Laurent' : (app ? app.replace(/iphone\\s*/i, '') : '?');\n  const proche = (d.match(/Client à proximité au moment du mémo : ([^.]+)\\./) || [])[1];\n  const lbl = (t.labels || []).filter(x => !['memo'].includes(x)).join(', ');\n  return '- ' + t.content + ' | note par ' + qui + ' le ' + quand + (t.due ? ' | pour le ' + t.due.date : '') + (proche ? ' | client proche suggere : ' + proche : '') + (lbl ? ' | ' + lbl : '') + ' | ' + (NOMS[t.project_id] || '');\n});\nreturn [{ json: { resultat: 'Memos non coches (' + vis.length + ') :\\n' + L.join('\\n') + (vis.length > 40 ? '\\n(40 premiers seulement)' : '') } }];"
+      },
+      "position": [
+        448,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "todoistApi": {
+          "id": "feB4B4HQds0e2tFC",
+          "name": "Todoist account"
+        }
+      },
+      "id": "7a5cf0f3-ffc7-49ad-8c33-0e4f8c149dbd",
+      "name": "Todoist - memos",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "method": "GET",
+        "nodeCredentialType": "todoistApi",
+        "options": {},
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "label",
+              "value": "memo"
+            },
+            {
+              "name": "limit",
+              "value": "200"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://api.todoist.com/api/v1/tasks"
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-12T17:05:49.793Z"
+}

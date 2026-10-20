@@ -1,0 +1,73 @@
+{
+  "active": false,
+  "connections": {
+    "Lancer": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Supprimer les lignes du test",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-07T21:21:14.010Z",
+  "id": "q6UPtSoYET3qtUd3",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "TEMP - Nettoyage plaud_traites",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "b245f7db-ef06-459b-8404-440eb5e70996",
+      "name": "Lancer",
+      "parameters": {},
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "id": "3ac71660-732c-413c-9def-4a46cf8e4ab1",
+      "name": "Supprimer les lignes du test",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "plaud_traites",
+          "mode": "id",
+          "value": "5iiREQs0cwhwUqhB"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "traite_le",
+              "keyValue": "2026-10-07 23:19"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "deleteRows",
+        "resource": "row"
+      },
+      "position": [
+        260,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-07T21:21:14.010Z"
+}

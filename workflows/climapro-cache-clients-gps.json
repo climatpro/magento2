@@ -1,0 +1,278 @@
+{
+  "active": true,
+  "connections": {
+    "Cache actuel": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Geocoder les nouveaux",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Chaque nuit 3h": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Pages",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Geocoder les nouveaux": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enregistrer",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interfast - clients": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Normaliser",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Normaliser": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Cache actuel",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Pages": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interfast - clients",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-10T17:12:06.515Z",
+  "description": "Chaque nuit : lit les fiches clients Interfast, géocode (IGN, gratuit) les nouvelles ou modifiées et met à jour la table clients_gps utilisée par Climapro - Mémos vocaux pour suggérer le client proche.",
+  "id": "xip9MMQ4aXhfpQ67",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Climapro - Cache clients GPS",
+  "nodeGroups": [
+    {
+      "description": "Toutes les fiches clients et prospects Interfast avec une adresse (fournisseurs exclus)",
+      "id": "9d91e0f4-bb2f-45fd-857f-0218d720f58c",
+      "name": "Lire Interfast",
+      "nodeNames": [
+        "Pages",
+        "Interfast - clients",
+        "Normaliser"
+      ]
+    },
+    {
+      "description": "Géocode via IGN seulement les fiches nouvelles ou modifiées, puis met à jour la table clients_gps",
+      "id": "b5d8aa34-83b2-4721-abf6-1de776b86f77",
+      "name": "Géocoder et stocker",
+      "nodeNames": [
+        "Cache actuel",
+        "Geocoder les nouveaux",
+        "Enregistrer"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "c8be2262-f77b-4ea9-8b3e-9f2b220e74ce",
+      "name": "Cache actuel",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "xrWuLpFXi8qQWU86"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        800,
+        128
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "e6499a04-afc0-449e-ab5b-ea6998e65a3b",
+      "name": "Chaque nuit 3h",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 3,
+              "triggerAtMinute": 7
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "98e1927e-6b77-492b-982b-b42b67420569",
+      "name": "Enregistrer",
+      "parameters": {
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": null
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "xrWuLpFXi8qQWU86"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "client_id",
+              "keyValue": "={{ $json.client_id }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "upsert",
+        "resource": "row"
+      },
+      "position": [
+        1248,
+        128
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "5a399612-ff24-47e0-b2b8-6019ef1e8c77",
+      "name": "Geocoder les nouveaux",
+      "parameters": {
+        "jsCode": "// Geocode uniquement les clients nouveaux ou dont l'adresse a change (Geoplateforme IGN, gratuit)\nconst cache = {};\nfor (const r of $input.all()) { if (r.json && r.json.client_id) cache[r.json.client_id] = r.json; }\nconst clients = $('Normaliser').all().map(i => i.json);\nconst todo = clients.filter(c => { const k = cache[c.client_id]; return !k || k.adresse !== c.adresse || k.nom !== c.nom || k.lat === null || k.lat === undefined; }).slice(0, 1500);\nconst geo = async (c) => {\n  const k = cache[c.client_id];\n  if (k && k.adresse === c.adresse && k.lat !== null && k.lat !== undefined) return Object.assign({}, c, { lat: k.lat, lon: k.lon, score: k.score });\n  for (let essai = 0; essai < 2; essai++) {\n    try {\n      const r = await this.helpers.httpRequest({ method: 'GET', url: 'https://data.geopf.fr/geocodage/search', qs: { q: c.adresse, limit: 1, index: 'address' }, json: true });\n      const f = (r.features || [])[0];\n      if (!f) return Object.assign({}, c, { lat: null, lon: null, score: 0 });\n      return Object.assign({}, c, { lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], score: Math.round((f.properties.score || 0) * 100) / 100 });\n    } catch (e) { /* 429 ou reseau : on retente une fois */ }\n  }\n  return null;\n};\nconst out = [];\nfor (let i = 0; i < todo.length; i += 4) {\n  const lot = await Promise.all(todo.slice(i, i + 4).map(geo));\n  for (const x of lot) if (x) out.push({ json: x });\n}\nreturn out;"
+      },
+      "position": [
+        1024,
+        128
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "6fbea0c2-8296-431e-8a96-464844f3991f",
+      "name": "Interfast - clients",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "method": "GET",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchInterval": 300,
+              "batchSize": 5
+            }
+          }
+        },
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "page",
+              "value": "={{ $json.page }}"
+            },
+            {
+              "name": "size",
+              "value": "100"
+            },
+            {
+              "name": "archived",
+              "value": "false"
+            },
+            {
+              "name": "name",
+              "value": ""
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://app.inter-fast.fr/v1/crm/search"
+      },
+      "position": [
+        496,
+        128
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "b38a55d2-0cde-425a-995d-54490072b14e",
+      "name": "Normaliser",
+      "parameters": {
+        "jsCode": "const out = [];\nconst vus = new Set();\nfor (const it of $input.all()) {\n  for (const c of (it.json.items || [])) {\n    if (vus.has(c.id)) continue;\n    vus.add(c.id);\n    if (String(c.category || '') === 'supplier') continue;\n    const a = c.address || {};\n    if (!a.address || !a.city) continue;\n    const adresse = [a.address, a.zipCode, a.city].map(s => String(s || '').trim()).filter(Boolean).join(' ');\n    out.push({ json: { client_id: String(c.id), ref: String(c.reference || ''), nom: String(c.name || '').trim(), adresse } });\n  }\n}\nreturn out;"
+      },
+      "position": [
+        720,
+        128
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "06f4b0a1-0232-4aea-87bf-c5f59c97617a",
+      "name": "Pages",
+      "parameters": {
+        "jsCode": "return Array.from({ length: 40 }, (_, i) => ({ json: { page: i } }));"
+      },
+      "position": [
+        272,
+        128
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1",
+    "executionTimeout": 900,
+    "timezone": "Europe/Paris"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-10T17:12:10.985Z"
+}

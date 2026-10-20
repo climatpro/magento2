@@ -1,0 +1,651 @@
+{
+  "active": true,
+  "connections": {
+    "Appel": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Entree H",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Choix": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Fiche a lire ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Donnees test": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Entree H",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "En cache ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resultat cache",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Telecharger fiche",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Entree H": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire modeles",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Fiche a lire ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire cache",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Resultat texte",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Fiche lue ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Sauver cache",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Resultat fiche",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire cache": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "En cache ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire fiche (Sonnet)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire modeles": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Choix",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Fiche lue ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Sauver cache": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resultat fiche",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Telecharger fiche": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Type PDF",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Test manuel": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Donnees test",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Type PDF": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire fiche (Sonnet)",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-10T10:18:06.026Z",
+  "description": "Outil du bot : code defaut Hitachi. Table codes_hitachi (appli officielle airCloud Alarm Code) -> libelle par modele -> fiche PDF officielle lue par Sonnet -> cache fiches_hitachi. Lecture seule.",
+  "id": "OOM7WyEjdrj5JnKy",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Outil - Code defaut Hitachi",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "5887b971-a554-47b2-8678-69d89d3ee876",
+      "name": "Appel",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "code",
+              "type": "string"
+            },
+            {
+              "name": "modele",
+              "type": "string"
+            },
+            {
+              "name": "demandeur",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "position": [
+        224,
+        288
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "330a2e3a-75cb-432e-bc44-dbc73ee9afb2",
+      "name": "Choix",
+      "parameters": {
+        "jsCode": "const e = $('Entree H').first().json;\nconst rows = $input.all().map(x => x.json).filter(r => r && r.modele);\nconst C = e.code;\nconst parse = r => { try { return JSON.parse(r.codes); } catch (_) { return []; } };\nconst isList = c => /[a-z]{3,}/i.test(c) && c.length > 5;\nconst nc = c => String(c).toUpperCase().replace(/\\.$/, '');\nconst findCode = list => { const ex = list.filter(([c]) => nc(c) === C); return ex.length ? ex : list.filter(([c]) => nc(c).startsWith(C + '-')); };\nconst url = (p, a) => 'https://hitachi-mp.spelog.com/getalarmcode.aspx?P=' + encodeURIComponent(p) + '&L=FR&A=' + encodeURIComponent(a);\nconst out = o => [{ json: Object.assign({ action: 'texte', absent: false, resultat: '', url: '', cle: '', modele: '', libelle: '', code_fiche: '', liste: false }, o) }];\nconst SRC = 'Source : application officielle Hitachi airCloud Alarm Code (fiches du manuel de service Hitachi).';\nif (!C) return out({ resultat: 'Aucun code fourni : demander le code exact affiche (telecommande, afficheur du groupe exterieur ou clignotements du voyant).' });\nif (!e.pref) {\n  const by = {};\n  rows.forEach(r => findCode(parse(r)).forEach(([c, d]) => { const k = String(d || '').trim(); if (k) (by[k] = by[k] || new Set()).add(r.famille); }));\n  const ent = Object.entries(by).sort((a, b) => b[1].size - a[1].size).slice(0, 8);\n  if (!ent.length) return out({ absent: true, resultat: 'Code ' + C + ' introuvable dans la base Hitachi. Ne devine pas sa signification. Demande le modele exact (plaque) et la lecture exacte du code. Laurent a ete prevenu.' });\n  return out({ resultat: SRC + '\\nModele non fourni : chez Hitachi le libelle et la fiche de depannage dependent du modele. Libelles connus pour le code ' + C + ' (familles de modeles entre crochets) :\\n' + ent.map(([d, s]) => '- ' + d + ' [' + [...s].slice(0, 8).join(', ') + ']').join('\\n') + '\\nDemande le modele exact (plaque signaletique de l unite interieure ou du groupe exterieur) pour obtenir la fiche de depannage officielle avec les verifications.' });\n}\nlet cands = rows.filter(r => r.modele_norm === e.norm);\nif (!cands.length) cands = rows.filter(r => r.modele_norm.startsWith(e.norm) || e.norm.startsWith(r.modele_norm));\nif (!cands.length && rows.length) {\n  const lcp = (a, b) => { let i = 0; while (i < a.length && a[i] === b[i]) i++; return i; };\n  const best = Math.max(...rows.map(r => lcp(r.modele_norm, e.norm)));\n  if (best >= e.pref.length + 2) cands = rows.filter(r => lcp(r.modele_norm, e.norm) === best);\n}\nif (!cands.length) return out({ resultat: 'Modele ' + e.modele + ' non trouve dans la base Hitachi.' + (rows.length ? ' Modeles proches : ' + rows.slice(0, 8).map(r => r.modele).join(', ') + '.' : '') + ' Verifie la plaque : si ce n est pas un Hitachi (ex : un RAS Toshiba), relance avec la bonne marque. Sinon redemande le modele exact.' });\nconst x = cands.map(r => ({ r, hits: findCode(parse(r)), list: parse(r).filter(([c]) => isList(c)) }));\nconst ok = x.filter(y => y.hits.length);\nconst sig = y => y.hits.map(h => h[1]).join(' / ');\nlet pick = null;\nif (ok.length === 1 || (ok.length > 1 && new Set(ok.map(sig)).size === 1)) pick = ok[0];\nif (!pick && ok.length > 1) return out({ resultat: SRC + '\\nPlusieurs modeles Hitachi correspondent a ' + e.modele + ' : ' + ok.slice(0, 8).map(y => y.r.modele).join(', ') + '.\\nLibelles du code ' + C + ' selon le modele :\\n' + [...new Set(ok.map(sig))].slice(0, 5).map(d => '- ' + d).join('\\n') + '\\nDemande le modele exact sur la plaque pour avoir la fiche de depannage complete.' });\nif (pick) {\n  const [c, d] = pick.hits[0];\n  const autres = pick.hits.slice(1).map(h => h[0] + ' : ' + h[1]);\n  return out({ action: 'fiche', modele: pick.r.modele, libelle: 'Code ' + c + ' : ' + d + (autres.length ? '\\nSous-codes : ' + autres.join(' ; ') : ''), url: url(pick.r.p, c), cle: pick.r.p + '|' + c, code_fiche: c, resultat: SRC });\n}\nconst lo = x.find(y => y.list.length);\nif (lo) return out({ action: 'fiche', liste: true, modele: lo.r.modele, libelle: 'Pour ce modele, Hitachi fournit une liste globale des codes (clignotements du voyant ou affichage), pas une fiche par code. Code demande : ' + C + '.', url: url(lo.r.p, lo.list[0][0]), cle: lo.r.p + '|' + C, code_fiche: C, resultat: SRC });\nreturn out({ absent: true, resultat: 'Le code ' + C + ' n existe pas pour le modele ' + cands[0].modele + ' dans la base Hitachi. Codes connus pour ce modele : ' + parse(cands[0]).map(([c]) => c).slice(0, 60).join(', ') + '. Fais verifier la lecture (code complet avec sous-code, afficheur du groupe exterieur ou telecommande). Ne devine pas. Laurent a ete prevenu.' });"
+      },
+      "position": [
+        896,
+        192
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "b4a21d8b-d6a3-4d7c-b714-657bafcfb8fc",
+      "name": "Donnees test",
+      "parameters": {
+        "jsCode": "return [{ json: { code: '02', modele: 'RAS-4HNSKQ', demandeur: 'test' } }];"
+      },
+      "position": [
+        224,
+        96
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "e7c457d6-ba9f-4707-87d7-bda43bf09ff8",
+      "name": "En cache ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.fiche || '' }}",
+              "operator": {
+                "operation": "notEmpty",
+                "singleValue": true,
+                "type": "string"
+              }
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        1568,
+        96
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "28567aa6-c6de-4a9e-a8d8-b380b7d10218",
+      "name": "Entree H",
+      "parameters": {
+        "jsCode": "const i = $input.first().json || {};\nconst raw = String(i.modele || '').toUpperCase().replace(/\\s+/g, '');\nconst norm = raw.replace(/\\.0(?=[A-Z])/g, '').replace(/[^A-Z0-9.]/g, '');\nconst m = /^([A-Z]+\\d+(?:\\.\\d+)?)/.exec(norm);\nconst pref = m ? m[1] : '';\nlet code = String(i.code || '').trim().replace(/^(code|erreur|error|alarme|alarm|defaut|défaut)\\s*/i, '').replace(/\\.$/, '').trim();\nif (/^\\d$/.test(code)) code = '0' + code;\ncode = code.toUpperCase();\nconst sansModele = !pref;\nreturn [{ json: { modele: raw, norm, pref, code, demandeur: String(i.demandeur || ''), col: sansModele ? 'codes' : 'modele_norm', cond: sansModele ? 'ilike' : 'like', val: sansModele ? '%[\"' + (code || 'AUCUN') + '%' : pref + '%' } }];"
+      },
+      "position": [
+        448,
+        192
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "c3cb0f39-a6c1-448b-b857-55d71abe08e1",
+      "name": "Fiche a lire ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.action }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "fiche"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        1120,
+        192
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "bd841049-5336-488c-a7e3-c3d999873516",
+      "name": "Fiche lue ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.ok }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              }
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        2688,
+        192
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "5affe34a-6ab2-4903-9c50-eafa8907ceed",
+      "name": "Lire cache",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "ywfMnHuTuf0KzXRY"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "cle",
+              "keyValue": "={{ $('Choix').first().json.cle }}"
+            }
+          ]
+        },
+        "limit": 1,
+        "matchType": "allConditions",
+        "operation": "get",
+        "resource": "row",
+        "returnAll": false
+      },
+      "position": [
+        1344,
+        96
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "credentials": {
+        "anthropicApi": {
+          "id": "UtZzlYk97MvjuDan",
+          "name": "Anthropic account 2"
+        }
+      },
+      "id": "de0e4481-a184-40b8-9fd2-19a38ca2b092",
+      "name": "Lire fiche (Sonnet)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "binaryPropertyName": "data",
+        "inputType": "binary",
+        "modelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "claude-sonnet-5"
+        },
+        "operation": "analyze",
+        "options": {
+          "maxTokens": 3000
+        },
+        "resource": "document",
+        "simplify": true,
+        "text": "={{ $('Choix').first().json.liste\n? 'Ce document officiel Hitachi est la liste des codes alarme du modele ' + $('Choix').first().json.modele + '. Trouve le code ' + $('Choix').first().json.code_fiche + ' (ce peut etre un nombre de clignotements d un voyant, un affichage ou un code telecommande). Donne en francais : comment il s affiche, sa signification, puis les causes et verifications indiquees par le document. Si le code n y figure pas, commence ta reponse par CODE ABSENT puis liste les codes presents. Texte brut, sans markdown (pas de #, pas de **, pas de tableau). 2000 caracteres maximum. N invente rien.'\n: 'Voici la fiche officielle Hitachi (page du manuel de service) du code ' + $('Choix').first().json.code_fiche + ' pour le modele ' + $('Choix').first().json.modele + '. Resume-la en francais pour un technicien frigoriste, fidelement, sans rien ajouter : 1) signification du code en une phrase ; 2) causes possibles dans l ordre du document, chacune avec le controle a faire puis l action ; garde tels quels les reperes du document (PCB, connecteurs CN, thermistances THM, fusibles, bornes, valeurs de tension, de resistance, de pression, de temperature) ; 3) pieces citees. Si la page contient un tableau de valeurs utile (ex resistance d une thermistance selon la temperature), recopie les valeurs principales. Si la fiche distingue plusieurs modeles ou cas, precise lesquels. Texte brut, sans markdown (pas de #, pas de **, pas de tableau). 2500 caracteres maximum. Si une partie est illisible, dis-le.' }}"
+      },
+      "position": [
+        2240,
+        192
+      ],
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "a5424ca3-6583-4833-b0bd-906aa7de157d",
+      "name": "Lire modeles",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "9fowyCEpKBxx3ui1"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "={{ $json.cond }}",
+              "keyName": "={{ $json.col }}",
+              "keyValue": "={{ $json.val }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        672,
+        192
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "09587478-ecd8-4228-913b-3f88ea06116a",
+      "name": "Preparer",
+      "parameters": {
+        "jsCode": "const c = $('Choix').first().json;\nconst j = $input.first().json || {};\nconst t = (Array.isArray(j.content) ? j.content : []).filter(x => x && x.type === 'text').map(x => x.text).join('\\n').trim();\nconst head = c.resultat + '\\nModele : ' + c.modele + '\\n' + c.libelle;\nif (!t) return [{ json: { ok: false, resultat: head + '\\nLa fiche de depannage officielle n a pas pu etre lue pour le moment. Donne le libelle ci-dessus et propose de reessayer plus tard, ou de passer par l expert diagnostic.' } }];\nreturn [{ json: { ok: true, cle: c.cle, modele: c.modele, code: c.code_fiche, libelle: c.libelle, fiche: t, maj: $now.toFormat('yyyy-MM-dd'), resultat: head + '\\nFiche de depannage officielle Hitachi (resumee) :\\n' + t + '\\nFiche constructeur : a croiser avec le terrain.' } }];"
+      },
+      "position": [
+        2464,
+        192
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "d179a8ac-fa6c-44c9-8852-4cd73cdc1a33",
+      "name": "Resultat cache",
+      "parameters": {
+        "jsCode": "const c = $('Choix').first().json;\nconst f = $input.first().json.fiche;\nreturn [{ json: { absent: false, resultat: c.resultat + '\\nModele : ' + c.modele + '\\n' + c.libelle + '\\nFiche de depannage officielle Hitachi (resumee) :\\n' + f + '\\nFiche constructeur : a croiser avec le terrain.' } }];"
+      },
+      "position": [
+        1792,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "e8a56102-05bf-413b-93ef-beb70ecf9739",
+      "name": "Resultat fiche",
+      "parameters": {
+        "jsCode": "return [{ json: { absent: false, resultat: $('Preparer').first().json.resultat } }];"
+      },
+      "position": [
+        3136,
+        192
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "d1395f4b-5a8d-4ada-a35b-ca45c22ded14",
+      "name": "Resultat texte",
+      "parameters": {
+        "jsCode": "const c = $('Choix').first().json;\nreturn [{ json: { absent: !!c.absent, resultat: c.resultat } }];"
+      },
+      "position": [
+        1344,
+        288
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "78b7c89e-020a-4552-b4d1-586bf13d5bdf",
+      "name": "Sauver cache",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "cle",
+              "id": "cle",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "modele",
+              "id": "modele",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "code",
+              "id": "code",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "libelle",
+              "id": "libelle",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "fiche",
+              "id": "fiche",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "maj",
+              "id": "maj",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "cle": "={{ $json.cle }}",
+            "code": "={{ $json.code }}",
+            "fiche": "={{ $json.fiche }}",
+            "libelle": "={{ $json.libelle }}",
+            "maj": "={{ $json.maj }}",
+            "modele": "={{ $json.modele }}"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "ywfMnHuTuf0KzXRY"
+        },
+        "operation": "insert",
+        "resource": "row"
+      },
+      "position": [
+        2912,
+        128
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "executeOnce": true,
+      "id": "74a958e9-46b6-4731-8efb-25980429d04d",
+      "name": "Telecharger fiche",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "method": "GET",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          },
+          "timeout": 30000
+        },
+        "url": "={{ $('Choix').first().json.url }}"
+      },
+      "position": [
+        1792,
+        192
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3
+    },
+    {
+      "id": "97015a4b-163b-4e33-ba74-337c5b7ad1e8",
+      "name": "Test manuel",
+      "parameters": {},
+      "position": [
+        0,
+        96
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "id": "d5ffbde1-1708-4f31-bc48-d90c73933f61",
+      "name": "Type PDF",
+      "parameters": {
+        "jsCode": "const it = $input.first();\nif (it && it.binary && it.binary.data) { it.binary.data.mimeType = 'application/pdf'; it.binary.data.fileExtension = 'pdf'; it.binary.data.fileName = 'fiche.pdf'; }\nreturn [it];"
+      },
+      "position": [
+        2016,
+        192
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-10T10:19:48.138Z"
+}

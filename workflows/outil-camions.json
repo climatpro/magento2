@@ -1,0 +1,229 @@
+{
+  "active": true,
+  "connections": {
+    "Appel outil": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire RDV": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Calculer camions",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire interventions": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire RDV",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire interventions",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-12T09:37:51.886Z",
+  "description": "Outil du bot : disponibilite des 2 camions (Christophe et Axel) par demi-journee, calcul en code (ensemble ou un seul = 1 camion libre ; chacun de son cote = aucun). Lecture seule.",
+  "id": "NXr5qAKWTQU0nVoY",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Outil - Camions",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "cca7e6a4-e43a-4d95-9701-45469ce24bcf",
+      "name": "Appel outil",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "date_debut",
+              "type": "string"
+            },
+            {
+              "name": "jours",
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "d7a5c412-31c7-401e-8aa0-b7722b238928",
+      "name": "Calculer camions",
+      "parameters": {
+        "jsCode": "// Disponibilite des 2 camions (Christophe et Axel) par demi-journee. Calcul en code, pas d'IA.\n// Regle de Laurent : ensemble ou un seul des deux au travail = 1 camion pris, 1 libre ; chacun de son cote sur la meme demi-journee = aucun camion libre.\nconst req = $('Preparer').first().json;\nfunction items(n) { try { const r = $(n).first().json; return (r && r.ok && r.data && r.data.items) || []; } catch (e) { return []; } }\nconst C = [5069], A = [9965, 5198];\nconst debut = DateTime.fromISO(req.date, { zone: 'Europe/Paris' }).startOf('day');\nconst jours = [];\nfor (let i = 0; i < req.jours; i++) jours.push(debut.plus({ days: i }).toISODate());\nconst J = {};\njours.forEach(d => { J[d] = { matin: [], aprem: [], caler: [] }; });\nconst vus = new Set();\nconst evs = items('Lire interventions').concat(items('Lire RDV'))\n  .filter(ev => { if (vus.has(String(ev.id))) return false; vus.add(String(ev.id)); return ev.lifecycleState !== 'cancelled'; })\n  .sort((a, b) => String(a.start).localeCompare(String(b.start)));\nfor (const ev of evs) {\n  const dt = DateTime.fromISO(ev.start, { zone: 'utc' }).setZone('Europe/Paris');\n  const j = J[dt.toISODate()];\n  if (!j) continue;\n  const ids = (ev.technicianIds || []).map(Number);\n  const c = ids.some(t => C.includes(t)), a = ids.some(t => A.includes(t));\n  if (!c && !a) continue;\n  const m = String(ev.address || '').match(/(\\d{5})[\\s,]+(.+)$/);\n  const lieu = (m ? m[2].trim() : '') || (ev.client && ev.client.name) || String(ev.title || ev.type || 'intervention').slice(0, 40);\n  const e = { qui: c && a ? 'ensemble' : (c ? 'Christophe' : 'Axel'), lieu, heure: dt.toFormat(\"HH'h'mm\") };\n  if (ev.codeHoraire === 4) { j.caler.push(e); continue; }\n  const min = dt.hour * 60 + dt.minute;\n  if (ev.codeHoraire === 3) { j.matin.push(e); j.aprem.push(e); }\n  else if (min < 750) j.matin.push(e);\n  else j.aprem.push(e);\n}\nconst uniq = arr => [...new Set(arr)];\nfunction verdict(liste) {\n  const sc = liste.filter(e => e.qui === 'Christophe'), sa = liste.filter(e => e.qui === 'Axel'), ens = liste.filter(e => e.qui === 'ensemble');\n  if (!liste.length) return '2 camions libres (ni Christophe ni Axel ne travaille)';\n  if (sc.length && sa.length) return 'aucun camion libre (chacun de son cote : Christophe a ' + uniq(sc.map(e => e.lieu)).join(', ') + ', Axel a ' + uniq(sa.map(e => e.lieu)).join(', ') + ')';\n  if (ens.length && !sc.length && !sa.length) return '1 camion libre (Christophe et Axel ensemble a ' + uniq(ens.map(e => e.lieu)).join(', ') + ')';\n  const seul = sc.length ? 'Christophe' : 'Axel';\n  return '1 camion libre (' + seul + ' a ' + uniq(liste.map(e => e.lieu)).join(', ') + (ens.length ? ', en partie avec ' + (seul === 'Christophe' ? 'Axel' : 'Christophe') : ', l autre ne travaille pas') + ')';\n}\nconst lignes = [];\nfor (const d of jours) {\n  const j = J[d];\n  const lib = DateTime.fromISO(d, { zone: 'Europe/Paris' }).setLocale('fr').toFormat('cccc dd/MM');\n  lignes.push(lib + ' :');\n  lignes.push('Matin : ' + verdict(j.matin));\n  lignes.push('Apres-midi : ' + verdict(j.aprem));\n  if (j.caler.length) lignes.push('A caler (non compte, peut prendre un camion) : ' + j.caler.map(e => (e.qui === 'ensemble' ? 'Christophe+Axel' : e.qui) + ' a ' + e.lieu).join(' ; '));\n}\nreturn [{ json: { resultat: 'Disponibilite des camions (calcul automatique, matin jusqu a 12h30) :\\n' + lignes.join('\\n') } }];\n",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        896,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "2f73829d-0acd-4f67-916e-b780500d96b0",
+      "name": "Lire RDV",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "rdv_jour",
+            "params": "={{ ({ date: $('Preparer').item.json.date, jours: $('Preparer').item.json.jours, technicianIds: $('Preparer').item.json.techIds }) }}"
+          }
+        }
+      },
+      "position": [
+        672,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "bebd9ffe-fc78-4ce5-968f-5286bcccc062",
+      "name": "Lire interventions",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "events_jour",
+            "params": "={{ ({ date: $('Preparer').item.json.date, jours: $('Preparer').item.json.jours, technicianIds: $('Preparer').item.json.techIds }) }}"
+          }
+        }
+      },
+      "position": [
+        448,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "4400af3b-1c3e-42c8-a47c-1fc6479f2dbe",
+      "name": "Preparer",
+      "parameters": {
+        "jsCode": "const i = $input.first().json;\nconst now = DateTime.now().setZone('Europe/Paris');\nlet d = DateTime.fromISO(String(i.date_debut || ''), { zone: 'Europe/Paris' });\nif (!d.isValid) d = now;\nconst ecart = d.startOf('day').diff(now.startOf('day'), 'days').days;\nif (ecart < -30 || ecart > 120) d = now;\nconst jours = Math.min(Math.max(parseInt(i.jours || 1, 10) || 1, 1), 14);\nreturn [{ json: { date: d.toISODate(), jours, techIds: ['5069', '9965', '5198'] } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-12T09:37:51.886Z"
+}

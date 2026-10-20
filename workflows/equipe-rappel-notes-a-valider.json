@@ -1,0 +1,147 @@
+{
+  "active": true,
+  "connections": {
+    "Notes en attente": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer rappel",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer rappel": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Envoyer le rappel",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Tous les soirs 18h": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Notes en attente",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-17T18:31:31.476Z",
+  "description": "Tous les soirs a 18h : si des notes du fil equipe attendent la validation de Laurent, le bot lui envoie la liste en prive sur Telegram.",
+  "id": "dsuziDLsOVsyISIk",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Equipe - Rappel notes a valider",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "gQjbmvis03Oi1VtD",
+          "name": "Bot Telegram - groupe climatpro"
+        }
+      },
+      "id": "c41fb231-29e7-42d1-8fb3-b5da64fe17bc",
+      "name": "Envoyer le rappel",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        },
+        "chatId": "1857340429",
+        "operation": "sendMessage",
+        "resource": "message",
+        "text": "={{ $json.texte }}"
+      },
+      "position": [
+        660,
+        0
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "alwaysOutputData": true,
+      "id": "53a2a32c-6efc-413c-92b1-a266e08d95e1",
+      "name": "Notes en attente",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "yUbZrUGS9DHJX3ss"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "statut",
+              "keyValue": "a_valider"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        220,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "ca210837-1c81-43b8-a1be-beebd5949f15",
+      "name": "Preparer rappel",
+      "parameters": {
+        "jsCode": "// Rappel du soir : seulement s'il reste des notes a valider.\nconst rows = $input.all().map(i => i.json).filter(r => r && r.id);\nif (!rows.length) return [];\nconst esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst lignes = rows.slice(0, 15).map(r => '- ' + esc(r.client_nom || 'Client ?') + ' (' + esc(r.date_lot || '') + ')');\nlet t = '<b>⏳ ' + rows.length + ' note' + (rows.length > 1 ? 's' : '') + ' a valider</b>\\n' + lignes.join('\\n');\nif (rows.length > 15) t += '\\n... et ' + (rows.length - 15) + ' autres';\nt += '\\n\\n<i>Remonte dans cette conversation pour les traiter.</i>';\nreturn [{ json: { texte: t } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        440,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "d4cfe448-4a26-4371-ba12-80c9854174ca",
+      "name": "Tous les soirs 18h",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "expression": "0 18 * * *",
+              "field": "cronExpression"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-17T18:31:31.476Z"
+}

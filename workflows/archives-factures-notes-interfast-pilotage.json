@@ -1,0 +1,740 @@
+{
+  "active": false,
+  "connections": {
+    "Calculer pilotage": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire index 3",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Choisir note": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Reecrire note",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Ecrire note Interfast": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resultat",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lancer": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire correspondance",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire correspondance": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire index",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire correspondance 2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire index 2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire fil Interfast": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Choisir note",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire index": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer notes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire index 2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer reformatage",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire index 3": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Stats",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer notes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ecrire note Interfast",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer reformatage": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire fil Interfast",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Reecrire note": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resultat 2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Reformater les notes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire correspondance 2",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Resultat": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Marquer dans le Sheet",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Bilan",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Resultat 2": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Marquer v2",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-19T17:07:01.672Z",
+  "description": "Ecrit dans Interfast la note « Historique ClimatPro avant Interfast » (sans montant, avec liens PDF privés) pour les clients sur ou validés OK dans Correspondance_Interfast, par lots. Marque la colonne note_interfast. Aucune IA.",
+  "id": "rUH5kAAMybl4Z9mk",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Archives factures - Notes Interfast + Pilotage",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "98c0f3a2-b661-4fd5-9a0f-6fc6f987d9bc",
+      "name": "Bilan",
+      "parameters": {
+        "jsCode": "const all = $input.all().map(i => i.json);\nconst err = all.filter(j => !/^ecrite/.test(String(j.note_interfast)));\nreturn [{ json: { total: all.length, ok: all.length - err.length, erreurs: err.length, detail_erreurs: err.slice(0, 30) } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1320,
+        450
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "01950cae-61ee-4a50-9c32-9228c2ed2dcc",
+      "name": "Calculer pilotage",
+      "parameters": {},
+      "position": [
+        0,
+        900
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "id": "58ce3cb3-0027-4db8-9373-4e756cb3e4c0",
+      "name": "Choisir note",
+      "parameters": {
+        "jsCode": "const src = $('Preparer reformatage').all();\nconst out = [];\n$input.all().forEach((it, i) => {\n  const s = src[i].json;\n  const liste = (it.json && it.json.items) || [];\n  const note = liste.find(a => a.type === 'note' && String((a.data && a.data.content) || '').startsWith('Historique ClimatPro avant Interfast') && String(a.data.content).includes(s.premier));\n  if (note) out.push({ json: Object.assign({}, s, { note_id: note.id }) });\n});\nreturn out;",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1100,
+        600
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "39e23eaa-e5dc-4c77-8206-f207fd437d3f",
+      "name": "Ecrire note Interfast",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "jsonBody": "={{ JSON.stringify({ type: \"note\", content: $json.contenu }) }}",
+        "method": "POST",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchInterval": 400,
+              "batchSize": 1
+            }
+          },
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          }
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "={{ \"https://app.inter-fast.fr/v1/client/\" + $json.interfast_id + \"/activities/notes\" }}"
+      },
+      "position": [
+        880,
+        300
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "90b0bd14-d13b-42b4-92d9-1b518d810511",
+      "name": "Lancer",
+      "parameters": {},
+      "position": [
+        0,
+        300
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "id": "c0677c21-ff45-4dae-a930-3154d86f4e7f",
+      "name": "Lire correspondance",
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1qk6RULDlOTXvfAnrbqCh6MAnFK2Kp1-f6v07DUheIXg"
+        },
+        "operation": "read",
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Correspondance_Interfast"
+        }
+      },
+      "position": [
+        220,
+        300
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "id": "47e9b6f6-67a1-4bf9-9022-c5ea167b1e5d",
+      "name": "Lire correspondance 2",
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1qk6RULDlOTXvfAnrbqCh6MAnFK2Kp1-f6v07DUheIXg"
+        },
+        "operation": "read",
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Correspondance_Interfast"
+        }
+      },
+      "position": [
+        220,
+        600
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "ee757d71-c4e5-461e-abe7-948583f697a6",
+      "name": "Lire fil Interfast",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "method": "GET",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchInterval": 300,
+              "batchSize": 1
+            }
+          }
+        },
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "page",
+              "value": "0"
+            },
+            {
+              "name": "size",
+              "value": "50"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "={{ \"https://app.inter-fast.fr/v1/client/\" + $json.interfast_id + \"/activities\" }}"
+      },
+      "position": [
+        880,
+        600
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "executeOnce": true,
+      "id": "669a2411-cde9-488b-93d7-d4258cd6da66",
+      "name": "Lire index",
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1qk6RULDlOTXvfAnrbqCh6MAnFK2Kp1-f6v07DUheIXg"
+        },
+        "operation": "read",
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Feuille 1"
+        }
+      },
+      "position": [
+        440,
+        300
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "executeOnce": true,
+      "id": "6c5bdfcc-4f64-4bc8-af67-54814258c5c7",
+      "name": "Lire index 2",
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1qk6RULDlOTXvfAnrbqCh6MAnFK2Kp1-f6v07DUheIXg"
+        },
+        "operation": "read",
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Feuille 1"
+        }
+      },
+      "position": [
+        440,
+        600
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "id": "4d52107b-2b5a-4f82-9f43-f8675024d5f0",
+      "name": "Lire index 3",
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1qk6RULDlOTXvfAnrbqCh6MAnFK2Kp1-f6v07DUheIXg"
+        },
+        "operation": "read",
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Feuille 1"
+        }
+      },
+      "position": [
+        220,
+        900
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "id": "b8a81992-cb1f-483b-914e-de903f974b31",
+      "name": "Marquer dans le Sheet",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "cle"
+          ],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "cle",
+              "id": "cle",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "note_interfast",
+              "id": "note_interfast",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "cle": "={{ $json.cle }}",
+            "note_interfast": "={{ $json.note_interfast }}"
+          }
+        },
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1qk6RULDlOTXvfAnrbqCh6MAnFK2Kp1-f6v07DUheIXg"
+        },
+        "operation": "update",
+        "options": {
+          "cellFormat": "RAW"
+        },
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Correspondance_Interfast"
+        }
+      },
+      "position": [
+        1320,
+        300
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "id": "a0fc64ce-d48e-4b84-b863-ec31a6037c72",
+      "name": "Marquer v2",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "cle"
+          ],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "cle",
+              "id": "cle",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "note_interfast",
+              "id": "note_interfast",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "cle": "={{ $json.cle }}",
+            "note_interfast": "={{ $json.note_interfast }}"
+          }
+        },
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1qk6RULDlOTXvfAnrbqCh6MAnFK2Kp1-f6v07DUheIXg"
+        },
+        "operation": "update",
+        "options": {
+          "cellFormat": "RAW"
+        },
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Correspondance_Interfast"
+        }
+      },
+      "position": [
+        1760,
+        600
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "id": "a1fac5c1-99f0-4e3b-991f-a39bf1f4d2ac",
+      "name": "Preparer notes",
+      "parameters": {
+        "jsCode": "// Construit la note d'historique (sans aucun montant) pour les clients sur ou valides OK. Aucune IA.\nconst LOT = 2000;\nconst fr = d => { const m = String(d || '').match(/^(\\d{4})-(\\d{2})-(\\d{2})/); return m ? m[3] + '/' + m[2] + '/' + m[1] : ''; };\nconst court = s => { s = String(s || '').replace(/\\s+/g, ' ').trim().replace(/[.;]+$/, ''); return s.length > 120 ? s.slice(0, 117).replace(/\\s+\\S*$/, '') + '...' : s; };\nconst norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/[^A-Z0-9]+/g, ' ').trim();\nfunction construire(fac) {\n  const vus = new Set(); const items = []; const mat = new Map();\n  for (const f of fac) {\n    if (vus.has(f.numero)) continue;\n    vus.add(f.numero);\n    items.push({ t: [fr(f.date_facture), f.numero, court(f.description)].filter(Boolean).join(' - '), lien: f.file_id ? 'https://drive.google.com/file/d/' + f.file_id + '/view' : '' });\n    const m = [f.marque, f.modele].filter(Boolean).join(' ').replace(/\\s+/g, ' ').trim();\n    const k = norm(m);\n    if (k && !mat.has(k)) mat.set(k, m.toUpperCase() === m || m.toLowerCase() === m ? m.toUpperCase() : m);\n  }\n  const cles = [...mat.keys()];\n  const matF = cles.filter(k => !cles.some(o => o !== k && o.startsWith(k + ' '))).map(k => mat.get(k)).slice(0, 8);\n  const n = items.length;\n  let c = 'Historique ClimatPro avant Interfast (archives factures) : ' + n + ' facture' + (n > 1 ? 's' : '') + ' au total';\n  for (const i of items) c += '\\n\\n' + i.t + (i.lien ? '\\n' + i.lien : '');\n  if (matF.length) c += '\\n\\nMatériel connu : ' + matF.join(', ');\n  return { n, contenu: c };\n}\nconst parCle = {};\nfor (const it of $('Lire index').all()) {\n  const r = it.json || {};\n  if (String(r.statut || '') !== 'ok') continue;\n  const dossier = String(r.dossier_client || '').trim();\n  const fourreTout = !dossier || /ANCIENS CLIENTS|racine/i.test(dossier);\n  const cle = fourreTout ? (dossier || '(racine)') + ' / ' + String(r.client || '').trim() : dossier;\n  (parCle[cle] = parCle[cle] || []).push(r);\n}\nconst out = [];\nfor (const it of $('Lire correspondance').all()) {\n  if (out.length >= LOT) break;\n  const c = it.json || {};\n  const decision = String(c.decision_laurent || '').trim().toUpperCase();\n  if (String(c.note_interfast || '').trim()) continue;\n  if (!String(c.interfast_id || '').trim()) continue;\n  if (decision === 'NON') continue;\n  if (!(decision === 'OK' || (decision === '' && c.statut === 'sur'))) continue;\n  // Garde-fou : fiche Interfast dont le nom est juste une ville (ex : LE CANNET) -> on ne devine pas, sauf OK de Laurent\n  const nomIF = norm(c.interfast_nom);\n  const villesC = String(c.villes || '').split(/[,;\\/]/).map(norm).concat([norm(c.interfast_ville)]).filter(Boolean);\n  if (decision !== 'OK' && villesC.includes(nomIF)) continue;\n  const fac = (parCle[String(c.cle || '').trim()] || []).slice().sort((a, b) => String(a.date_facture).localeCompare(String(b.date_facture)));\n  if (!fac.length) continue;\n  const r = construire(fac);\n  out.push({ json: { cle: c.cle, interfast_id: String(c.interfast_id).trim(), interfast_nom: c.interfast_nom, nb: r.n, contenu: r.contenu } });\n}\nreturn out;",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        660,
+        300
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "f11a9740-c261-4966-bc6c-a799a4096ca2",
+      "name": "Preparer reformatage",
+      "parameters": {
+        "jsCode": "// Reecrit les notes deja posees (ecrite ...) au nouveau format. MODE_HTML = cles a tester en HTML.\nconst MODE_HTML = ['NAVIGAIR'];\nconst EXCLURE = ['FREDERIC M FRANCE - LE CANNET'];\nconst fr = d => { const m = String(d || '').match(/^(\\d{4})-(\\d{2})-(\\d{2})/); return m ? m[3] + '/' + m[2] + '/' + m[1] : ''; };\nconst court = s => { s = String(s || '').replace(/\\s+/g, ' ').trim().replace(/[.;]+$/, ''); return s.length > 120 ? s.slice(0, 117).replace(/\\s+\\S*$/, '') + '...' : s; };\nconst norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/[^A-Z0-9]+/g, ' ').trim();\nconst esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nfunction construire(fac, html) {\n  const vus = new Set(); const items = []; const mat = new Map();\n  for (const f of fac) {\n    if (vus.has(f.numero)) continue;\n    vus.add(f.numero);\n    items.push({ num: String(f.numero), t: [fr(f.date_facture), f.numero, court(f.description)].filter(Boolean).join(' - '), lien: f.file_id ? 'https://drive.google.com/file/d/' + f.file_id + '/view' : '' });\n    const m = [f.marque, f.modele].filter(Boolean).join(' ').replace(/\\s+/g, ' ').trim();\n    const k = norm(m);\n    if (k && !mat.has(k)) mat.set(k, m.toUpperCase() === m || m.toLowerCase() === m ? m.toUpperCase() : m);\n  }\n  const cles = [...mat.keys()];\n  const matF = cles.filter(k => !cles.some(o => o !== k && o.startsWith(k + ' '))).map(k => mat.get(k)).slice(0, 8);\n  const n = items.length;\n  const titre = 'Historique ClimatPro avant Interfast (archives factures) : ' + n + ' facture' + (n > 1 ? 's' : '') + ' au total';\n  let c;\n  if (html) {\n    c = '<p><strong>' + esc(titre) + '</strong></p>';\n    for (const i of items) c += '<p>' + esc(i.t) + (i.lien ? '<br><a href=\"' + i.lien + '\" target=\"_blank\">' + i.lien + '</a>' : '') + '</p>';\n    if (matF.length) c += '<p>Matériel connu : ' + esc(matF.join(', ')) + '</p>';\n  } else {\n    c = titre;\n    for (const i of items) c += '\\n\\n' + i.t + (i.lien ? '\\n' + i.lien : '');\n    if (matF.length) c += '\\n\\nMatériel connu : ' + matF.join(', ');\n  }\n  return { n, contenu: c, premier: items.length ? items[0].num : '' };\n}\nconst parCle = {};\nfor (const it of $('Lire index 2').all()) {\n  const r = it.json || {};\n  if (String(r.statut || '') !== 'ok') continue;\n  const dossier = String(r.dossier_client || '').trim();\n  const fourreTout = !dossier || /ANCIENS CLIENTS|racine/i.test(dossier);\n  const cle = fourreTout ? (dossier || '(racine)') + ' / ' + String(r.client || '').trim() : dossier;\n  (parCle[cle] = parCle[cle] || []).push(r);\n}\nconst out = [];\nfor (const it of $('Lire correspondance 2').all()) {\n  const c = it.json || {};\n  const cle = String(c.cle || '').trim();\n  const st = String(c.note_interfast || '').trim();\n  if (!/^ecrite/.test(st) || / v2$/.test(st)) continue;\n  if (EXCLURE.includes(cle)) continue;\n  if (!String(c.interfast_id || '').trim()) continue;\n  const fac = (parCle[cle] || []).slice().sort((a, b) => String(a.date_facture).localeCompare(String(b.date_facture)));\n  if (!fac.length) continue;\n  const html = MODE_HTML.includes(cle);\n  const r = construire(fac, html);\n  out.push({ json: { cle: c.cle, interfast_id: String(c.interfast_id).trim(), nb: r.n, premier: r.premier, contenu: r.contenu, statut_avant: st, html } });\n}\nreturn out;",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        660,
+        600
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "df93ae7c-aea7-4b0c-a4e1-868b36b471ec",
+      "name": "Reecrire note",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "jsonBody": "={{ JSON.stringify({ type: \"note\", content: $json.contenu }) }}",
+        "method": "PUT",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchInterval": 300,
+              "batchSize": 1
+            }
+          },
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          }
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "={{ \"https://app.inter-fast.fr/v1/client/\" + $json.interfast_id + \"/activities/notes/\" + $json.note_id }}"
+      },
+      "position": [
+        1320,
+        600
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "c9b14113-1573-4601-aab4-501161fca92c",
+      "name": "Reformater les notes",
+      "parameters": {},
+      "position": [
+        0,
+        600
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "id": "c0580ea1-09ae-4093-8ddb-fe66ccc121e9",
+      "name": "Resultat",
+      "parameters": {
+        "jsCode": "const src = $('Preparer notes').item.json;\nconst code = Number($json.statusCode || 0);\nconst ok = code >= 200 && code < 300;\nconst jour = $now.setZone('Europe/Paris').toFormat('yyyy-LL-dd');\nreturn { json: { cle: src.cle, note_interfast: ok ? 'ecrite ' + jour : 'ERREUR ' + code } };",
+        "language": "javaScript",
+        "mode": "runOnceForEachItem"
+      },
+      "position": [
+        1100,
+        300
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "8a52e612-ac66-4e0b-b178-af06e4c92579",
+      "name": "Resultat 2",
+      "parameters": {
+        "jsCode": "const src = $('Choisir note').item.json;\nconst code = Number($json.statusCode || 0);\nconst ok = code >= 200 && code < 300;\nreturn { json: { cle: src.cle, note_interfast: ok ? src.statut_avant + ' v2' + (src.html ? ' html' : '') : src.statut_avant + ' ERREUR v2 ' + code } };",
+        "language": "javaScript",
+        "mode": "runOnceForEachItem"
+      },
+      "position": [
+        1540,
+        600
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "4f09cd53-d51c-427d-bceb-c8377480be78",
+      "name": "Stats",
+      "parameters": {
+        "jsCode": "const num = v => { const x = parseFloat(String(v == null ? '' : v).replace(/\\s/g, '').replace(',', '.')); return isFinite(x) ? x : null; };\nconst norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim() || '(vide)';\nconst med = a => { if (!a.length) return null; const b = a.slice().sort((x, y) => x - y); const m = Math.floor(b.length / 2); return Math.round(b.length % 2 ? b[m] : (b[m - 1] + b[m]) / 2); };\nconst types = {}; const an = {}; const anType = {}; const mois = {}; const anMois = {}; const pu = {};\nlet sansMontant = 0, sansDate = 0, n = 0;\nconst add = (o, k, f) => { o[k] = o[k] || f(); return o[k]; };\nfor (const it of $input.all()) {\n  const r = it.json || {};\n  if (String(r.statut || '') !== 'ok') continue;\n  n++;\n  const m = String(r.date_facture || '').match(/^(\\d{4})-(\\d{2})/);\n  if (!m) { sansDate++; continue; }\n  const y = m[1], mo = m[2];\n  const av = String(r.type_doc || '').toUpperCase().startsWith('AV') || /^AV/i.test(String(r.numero || ''));\n  let ht = num(r.montant_ht);\n  if (ht == null) { sansMontant++; ht = 0; }\n  const signe = av ? -Math.abs(ht) : ht;\n  const t = norm(r.type_intervention);\n  const T = add(types, t, () => ({ nb: 0, ca: 0 })); T.nb++; T.ca += signe;\n  const A = add(an, y, () => ({ fa: 0, av: 0, ca: 0, paniers: [] }));\n  if (av) A.av++; else { A.fa++; if (ht > 0) A.paniers.push(ht); }\n  A.ca += signe;\n  if (!av) {\n    const AT = add(anType, y + '|' + t, () => ({ nb: 0, ca: 0, p: [] })); AT.nb++; AT.ca += ht; if (ht > 0) AT.p.push(ht);\n    const M = add(mois, mo + '|' + t, () => ({ nb: 0, ca: 0 })); M.nb++; M.ca += ht;\n    const AM = add(anMois, y + '-' + mo, () => ({ nb: 0, ca: 0 })); AM.nb++; AM.ca += ht;\n    const u = num(r.nb_unites_int), kw = num(r.puissance_kw);\n    if (ht > 0 && u && u > 0) { const P = add(pu, y + '|' + t, () => ({ parUnite: [], parKw: [] })); P.parUnite.push(ht / u); if (kw && kw > 0) P.parKw.push(ht / kw); }\n  }\n}\nconst R = x => Math.round(x);\nreturn [{ json: {\n  n, sansMontant, sansDate,\n  types: Object.entries(types).sort((a, b) => b[1].nb - a[1].nb).map(([k, v]) => ({ type: k, nb: v.nb, ca: R(v.ca) })),\n  annees: Object.keys(an).sort().map(y => ({ an: y, fa: an[y].fa, av: an[y].av, ca: R(an[y].ca), panier_med: med(an[y].paniers) })),\n  anType: Object.keys(anType).sort().map(k => { const [y, t] = k.split('|'); const v = anType[k]; return { an: y, type: t, nb: v.nb, ca: R(v.ca), med: med(v.p) }; }),\n  mois: Object.keys(mois).sort().map(k => { const [mo, t] = k.split('|'); return { mois: mo, type: t, nb: mois[k].nb, ca: R(mois[k].ca) }; }),\n  anMois: Object.keys(anMois).sort().map(k => ({ m: k, nb: anMois[k].nb, ca: R(anMois[k].ca) })),\n  prixUnitaires: Object.keys(pu).sort().map(k => { const [y, t] = k.split('|'); const v = pu[k]; return { an: y, type: t, n: v.parUnite.length, med_par_unite: med(v.parUnite), n_kw: v.parKw.length, med_par_kw: med(v.parKw) }; })\n} }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        440,
+        900
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-20T05:52:50.497Z"
+}

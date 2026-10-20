@@ -1,0 +1,2814 @@
+[
+ {
+  "id": "8GN2GvWHNhjTrew5",
+  "name": "Archives factures - Correspondance Interfast",
+  "slug": "archives-factures-correspondance-interfast",
+  "active": false,
+  "trigger": "manuel (Manual Trigger 'Lancer')",
+  "role": "Rapproche les clients des anciennes factures (Sheet Index-Factures-ClimatPro) avec les fiches clients Interfast et écrit les nouveaux groupes dans l'onglet Correspondance_Interfast (sur / a_verifier / absent).",
+  "services": [
+   "Interfast",
+   "Google Sheets"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "GgJ5wsyGIUSWY0cN",
+    "name": "Interfast API",
+    "type": "httpHeaderAuth"
+   },
+   {
+    "id": "fKAETwT6ij09juV8",
+    "name": "Google Sheets account",
+    "type": "googleSheetsOAuth2Api"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "pagination Interfast figée 32+12 pages x 100 (clients au-delà ignorés)",
+   "HTTP Clients Interfast onError continueRegularOutput (page manquante silencieuse, garde-fou < 500 clients)",
+   "rapprochement heuristique (Levenshtein 1, préfixes) : faux positifs possibles",
+   "ID Google Sheet et onglets en dur",
+   "append autoMapInputData dépendant des colonnes du Sheet",
+   "groupes par dossier_client / nom brut : variantes d'orthographe = groupes distincts",
+   "pas de déclencheur automatique, dépend de l'extraction préalable"
+  ]
+ },
+ {
+  "id": "FmosA6XoUHWvgDA5",
+  "name": "Archives factures - Extraction index",
+  "slug": "archives-factures-extraction-index",
+  "active": false,
+  "trigger": "cron toutes les 30 min (Schedule Trigger, Europe/Paris)",
+  "role": "Lit par lots les PDF de factures d'avant Interfast dans Drive, les fait extraire par Claude Haiku et remplit le Google Sheet Index-Factures-ClimatPro sans doublon.",
+  "services": [
+   "Google Drive",
+   "Anthropic",
+   "Google Sheets"
+  ],
+  "models": [
+   {
+    "node": "Extraire (Haiku)",
+    "provider": "anthropic",
+    "model": "claude-haiku-4-5-20251001"
+   }
+  ],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "54fd9ApHaDydoOJv",
+    "name": "Google Drive account 2",
+    "type": "googleDriveOAuth2Api"
+   },
+   {
+    "id": "GfYoRA9p0AV4WXlD",
+    "name": "Anthropic account",
+    "type": "anthropicApi"
+   },
+   {
+    "id": "fKAETwT6ij09juV8",
+    "name": "Google Sheets account",
+    "type": "googleSheetsOAuth2Api"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "fenêtre Drive createdTime figée 2026-10-16T18:00 -> 2026-10-17T09:00",
+   "cron 30 min + lot 900 + Haiku séquentiel : chevauchement d'exécutions et doublons si réactivé",
+   "ID dossier racine Drive, seuil FA 14146 et ID Sheet en dur",
+   "regex nom de fichier ^(FA|AV)[\\s\\-_]*(\\d{2,6}) et filtre Drive name contains",
+   "Telecharger PDF / Extraire (Haiku) onError continue : lignes erreur_lecture non reprises",
+   "modèle claude-haiku-4-5-20251001 (ancienne génération) et credential Anthropic distincte",
+   "saveDataSuccessExecution none",
+   "code Preparer lot dupliqué dans Liste à traiter"
+  ]
+ },
+ {
+  "id": "TVISDTqWACLV6OIw",
+  "name": "Archives factures - Liste à traiter",
+  "slug": "archives-factures-liste-a-traiter",
+  "active": false,
+  "trigger": "cron 0 3 1 1 * (1er janvier 3h, de fait manuel)",
+  "role": "Liste les factures d'archives restant à indexer (dédoublonnées, hors Interfast, hors déjà indexées) et l'écrit dans l'onglet A_traiter du Sheet Index-Factures-ClimatPro.",
+  "services": [
+   "Google Drive",
+   "Google Sheets"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "54fd9ApHaDydoOJv",
+    "name": "Google Drive account 2",
+    "type": "googleDriveOAuth2Api"
+   },
+   {
+    "id": "fKAETwT6ij09juV8",
+    "name": "Google Sheets account",
+    "type": "googleSheetsOAuth2Api"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "cron 0 3 1 1 * tournerait chaque 1er janvier si activé",
+   "append A_traiter sans vidage ni dédup : relance = doublons",
+   "fenêtre Drive figée, ID racine Drive, seuil 14146, ID Sheet en dur",
+   "paramètre lot (99999) non utilisé",
+   "doublon du code Preparer lot de Extraction index"
+  ]
+ },
+ {
+  "id": "rUH5kAAMybl4Z9mk",
+  "name": "Archives factures - Notes Interfast + Pilotage",
+  "slug": "archives-factures-notes-interfast-pilotage",
+  "active": false,
+  "trigger": "manuel (3 Manual Triggers : Lancer / Reformater les notes / Calculer pilotage)",
+  "role": "Écrit (POST) puis reformate (PUT) dans Interfast la note « Historique ClimatPro avant Interfast » des clients validés dans Correspondance_Interfast, marque le Sheet, et calcule des statistiques de pilotage sur l'index des factures.",
+  "services": [
+   "Interfast",
+   "Google Sheets"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "GgJ5wsyGIUSWY0cN",
+    "name": "Interfast API",
+    "type": "httpHeaderAuth"
+   },
+   {
+    "id": "fKAETwT6ij09juV8",
+    "name": "Google Sheets account",
+    "type": "googleSheetsOAuth2Api"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "écriture Interfast (POST/PUT notes) : anti-doublon uniquement via colonne note_interfast du Sheet",
+   "HTTP neverError : erreurs seulement notées ERREUR xxx dans le Sheet",
+   "Lire fil Interfast page 0 size 50 : note non retrouvée si > 50 activités",
+   "Choisir note / Resultat 2 alignés par index src[i]",
+   "MODE_HTML et EXCLURE codés en dur",
+   "LOT 2000 en dur",
+   "node Bilan : sortie morte",
+   "liens Drive privés dans les notes",
+   "branche Stats manipule le CA (sensible)",
+   "ID Sheet en dur dans 7 nodes"
+  ]
+ },
+ {
+  "id": "UdHjR65FGA29FGQ4",
+  "name": "Assistant ClimatPro — Identification Laurent",
+  "slug": "assistant-climatpro-identification-laurent",
+  "active": false,
+  "trigger": "telegram (Telegram Trigger, message)",
+  "role": "Squelette vide (un seul Telegram Trigger, aucune connexion) ayant servi à identifier le chat_id Telegram de Laurent.",
+  "services": [
+   "Telegram"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "thfKrKcwKcCWoR9V",
+    "name": "Telegram account",
+    "type": "telegramApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "workflow vide : code mort, à archiver",
+   "même credential Telegram que Bot - Assistant : conflit de webhook si activé",
+   "pas de description"
+  ]
+ },
+ {
+  "id": "fb86kJwEmjNC5Vcd",
+  "name": "Bot - Assistant",
+  "slug": "bot-assistant",
+  "active": true,
+  "trigger": "telegram (Telegram Trigger, message, privé uniquement)",
+  "role": "Assistant Telegram libre (AI Agent Claude Haiku + 14 outils sous-workflows) pour Laurent et les techniciens : planning, clients, matériel, codes défaut, pièces, prix, mémos, camions ; liste blanche bot_users, quota, alertes admin, journal Sheet.",
+  "services": [
+   "Telegram",
+   "Anthropic",
+   "Google Sheets",
+   "n8n webhook mailto",
+   "Interfast (via outils)"
+  ],
+  "models": [
+   {
+    "node": "Haiku",
+    "provider": "anthropic",
+    "model": "claude-haiku-5-5"
+   }
+  ],
+  "calls": [
+   {
+    "id": "zA9fv7IqJnrBuRRy",
+    "name": "Outil - Planning",
+    "node": "planning"
+   },
+   {
+    "id": "yj2W2NXNAbFRiuN6",
+    "name": "Outil - Fiche client",
+    "node": "fiche_client"
+   },
+   {
+    "id": "FHVtoHPBvB59ExMT",
+    "name": "Outil - Recherche client",
+    "node": "recherche_client"
+   },
+   {
+    "id": "RkGCPcG8e1gI0knk",
+    "name": "Outil - Materiel devis",
+    "node": "materiel_devis"
+   },
+   {
+    "id": "0bCdxnRh9exHqvvM",
+    "name": "Outil - Detail RDV",
+    "node": "detail_rdv"
+   },
+   {
+    "id": "p7VfJ2HTKTctJBsv",
+    "name": "Outil - Dispo Hitachi",
+    "node": "dispo_hitachi"
+   },
+   {
+    "id": "nUxjWTbY2DyKPetM",
+    "name": "Outil - Sonepar",
+    "node": "prix_sonepar"
+   },
+   {
+    "id": "uWkW4FbbnjkmwTXb",
+    "name": "Outil - Code defaut",
+    "node": "code_defaut"
+   },
+   {
+    "id": "4PjuGOfWCDdkuoPq",
+    "name": "Outil - Dispo Toshiba",
+    "node": "dispo_toshiba"
+   },
+   {
+    "id": "LA38f9HqFWwMlXjY",
+    "name": "Outil - Expert diagnostic",
+    "node": "expert_diagnostic"
+   },
+   {
+    "id": "6jYK4PkJgDjs4Zf2",
+    "name": "Outil - Memos",
+    "node": "memos"
+   },
+   {
+    "id": "NvBI84JhjfoUH5FZ",
+    "name": "Outil - Clients sans entretien",
+    "node": "clients_sans_entretien"
+   },
+   {
+    "id": "NXr5qAKWTQU0nVoY",
+    "name": "Outil - Camions",
+    "node": "camions"
+   },
+   {
+    "id": "di2cU3TRSnyS2BdQ",
+    "name": "Outil - Dispo Daikin",
+    "node": "dispo_daikin"
+   },
+   {
+    "id": "",
+    "name": "webhook /webhook/mailto (n8n.climatpro.fr, URL de bouton Telegram)",
+    "node": "Construire bulle copie"
+   }
+  ],
+  "data_tables": [
+   {
+    "id": "MAaqIFX2KBiCvHFa",
+    "name": "bot_users",
+    "mode": "lecture"
+   },
+   {
+    "id": "G8J0dx9EwoyaTfto",
+    "name": "fournisseurs_pieces",
+    "mode": "lecture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "thfKrKcwKcCWoR9V",
+    "name": "Telegram account",
+    "type": "telegramApi"
+   },
+   {
+    "id": "UtZzlYk97MvjuDan",
+    "name": "Anthropic account 2",
+    "type": "anthropicApi"
+   },
+   {
+    "id": "fKAETwT6ij09juV8",
+    "name": "Google Sheets account",
+    "type": "googleSheetsOAuth2Api"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "quota 150/jour dans workflowStaticData (reset au redémarrage), vocaux comptés",
+   "Bilan hebdo cherche 'limite de 30 questions' vs message réel 'limite de 150' : quotas jamais comptés",
+   "Agent onError continue : erreur masquée par message générique ; maxTokens 1024 peut tronquer",
+   "garde-fou regex suppression références/prix dans message distributeur fragile",
+   "URL n8n.climatpro.fr/webhook/mailto et cc contact@climatpro.fr en dur",
+   "détection sujet sensible / refus par regex",
+   "Journal et Lire fournisseurs onError continue : perte silencieuse",
+   "sticky note obsolète (4 outils vs 14)",
+   "14 sous-workflows par ID : suppression = outil absent silencieux",
+   "prompt système ~13k caractères rejoué à chaque itération"
+  ]
+ },
+ {
+  "id": "4ZLozTo8dtEjTUwG",
+  "name": "Bot - Bilan hebdo",
+  "slug": "bot-bilan-hebdo",
+  "active": true,
+  "trigger": "cron 0 20 8 * * 1 (lundi 8h20)",
+  "role": "Chaque lundi, résume l'usage du bot sur 7 jours (questions par personne, hors sujet/sensibles, quotas) depuis le journal Google Sheet et l'envoie en Telegram aux admins de bot_users.",
+  "services": [
+   "Google Sheets",
+   "Telegram"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "MAaqIFX2KBiCvHFa",
+    "name": "bot_users",
+    "mode": "lecture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "fKAETwT6ij09juV8",
+    "name": "Google Sheets account",
+    "type": "googleSheetsOAuth2Api"
+   },
+   {
+    "id": "thfKrKcwKcCWoR9V",
+    "name": "Telegram account",
+    "type": "telegramApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "regex 'limite de 30 questions' vs message réel 'limite de 150' : quotas jamais comptés",
+   "pas de timezone dans les settings (cron dépend de l'instance)",
+   "lecture intégrale du journal à chaque run",
+   "détection sensible/refus par regex dupliquée du Bot - Assistant",
+   "onglet ciblé par gid 'Untitled'",
+   "Lire journal alwaysOutputData : journal vide = bilan sans alerte"
+  ]
+ },
+ {
+  "id": "Lw8Dv81qmxIMwXVI",
+  "name": "Bot - Brief 18h",
+  "slug": "bot-brief-18h--Lw8Dv81qmxIMwXVI",
+  "active": false,
+  "trigger": "cron quotidien 18h00 (Schedule Trigger days) + manuel",
+  "role": "V1 obsolète du brief du soir : interventions Interfast de J+1 enrichies (intervention, client, devis, matériel) envoyées en Telegram à un chat_id fixe (Laurent), sans IA.",
+  "services": [
+   "Interfast (via Interfast - Lecture V1 MOZo7wkYxjOghKVZ)",
+   "Telegram"
+  ],
+  "models": [],
+  "calls": [
+   {
+    "id": "MOZo7wkYxjOghKVZ",
+    "name": "Interfast - Lecture",
+    "node": "Interfast - events J+1"
+   },
+   {
+    "id": "MOZo7wkYxjOghKVZ",
+    "name": "Interfast - Lecture",
+    "node": "Interfast - detail intervention"
+   },
+   {
+    "id": "MOZo7wkYxjOghKVZ",
+    "name": "Interfast - Lecture",
+    "node": "Interfast - fiche client"
+   },
+   {
+    "id": "MOZo7wkYxjOghKVZ",
+    "name": "Interfast - Lecture",
+    "node": "Interfast - recherche devis"
+   },
+   {
+    "id": "MOZo7wkYxjOghKVZ",
+    "name": "Interfast - Lecture",
+    "node": "Interfast - detail devis"
+   }
+  ],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "thfKrKcwKcCWoR9V",
+    "name": "Telegram account",
+    "type": "telegramApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "doublon obsolète de Bot - Brief 18h ZivtrXedkHo5phMD (actif)",
+   "CHAT_ID 1857340429 en dur",
+   "sous-workflow MOZo7wkYxjOghKVZ (Interfast - Lecture V1, inactif) sans nom en cache ; homonyme de Qgn9xL6dGSAcq4Zv avec interface différente",
+   "fusions par index après Execute Workflow onError continue",
+   "events count 100 sans pagination",
+   "regex devis DC\\d{3,} et code horaire par chiffre des minutes",
+   "pas de timezone ni journal"
+  ]
+ },
+ {
+  "id": "ZivtrXedkHo5phMD",
+  "name": "Bot - Brief 18h",
+  "slug": "bot-brief-18h--ZivtrXedkHo5phMD",
+  "active": true,
+  "trigger": "cron 0 0 18 * * 0-5 (18h dim-ven) + cron 0 15 8 * * 1-5 (8h15 lun-ven), Europe/Paris",
+  "role": "Brief Telegram du soir (interventions du lendemain par technicien, alerte camions et mémo clients aux admins) et récap du matin aux admins, lecture Interfast via sous-workflow, résumé matériel par devis mis en cache (Haiku), journal Sheet.",
+  "services": [
+   "Interfast (via Interfast - Lecture)",
+   "Anthropic",
+   "Telegram",
+   "Google Sheets"
+  ],
+  "models": [
+   {
+    "node": "Résumer matériel (Haiku)",
+    "provider": "anthropic",
+    "model": "claude-haiku-5-5"
+   }
+  ],
+  "calls": [
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire planning"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire RDV"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Chercher devis"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire devis"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire intervention"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire client"
+   },
+   {
+    "id": "99B4KwoLPMWmJuNc",
+    "name": "Outil - Memoire client",
+    "node": "Mémoire client"
+   }
+  ],
+  "data_tables": [
+   {
+    "id": "F66omRHgUbs2aeoL",
+    "name": "cache_devis",
+    "mode": "lecture"
+   },
+   {
+    "id": "F66omRHgUbs2aeoL",
+    "name": "cache_devis",
+    "mode": "ecriture"
+   },
+   {
+    "id": "MAaqIFX2KBiCvHFa",
+    "name": "bot_users",
+    "mode": "lecture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "UtZzlYk97MvjuDan",
+    "name": "Anthropic account 2",
+    "type": "anthropicApi"
+   },
+   {
+    "id": "thfKrKcwKcCWoR9V",
+    "name": "Telegram account",
+    "type": "telegramApi"
+   },
+   {
+    "id": "fKAETwT6ij09juV8",
+    "name": "Google Sheets account",
+    "type": "googleSheetsOAuth2Api"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "IDs techniciens en dur (5198, 9965, 5066, 5069) et remap Julien -> Axel",
+   "ordre d'exécution cache -> brief dépend de l'ordre des connexions v1",
+   "cache_devis jamais rafraîchi pour statut ok",
+   "Préparer interventions throw si Interfast KO : aucune alerte",
+   "Lire client / Mémoire client appariés par item après onError continue",
+   "logique vendredi -> lundi dupliquée 4 fois + rustines regex",
+   "cron du soir inclut dimanche (admins seulement)",
+   "journal Sheet contient téléphones et notes clients",
+   "troncature à 4000 caractères sans multi-messages",
+   "sticky note partiellement obsolète"
+  ]
+ },
+ {
+  "id": "39jFHOalFexDqKDq",
+  "name": "Bot - Questions (V2)",
+  "slug": "bot-questions-v2",
+  "active": false,
+  "trigger": "telegram (Telegram Trigger, message)",
+  "role": "Bot Telegram minimal (prochain RDV, téléphone, adresse) : Haiku classe l'intention, le code lit Interfast via Interfast - Lecture et répond, journal Sheet ; remplacé par Bot - Assistant.",
+  "services": [
+   "Telegram",
+   "Anthropic",
+   "Interfast (via Interfast - Lecture)",
+   "Google Sheets"
+  ],
+  "models": [
+   {
+    "node": "Comprendre la question",
+    "provider": "anthropic",
+    "model": "claude-haiku-5-5"
+   }
+  ],
+  "calls": [
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire interventions du jour"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire RDV du jour"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire client"
+   }
+  ],
+  "data_tables": [
+   {
+    "id": "MAaqIFX2KBiCvHFa",
+    "name": "bot_users",
+    "mode": "lecture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "thfKrKcwKcCWoR9V",
+    "name": "Telegram account",
+    "type": "telegramApi"
+   },
+   {
+    "id": "UtZzlYk97MvjuDan",
+    "name": "Anthropic account 2",
+    "type": "anthropicApi"
+   },
+   {
+    "id": "fKAETwT6ij09juV8",
+    "name": "Google Sheets account",
+    "type": "googleSheetsOAuth2Api"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "obsolète, remplacé par Bot - Assistant ; même credential Telegram (conflit webhook si réactivé)",
+   "pas de quota",
+   "Comprendre la question onError continue : intention 'autre' silencieuse",
+   "Lire client appelé même sans clientId",
+   "RDV au nom de Julien non remontés pour Axel",
+   "sticky note obsolète",
+   "journal Sheet contient téléphones clients"
+  ]
+ },
+ {
+  "id": "EQvQIgDjOe2gq98m",
+  "name": "Claude - Pieces detachees",
+  "slug": "claude-pieces-detachees",
+  "active": false,
+  "trigger": "webhook POST /webhook/pieces-detachees (cle x-cle verifiee dans le code)",
+  "role": "Passerelle pour Claude vers les outils de dispo pieces Toshiba/Hitachi (role admin), lecture seule.",
+  "services": [],
+  "models": [],
+  "calls": [
+   {
+    "id": "4PjuGOfWCDdkuoPq",
+    "name": "Outil - Dispo Toshiba",
+    "node": "Outil Toshiba"
+   },
+   {
+    "id": "p7VfJ2HTKTctJBsv",
+    "name": "Outil - Dispo Hitachi",
+    "node": "Outil Hitachi"
+   }
+  ],
+  "data_tables": [],
+  "credentials": [],
+  "webhook_paths": [
+   "pieces-detachees"
+  ],
+  "fragile": [
+   "Cle x-cle en dur dans le code du node Entree (retiree de l'export), partagee avec Outil - Sonepar",
+   "Webhook sans authentification n8n",
+   "Workflow inactif",
+   "Erreurs renvoyees en HTTP 200",
+   "responseMode lastNode : seul le premier item est renvoye",
+   "Role admin force pour tout appelant",
+   "Aucun onError/timeout sur les Execute Workflow"
+  ]
+ },
+ {
+  "id": "qVSGol88bMMOGOKf",
+  "name": "Claude - SCAN vers MAIL pour PJ",
+  "slug": "claude-scan-vers-mail-pour-pj",
+  "active": false,
+  "trigger": "webhook POST /webhook/claude-envoi-fichier (sans authentification)",
+  "role": "Telecharge un fichier Drive et l'envoie par Gmail (mode send) ou cree un brouillon Gmail avec PJ.",
+  "services": [
+   "Google Drive",
+   "Gmail"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "54fd9ApHaDydoOJv",
+    "name": "Google Drive account 2",
+    "type": "googleDriveOAuth2Api"
+   },
+   {
+    "id": "QkVJEJmojKI4yW63",
+    "name": "Gmail account",
+    "type": "gmailOAuth2"
+   }
+  ],
+  "webhook_paths": [
+   "claude-envoi-fichier"
+  ],
+  "fragile": [
+   "Webhook public sans aucune authentification : envoi de mail depuis la boite ClimatPro par quiconque connait l'URL",
+   "Workflow inactif",
+   "Node Gmail - Envoyer : PJ declaree avec un objet vide (attachmentsBinary [{}]) : mail probablement envoye sans PJ",
+   "Aucune validation du corps ni onError",
+   "Pas de description",
+   "binaryMode separate"
+  ]
+ },
+ {
+  "id": "xip9MMQ4aXhfpQ67",
+  "name": "Climapro - Cache clients GPS",
+  "slug": "climapro-cache-clients-gps",
+  "active": true,
+  "trigger": "cron 3h07 quotidien (Europe/Paris)",
+  "role": "Chaque nuit, lit les fiches clients Interfast, geocode via IGN les nouvelles/modifiees et met a jour la table clients_gps.",
+  "services": [
+   "Interfast",
+   "IGN"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "xrWuLpFXi8qQWU86",
+    "name": "clients_gps",
+    "mode": "lecture"
+   },
+   {
+    "id": "xrWuLpFXi8qQWU86",
+    "name": "clients_gps",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "GgJ5wsyGIUSWY0cN",
+    "name": "Interfast API",
+    "type": "httpHeaderAuth"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "Pagination limitee 40 pages x 100 = 4000 fiches",
+   "onError continueRegularOutput sur Interfast (pages perdues en silence)",
+   "Plafond 1500 geocodages par nuit, echecs IGN sautes sans log",
+   "Fiches sans resultat IGN (lat null) re-geocodees chaque nuit",
+   "Geocodage via this.helpers.httpRequest dans un node Code, sans rate-limit",
+   "executionTimeout 900 s",
+   "Table jamais purgee des clients archives",
+   "Nom du node 'Chaque nuit 3h' vs 3h07 reel"
+  ]
+ },
+ {
+  "id": "H7muVNYi1nx8vEFs",
+  "name": "Climapro - Clients sans entretien",
+  "slug": "climapro-clients-sans-entretien",
+  "active": true,
+  "trigger": "cron 3h22 quotidien (Europe/Paris)",
+  "role": "Chaque nuit, relit toutes les interventions Interfast et liste dans la table clients_sans_entretien les clients avec une pose depuis 6 mois ou plus sans entretien (hors contrat, hors entretien planifie).",
+  "services": [
+   "Interfast"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "wdM1D4E3ZOAmhvoy",
+    "name": "clients_sans_entretien",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "GgJ5wsyGIUSWY0cN",
+    "name": "Interfast API",
+    "type": "httpHeaderAuth"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "Pagination limitee 40 pages x 100 = 4000 interventions depuis 2018, tri croissant : les plus recentes manquent en premier",
+   "onError continueRegularOutput sur Interfast",
+   "Classification par regex sur type/titre ; 'Toshiba' exclu en dur",
+   "Upsert sans suppression : les lignes perimees restent, filtre sur maj a la charge du lecteur",
+   "Seuils en dur (6 mois, 18 mois contrat, +13 mois)",
+   "Aucune alerte si resultat vide"
+  ]
+ },
+ {
+  "id": "9eDmOWAeUc9LwYlM",
+  "name": "Climapro - Devis acceptes par mail",
+  "slug": "climapro-devis-acceptes-par-mail",
+  "active": true,
+  "trigger": "cron toutes les 15 min + webhook GET /webhook/devis-mail-valider (jeton usage unique)",
+  "role": "Detecte dans les mails recus (3 jours) les acceptations de devis via Haiku, verifie le devis dans Interfast, alimente la table devis_a_planifier (source mail) ou envoie un doute a Laurent sur Telegram avec lien de validation ; ferme les lignes mail dont le devis est annule/refuse/solde.",
+  "services": [
+   "Gmail",
+   "Anthropic",
+   "Interfast",
+   "Telegram"
+  ],
+  "models": [
+   {
+    "node": "Analyser (Haiku)",
+    "provider": "anthropic",
+    "model": "claude-haiku-5-5"
+   }
+  ],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "kX8WPJnw2JlUsq51",
+    "name": "devis_mails",
+    "mode": "lecture"
+   },
+   {
+    "id": "kX8WPJnw2JlUsq51",
+    "name": "devis_mails",
+    "mode": "ecriture"
+   },
+   {
+    "id": "0U759buKi8psn4V5",
+    "name": "devis_a_planifier",
+    "mode": "lecture"
+   },
+   {
+    "id": "0U759buKi8psn4V5",
+    "name": "devis_a_planifier",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "QkVJEJmojKI4yW63",
+    "name": "Gmail account",
+    "type": "gmailOAuth2"
+   },
+   {
+    "id": "UtZzlYk97MvjuDan",
+    "name": "Anthropic account 2",
+    "type": "anthropicApi"
+   },
+   {
+    "id": "GgJ5wsyGIUSWY0cN",
+    "name": "Interfast API",
+    "type": "httpHeaderAuth"
+   },
+   {
+    "id": "thfKrKcwKcCWoR9V",
+    "name": "Telegram account",
+    "type": "telegramApi"
+   }
+  ],
+  "webhook_paths": [
+   "devis-mail-valider"
+  ],
+  "fragile": [
+   "Webhook GET devis-mail-valider sans auth, jeton genere par Math.random()",
+   "Description tronquee",
+   "Pre-filtre regex tres large ; domaines internes exclus en dur",
+   "Table devis_mails jamais purgee et relue entierement toutes les 15 min",
+   "Limites en dur 60 listes / 25 traites par passage",
+   "Node 'Devis clos ?' apparie reponses et lignes par index",
+   "onError continueRegularOutput sur Gmail-lire, Haiku, Devis Interfast, Statut devis, Telegram",
+   "Chat Telegram 1857340429 et URL n8n en dur",
+   "Regex CHRISTOPHE/LAURENT dupliquees 3 fois (Decider, Ligne (lien), Devis signes a planifier)",
+   "Pas de timezone dans les settings",
+   "Doute sans devis identifie : ligne devis_mails reste en statut doute pour toujours"
+  ]
+ },
+ {
+  "id": "41rkj8mIgjXlAuat",
+  "name": "Climapro - Devis signes a planifier",
+  "slug": "climapro-devis-signes-a-planifier",
+  "active": true,
+  "trigger": "cron toutes les 30 min (Europe/Paris)",
+  "role": "Liste les devis signes Interfast (toPlan) sans intervention associee dans la table devis_a_planifier lue par le tableau de bord, avec responsable Christophe/Laurent par regex ; lecture seule Interfast, aucune IA.",
+  "services": [
+   "Interfast"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "0U759buKi8psn4V5",
+    "name": "devis_a_planifier",
+    "mode": "lecture"
+   },
+   {
+    "id": "0U759buKi8psn4V5",
+    "name": "devis_a_planifier",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "GgJ5wsyGIUSWY0cN",
+    "name": "Interfast API",
+    "type": "httpHeaderAuth"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "Une seule page de devis (size 100)",
+   "Interventions limitees a 15 pages x 100 sur 21 mois ; si l'appel events echoue (continueRegularOutput) tous les devis reapparaissent non planifies",
+   "Date pivot DEPUIS=2026-01-01 en dur, comparaison de dates en chaines",
+   "Heuristique 'intervention chez le meme client apres signature' peut masquer un devis non planifie",
+   "Seuil facture 80 % en dur",
+   "Regex CHRISTOPHE/LAURENT dupliquees avec Devis acceptes par mail",
+   "saveDataSuccessExecution none : pas d'historique des succes",
+   "Couplage implicite avec Devis acceptes par mail via le champ source de la table"
+  ]
+ },
+ {
+  "id": "awPLiSdGvFBFGK14",
+  "name": "Climapro - Images tableau de bord",
+  "slug": "climapro-images-tableau-de-bord",
+  "active": true,
+  "trigger": "cron toutes les 15 min + declencheur manuel",
+  "role": "Synchronise les images Drive (Tableau de bord ClimatPro > images, icones) vers la mediatheque WordPress climatpro.fr, note l'URL dans la table images_tableau et reecrit le fichier Drive icones-a-creer.md a partir des memos Todoist sans icone.",
+  "services": [
+   "WordPress",
+   "Google Drive",
+   "Todoist"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "gkJQL9liZvE8M2Op",
+    "name": "images_tableau",
+    "mode": "lecture"
+   },
+   {
+    "id": "gkJQL9liZvE8M2Op",
+    "name": "images_tableau",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "d1SeVJUDTXBOklWX",
+    "name": "WordPress climatpro.fr",
+    "type": "httpBasicAuth"
+   },
+   {
+    "id": "54fd9ApHaDydoOJv",
+    "name": "Google Drive account 2",
+    "type": "googleDriveOAuth2Api"
+   },
+   {
+    "id": "feB4B4HQds0e2tFC",
+    "name": "Todoist account",
+    "type": "todoistApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "Ids Drive en dur (dossiers 1c2zZA2AqNarxkwsH62RQUXdK0r_RXqB_, 1uIhYG4xxOMhXr9gCGLnoYrdfGSbV22FU ; fichier 1SHdNeJn1wMEY8QGPYKIGysZ9IeCbVDRK) ; note du node cite un autre id",
+   "Description tronquee",
+   "Pas de pagination Drive (200) ni Todoist (200)",
+   "Verifier WordPress et Envoyer dans WordPress sans onError",
+   "Supprimer ancienne image WP en continueRegularOutput : orphelins possibles",
+   "Mettre a jour icones-a-creer.md en continueRegularOutput",
+   "SVG accepte par le filtre mais refuse par WordPress",
+   "Couplage par convention texte 'Icone : mot' avec Memos vocaux",
+   "Double declencheur manuel + cron : risque de double upload"
+  ]
+ },
+ {
+  "id": "VGZmIR5xPPzUFpMP",
+  "name": "Climapro - Mémos vocaux",
+  "slug": "climapro-memos-vocaux",
+  "active": true,
+  "trigger": "webhook POST /webhook/climapro (headerAuth X-Key)",
+  "role": "Classe un memo vocal iPhone avec Haiku et le range en tache Todoist (bon projet/section/labels) ou en note sur la fiche client Interfast, avec suggestion du client proche (GPS) et confirmation a l'iPhone.",
+  "services": [
+   "Anthropic",
+   "Interfast",
+   "Todoist",
+   "IGN"
+  ],
+  "models": [
+   {
+    "node": "Classer (Haiku)",
+    "provider": "anthropic",
+    "model": "claude-haiku-4-5-20251001"
+   }
+  ],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "xrWuLpFXi8qQWU86",
+    "name": "clients_gps",
+    "mode": "lecture"
+   },
+   {
+    "id": "gkJQL9liZvE8M2Op",
+    "name": "images_tableau",
+    "mode": "lecture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "TzXvxzRIPrc4mWME",
+    "name": "Climapro X-Key",
+    "type": "httpHeaderAuth"
+   },
+   {
+    "id": "UtZzlYk97MvjuDan",
+    "name": "Anthropic account 2",
+    "type": "anthropicApi"
+   },
+   {
+    "id": "GgJ5wsyGIUSWY0cN",
+    "name": "Interfast API",
+    "type": "httpHeaderAuth"
+   },
+   {
+    "id": "feB4B4HQds0e2tFC",
+    "name": "Todoist account",
+    "type": "todoistApi"
+   }
+  ],
+  "webhook_paths": [
+   "climapro"
+  ],
+  "fragile": [
+   "Ecriture Interfast (POST /v1/client/{id}/activities/notes)",
+   "Identite de Laurent deduite du nom d'appareil 'iphone klb' en dur",
+   "Ids Todoist projets/sections en dur dupliques dans Router, Theme, Films et Ranger memo",
+   "Adresses personnelles et infos privees en dur dans le code et le prompt",
+   "Prompt systeme reparti sur deux nodes (Preparer + Precisions commande)",
+   "Haiku en echec -> tout en 'A trier' sans erreur explicite",
+   "Geocoder le lieu appele meme avec lat/lon fournis ; continueRegularOutput/alwaysOutputData partout",
+   "Correspondance client Interfast par nom, candidat unique exige",
+   "Modele claude-haiku-4-5-20251001 plus ancien que claude-haiku-5-5 des autres workflows",
+   "Pas de timezone dans les settings"
+  ]
+ },
+ {
+  "id": "WioaHhSBgYJ2EbmU",
+  "name": "Climapro - Ranger mémo (pro ou perso)",
+  "slug": "climapro-ranger-memo-pro-ou-perso",
+  "active": true,
+  "trigger": "webhook POST /webhook/climapro-ranger (headerAuth X-Key)",
+  "role": "Range le dernier memo Todoist marque pro-ou-perso dans Perso, Equipe ClimatPro (ou Commandes materiel) ou Laurent ClimatPro selon la reponse du menu iPhone.",
+  "services": [
+   "Todoist"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "TzXvxzRIPrc4mWME",
+    "name": "Climapro X-Key",
+    "type": "httpHeaderAuth"
+   },
+   {
+    "id": "feB4B4HQds0e2tFC",
+    "name": "Todoist account",
+    "type": "todoistApi"
+   }
+  ],
+  "webhook_paths": [
+   "climapro-ranger"
+  ],
+  "fragile": [
+   "Ids projets/sections Todoist en dur, dupliques avec Memos vocaux",
+   "Choisit le dernier memo par added_at : mauvais memo possible si plusieurs en attente",
+   "continueRegularOutput sur GET tasks : Todoist indisponible -> 'Aucun memo en attente'",
+   "Update puis move sans transaction : label retire meme si le move echoue",
+   "Mettre a jour / Deplacer sans onError : erreur brute renvoyee a l'iPhone",
+   "Choix interprete par regex, defaut Perso sans avertissement"
+  ]
+ },
+ {
+  "id": "Sfax1FXhgLXoeyLN",
+  "name": "Equipe - Archiviste",
+  "slug": "equipe-archiviste",
+  "active": true,
+  "trigger": "telegram (bot @Team_ClimatPro_bot, updates message + callback_query)",
+  "role": "Bot muet du groupe Telegram ClimatPro Equipe : archive chaque message dans la table equipe_messages, range les photos dans Drive (fil-equipe-photos) et delegue callbacks/messages prives a Equipe - Validation notes.",
+  "services": [
+   "Telegram",
+   "Google Drive"
+  ],
+  "models": [],
+  "calls": [
+   {
+    "id": "7NeZSKB3GXm3tXOB",
+    "name": "Equipe - Validation notes",
+    "node": "Valider une note"
+   }
+  ],
+  "data_tables": [
+   {
+    "id": "MAaqIFX2KBiCvHFa",
+    "name": "",
+    "mode": "lecture"
+   },
+   {
+    "id": "JtuuDgi9yHe84lHj",
+    "name": "equipe_messages",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "gQjbmvis03Oi1VtD",
+    "name": "Bot Telegram - groupe climatpro",
+    "type": "telegramApi"
+   },
+   {
+    "id": "54fd9ApHaDydoOJv",
+    "name": "Google Drive account 2",
+    "type": "googleDriveOAuth2Api"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "Point d'entree unique du bot Telegram : doit rester actif pour Equipe - Validation notes",
+   "Sous-workflow appele sans attente (waitForSubWorkflow false) : erreurs invisibles",
+   "Id dossier Drive en dur ; nom de fichier toujours .jpg et mimeType force image/jpeg",
+   "Telecharger photo / Ranger photo en continueRegularOutput : photo_drive_id vide ou errone en cas d'echec",
+   "Traite uniquement le premier item",
+   "Pas de deduplication sur tg_message_id",
+   "Vocaux/videos/documents non archives (type seulement) ; texte tronque a 4000",
+   "Nom de la table utilisateurs (MAaqIFX2KBiCvHFa) non visible"
+  ]
+ },
+ {
+  "id": "2vzK7iVCvfsZLzhE",
+  "name": "Equipe - Fil (tableau)",
+  "slug": "equipe-fil-tableau",
+  "active": true,
+  "trigger": "webhooks GET /webhook/equipe-fil, POST /webhook/equipe-envoyer, GET /webhook/equipe-photo",
+  "role": "Backend du Fil equipe du tableau de bord : lecture des 40 derniers messages, publication texte/photo dans le groupe Telegram au nom du membre (jeton HMAC fil.v1), photos Drive via lien signe photo.v1.",
+  "services": [
+   "Telegram",
+   "Google Drive",
+   "Data Tables n8n"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "ZS80JIsncc2f3ZED",
+    "name": "",
+    "mode": "lecture"
+   },
+   {
+    "id": "D0StwthqUQF0nV7Z",
+    "name": "",
+    "mode": "lecture"
+   },
+   {
+    "id": "JtuuDgi9yHe84lHj",
+    "name": "equipe_messages",
+    "mode": "lecture"
+   },
+   {
+    "id": "JtuuDgi9yHe84lHj",
+    "name": "equipe_messages",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "gQjbmvis03Oi1VtD",
+    "name": "Bot Telegram - groupe climatpro",
+    "type": "telegramApi"
+   },
+   {
+    "id": "54fd9ApHaDydoOJv",
+    "name": "Google Drive account 2",
+    "type": "googleDriveOAuth2Api"
+   }
+  ],
+  "webhook_paths": [
+   "equipe-fil",
+   "equipe-envoyer",
+   "equipe-photo"
+  ],
+  "fragile": [
+   "HMAC-SHA256 reimplemente en JS pur et duplique dans 3 nodes Code",
+   "Secret de signature (cookie_secret) stocke dans une Data Table, pas dans un credential",
+   "CORS Access-Control-Allow-Origin: * sur les 3 webhooks",
+   "chat_id du groupe deduit de la derniere ligne source=telegram : table vide = envoi impossible sans reponse HTTP",
+   "Aucun onError sur les nodes Telegram et Google Drive (timeout cote tableau en cas d'echec)",
+   "URL webhook photo (n8n.climatpro.fr) et id dossier Drive en dur",
+   "Photo base64 jusqu'a 8 000 000 caracteres dans le POST (limite payload n8n)",
+   "Lecture limitee aux 40 dernieres lignes",
+   "Cache-Control 7 jours sur les photos servies"
+  ]
+ },
+ {
+  "id": "SCv8Qb03TbUB56NM",
+  "name": "Equipe - Mail vers groupe Telegram",
+  "slug": "equipe-mail-vers-groupe-telegram",
+  "active": false,
+  "trigger": "cron toutes les 5 min",
+  "role": "Relaie les mails Gmail etiquetes Telegram (Label_37) dans le groupe Telegram equipe (texte + pieces jointes), trace une ligne dans le fil equipe et bascule le libelle vers Telegram-envoye (Label_38).",
+  "services": [
+   "Gmail",
+   "Telegram",
+   "Data Tables n8n"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "JtuuDgi9yHe84lHj",
+    "name": "equipe_messages",
+    "mode": "lecture"
+   },
+   {
+    "id": "JtuuDgi9yHe84lHj",
+    "name": "equipe_messages",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "QkVJEJmojKI4yW63",
+    "name": "Gmail account",
+    "type": "gmailOAuth2"
+   },
+   {
+    "id": "gQjbmvis03Oi1VtD",
+    "name": "Bot Telegram - groupe climatpro",
+    "type": "telegramApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "Jamais publie (activeVersionId null), inactif",
+   "Identifiants de libelles Gmail en dur (Label_37, Label_38)",
+   "Bascule des libelles independante du succes des envois Telegram : mail perdu si l'envoi echoue",
+   "onError continueRegularOutput sur Publier la piece jointe et Enregistrer dans le fil",
+   "Detection des logos par regex nom/taille < 40 Ko",
+   "Taille des pieces jointes parsee depuis la chaine fileSize, seuil 45 Mo",
+   "Coupure du corps sur regex RGPD/disclaimer",
+   "Limite 10 mails par passage ; exception si aucune ligne telegram dans la table"
+  ]
+ },
+ {
+  "id": "aG1bAfDj6ErD5IOQ",
+  "name": "Equipe - Notes Interfast",
+  "slug": "equipe-notes-interfast",
+  "active": true,
+  "trigger": "cron toutes les 5 min",
+  "role": "Haiku analyse le lot de messages non traites du fil equipe (avec le planning Interfast du jour) : notes client envoyees a Laurent pour validation Telegram avant ecriture Interfast, demandes de materiel creees dans Todoist sans doublon.",
+  "services": [
+   "Interfast",
+   "Anthropic",
+   "Telegram",
+   "Todoist",
+   "Data Tables n8n"
+  ],
+  "models": [
+   {
+    "node": "Analyser (Haiku)",
+    "provider": "anthropic",
+    "model": "claude-haiku-5-5"
+   }
+  ],
+  "calls": [
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire planning du jour"
+   }
+  ],
+  "data_tables": [
+   {
+    "id": "JtuuDgi9yHe84lHj",
+    "name": "equipe_messages",
+    "mode": "lecture"
+   },
+   {
+    "id": "JtuuDgi9yHe84lHj",
+    "name": "equipe_messages",
+    "mode": "ecriture"
+   },
+   {
+    "id": "yUbZrUGS9DHJX3ss",
+    "name": "",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "GgJ5wsyGIUSWY0cN",
+    "name": "Interfast API",
+    "type": "httpHeaderAuth"
+   },
+   {
+    "id": "UtZzlYk97MvjuDan",
+    "name": "Anthropic account 2",
+    "type": "anthropicApi"
+   },
+   {
+    "id": "gQjbmvis03Oi1VtD",
+    "name": "Bot Telegram - groupe climatpro",
+    "type": "telegramApi"
+   },
+   {
+    "id": "feB4B4HQds0e2tFC",
+    "name": "Todoist account",
+    "type": "todoistApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "Modele claude-haiku-5-5 et anthropic-version 2023-06-01 en dur dans une expression",
+   "Analyser (Haiku) en onError continue : erreur API = reponse illisible, lot classe (lot illisible) au 2e echec",
+   "Branche directe Interfast (consigner la note) = code mort tant que TOUT_VALIDER = true ; sans onError ; Messages consignes apparie par index",
+   "TOUT_VALIDER et chat_id Laurent 1857340429 en dur",
+   "Recherche client Interfast sur un seul mot (le plus long), 5 resultats : homonymes mal geres",
+   "Alertes Telegram en onError continue : tg_message_id = 0 si echec, validation par reponse impossible",
+   "Lire planning du jour en onError continue",
+   "Dedoublonnage Todoist heuristique >= 60 % de mots communs",
+   "Lot limite a 60 messages, attente 3 min de calme",
+   "Prompt systeme long dans une expression JSON.stringify"
+  ]
+ },
+ {
+  "id": "dsuziDLsOVsyISIk",
+  "name": "Equipe - Rappel notes a valider",
+  "slug": "equipe-rappel-notes-a-valider",
+  "active": true,
+  "trigger": "cron 0 18 * * * (18h quotidien)",
+  "role": "Chaque soir, envoie a Laurent en prive sur Telegram la liste des notes du fil equipe encore au statut a_valider.",
+  "services": [
+   "Telegram",
+   "Data Tables n8n"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "yUbZrUGS9DHJX3ss",
+    "name": "",
+    "mode": "lecture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "gQjbmvis03Oi1VtD",
+    "name": "Bot Telegram - groupe climatpro",
+    "type": "telegramApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "chat_id Laurent 1857340429 en dur",
+   "Fuseau du cron dependant de l'instance n8n",
+   "Pas de onError sur Telegram",
+   "Liste tronquee a 15 lignes"
+  ]
+ },
+ {
+  "id": "7NeZSKB3GXm3tXOB",
+  "name": "Equipe - Validation notes",
+  "slug": "equipe-validation-notes",
+  "active": true,
+  "trigger": "sous-workflow (entree update = objet update Telegram)",
+  "role": "Traite la decision de Laurent sur une note a valider (bouton nv:<id>:ok|no ou reponse nom/id client), ecrit la note sur la fiche client Interfast, met a jour le statut et le message Telegram.",
+  "services": [
+   "Interfast",
+   "Telegram",
+   "Data Tables n8n"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "MAaqIFX2KBiCvHFa",
+    "name": "bot_users",
+    "mode": "lecture"
+   },
+   {
+    "id": "yUbZrUGS9DHJX3ss",
+    "name": "",
+    "mode": "lecture"
+   },
+   {
+    "id": "yUbZrUGS9DHJX3ss",
+    "name": "",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "GgJ5wsyGIUSWY0cN",
+    "name": "Interfast API",
+    "type": "httpHeaderAuth"
+   },
+   {
+    "id": "gQjbmvis03Oi1VtD",
+    "name": "Bot Telegram - groupe climatpro",
+    "type": "telegramApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "MODE_TEST = false et AUTORISES ['406157','405318'] en dur (code mort)",
+   "Seuls les admins de bot_users sont ecoutes : table vide = tout ignore en silence",
+   "Rattachement par tg_message_id suppose unique ; impossible si l'alerte avait echoue (0)",
+   "Recherche client sur le mot le plus long puis prefixe : homonymes mal geres",
+   "Id saisi a la main ecrit sans verification d'existence du client",
+   "POST Interfast en onError continue, detection d'echec via error/statusCode",
+   "Mettre a jour la note filtre note_id || -1 : update sans effet si note introuvable",
+   "Texte edite limite a 3200 caracteres"
+  ]
+ },
+ {
+  "id": "MdI9Kjjo1itBbbXC",
+  "name": "📧 Factures Gmail → Google Drive (ClimatPro) v3 - recup drive",
+  "slug": "factures-gmail-google-drive-climatpro-v3-recup-drive",
+  "active": true,
+  "trigger": "Gmail Trigger (polling 1 min, INBOX, PDF en PJ, to:scan@climatpro.fr ou expediteur externe)",
+  "role": "Analyse chaque PDF recu par e-mail avec un LLM (facture/avoir fournisseur, emetteur, montant, date, numero), rejette les documents emis par ClimatPro, range la facture dans le dossier Drive DEPENSES <MOIS> <ANNEE>, upserte une ligne dans le Sheet de suivi factures et marque l'e-mail lu.",
+  "services": [
+   "Gmail",
+   "Anthropic",
+   "Google Gemini",
+   "Google Drive",
+   "Google Sheets"
+  ],
+  "models": [
+   {
+    "node": "🤖 Claude Haiku - Analyser la facture",
+    "provider": "anthropic",
+    "model": "claude-haiku-5-5"
+   },
+   {
+    "node": "🤖 Gemini - Analyser la facture (version active publiee)",
+    "provider": "google",
+    "model": "gemini-2.5-flash"
+   }
+  ],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "QkVJEJmojKI4yW63",
+    "name": "Gmail account",
+    "type": "gmailOAuth2"
+   },
+   {
+    "id": "GfYoRA9p0AV4WXlD",
+    "name": "Anthropic account",
+    "type": "anthropicApi"
+   },
+   {
+    "id": "Kzyo5YdstGMrLjn6",
+    "name": "Query Auth account",
+    "type": "httpQueryAuth"
+   },
+   {
+    "id": "54fd9ApHaDydoOJv",
+    "name": "Google Drive account 2",
+    "type": "googleDriveOAuth2Api"
+   },
+   {
+    "id": "fKAETwT6ij09juV8",
+    "name": "Google Sheets account",
+    "type": "googleSheetsOAuth2Api"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "brouillon != version publiee (sameAsDraft false) : le passage Gemini -> Claude Haiku du 13/10/2026 n'est pas publie ; en prod c'est Gemini 2.5 Flash avec cle API en query string (httpQueryAuth) qui tourne",
+   "e-mail sans facture reconnue ou en erreur de parsing LLM : jamais marque lu, aucune trace ni alerte ; echec d'upload non retraite",
+   "date_facture par defaut = aujourd'hui si absente (mauvais mois) ; montant par defaut 0,00 dans le nom de fichier",
+   "cle de dedup fournisseur|numero dependante du nom court renvoye par le LLM ; sans numero, pas de dedup inter-mails",
+   "recherche de dossier par name = '...' non echappee, premier resultat ; dossier parent 1qiVL5cq9nCdEFGMCOIsZsiKJEQJdTQrD et ID Sheet en dur ; upload sur My Drive",
+   "pairing $('📧 Gmail - Nouveaux emails').item dans Marquer comme lu apres plusieurs Code nodes (fragile si plusieurs PDF par e-mail)",
+   "PDF base64 dans une chaine JSON stockee dans json (memoire) ; max_tokens 1024",
+   "colonnes Montant HT et Statut jamais renseignees ; Marquer comme lu en onError continueRegularOutput",
+   "doublon fonctionnel partiel avec Tri scans Brother (meme Sheet de suivi)"
+  ]
+ },
+ {
+  "id": "IPXbHTthWpMfQimp",
+  "name": "Import - Codes defaut Toshiba",
+  "slug": "import-codes-defaut-toshiba",
+  "active": true,
+  "trigger": "cron mensuel, le 1er a 06:07",
+  "role": "Scrape la page publique des codes defaut Toshiba France et met a jour par upsert la Data Table codes_defaut (marque Toshiba), sans toucher notes_climatpro.",
+  "services": [
+   "Site fournisseur (espacepro.toshiba-confort.fr)",
+   "Data Tables n8n"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "ko1b5qPW0nF5yYBm",
+    "name": "codes_defaut",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [],
+  "webhook_paths": [],
+  "fragile": [
+   "Extraction par regex sur le HTML de la page Toshiba",
+   "Exception si moins de 100 codes lus, sans notification",
+   "Aucun onError ni alerte",
+   "Upsert ligne par ligne (lent, partiel en cas d'interruption)",
+   "Colonne notes (constructeur) ecrasee a chaque import"
+  ]
+ },
+ {
+  "id": "RYPWWGNG0nmH61VN",
+  "name": "Import - Codes Hitachi (temporaire)",
+  "slug": "import-codes-hitachi-temporaire",
+  "active": false,
+  "trigger": "webhook POST /webhook/import-hitachi-5e7ba5a315866c5e (origine hitachiaircon.com, jeton dans le body)",
+  "role": "Reception temporaire de lignes de codes d'alarme Hitachi en JSON et insertion bulk dans une Data Table.",
+  "services": [
+   "Data Tables n8n"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "9fowyCEpKBxx3ui1",
+    "name": "",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [],
+  "webhook_paths": [
+   "import-hitachi-5e7ba5a315866c5e"
+  ],
+  "fragile": [
+   "Jeton d'authentification en dur dans l'option onlyRunIf du webhook (retire de l'export : <SECRET-RETIRE>)",
+   "Workflow temporaire, inactif, sans description : a archiver",
+   "Insertion sans dedoublonnage",
+   "Aucune validation du contenu des lignes",
+   "Nom de la Data Table cible non visible"
+  ]
+ },
+ {
+  "id": "MOZo7wkYxjOghKVZ",
+  "name": "Interfast - Lecture",
+  "slug": "interfast-lecture--MOZo7wkYxjOghKVZ",
+  "active": false,
+  "trigger": "sous-workflow (entrees path, query)",
+  "role": "Premiere version du sous-workflow de lecture seule Interfast : chemin GET verifie contre une liste blanche, appel authentifie, suppression des champs sensibles.",
+  "services": [
+   "Interfast"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "GgJ5wsyGIUSWY0cN",
+    "name": "Interfast API",
+    "type": "httpHeaderAuth"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "Doublon de nom avec Qgn9xL6dGSAcq4Zv (version active, plus complete) ; inactif, probablement obsolete",
+   "Chemin hors liste blanche = exception chez l'appelant",
+   "HTTP Request sans neverError : erreur 4xx/5xx = exception",
+   "Pas de normalisation horaire ni dedoublonnage techniciens",
+   "Liste de champs bloques differente de la v2"
+  ]
+ },
+ {
+  "id": "Qgn9xL6dGSAcq4Zv",
+  "name": "Interfast - Lecture",
+  "slug": "interfast-lecture--Qgn9xL6dGSAcq4Zv",
+  "active": true,
+  "trigger": "sous-workflow (entrees op, params)",
+  "role": "Point d'acces unique en lecture seule a Interfast : traduit une operation nommee (events_jour, intervention, client, client_recherche, devis...) en GET, nettoie les champs sensibles et enrichit les evenements (dateParis, heureParis, codeHoraire).",
+  "services": [
+   "Interfast"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "GgJ5wsyGIUSWY0cN",
+    "name": "Interfast API",
+    "type": "httpHeaderAuth"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "Pagination figee page 0 (events 100, client_events 50, recherche 10, devis 20) : resultats tronques silencieusement",
+   "op inconnue ou parametre invalide = exception remontee a l'appelant",
+   "Tableau a 1 element duplique dans la query string (astuce API)",
+   "Convention codeHoraire = dernier chiffre des minutes",
+   "Sticky note incomplete (client_activites, client_recherche, devis_client absentes)",
+   "Doublon de nom avec MOZo7wkYxjOghKVZ (inactif)",
+   "Timeout 15 s ; date par defaut J+1"
+  ]
+ },
+ {
+  "id": "sNz4QD6CaaipqSyT",
+  "name": "Interfast — Test connexion GET",
+  "slug": "interfast-test-connexion-get",
+  "active": false,
+  "trigger": "manuel",
+  "role": "Test manuel du credential Interfast : un GET /v1/events?page=1&count=1.",
+  "services": [
+   "Interfast"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "GgJ5wsyGIUSWY0cN",
+    "name": "Interfast API",
+    "type": "httpHeaderAuth"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "Workflow de test sans description, inactif, jamais publie : a archiver",
+   "Reponse Interfast brute non filtree (prix d'achat, donnees perso)",
+   "callerPolicy workflowsFromSameOwner sans trigger de sous-workflow (sans effet)"
+  ]
+ },
+ {
+  "id": "NXr5qAKWTQU0nVoY",
+  "name": "Outil - Camions",
+  "slug": "outil-camions",
+  "active": true,
+  "trigger": "sous-workflow (Appel outil : date_debut, jours)",
+  "role": "Outil du bot : disponibilite des 2 camions (Christophe, Axel) par demi-journee a partir des interventions et RDV Interfast, calcul en code.",
+  "services": [
+   "Interfast (via Interfast - Lecture)"
+  ],
+  "models": [],
+  "calls": [
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire interventions"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire RDV"
+   }
+  ],
+  "data_tables": [],
+  "credentials": [],
+  "webhook_paths": [],
+  "fragile": [
+   "IDs techniciens en dur (5069, 9965, 5198)",
+   "onError continueRegularOutput sur les appels Interfast : panne = '2 camions libres' sans erreur",
+   "date hors [-30;+120] j remplacee silencieusement par aujourd'hui, jours plafonne a 14",
+   "regex lieu basee sur le code postal",
+   "codeHoraire 3/4 et seuil 12h30 en dur"
+  ]
+ },
+ {
+  "id": "NvBI84JhjfoUH5FZ",
+  "name": "Outil - Clients sans entretien",
+  "slug": "outil-clients-sans-entretien",
+  "active": true,
+  "trigger": "sous-workflow (Appel outil : villes, mois_min, client_id, rayon_km)",
+  "role": "Outil du bot : liste les clients avec clim posee par ClimatPro sans entretien depuis X mois (table pre-calculee), filtrable par ville ou rayon autour d'un client.",
+  "services": [
+   "Data Tables n8n"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "wdM1D4E3ZOAmhvoy",
+    "name": "clients_sans_entretien (deduit de la description)",
+    "mode": "lecture"
+   },
+   {
+    "id": "xrWuLpFXi8qQWU86",
+    "name": "",
+    "mode": "lecture"
+   }
+  ],
+  "credentials": [],
+  "webhook_paths": [],
+  "fragile": [
+   "tables referencees par id sans nom",
+   "depend d'un workflow nocturne non identifie qui remplit la table",
+   "returnAll sur toute la table a chaque appel",
+   "Centre onError continue : filtre rayon desactive silencieusement",
+   "limite 25 lignes, defauts 3 km / 12 mois en dur"
+  ]
+ },
+ {
+  "id": "OOM7WyEjdrj5JnKy",
+  "name": "Outil - Code defaut Hitachi",
+  "slug": "outil-code-defaut-hitachi",
+  "active": true,
+  "trigger": "sous-workflow (Appel : code, modele, demandeur) + Test manuel",
+  "role": "Sous-outil Hitachi : libelle du code alarme par modele (table codes_hitachi), fiche PDF officielle hitachi-mp.spelog.com resumee par Sonnet, cache dans fiches_hitachi.",
+  "services": [
+   "HTTP hitachi-mp.spelog.com (PDF fiche)",
+   "Anthropic",
+   "Data Tables n8n"
+  ],
+  "models": [
+   {
+    "node": "Lire fiche (Sonnet)",
+    "provider": "anthropic",
+    "model": "claude-sonnet-5"
+   }
+  ],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "9fowyCEpKBxx3ui1",
+    "name": "codes_hitachi (deduit de la description)",
+    "mode": "lecture"
+   },
+   {
+    "id": "ywfMnHuTuf0KzXRY",
+    "name": "fiches_hitachi (deduit de la description)",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "UtZzlYk97MvjuDan",
+    "name": "Anthropic account 2",
+    "type": "anthropicApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "filtre Data Table dynamique ilike sur colonne JSON codes",
+   "URL hitachi-mp.spelog.com en dur, telechargement onError continue + mimeType PDF force",
+   "cache insert sans expiration ni upsert",
+   "ecrit une Data Table malgre 'lecture seule'",
+   "'Laurent a ete prevenu' mais alerte faite seulement par le parent",
+   "nodes de test dans workflow actif"
+  ]
+ },
+ {
+  "id": "uWkW4FbbnjkmwTXb",
+  "name": "Outil - Code defaut",
+  "slug": "outil-code-defaut",
+  "active": true,
+  "trigger": "sous-workflow (Appel outil : marque, code, modele, demandeur)",
+  "role": "Outil du bot : signification d'un code defaut Toshiba/Daikin (table codes_defaut) ou Hitachi (sous-outil), alerte Telegram des admins si code absent.",
+  "services": [
+   "Telegram",
+   "Data Tables n8n"
+  ],
+  "models": [],
+  "calls": [
+   {
+    "id": "OOM7WyEjdrj5JnKy",
+    "name": "Outil - Code defaut Hitachi",
+    "node": "Fiche Hitachi"
+   }
+  ],
+  "data_tables": [
+   {
+    "id": "ko1b5qPW0nF5yYBm",
+    "name": "codes_defaut",
+    "mode": "lecture"
+   },
+   {
+    "id": "MAaqIFX2KBiCvHFa",
+    "name": "bot_users",
+    "mode": "lecture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "thfKrKcwKcCWoR9V",
+    "name": "Telegram account",
+    "type": "telegramApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "detection marque par regex prefixe modele (RAS-... Hitachi classe Toshiba)",
+   "Fiche Hitachi sans onError",
+   "Alerter Laurent onError continue alors que le texte dit 'Laurent a ete prevenu'",
+   "sticky note obsolete, depend d'un import mensuel non verifie",
+   "resultat tronque 6000 car.",
+   "logique dupliquee avec Outil - Expert diagnostic",
+   "Altherma non couvert"
+  ]
+ },
+ {
+  "id": "0bCdxnRh9exHqvvM",
+  "name": "Outil - Detail RDV",
+  "slug": "outil-detail-rdv",
+  "active": true,
+  "trigger": "sous-workflow (Appel outil : event_id)",
+  "role": "Outil du bot : detail complet d'une intervention Interfast (description, consignes, acces, techniciens, compte-rendu).",
+  "services": [
+   "Interfast (via Interfast - Lecture)"
+  ],
+  "models": [],
+  "calls": [
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire intervention"
+   }
+  ],
+  "data_tables": [],
+  "credentials": [],
+  "webhook_paths": [],
+  "fragile": [
+   "NOMS en dur, 5198 = Axel ici mais Julien dans Outil - Fiche client",
+   "onError continue : panne Interfast = 'Pas de detail disponible'",
+   "troncatures 1500/800 car.",
+   "depend des champs dateParis/heureParis/horaireLibelle d'Interfast - Lecture"
+  ]
+ },
+ {
+  "id": "di2cU3TRSnyS2BdQ",
+  "name": "Outil - Dispo Daikin",
+  "slug": "outil-dispo-daikin",
+  "active": true,
+  "trigger": "sous-workflow (Appel outil : reference, modele, mots_cles, role) + Test manuel",
+  "role": "Outil du bot : piece Daikin par reference ou modele + mots-cles sur le portail Spare Parts Bank (stock FR/BE, remplacement, prix indicatif x1,30).",
+  "services": [
+   "Daikin Spare Parts Bank (HTTP, spb-dev.daikin.co.jp)",
+   "Data Tables n8n"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "pU9JwmOAxlYmPcvL",
+    "name": "daikin_spb_acces (deduit de la description)",
+    "mode": "lecture"
+   }
+  ],
+  "credentials": [],
+  "webhook_paths": [],
+  "fragile": [
+   "identifiants portail Daikin en clair dans une Data Table",
+   "URL par defaut = portail de test spb-dev",
+   "parsing HTML/JS par regex",
+   "neverError + onError continue partout",
+   "marge 1,30 en dur, role admin non verifie",
+   "nodes de test avec role admin dans workflow actif"
+  ]
+ },
+ {
+  "id": "p7VfJ2HTKTctJBsv",
+  "name": "Outil - Dispo Hitachi",
+  "slug": "outil-dispo-hitachi",
+  "active": true,
+  "trigger": "sous-workflow (Appel outil : reference, role, modele, mots_cles)",
+  "role": "Outil du bot : piece Hitachi par reference ou modele + mots-cles sur hi-parts.fr via browserless (dispo, remplacement, verdict, prix indicatif x1,15).",
+  "services": [
+   "browserless (http://browserless:3000)",
+   "hi-parts.fr (scraping)",
+   "Data Tables n8n"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "VrTMPgLga7GykpX2",
+    "name": "hiparts_acces",
+    "mode": "lecture"
+   }
+  ],
+  "credentials": [],
+  "webhook_paths": [],
+  "fragile": [
+   "identifiants hi-parts + token browserless en clair dans une Data Table, token en query string",
+   "scraping ASP.NET par selecteurs et regex",
+   "HTTP neverError sans onError : browserless down = echec workflow",
+   "timeouts 90/120 s, jusqu'a 8 vues eclatees",
+   "script.toString() et regex avec caracteres combinants litteraux",
+   "marge 1,15 en dur, role admin non verifie",
+   "Entree lit query/body (reliquat webhook)"
+  ]
+ },
+ {
+  "id": "4PjuGOfWCDdkuoPq",
+  "name": "Outil - Dispo Toshiba",
+  "slug": "outil-dispo-toshiba",
+  "active": true,
+  "trigger": "sous-workflow (Appel outil : reference, modele, mots_cles, role)",
+  "role": "Outil du bot : piece Toshiba par reference ou modele + mots-cles sur pieces.toshiba-confort.fr (acces invite), stock et prix indicatif x1,30.",
+  "services": [
+   "pieces.toshiba-confort.fr (HTTP public)"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [],
+  "webhook_paths": [],
+  "fragile": [
+   "catalogue complet @list-items telecharge a chaque appel, colonnes positionnelles",
+   "vue eclatee parsee par regex HTML",
+   "sticky note dit x1,15 mais code MARGE=1.30",
+   "stock aligne par index, decalage si un appel echoue",
+   "neverError partout",
+   "role admin non verifie"
+  ]
+ },
+ {
+  "id": "LA38f9HqFWwMlXjY",
+  "name": "Outil - Expert diagnostic",
+  "slug": "outil-expert-diagnostic",
+  "active": true,
+  "trigger": "sous-workflow (Appel outil : marque, modele, code, symptomes, client_id) + Test manuel",
+  "role": "Expert du bot : diagnostic de panne complexe par Claude Sonnet (reflexion adaptative, sans memoire) a partir de la fiche code, des notes terrain, des symptomes et de l'historique client.",
+  "services": [
+   "Anthropic",
+   "Interfast (indirect via Outil - Fiche client)",
+   "Data Tables n8n"
+  ],
+  "models": [
+   {
+    "node": "Sonnet",
+    "provider": "anthropic",
+    "model": "claude-sonnet-5"
+   }
+  ],
+  "calls": [
+   {
+    "id": "yj2W2NXNAbFRiuN6",
+    "name": "Outil - Fiche client",
+    "node": "Historique client"
+   }
+  ],
+  "data_tables": [
+   {
+    "id": "ko1b5qPW0nF5yYBm",
+    "name": "codes_defaut",
+    "mode": "lecture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "UtZzlYk97MvjuDan",
+    "name": "Anthropic account 2",
+    "type": "anthropicApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "Hitachi non gere (pas de detection ni de table codes_hitachi)",
+   "logique Fiche code dupliquee avec Outil - Code defaut",
+   "filtrage donnees perso de l'historique par regex Contact/Adresse seulement",
+   "Expert et Historique client onError continue",
+   "nodes de test dans workflow actif"
+  ]
+ },
+ {
+  "id": "yj2W2NXNAbFRiuN6",
+  "name": "Outil - Fiche client",
+  "slug": "outil-fiche-client",
+  "active": true,
+  "trigger": "sous-workflow (Appel outil : client_id)",
+  "role": "Outil du bot : fiche client Interfast en texte (contacts, telephones, adresses, notes, 12 dernieres interventions).",
+  "services": [
+   "Interfast (via Interfast - Lecture)"
+  ],
+  "models": [],
+  "calls": [
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire fiche"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire adresses"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire historique"
+   }
+  ],
+  "data_tables": [],
+  "credentials": [],
+  "webhook_paths": [],
+  "fragile": [
+   "NOMS en dur, 5198 = Julien ici mais Axel dans Camions et Detail RDV",
+   "onError continue sur les 3 appels : panne Interfast = 'Client introuvable'",
+   "telephones/mails en clair renvoyes au bot",
+   "3 appels sequentiels a Interfast - Lecture",
+   "limites fixes 6 contacts / 5 adresses / 12 interventions"
+  ]
+ },
+ {
+  "id": "oabRTfuN2I91bsfK",
+  "name": "Outil - Fiche contact iPhone",
+  "slug": "outil-fiche-contact-iphone",
+  "active": true,
+  "trigger": "webhook POST /webhook/fiche-contact-iphone-k7q2",
+  "role": "Reçoit une fiche client en POST, construit une vCard et l'envoie à Laurent par Telegram (sendDocument) pour ajout aux Contacts iPhone.",
+  "services": [
+   "Telegram"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "ZS80JIsncc2f3ZED",
+    "name": "",
+    "mode": "lecture"
+   }
+  ],
+  "credentials": [],
+  "webhook_paths": [
+   "fiche-contact-iphone-k7q2"
+  ],
+  "fragile": [
+   "webhook public sans authentification (obscurité du chemin seule)",
+   "chat_id Telegram 1857340429 en dur",
+   "token du bot dans l'URL HTTP (visible dans les exécutions)",
+   "Data Table lue avec limit 1 sans filtre",
+   "description parle de sendContact, le code fait sendDocument (vCard)",
+   "aucun onError",
+   "normalisation téléphone limitée aux numéros FR à 10 chiffres"
+  ]
+ },
+ {
+  "id": "RkGCPcG8e1gI0knk",
+  "name": "Outil - Materiel devis",
+  "slug": "outil-materiel-devis",
+  "active": true,
+  "trigger": "sous-workflow (client_id, ref_devis)",
+  "role": "Outil du bot : matériel (lignes, quantités, options) des devis signés d'un client ou d'un devis par référence, sans prix, via Interfast - Lecture.",
+  "services": [
+   "Interfast"
+  ],
+  "models": [],
+  "calls": [
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Chercher devis"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire devis"
+   }
+  ],
+  "data_tables": [],
+  "credentials": [],
+  "webhook_paths": [],
+  "fragile": [
+   "regex de référence devis ^[A-Z]{1,3}[0-9]{2,6}$",
+   "3 devis max et 40 lignes par devis",
+   "onError continueRegularOutput sur les appels Interfast (erreurs silencieuses)",
+   "client_id vide envoyé comme 'aucun'"
+  ]
+ },
+ {
+  "id": "99B4KwoLPMWmJuNc",
+  "name": "Outil - Memoire client",
+  "slug": "outil-memoire-client",
+  "active": true,
+  "trigger": "sous-workflow (clientId, eventId, objet, actif)",
+  "role": "Sous-workflow du brief 18h : assemble fiche, activités CRM, 6 dernières interventions et e-mails d'un client puis fait résumer par Claude Haiku en version tech (sans argent) et admin.",
+  "services": [
+   "Interfast",
+   "Anthropic"
+  ],
+  "models": [
+   {
+    "node": "Resumer (Haiku)",
+    "provider": "anthropic",
+    "model": "claude-haiku-5-5"
+   }
+  ],
+  "calls": [
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire fiche"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire activites"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire historique"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire rapports"
+   }
+  ],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "UtZzlYk97MvjuDan",
+    "name": "Anthropic account 2",
+    "type": "anthropicApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "onError continueRegularOutput partout, y compris sur Anthropic (résumés vides ou texte brut sans alerte)",
+   "regex BAN anti-argent peut supprimer des lignes légitimes",
+   "extraction JSON par indexOf/lastIndexOf",
+   "troncatures silencieuses (contexte 24000, note 4000, 15 mails)",
+   "appel Interfast 'intervention' avec id 'aucune' quand aucune intervention passée",
+   "anthropic-version 2023-06-01 en dur"
+  ]
+ },
+ {
+  "id": "6jYK4PkJgDjs4Zf2",
+  "name": "Outil - Memos",
+  "slug": "outil-memos",
+  "active": true,
+  "trigger": "sous-workflow (theme, client, role, nom)",
+  "role": "Outil du bot : mémos vocaux Todoist non cochés (label memo) filtrés par droits codés en dur (admin vs technicien), thème et client.",
+  "services": [
+   "Todoist"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "feB4B4HQds0e2tFC",
+    "name": "Todoist account",
+    "type": "todoistApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "IDs projets Todoist en dur (6hh423vJrW7RvQQg, 6hh423vw4vGgHFPw)",
+   "limite 200 tâches sans pagination",
+   "onError continueRegularOutput sur Todoist (erreur = 'Aucun memo trouve')",
+   "droits basés sur role/nom fournis par l'appelant",
+   "parsing de la description par regex (Dicté le, iPhone, klb, Client à proximité)",
+   "40 mémos max affichés"
+  ]
+ },
+ {
+  "id": "zA9fv7IqJnrBuRRy",
+  "name": "Outil - Planning",
+  "slug": "outil-planning",
+  "active": true,
+  "trigger": "sous-workflow (date_debut, jours, categorie, technicien, user_id, role)",
+  "role": "Outil du bot : planning Interfast (interventions + RDV) sur 1 à 31 jours, filtré par catégorie déduite par mots-clés et par technicien selon le rôle.",
+  "services": [
+   "Interfast"
+  ],
+  "models": [],
+  "calls": [
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire interventions"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire RDV"
+   }
+  ],
+  "data_tables": [],
+  "credentials": [],
+  "webhook_paths": [],
+  "fragile": [
+   "IDs techniciens Interfast en dur et dupliqués (5066, 5069, 9965, 5198)",
+   "catégorie déduite par regex sur type/titre",
+   "date hors -90/+120 jours remplacée silencieusement par aujourd'hui",
+   "onError continueRegularOutput (panne = 'Aucun evenement.')",
+   "droits basés sur role/user_id fournis par l'appelant",
+   "60 lignes max"
+  ]
+ },
+ {
+  "id": "FHVtoHPBvB59ExMT",
+  "name": "Outil - Recherche client",
+  "slug": "outil-recherche-client",
+  "active": true,
+  "trigger": "sous-workflow (nom)",
+  "role": "Outil du bot : recherche approximative de clients Interfast par nom, renvoie id, adresse et téléphones (10 max), fournisseurs exclus.",
+  "services": [
+   "Interfast"
+  ],
+  "models": [],
+  "calls": [
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Chercher client"
+   }
+  ],
+  "data_tables": [],
+  "credentials": [],
+  "webhook_paths": [],
+  "fragile": [
+   "onError continueRegularOutput (erreur = 'Aucun client trouve')",
+   "10 résultats max sans indication du total",
+   "aucun contrôle de rôle, téléphones exposés à tout appelant"
+  ]
+ },
+ {
+  "id": "nUxjWTbY2DyKPetM",
+  "name": "Outil - Sonepar",
+  "slug": "outil-sonepar",
+  "active": true,
+  "trigger": "sous-workflow (reference, role) + webhook POST /webhook/sonepar-prix (en-tête x-cle)",
+  "role": "Prix net ClimatPro, stock et délai d'une référence sur sonepar.fr via browserless (Puppeteer) avec le compte Sonepar de Laurent ; réservé au rôle admin.",
+  "services": [
+   "browserless",
+   "sonepar.fr"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "lJhoGjf1oe1kfKJz",
+    "name": "sonepar_acces",
+    "mode": "lecture"
+   },
+   {
+    "id": "VrTMPgLga7GykpX2",
+    "name": "hiparts_acces",
+    "mode": "lecture"
+   }
+  ],
+  "credentials": [],
+  "webhook_paths": [
+   "sonepar-prix"
+  ],
+  "fragile": [
+   "clé x-cle du webhook en dur dans le code du node Entree (retirée de l'export, <SECRET-RETIRE>) ; le webhook donne d'office le rôle admin",
+   "identifiants Sonepar en clair dans une Data Table, envoyés dans le body browserless ; token browserless dans l'URL",
+   "version publiée différente du brouillon (activeVersionId d57787d4 vs versionId fb9cb161) : interception des requêtes et libellé 'pas de stock' non publiés",
+   "scraping par sélecteurs/regex fragile aux changements du site Sonepar",
+   "connexion complète à chaque appel (lent, timeout 90 s, risque de blocage du compte)",
+   "URL interne http://browserless:3000 en dur",
+   "aucun credential n8n, tout passe par les Data Tables"
+  ]
+ },
+ {
+  "id": "zRZHM0b8qyaYTHTy",
+  "name": "Page - Mailto",
+  "slug": "page-mailto",
+  "active": true,
+  "trigger": "webhook GET /webhook/mailto?to=&cc=&s=&b=",
+  "role": "Mini-page HTML qui redirige vers un lien mailto: pré-rempli (destinataire, cc, objet, corps) ; utilisée par le bouton Envoyer par email de Bot - Assistant.",
+  "services": [],
+  "models": [],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [],
+  "webhook_paths": [
+   "mailto"
+  ],
+  "fragile": [
+   "endpoint public sans authentification (page de redirection mailto ouverte)",
+   "un seul destinataire, validation d'adresse minimale",
+   "corps tronqué à 3000 caractères",
+   "dépend du support de mailto: par le navigateur intégré Telegram"
+  ]
+ },
+ {
+  "id": "vKYK5N7OxtU2uZyI",
+  "name": "Page - Tableau technicien",
+  "slug": "page-tableau-technicien",
+  "active": true,
+  "trigger": "webhooks GET /webhook/tableau, /webhook/tableau-connexion, /webhook/tableau-fait, /webhook/tableau-partage",
+  "role": "Tableau de bord web par personne (cookie de session Telegram) : planning Interfast 8 jours, mémos/commandes Todoist (Fait, partage, rangement), clients sans entretien, météo, véhicules Quartix et fil équipe (admin), devis à planifier ; rendu serveur sans IA.",
+  "services": [
+   "Interfast",
+   "Todoist",
+   "Google Drive",
+   "Open-Meteo",
+   "Telegram",
+   "WordPress",
+   "Quartix",
+   "Leaflet/OpenStreetMap"
+  ],
+  "models": [],
+  "calls": [
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire interventions"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire RDV"
+   },
+   {
+    "id": "",
+    "name": "",
+    "node": "Fil equipe (la page appelle les webhooks n8n /webhook/equipe-* d'un autre workflow)"
+   }
+  ],
+  "data_tables": [
+   {
+    "id": "ZS80JIsncc2f3ZED",
+    "name": "secrets (telegram_bot_token, cookie_secret)",
+    "mode": "lecture"
+   },
+   {
+    "id": "D0StwthqUQF0nV7Z",
+    "name": "dashboard_acces",
+    "mode": "lecture"
+   },
+   {
+    "id": "wdM1D4E3ZOAmhvoy",
+    "name": "clients sans entretien",
+    "mode": "lecture"
+   },
+   {
+    "id": "gkJQL9liZvE8M2Op",
+    "name": "images_tableau",
+    "mode": "lecture"
+   },
+   {
+    "id": "nucvI8QpMgKtoMfG",
+    "name": "memos_categories",
+    "mode": "lecture"
+   },
+   {
+    "id": "45PSs7FELv97nkCn",
+    "name": "quartix_etat",
+    "mode": "lecture"
+   },
+   {
+    "id": "dJ4ZIO2PdhYlt95o",
+    "name": "quartix_jours",
+    "mode": "lecture"
+   },
+   {
+    "id": "0U759buKi8psn4V5",
+    "name": "devis_a_planifier",
+    "mode": "lecture"
+   },
+   {
+    "id": "OAX0BQo3Hczx8xLF",
+    "name": "tableau_connexions_utilisees",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "feB4B4HQds0e2tFC",
+    "name": "Todoist account",
+    "type": "todoistApi"
+   },
+   {
+    "id": "GgJ5wsyGIUSWY0cN",
+    "name": "Interfast API",
+    "type": "httpHeaderAuth"
+   },
+   {
+    "id": "54fd9ApHaDydoOJv",
+    "name": "Google Drive account 2",
+    "type": "googleDriveOAuth2Api"
+   }
+  ],
+  "webhook_paths": [
+   "tableau",
+   "tableau-connexion",
+   "tableau-fait",
+   "tableau-partage"
+  ],
+  "fragile": [
+   "SHA-256/HMAC réimplémentés à la main et copiés dans 7 nodes",
+   "cookie de session 1 an, révocation uniquement via actif=false ; cookie_secret relu en Data Table à chaque requête",
+   "sticky note et description obsolètes (jeton ?t= supprimé)",
+   "IDs en dur : techniciens Interfast, projets/sections Todoist, prénoms partage, dossier Drive, coordonnées météo, domaine app.climatpro.fr",
+   "limites silencieuses : 200 tâches Todoist, 30 clients, 6 clients sans entretien",
+   "onError continueRegularOutput sur presque toutes les lectures (page incomplète sans signalement)",
+   "73 nodes, code très volumineux (Construire page 36k, Carte vehicules 25k, CSS secours 22k), rendu recalculé à chaque GET sans cache, saveDataSuccessExecution none",
+   "dépend de tables alimentées par d'autres workflows (Quartix, clients sans entretien, images, devis à planifier) et des webhooks equipe-*",
+   "table anti-rejeu jamais purgée",
+   "Respond nodes de versions hétérogènes (1.1 / 1.5)"
+  ]
+ },
+ {
+  "id": "jbzd2fq9MTIGLJK5",
+  "name": "Plaud vers Interfast CRM",
+  "slug": "plaud-vers-interfast-crm",
+  "active": true,
+  "trigger": "cron toutes les 15 min",
+  "role": "Lit les enregistrements Plaud transcrits, les classe avec Claude Sonnet, consigne une note CRM sur la fiche client Interfast (ou crée une tâche Todoist à rattacher) et mémorise les fichiers traités dans plaud_traites.",
+  "services": [
+   "Plaud (MCP)",
+   "Anthropic",
+   "Interfast",
+   "Todoist"
+  ],
+  "models": [
+   {
+    "node": "Claude Sonnet",
+    "provider": "anthropic",
+    "model": "claude-sonnet-5-5"
+   }
+  ],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "5iiREQs0cwhwUqhB",
+    "name": "plaud_traites",
+    "mode": "lecture"
+   },
+   {
+    "id": "5iiREQs0cwhwUqhB",
+    "name": "plaud_traites",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "KxcxKLAx6oNuafZS",
+    "name": "Unnamed credential",
+    "type": "mcpOAuth2Api"
+   },
+   {
+    "id": "GfYoRA9p0AV4WXlD",
+    "name": "Anthropic account",
+    "type": "anthropicApi"
+   },
+   {
+    "id": "GgJ5wsyGIUSWY0cN",
+    "name": "Interfast API",
+    "type": "httpHeaderAuth"
+   },
+   {
+    "id": "feB4B4HQds0e2tFC",
+    "name": "Todoist account",
+    "type": "todoistApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "credential Plaud 'Unnamed credential'",
+   "aucun onError sur Plaud/Interfast/Todoist : une erreur bloque la boucle ; risque de doublon de note CRM si échec entre consignation et marquage",
+   "fenêtre list_files 2 jours + abandon après 48 h sans transcription",
+   "DATE_MIN 2026-10-07 et seuil 4000 ms en dur",
+   "recherche Interfast size 5, correspondance exigeant un candidat unique",
+   "parser structuré sur exemple JSON, transcript tronqué à 60000",
+   "IDs projet Todoist et noms réels en dur dans le prompt",
+   "écriture Interfast (POST activities/notes) et Todoist"
+  ]
+ },
+ {
+  "id": "eIm19cWQyQ7RRshF",
+  "name": "Prix achat fournisseurs - Extraction factures (HAC, Econology)",
+  "slug": "prix-achat-fournisseurs-extraction-factures-hac-econology",
+  "active": true,
+  "trigger": "cron 3h quotidien",
+  "role": "Chaque nuit, extrait par lot de 40 les lignes article des factures PDF HAC/Econology trouvées sur Google Drive avec Claude Haiku et ajoute les prix nets HT dans le Sheet PRIX ACHAT ClimatPro (dédup par file_id).",
+  "services": [
+   "Google Drive",
+   "Google Sheets",
+   "Anthropic"
+  ],
+  "models": [
+   {
+    "node": "Extraire lignes (Haiku)",
+    "provider": "anthropic",
+    "model": "claude-haiku-4-5-20251001"
+   }
+  ],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "54fd9ApHaDydoOJv",
+    "name": "Google Drive account 2",
+    "type": "googleDriveOAuth2Api"
+   },
+   {
+    "id": "fKAETwT6ij09juV8",
+    "name": "Google Sheets account",
+    "type": "googleSheetsOAuth2Api"
+   },
+   {
+    "id": "GfYoRA9p0AV4WXlD",
+    "name": "Anthropic account",
+    "type": "anthropicApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "onError continueRegularOutput sur Telecharger PDF et Haiku : un echec produit une ligne erreur_lecture avec file_id, le fichier n'est jamais retente",
+   "maxTokens 4000 : JSON tronque sur facture longue = erreur_lecture definitive",
+   "pagination Drive limitee 20 pages x 1000 ; filtre modifiedTime > 2024-01-01 et exclusions par nom en dur",
+   "fullText contains 'Hitachi Cooling' depend de l'indexation Drive",
+   "regex de detection des frais et liste REF_FRAIS en dur (peut ecarter des articles contenant 'port')",
+   "repli fournisseur par regex sur nom de fichier",
+   "pas de dedup par numero de facture (copies de PDF extraites deux fois)",
+   "Lire prix relit toute la feuille a chaque run ; IDs Sheet en dur",
+   "aucune alerte en cas d'erreur ou de backlog ; pas d'errorWorkflow",
+   "code mort : test d.est_facture_hac"
+  ]
+ },
+ {
+  "id": "mT1ui2kYOVnAJdLM",
+  "name": "Quartix - Duree sur place (lecture seule)",
+  "slug": "quartix-duree-sur-place-lecture-seule",
+  "active": false,
+  "trigger": "webhook GET /webhook/quartix-trajets-jour (query jour, immat) | manuel",
+  "role": "Pour un jour et une immatriculation (defaut FL 192 RP), lit les trajets Quartix et renvoie les arrets >= 5 min hors depot avec durees et totaux par lieu, pour facturer le temps reel sur place.",
+  "services": [
+   "Quartix"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "JVvofvrQJHHfTNQ3",
+    "name": "Custom Auth account",
+    "type": "httpCustomAuth"
+   }
+  ],
+  "webhook_paths": [
+   "quartix-trajets-jour"
+  ],
+  "fragile": [
+   "workflow inactif : webhook non expose ; s'il est active, GET public sans authentification exposant la geolocalisation d'un vehicule",
+   "immat par defaut FL 192 RP et regex depot en dur",
+   "logique arrets/depot dupliquee avec Quartix - Positions (1bkcX6ADhHRwDbMF) et Quartix - Historique (cOF8qLkXSnyAfyth)",
+   "Auth Quartix onError continue + neverError : erreur renvoyee en JSON, aucune alerte",
+   "dernier arret de la journee ignore (pas de trajet suivant)",
+   "casse VehicleID / VehicleId dependante du format Quartix, sans lecture insensible a la casse",
+   "timeouts 15 s / 20 s, pas de pagination"
+  ]
+ },
+ {
+  "id": "cOF8qLkXSnyAfyth",
+  "name": "Quartix - Historique",
+  "slug": "quartix-historique",
+  "active": true,
+  "trigger": "cron 19h25 quotidien (hier + aujourd'hui) | cron */15 min 8h-19h45 lun-ven (aujourd'hui) | manuel (rattrapage 45 jours)",
+  "role": "Construit par jour et par vehicule un journal JSON des trajets Quartix (trace GPS simplifiee) et des arrets qualifies (depot, maison, fournisseur, client Interfast via geocodage BAN) dans la Data Table quartix_jours, avec purge > 365 jours.",
+  "services": [
+   "Quartix",
+   "Interfast",
+   "IGN Geoplateforme",
+   "BAN api-adresse.data.gouv.fr",
+   "Data Tables n8n"
+  ],
+  "models": [],
+  "calls": [
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Interventions du jour"
+   },
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "RDV du jour"
+   }
+  ],
+  "data_tables": [
+   {
+    "id": "dJ4ZIO2PdhYlt95o",
+    "name": "quartix_jours",
+    "mode": "ecriture"
+   },
+   {
+    "id": "xrWuLpFXi8qQWU86",
+    "name": "clients_gps",
+    "mode": "lecture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "JVvofvrQJHHfTNQ3",
+    "name": "Custom Auth account",
+    "type": "httpCustomAuth"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "detection du mode par heuristique (champs timestamp/Readable date du trigger + fenetre horaire 19h20-19h29) : un retard d'execution fait perdre le jour precedent",
+   "garde-fou 240 s dans le Code : rattrapage 45 jours interrompu (interrompuA) a relancer a la main ; jours manques jamais rattrapes automatiquement",
+   "coordonnees DEPOT et MAISON (domicile du gerant) en dur dans le code ; liste LIEUX fournisseurs et seuils 350/800 m, 5 min en dur",
+   "toutes les 15 min : auth Quartix + 2 appels Interfast + 1 route par vehicule + geocodages (charge/quota) ; cache geocodage vide brutalement au-dela de 3000 cles",
+   "executions non sauvegardees (saveDataErrorExecution none) : aucun diagnostic possible ; ligne _bilan non-metier stockee dans la table",
+   "Auth Quartix, Lire clients_gps, Purge en onError continueRegularOutput : erreurs silencieuses, pas d'alerte",
+   "RDV du jour depend du pairing $('Un item par jour').item apres Execute Workflow mode each",
+   "logique arrets/depot dupliquee avec Quartix - Positions et Quartix - Duree sur place",
+   "champ de debug exemple laisse dans le bilan ; api-adresse.data.gouv.fr = ancien endpoint BAN en repli"
+  ]
+ },
+ {
+  "id": "1bkcX6ADhHRwDbMF",
+  "name": "Quartix - Positions",
+  "slug": "quartix-positions",
+  "active": true,
+  "trigger": "cron chaque minute (filtre code : lun-ven 8h15-19h, 1 min si vehicule en route sinon 5 min) | manuel",
+  "role": "Lit Quartix (vehicules, live, trajets du jour, echeances) et upserte l'etat courant des vehicules + arrets du Vivaro blanc FL 192 RP dans la Data Table quartix_etat lue par le tableau de bord.",
+  "services": [
+   "Quartix",
+   "Data Tables n8n"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "45PSs7FELv97nkCn",
+    "name": "quartix_etat",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [
+   {
+    "id": "JVvofvrQJHHfTNQ3",
+    "name": "Custom Auth account",
+    "type": "httpCustomAuth"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "trigger chaque minute 24/7 (~1440 executions/jour) ; cadence reelle portee par $getWorkflowStaticData (dernier, enRoute, bloque), etat fragile en cas de republication ou chevauchement",
+   "refus d'auth : pause 30 min + erreur ecrite dans la table, aucune alerte ; Auth Quartix onError continue",
+   "executions non sauvegardees (saveDataErrorExecution none)",
+   "immat FL 192 RP et regex depot en dur ; enRoute deduit de Speed > 0 ou LastEventDescription != 'Ignition-Off'",
+   "parsing de LocationText par regex (format texte Quartix)",
+   "casse VehicleId / VehicleID selon endpoints sans lecture insensible a la casse",
+   "logique arrets/depot dupliquee avec Quartix - Historique et Quartix - Duree sur place",
+   "Test manuel saute Fenetre et cadence mais ecrit s.dernier / s.enRoute (effet de bord)"
+  ]
+ },
+ {
+  "id": "PROTVUjUQLOPHwcg",
+  "name": "Quartix - Test connexion",
+  "slug": "quartix-test-connexion",
+  "active": false,
+  "trigger": "manuel",
+  "role": "Diagnostic : lit les identifiants Quartix dans la Data Table quartix_acces, s'authentifie sur QWS v2 et renvoie brut vehicules, live, trajets du jour et management.",
+  "services": [
+   "Quartix",
+   "Data Tables n8n"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "NEpa7TDPMZep9rOI",
+    "name": "quartix_acces",
+    "mode": "lecture"
+   }
+  ],
+  "credentials": [],
+  "webhook_paths": [],
+  "fragile": [
+   "mot de passe Quartix stocke en clair dans la Data Table quartix_acces (customer_id, identifiant, mot_de_passe, application) au lieu d'une credential n8n ; a purger",
+   "obsolete : la prod utilise la credential Custom Auth account JVvofvrQJHHfTNQ3",
+   "methode d'auth differente de la prod (form-urlencoded vs JSON {} + custom auth) : ne teste pas la config reelle",
+   "pas de timeout sur les httpRequest ; executions non sauvegardees",
+   "sortie brute complete (positions live) sans filtrage"
+  ]
+ },
+ {
+  "id": "q6UPtSoYET3qtUd3",
+  "name": "TEMP - Nettoyage plaud_traites",
+  "slug": "temp-nettoyage-plaud-traites",
+  "active": false,
+  "trigger": "manuel",
+  "role": "Utilitaire jetable qui supprime dans la Data Table plaud_traites les lignes dont traite_le = '2026-10-07 23:19' (nettoyage d'un test Plaud).",
+  "services": [
+   "Data Tables n8n"
+  ],
+  "models": [],
+  "calls": [],
+  "data_tables": [
+   {
+    "id": "5iiREQs0cwhwUqhB",
+    "name": "plaud_traites",
+    "mode": "ecriture"
+   }
+  ],
+  "credentials": [],
+  "webhook_paths": [],
+  "fragile": [
+   "workflow temporaire (TEMP) cree le 2026-10-07, a supprimer",
+   "deleteRows destructif sur une valeur de date en dur, sans sauvegarde ni garde-fou",
+   "pas de description"
+  ]
+ },
+ {
+  "id": "HJKoe6RKxIEKlKSt",
+  "name": "TEST - Banc WhatsApp Haiku vs Sonnet (a supprimer)",
+  "slug": "test-banc-whatsapp-haiku-vs-sonnet-a-supprimer",
+  "active": false,
+  "trigger": "webhook POST /webhook/banc-whatsapp",
+  "role": "Banc d'essai : pour chaque lot de messages Telegram d'equipe par journee, lit le planning Interfast du jour puis envoie le meme prompt 'notes client' a Claude Haiku et Sonnet pour comparer notes extraites et tokens.",
+  "services": [
+   "Interfast",
+   "Anthropic"
+  ],
+  "models": [
+   {
+    "node": "Analyser",
+    "provider": "anthropic",
+    "model": "claude-haiku-5-5"
+   },
+   {
+    "node": "Analyser",
+    "provider": "anthropic",
+    "model": "claude-sonnet-5-5"
+   }
+  ],
+  "calls": [
+   {
+    "id": "Qgn9xL6dGSAcq4Zv",
+    "name": "Interfast - Lecture",
+    "node": "Lire planning"
+   }
+  ],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "UtZzlYk97MvjuDan",
+    "name": "Anthropic account 2",
+    "type": "anthropicApi"
+   }
+  ],
+  "webhook_paths": [
+   "banc-whatsapp"
+  ],
+  "fragile": [
+   "workflow de test 'a supprimer' ; inactif, mais webhook POST public sans authentification declenchant des appels Anthropic payants s'il est active",
+   "prompt systeme duplique du workflow de production (derive possible), prenoms des techniciens en dur",
+   "Lire planning et Analyser en onError continueRegularOutput ; Planning et Resultats apparient par index (decalage si item manquant)",
+   "resultats non persistes (sortie du dernier node seulement) ; responseMode onReceived"
+  ]
+ },
+ {
+  "id": "EpLk9dpFfWTMW3Y6",
+  "name": "TEST - Gemini audio (a supprimer)",
+  "slug": "test-gemini-audio-a-supprimer",
+  "active": false,
+  "trigger": "manuel",
+  "role": "Test temporaire de transcription audio Gemini : telecharge un fichier d'exemple Wikimedia (Example.ogg) puis le transcrit.",
+  "services": [
+   "Google Gemini",
+   "HTTP upload.wikimedia.org"
+  ],
+  "models": [
+   {
+    "node": "Transcrire",
+    "provider": "google",
+    "model": "models/gemini-2.5-flash"
+   }
+  ],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "dbBozPeQkcHzKBdI",
+    "name": "Google Gemini(PaLM) Api account 2",
+    "type": "googlePalmApi"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "workflow de test 'a supprimer', inactif depuis le 2026-10-09",
+   "parametres contradictoires dans Transcrire : inputType binary et audioUrls renseigne",
+   "URL d'exemple en dur ; e-mail de contact expose dans le User-Agent"
+  ]
+ },
+ {
+  "id": "u0mZuNjuW4LW54vI",
+  "name": "Tri scans Brother",
+  "slug": "tri-scans-brother",
+  "active": false,
+  "trigger": "Google Drive Trigger (fichier cree dans le dossier 1RiEj8rvkgx9GR-ULdvvnrwL1lMYvUO0d, polling 1 min)",
+  "role": "Classe les PDF scannes par le copieur Brother : hash de dedup (Sheet DEDUP_SCANS_BROTHER), classification Gemini (facture vs autre + sous-type), rangement dans le Drive partage DEPENSES FIMAREX par mois / administratif / sous-type, et ligne dans le Sheet de suivi factures.",
+  "services": [
+   "Google Drive",
+   "Google Sheets",
+   "Google Gemini"
+  ],
+  "models": [
+   {
+    "node": "Call Gemini",
+    "provider": "google",
+    "model": "gemini-2.5-flash"
+   }
+  ],
+  "calls": [],
+  "data_tables": [],
+  "credentials": [
+   {
+    "id": "54fd9ApHaDydoOJv",
+    "name": "Google Drive account 2",
+    "type": "googleDriveOAuth2Api"
+   },
+   {
+    "id": "sI64hm3ZUMyRS8JL",
+    "name": "Google Sheets account 2",
+    "type": "googleSheetsOAuth2Api"
+   },
+   {
+    "id": "ZcL2hYc3F444ZEyn",
+    "name": "Header Auth account",
+    "type": "httpHeaderAuth"
+   }
+  ],
+  "webhook_paths": [],
+  "fragile": [
+   "deduplication cassee : Lookup Dedup lit toute la feuille et IF - Is Duplicate? teste seulement 'Hash MD5 notEmpty' sans comparer au hash calcule (toute ligne existante = doublon) ; le 'MD5' est un cyrb53 53 bits",
+   "Rename Facture / Rename Autre : update avec options vides, le fichier n'est pas renomme (newFilename inutilise)",
+   "List Autre Monthly : queryString commence par '==' (requete Drive malformee)",
+   "nom de feuille 'Sheet1' pour le Sheet de suivi factures (feuille reelle 'Feuille 1') ; append DEDUP par nom 'Sheet1' vs lecture par gid",
+   "nodes move sur driveId My Drive alors que les dossiers sont dans le Drive partage 0AAse2-rbb-B9Uk9PVA",
+   "Parse Gemini Response : new Date(doc_date) sur chaine libre -> throw 'Date invalide', fichier bloque, aucune alerte",
+   "pdfBase64 conserve dans le json de chaque item (memoire) ; IDs de dossiers / Drive partage / seuil 0.85 en dur",
+   "doublon fonctionnel avec Factures Gmail -> Google Drive v3 (meme Sheet de suivi, arborescence differente : 'depenses octobre 2026' vs 'DEPENSES OCTOBRE 2026', Drive FIMAREX vs dossier 1qiVL5cq9nCdEFGMCOIsZsiKJEQJdTQrD)",
+   "inactif depuis 2026-10-07, vraisemblablement abandonne : a archiver ou corriger"
+  ]
+ }
+]

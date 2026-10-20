@@ -1,0 +1,398 @@
+{
+  "active": false,
+  "connections": {
+    "Lire index": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer liste",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lister dossiers": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lister factures",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lister factures": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire index",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Manuel (planning inactif)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Parametres",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Parametres": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lister dossiers",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer liste": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ecrire A_traiter",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-17T22:56:41.664Z",
+  "description": "Établit la liste des factures d'archives restant à indexer (dédoublonnées, hors Interfast, hors déjà indexées) et l'écrit dans l'onglet A_traiter du Sheet Index-Factures-ClimatPro. Aucun appel IA.",
+  "id": "TVISDTqWACLV6OIw",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Archives factures - Liste à traiter",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "id": "7a43f6bc-bd59-4556-87fe-7ca369e56997",
+      "name": "Ecrire A_traiter",
+      "parameters": {
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "numero",
+              "id": "numero",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "file_id",
+              "id": "file_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "nom_fichier",
+              "id": "nom_fichier",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "dossier_client",
+              "id": "dossier_client",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "lien_pdf",
+              "id": "lien_pdf",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {}
+        },
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1qk6RULDlOTXvfAnrbqCh6MAnFK2Kp1-f6v07DUheIXg"
+        },
+        "operation": "append",
+        "options": {
+          "cellFormat": "RAW",
+          "handlingExtraData": "ignoreIt",
+          "useAppend": true
+        },
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "A_traiter"
+        }
+      },
+      "position": [
+        1320,
+        300
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "executeOnce": true,
+      "id": "4f44ed6d-c13c-4453-8469-7e90036acfbd",
+      "name": "Lire index",
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1qk6RULDlOTXvfAnrbqCh6MAnFK2Kp1-f6v07DUheIXg"
+        },
+        "operation": "read",
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Feuille 1"
+        }
+      },
+      "position": [
+        880,
+        300
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "34ed48bf-6d53-455d-8057-bd703e20f3ac",
+      "name": "Lister dossiers",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "method": "GET",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "options": {
+          "pagination": {
+            "pagination": {
+              "completeExpression": "={{ !$response.body.nextPageToken }}",
+              "limitPagesFetched": true,
+              "maxRequests": 50,
+              "paginationCompleteWhen": "other",
+              "paginationMode": "updateAParameterInEachRequest",
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "pageToken",
+                    "type": "qs",
+                    "value": "={{ $response.body.nextPageToken }}"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "=mimeType='application/vnd.google-apps.folder' and trashed=false and createdTime > '{{ $json.fenetre_debut }}' and createdTime < '{{ $json.fenetre_fin }}'"
+            },
+            {
+              "name": "fields",
+              "value": "nextPageToken,files(id,name,parents)"
+            },
+            {
+              "name": "pageSize",
+              "value": "1000"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "url": "https://www.googleapis.com/drive/v3/files"
+      },
+      "position": [
+        440,
+        300
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "executeOnce": true,
+      "id": "54d85d88-4c0a-4c58-a691-ebb3f8d4702e",
+      "name": "Lister factures",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "method": "GET",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "options": {
+          "pagination": {
+            "pagination": {
+              "completeExpression": "={{ !$response.body.nextPageToken }}",
+              "limitPagesFetched": true,
+              "maxRequests": 50,
+              "paginationCompleteWhen": "other",
+              "paginationMode": "updateAParameterInEachRequest",
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "pageToken",
+                    "type": "qs",
+                    "value": "={{ $response.body.nextPageToken }}"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "=mimeType='application/pdf' and trashed=false and (name contains 'FA' or name contains 'AV') and createdTime > '{{ $('Parametres').first().json.fenetre_debut }}' and createdTime < '{{ $('Parametres').first().json.fenetre_fin }}'"
+            },
+            {
+              "name": "fields",
+              "value": "nextPageToken,files(id,name,parents,webViewLink)"
+            },
+            {
+              "name": "pageSize",
+              "value": "1000"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "url": "https://www.googleapis.com/drive/v3/files"
+      },
+      "position": [
+        660,
+        300
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5
+    },
+    {
+      "id": "21dd9527-14e4-4b12-9636-29ffdc052539",
+      "name": "Manuel (planning inactif)",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "expression": "0 3 1 1 *",
+              "field": "cronExpression"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        300
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "31ad7875-088a-4146-b5c9-3388268429fa",
+      "name": "Parametres",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "lot",
+              "name": "lot",
+              "type": "number",
+              "value": 99999
+            },
+            {
+              "id": "debut",
+              "name": "fenetre_debut",
+              "type": "string",
+              "value": "2026-10-16T18:00:00"
+            },
+            {
+              "id": "fin",
+              "name": "fenetre_fin",
+              "type": "string",
+              "value": "2026-10-17T09:00:00"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "mode": "manual"
+      },
+      "position": [
+        220,
+        300
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "9366fb9e-472c-4b25-b99e-8c4778868cb9",
+      "name": "Preparer liste",
+      "parameters": {
+        "jsCode": "const ROOT = '18foeaN7yoGBfRc9USHJcp1ULzHUBIlgK';\nconst PREMIER_INTERFAST = 14146;\nconst dossiers = {};\nfor (const page of $('Lister dossiers').all()) for (const f of (page.json.files || [])) dossiers[f.id] = f;\nconst fichiers = [];\nfor (const page of $('Lister factures').all()) for (const f of (page.json.files || [])) fichiers.push(f);\nconst dejaFaits = new Set($('Lire index').all().map(i => String(i.json.numero || '').trim()).filter(Boolean));\nfunction dossierClient(f) {\n  let p = (f.parents || [])[0];\n  let dernier = null;\n  let garde = 0;\n  while (p && p !== ROOT && garde < 25) {\n    dernier = dossiers[p];\n    if (!dernier) return null;\n    p = (dernier.parents || [])[0];\n    garde++;\n  }\n  if (p !== ROOT) return null;\n  return dernier ? dernier.name : '(racine)';\n}\nconst meilleurs = {};\nfor (const f of fichiers) {\n  const m = String(f.name).match(/^\\s*(FA|AV)[\\s\\-_]*(\\d{2,6})/i);\n  if (!m) continue;\n  const genre = m[1].toUpperCase();\n  const n = parseInt(m[2], 10);\n  if (genre === 'FA' && n >= PREMIER_INTERFAST) continue;\n  const dc = dossierClient(f);\n  if (dc === null) continue;\n  const numero = genre + m[2];\n  const score = (/PAYEE/i.test(f.name) ? 0 : 1) * 1000 + String(f.name).length;\n  const actuel = meilleurs[numero];\n  if (!actuel || score < actuel.score) meilleurs[numero] = { numero, genre, n, score, file_id: f.id, nom_fichier: f.name, dossier_client: dc, lien_pdf: f.webViewLink || ('https://drive.google.com/file/d/' + f.id + '/view') };\n}\nconst aFaire = Object.values(meilleurs).filter(x => !dejaFaits.has(x.numero)).sort((a, b) => (a.genre === b.genre ? a.n - b.n : (a.genre === 'FA' ? -1 : 1)));\nreturn aFaire.map(x => ({ json: { numero: x.numero, file_id: x.file_id, nom_fichier: x.nom_fichier, dossier_client: x.dossier_client, lien_pdf: x.lien_pdf } }));",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1100,
+        300
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-17T22:56:50.303Z"
+}

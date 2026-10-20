@@ -1,0 +1,143 @@
+{
+  "active": true,
+  "connections": {
+    "Lire token bot": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer carte contact",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer carte contact": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Envoyer contact Telegram",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire token bot",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-19T13:14:03.163Z",
+  "description": "Recoit une fiche client (webhook POST) et l'envoie a Laurent en carte contact Telegram native via le bot (sendContact), pour ajout direct aux Contacts iPhone.",
+  "id": "oabRTfuN2I91bsfK",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Outil - Fiche contact iPhone",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "6ec14958-8a97-4a94-8d23-f45c75c081e8",
+      "name": "Envoyer contact Telegram",
+      "parameters": {
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chat_id",
+              "parameterType": "formData",
+              "value": "={{ $json.chat_id }}"
+            },
+            {
+              "name": "caption",
+              "parameterType": "formData",
+              "value": "={{ $json.caption }}"
+            },
+            {
+              "inputDataFieldName": "data",
+              "name": "document",
+              "parameterType": "formBinaryData"
+            }
+          ]
+        },
+        "contentType": "multipart-form-data",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "url": "={{ $json.url }}"
+      },
+      "position": [
+        672,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "cd0138be-9755-4160-9779-f62e4f00958f",
+      "name": "Lire token bot",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "ZS80JIsncc2f3ZED"
+        },
+        "limit": 1,
+        "operation": "get",
+        "resource": "row",
+        "returnAll": false
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "2f93abb1-fcf1-4456-98ce-e626928eca04",
+      "name": "Preparer carte contact",
+      "parameters": {
+        "jsCode": "const b = $('Webhook').first().json.body || {};\nconst token = $input.first().json.telegram_bot_token;\nconst esc = s => String(s || '').replace(/\\\\/g, '\\\\\\\\').replace(/,/g, '\\\\,').replace(/;/g, '\\\\;').replace(/\\r?\\n/g, '\\\\n');\nlet tel = String(b.telephone || '').replace(/[^0-9+]/g, '');\nif (tel.startsWith('0') && tel.length === 10) tel = '+33' + tel.slice(1);\nconst prenom = b.prenom || '';\nconst nom = String(b.nom || '').toUpperCase();\nconst complet = (prenom + ' ' + nom).trim();\nconst lignes = ['BEGIN:VCARD', 'VERSION:3.0',\n  'N:' + esc(nom) + ';' + esc(prenom) + ';;;',\n  'FN:' + esc(complet)];\nif (b.societe) lignes.push('ORG:' + esc(b.societe));\nif (tel) lignes.push('TEL;TYPE=CELL:' + tel);\nif (b.email) lignes.push('EMAIL;TYPE=INTERNET:' + b.email);\nif (b.adresse || b.ville) lignes.push('ADR;TYPE=HOME:;;' + esc(b.adresse) + ';' + esc(b.ville) + ';;' + esc(b.code_postal) + ';France');\nif (b.note) lignes.push('NOTE:' + esc(b.note));\nlignes.push('END:VCARD');\nconst vcf = lignes.join('\\r\\n') + '\\r\\n';\nreturn [{\n  json: { url: 'https://api.telegram.org/bot' + token + '/sendDocument', chat_id: '1857340429', caption: complet + ' : tape sur le fichier, Partager, puis Contacts' },\n  binary: { data: { data: Buffer.from(vcf, 'utf8').toString('base64'), mimeType: 'text/vcard', fileName: (complet || 'contact').replace(/[^A-Za-z0-9 _-]/g, '') + '.vcf' } }\n}];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        448,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "2bec4871-97ca-4545-9008-10d77398a4e3",
+      "name": "Webhook",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fiche-contact-iphone-k7q2",
+        "responseData": "firstEntryJson",
+        "responseMode": "lastNode"
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-19T13:18:22.646Z"
+}

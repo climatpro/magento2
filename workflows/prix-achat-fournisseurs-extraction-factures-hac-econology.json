@@ -1,0 +1,424 @@
+{
+  "active": true,
+  "connections": {
+    "Boucle factures": {
+      "main": [
+        [],
+        [
+          {
+            "index": 0,
+            "node": "Telecharger PDF",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Chaque nuit 3h": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Parametres",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Construire lignes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ecrire prix",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Ecrire prix": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Boucle factures",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extraire lignes (Haiku)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Construire lignes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire prix": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer lot",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lister factures fournisseurs": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire prix",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Parametres": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lister factures fournisseurs",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer lot": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Boucle factures",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Telecharger PDF": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Extraire lignes (Haiku)",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-20T06:24:45.825Z",
+  "description": "Lit les factures HAC (PDF Drive contenant Hitachi Cooling), extrait chaque ligne article avec Haiku et ajoute prix nets HT dans le Sheet PRIX ACHAT ClimatPro. Par lots, sans doublon (file_id).",
+  "id": "eIm19cWQyQ7RRshF",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Prix achat fournisseurs - Extraction factures (HAC, Econology)",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "af42de41-d742-4142-9265-8ac11f17feb3",
+      "name": "Boucle factures",
+      "parameters": {
+        "batchSize": 1
+      },
+      "position": [
+        1120,
+        80
+      ],
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3
+    },
+    {
+      "id": "1e110d11-79c7-46aa-bae9-3604856f044e",
+      "name": "Chaque nuit 3h",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 3
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        80
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "d7d1f03d-c701-4728-88b4-6977bb7cb6b0",
+      "name": "Construire lignes",
+      "parameters": {
+        "jsCode": "const src = $('Boucle factures').first().json;\nconst j = $input.first() ? ($input.first().json || {}) : {};\nlet texte = '';\nif (typeof j.content === 'string') texte = j.content;\nelse if (Array.isArray(j.content)) texte = j.content.map(c => (c && c.text) || '').join('');\nelse if (typeof j.text === 'string') texte = j.text;\nelse if (typeof j.output === 'string') texte = j.output;\nelse texte = JSON.stringify(j);\nlet d = null; let statut = 'ok';\ntry { const t = texte.replace(/```json|```/g, ''); d = JSON.parse(t.slice(t.indexOf('{'), t.lastIndexOf('}') + 1)); } catch (e) { statut = 'erreur_lecture'; d = {}; }\nif (statut === 'ok' && (d.est_facture_fournisseur === false || d.est_facture_hac === false)) statut = 'pas_facture_fournisseur';\nif (statut === 'ok' && d.type_doc === 'avoir') statut = 'avoir';\nconst num = v => (v === null || v === undefined || v === '' || isNaN(Number(v))) ? '' : Number(v);\nconst quand = $now.setZone('Europe/Paris').toFormat('yyyy-LL-dd HH:mm');\nconst fourn = d.fournisseur && d.fournisseur !== 'autre' ? d.fournisseur : (/econology/i.test(src.nom_fichier) ? 'Econology' : 'HAC');\nconst base = { fournisseur: fourn, date_facture: d.date_facture || '', numero_facture: d.numero_facture ? \"'\" + d.numero_facture : '', lien_pdf: src.lien_pdf, file_id: src.file_id, traite_le: quand };\nconst REF_FRAIS = ['DEEE', 'ECO', 'FF', 'PORT'];\nconst estFrais = l => { const r = String(l.reference || '').trim().toUpperCase(); const des = String(l.designation || '').toLowerCase(); return l.categorie === 'frais' || REF_FRAIS.includes(r) || /transport|frais de port|port |livraison|eco.?contribution|eco.?participation|deee|frais de facturation|^f\\.f/.test(des); };\nconst lignes = (statut === 'ok' && Array.isArray(d.lignes)) ? d.lignes.filter(l => !estFrais(l)) : [];\nif (!lignes.length) return [{ json: Object.assign({ reference: '', designation: src.nom_fichier, categorie: '', quantite: '', prix_unitaire_net_ht: '', remise_pct: '', statut: statut === 'ok' ? 'aucune_ligne' : statut }, base) }];\nreturn lignes.map(l => ({ json: Object.assign({ reference: l.reference ? \"'\" + String(l.reference).trim() : '', designation: String(l.designation || '').slice(0, 300), categorie: l.categorie || '', quantite: num(l.quantite), prix_unitaire_net_ht: num(l.prix_unitaire_net_ht), remise_pct: num(l.remise_pct), statut: 'ok' }, base) }));",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1792,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "id": "091c6d81-91d3-428d-a9e4-3be47811bd0b",
+      "name": "Ecrire prix",
+      "parameters": {
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {}
+        },
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1jemEEyKe-L3xdL4TuDmkPTG8cqbWRWvXLAy36iIBehU"
+        },
+        "operation": "append",
+        "options": {
+          "cellFormat": "USER_ENTERED",
+          "handlingExtraData": "ignoreIt"
+        },
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "mode": "id",
+          "value": "2035616917"
+        }
+      },
+      "position": [
+        2016,
+        80
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "credentials": {
+        "anthropicApi": {
+          "id": "GfYoRA9p0AV4WXlD",
+          "name": "Anthropic account"
+        }
+      },
+      "id": "76ec6c42-2256-4c1e-b414-e98f7e17322d",
+      "name": "Extraire lignes (Haiku)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "binaryPropertyName": "data",
+        "inputType": "binary",
+        "modelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "claude-haiku-4-5-20251001"
+        },
+        "operation": "analyze",
+        "options": {
+          "maxTokens": 4000
+        },
+        "resource": "document",
+        "simplify": true,
+        "text": "Tu lis une facture PDF d'un fournisseur de l'entreprise de climatisation ClimatPro (HAC / Hitachi Cooling & Heating, ou Econology).\nReponds UNIQUEMENT par un objet JSON, sans texte autour, avec exactement ces cles :\n{\"fournisseur\": \"HAC\" | \"Econology\" | \"autre\" (emetteur de la facture),\n\"est_facture_fournisseur\": true/false (true seulement si c'est une facture ou un avoir emis par HAC ou Econology a destination de ClimatPro),\n\"type_doc\": \"facture\" | \"avoir\" | \"autre\",\n\"numero_facture\": \"\",\n\"date_facture\": \"AAAA-MM-JJ\",\n\"lignes\": [{\"reference\": \"code article tel qu'ecrit\", \"designation\": \"libelle tel qu'ecrit\", \"categorie\": \"accessoire\" | \"machine\" | \"piece_detachee\" | \"frais\" | \"autre\", \"quantite\": nombre, \"prix_unitaire_net_ht\": nombre (prix unitaire HT APRES toutes remises), \"remise_pct\": nombre ou null}]}\nRegles : une entree par ligne article facturee. Si seuls des prix TTC sont indiques, divise par 1,2. Machine = unite interieure, unite exterieure, groupe, PAC, ballon. Accessoire = supports, gaines, goulottes, liaisons, cables, pompes de relevage, telecommandes, caches, grilles, consommables. Frais = port, emballage, eco-participation, DEEE, frais de facturation.\nIgnore les lignes de texte sans prix (numeros de BL, commentaires). N'invente rien : null si absent. N'ecris jamais d'IBAN ni de RIB."
+      },
+      "position": [
+        1568,
+        0
+      ],
+      "type": "@n8n/n8n-nodes-langchain.anthropic",
+      "typeVersion": 1
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "executeOnce": true,
+      "id": "ff7a44ac-d9ac-44e5-b101-52e5c054d96f",
+      "name": "Lire prix",
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1jemEEyKe-L3xdL4TuDmkPTG8cqbWRWvXLAy36iIBehU"
+        },
+        "operation": "read",
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "mode": "id",
+          "value": "2035616917"
+        }
+      },
+      "position": [
+        672,
+        80
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "ace6eeba-334c-42b7-a2d3-b3212b289c90",
+      "name": "Lister factures fournisseurs",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "method": "GET",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "options": {
+          "pagination": {
+            "pagination": {
+              "completeExpression": "={{ !$response.body.nextPageToken }}",
+              "limitPagesFetched": true,
+              "maxRequests": 20,
+              "paginationCompleteWhen": "other",
+              "paginationMode": "updateAParameterInEachRequest",
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "pageToken",
+                    "type": "qs",
+                    "value": "={{ $response.body.nextPageToken }}"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "mimeType='application/pdf' and trashed=false and modifiedTime > '2024-01-01T00:00:00' and (fullText contains 'Hitachi Cooling' or name contains 'ECONOLOGY' or name contains 'Econology') and not name contains 'Notice' and not name contains 'SET FREE' and not name contains 'brochure' and not name contains 'Attestation' and not name contains 'Rapport'"
+            },
+            {
+              "name": "fields",
+              "value": "nextPageToken,files(id,name,createdTime,webViewLink)"
+            },
+            {
+              "name": "pageSize",
+              "value": "1000"
+            },
+            {
+              "name": "corpora",
+              "value": "allDrives"
+            },
+            {
+              "name": "includeItemsFromAllDrives",
+              "value": "true"
+            },
+            {
+              "name": "supportsAllDrives",
+              "value": "true"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "specifyQuery": "keypair",
+        "url": "https://www.googleapis.com/drive/v3/files"
+      },
+      "position": [
+        448,
+        80
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "13647ec4-a5c7-4fc6-b045-6c27bc1ff8a2",
+      "name": "Parametres",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "lot",
+              "name": "lot",
+              "type": "number",
+              "value": 40
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "mode": "manual"
+      },
+      "position": [
+        224,
+        80
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "1236538d-3262-48d1-bf50-e7e330f1e5b2",
+      "name": "Preparer lot",
+      "parameters": {
+        "jsCode": "const LOT = Number($('Parametres').first().json.lot) || 40;\nconst deja = new Set($('Lire prix').all().map(i => String(i.json.file_id || '').trim()).filter(Boolean));\nconst vus = new Set();\nconst fichiers = [];\nfor (const page of $('Lister factures fournisseurs').all()) for (const f of (page.json.files || [])) { if (!vus.has(f.id)) { vus.add(f.id); fichiers.push(f); } }\nconst aFaire = fichiers.filter(f => !deja.has(f.id)).sort((a, b) => String(a.createdTime).localeCompare(String(b.createdTime)));\nreturn aFaire.slice(0, LOT).map(f => ({ json: { file_id: f.id, nom_fichier: f.name, lien_pdf: f.webViewLink || ('https://drive.google.com/file/d/' + f.id + '/view'), restants_avant_lot: aFaire.length } }));",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        896,
+        80
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "66ed71b9-37e4-4112-8c1a-6ceaa7f8dff6",
+      "name": "Telecharger PDF",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.file_id }}"
+        },
+        "operation": "download",
+        "options": {
+          "binaryPropertyName": "data"
+        },
+        "resource": "file"
+      },
+      "position": [
+        1344,
+        0
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-20T06:56:54.046Z"
+}

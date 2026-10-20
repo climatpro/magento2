@@ -1,0 +1,127 @@
+{
+  "active": false,
+  "connections": {
+    "Inserer": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Compte",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lignes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Inserer",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Reception": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lignes",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-10T10:13:29.199Z",
+  "id": "RYPWWGNG0nmH61VN",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Import - Codes Hitachi (temporaire)",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "8378b598-acd5-47c4-91fc-7ac10894ca57",
+      "name": "Compte",
+      "parameters": {
+        "jsCode": "return [{ json: { ok: true, n: $('Lignes').all().length } }];"
+      },
+      "position": [
+        672,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "alwaysOutputData": true,
+      "id": "192d514e-691f-46e0-862f-d9ccb506c33b",
+      "name": "Inserer",
+      "parameters": {
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {}
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "9fowyCEpKBxx3ui1"
+        },
+        "operation": "insert",
+        "options": {
+          "optimizeBulk": true
+        },
+        "resource": "row"
+      },
+      "position": [
+        448,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "52c89f96-a5fd-425b-a438-c5246443208a",
+      "name": "Lignes",
+      "parameters": {
+        "jsCode": "const b = $input.first().json.body;\nconst rows = Array.isArray(b.rows) ? b.rows : [];\nreturn rows.map(r => ({ json: { modele: String(r.modele||''), modele_norm: String(r.modele_norm||''), famille: String(r.famille||''), p: String(r.p||''), codes: String(r.codes||'') } }));"
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "65d803f2-4f15-43d8-a9ae-07386edf6ed3",
+      "name": "Reception",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {
+          "allowedOrigins": "https://aircloud-alarmcode.hitachiaircon.com",
+          "onlyRunIf": "={{ $json.body.token === '<SECRET-RETIRE>' }}"
+        },
+        "path": "import-hitachi-5e7ba5a315866c5e",
+        "responseData": "firstEntryJson",
+        "responseMode": "lastNode"
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-10T10:13:29.199Z"
+}

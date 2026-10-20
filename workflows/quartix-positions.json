@@ -1,0 +1,215 @@
+{
+  "active": true,
+  "connections": {
+    "Auth Quartix": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire Quartix (lecture seule)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Chaque minute": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Fenetre et cadence",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Fenetre et cadence": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Auth Quartix",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire Quartix (lecture seule)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enregistrer etat",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Test manuel": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Auth Quartix",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-13T09:53:09.016Z",
+  "description": "Lit Quartix en lecture seule (8h15-19h en semaine, 1 min si un véhicule roule, 5 min sinon) et enregistre positions + arrêts du jour du Vivaro Blanc dans la table quartix_etat, lue par le tableau de bord.",
+  "id": "1bkcX6ADhHRwDbMF",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Quartix - Positions",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "httpCustomAuth": {
+          "id": "JVvofvrQJHHfTNQ3",
+          "name": "Custom Auth account"
+        }
+      },
+      "id": "e183bba7-5fed-4b0e-9c74-db62aed530dd",
+      "name": "Auth Quartix",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "contentType": "json",
+        "genericAuthType": "httpCustomAuth",
+        "jsonBody": "{}",
+        "method": "POST",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://qws.quartix.net/v2/api/auth"
+      },
+      "position": [
+        440,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "a7644586-ffdc-4e24-992a-c7791ba161c1",
+      "name": "Chaque minute",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "524a5023-57c9-4893-be3d-f751a7008eec",
+      "name": "Enregistrer etat",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "cle": "etat",
+            "etat_json": "={{ $json.etat_json }}",
+            "maj": "={{ $json.maj }}"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "45PSs7FELv97nkCn"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "cle",
+              "keyValue": "etat"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "upsert",
+        "resource": "row"
+      },
+      "position": [
+        896,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "5d769a27-cd6d-4cc6-80d7-cc79cc451fc0",
+      "name": "Fenetre et cadence",
+      "parameters": {
+        "jsCode": "// Cadence : semaine, 8h15-19h (Paris). Toutes les minutes si un véhicule roule, sinon toutes les 5 minutes.\nconst now = DateTime.now().setZone('Europe/Paris');\nconst m = now.hour * 60 + now.minute;\nif (now.weekday > 5 || m < 8 * 60 + 15 || m > 19 * 60) return [];\nconst s = $getWorkflowStaticData('global');\nif (s.bloque && Date.now() < s.bloque) return []; // pause 30 min après un refus de connexion\nconst ecoule = (Date.now() - (s.dernier || 0)) / 60000;\nif (!s.enRoute && ecoule < 4.5) return [];\nreturn [{ json: { lancement: now.toISO() } }];\n",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "8d93f6e5-c6eb-430c-9a78-0143f21889c5",
+      "name": "Lire Quartix (lecture seule)",
+      "parameters": {
+        "jsCode": "// Lit Quartix (QWS v2) en LECTURE SEULE. L'authentification est faite par le nœud « Auth Quartix »\n// avec l'identifiant n8n chiffré : aucun mot de passe ne passe dans les données.\nconst r = $input.first().json || {};\nconst now = DateTime.now().setZone('Europe/Paris');\nconst jour = now.toFormat('yyyy-MM-dd');\nconst s = $getWorkflowStaticData('global');\nconst b = r.body || {};\nconst d = b.Data || b.data || {};\nconst tok = d.AccessToken || d.accessToken;\nif (!tok) {\n  s.bloque = Date.now() + 30 * 60000; s.dernier = Date.now(); s.enRoute = false;\n  const m = (b.Meta && b.Meta.Message) || (b.meta && b.meta.message) || (r.error && r.error.message) || '';\n  return [{ json: { cle: 'etat', etat_json: JSON.stringify({ jour, maj: now.toISO(), erreur: 'Connexion Quartix refusée', code: r.statusCode || null, message: String(m).slice(0, 200) }), maj: now.toISO() } }];\n}\ns.bloque = 0;\nconst base = 'https://qws.quartix.net/v2/api';\nconst H = { AccessToken: tok };\nconst get = async (p) => { const x = await this.helpers.httpRequest({ method: 'GET', url: base + p, headers: H, json: true, timeout: 15000 }); return (x && (x.Data || x.data)) || []; };\nconst [vehicules, live, trajets, gestion] = [await get('/vehicles'), await get('/vehicles/live'), await get('/vehicles/trips?StartDay=' + jour + '&EndDay=' + jour), await get('/vehicles/management')];\nfunction calculer(vehicules, live, trajets, gestion, maintenantISO) {\n  const SUIVI_ARRETS = ['FL 192 RP']; // Vivaro Blanc (techniciens). Le Vivaro Bleu = véhicule de Laurent, pas de suivi des durées.\n  const lieu = s => String(s || '').replace(/, France$/, '').trim();\n  const estDepot = s => /^climatpro$/i.test(String(s || '').trim()) || /Chem(in|\\.) de Dandon/i.test(String(s || ''));\n  const out = [];\n  for (const v of vehicules) {\n    const L = live.find(x => x.VehicleId === v.VehicleId) || {};\n    const G = gestion.find(x => x.VehicleID === v.VehicleId) || {};\n    const enRoute = (L.Speed || 0) > 0 || (L.LastEventDescription && L.LastEventDescription !== 'Ignition-Off');\n    const adr = lieu(String(L.LocationText || '').replace(/^.*? à /, '').replace(/ depuis .*$/, ''));\n    const T = trajets.filter(t => t.VehicleID === v.VehicleId)\n      .sort((a, b) => String(a.StartDateTime).localeCompare(String(b.StartDateTime)))\n      .filter(t => (t.Distance || 0) >= 0.15); // micro-déplacements (< 150 m) ignorés : ils ne coupent pas un arrêt\n    const arrets = [];\n    if (SUIVI_ARRETS.includes(v.RegistrationNumber)) {\n      for (let i = 0; i < T.length; i++) {\n        const arr = T[i], dep = T[i + 1];\n        const fin = dep ? dep.StartDateTime : (enRoute ? null : maintenantISO);\n        if (!fin) continue;\n        const min = Math.round((Date.parse(fin) - Date.parse(arr.EndDateTime)) / 60000);\n        if (min < 5 || estDepot(arr.EndLocation)) continue;\n        arrets.push({ lieu: lieu(arr.EndLocation), lat: arr.EndLat, lon: arr.EndLong, arrivee: arr.EndDateTime, depart: dep ? dep.StartDateTime : null, minutes: min, enCours: !dep });\n      }\n    }\n    out.push({\n      id: v.VehicleId, immat: v.RegistrationNumber, nom: v.Description,\n      enRoute, vitesse: L.Speed || 0, adresse: adr, depot: estDepot(adr), lat: L.Latitude, lon: L.Longitude,\n      dernierSignal: L.LastEventDateTime || null, evenement: L.LastEventDescription || '',\n      km: Math.round(T.reduce((s, t) => s + (t.Distance || 0), 0) * 10) / 10,\n      echeances: { revision: G.ServiceDueDate || null, assurance: G.InsuranceDueDate || null, ct: G.TestDueDate || null },\n      arrets\n    });\n  }\n  return out;\n}\n\nconst etat = calculer(vehicules, live, trajets, gestion, now.toISO());\ns.dernier = Date.now();\ns.enRoute = etat.some(v => v.enRoute);\nreturn [{ json: { cle: 'etat', etat_json: JSON.stringify({ jour, maj: now.toISO(), vehicules: etat }), maj: now.toISO() } }];\n",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        672,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "c71a0b1d-cd36-4bde-b530-a78ae69397fb",
+      "name": "Test manuel",
+      "parameters": {},
+      "position": [
+        220,
+        200
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false
+  },
+  "tags": [],
+  "updatedAt": "2026-10-14T17:54:53.381Z"
+}

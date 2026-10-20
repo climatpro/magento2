@@ -1,0 +1,246 @@
+{
+  "active": true,
+  "connections": {
+    "Chaque mois": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Page codes Toshiba",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extraire codes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ecrire codes_defaut",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Page codes Toshiba": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Extraire codes",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-10T05:05:05.985Z",
+  "description": "Import mensuel de la base officielle des codes defaut Toshiba France (espacepro.toshiba-confort.fr) dans la Data Table codes_defaut. notes_climatpro jamais ecrasee.",
+  "id": "IPXbHTthWpMfQimp",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Import - Codes defaut Toshiba",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "ec508d0a-057a-4847-ab27-1be12482bba2",
+      "name": "Chaque mois",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months",
+              "monthsInterval": 1,
+              "triggerAtDayOfMonth": 1,
+              "triggerAtHour": 6,
+              "triggerAtMinute": 7
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "bd3db5f8-9fb1-43f1-953b-134c9f609816",
+      "name": "Ecrire codes_defaut",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "marque",
+              "id": "marque",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "code",
+              "id": "code",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "code_cle",
+              "id": "code_cle",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "designation",
+              "id": "designation",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "notes",
+              "id": "notes",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "source",
+              "id": "source",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "maj",
+              "id": "maj",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "code": "={{ $json.code }}",
+            "code_cle": "={{ $json.code_cle }}",
+            "designation": "={{ $json.designation }}",
+            "maj": "={{ $json.maj }}",
+            "marque": "={{ $json.marque }}",
+            "notes": "={{ $json.notes }}",
+            "source": "={{ $json.source }}"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "codes_defaut",
+          "mode": "id",
+          "value": "ko1b5qPW0nF5yYBm"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "marque",
+              "keyValue": "={{ $json.marque }}"
+            },
+            {
+              "condition": "eq",
+              "keyName": "code_cle",
+              "keyValue": "={{ $json.code_cle }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "upsert",
+        "options": {},
+        "resource": "row"
+      },
+      "position": [
+        672,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "53e0b1d3-785f-4908-a215-79a22d6355d6",
+      "name": "Extraire codes",
+      "parameters": {
+        "jsCode": "const h = String($input.first().json.html || '');\nconst dec = s => String(s || '').replace(/<br\\s*\\/?>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/&#0?39;|&rsquo;|&#8217;/g, \"'\").replace(/&amp;/g, '&').replace(/&quot;/g, '\"').replace(/&nbsp;/g, ' ').replace(/&#8211;|&#8212;/g, '-').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/\\s+/g, ' ').trim();\nconst parts = h.split('class=\"wrapper-resultat-code\"').slice(1);\nconst jour = $now.setZone('Europe/Paris').toISODate();\nconst out = [];\nconst vus = new Set();\nfor (const p of parts) {\n  const c = /code=\"([^\"]*)\"/.exec(p);\n  if (!c) continue;\n  const code = dec(c[1]);\n  const des = /class=\"designation-code\">([\\s\\S]*?)<\\/div>/.exec(p);\n  const not = /class=\"note-code\">([\\s\\S]*?)<\\/div>/.exec(p);\n  const designation = des ? dec(des[1].replace(/<h4>[\\s\\S]*?<\\/h4>/, '')) : '';\n  const notes = not ? dec(not[1].replace(/<h4>[\\s\\S]*?<\\/h4>/, '')) : '';\n  const code_cle = code.toUpperCase().replace(/[^A-Z0-9]/g, '');\n  if (!code_cle || vus.has(code_cle)) continue;\n  vus.add(code_cle);\n  out.push({ json: { marque: 'Toshiba', code, code_cle, designation, notes, source: 'espacepro.toshiba-confort.fr/codes-defauts', maj: jour } });\n}\nif (out.length < 100) throw new Error('Seulement ' + out.length + ' codes lus : la page Toshiba a peut-etre change, import annule.');\nreturn out;",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        448,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "868b0d11-0685-44c4-ae15-ae2d861e10b6",
+      "name": "Page codes Toshiba",
+      "parameters": {
+        "method": "GET",
+        "options": {
+          "response": {
+            "response": {
+              "outputPropertyName": "html",
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 60000
+        },
+        "url": "https://espacepro.toshiba-confort.fr/codes-defauts/"
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "830b3d3c-ea42-4531-9d54-93089375252c",
+      "name": "Sticky Note 58c56548",
+      "parameters": {
+        "color": 4,
+        "content": "## Import - Codes defaut Toshiba\nLit chaque mois la base officielle des codes defaut Toshiba France (espacepro.toshiba-confort.fr/codes-defauts, page publique) et met a jour la Data Table codes_defaut (marque Toshiba).\nLa colonne notes_climatpro n est jamais ecrasee : Laurent peut y ajouter ses retours terrain.\nSi moins de 100 codes sont lus (page modifiee), l import s arrete sans rien toucher.",
+        "height": 200,
+        "width": 520
+      },
+      "position": [
+        128,
+        -32
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-10T05:05:05.985Z"
+}

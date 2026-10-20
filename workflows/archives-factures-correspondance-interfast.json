@@ -1,0 +1,281 @@
+{
+  "active": false,
+  "connections": {
+    "Clients Interfast": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire index",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lancer": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Pages Interfast",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire correspondance": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Rapprocher",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire index": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire correspondance",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Pages Interfast": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Clients Interfast",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Rapprocher": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ecrire correspondance",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-18T08:40:15.328Z",
+  "description": "Rapproche les clients des anciennes factures (onglet Feuille 1) avec les fiches clients Interfast, et ajoute les nouveaux dans l'onglet Correspondance_Interfast (sur / a_verifier / absent). Lecture seule Interfast, aucune IA. Relançable : ne réécrit jamai",
+  "id": "8GN2GvWHNhjTrew5",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Archives factures - Correspondance Interfast",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "75134496-9fc4-40b9-85c8-ed7f002e4424",
+      "name": "Clients Interfast",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "method": "GET",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchInterval": 400,
+              "batchSize": 4
+            }
+          }
+        },
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "page",
+              "value": "={{ $json.page }}"
+            },
+            {
+              "name": "size",
+              "value": "100"
+            },
+            {
+              "name": "name",
+              "value": ""
+            },
+            {
+              "name": "archived",
+              "value": "={{ $json.archived }}"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://app.inter-fast.fr/v1/crm/search"
+      },
+      "position": [
+        440,
+        300
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "id": "5c35da91-a51b-4e6b-ba2e-b3069c179731",
+      "name": "Ecrire correspondance",
+      "parameters": {
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {}
+        },
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1qk6RULDlOTXvfAnrbqCh6MAnFK2Kp1-f6v07DUheIXg"
+        },
+        "operation": "append",
+        "options": {
+          "cellFormat": "RAW",
+          "handlingExtraData": "ignoreIt",
+          "useAppend": true
+        },
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Correspondance_Interfast"
+        }
+      },
+      "position": [
+        1320,
+        300
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "id": "7827371b-2022-4e87-805f-752ef5214dde",
+      "name": "Lancer",
+      "parameters": {},
+      "position": [
+        0,
+        300
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "executeOnce": true,
+      "id": "b38872e4-a0a2-4ddd-b934-e21ce109c58a",
+      "name": "Lire correspondance",
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1qk6RULDlOTXvfAnrbqCh6MAnFK2Kp1-f6v07DUheIXg"
+        },
+        "operation": "read",
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Correspondance_Interfast"
+        }
+      },
+      "position": [
+        880,
+        300
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "executeOnce": true,
+      "id": "47ad2d67-240c-45c0-9aa0-827d2c4a7cfb",
+      "name": "Lire index",
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1qk6RULDlOTXvfAnrbqCh6MAnFK2Kp1-f6v07DUheIXg"
+        },
+        "operation": "read",
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Feuille 1"
+        }
+      },
+      "position": [
+        660,
+        300
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "id": "f84061b3-b7b4-43cd-9e97-8557e411d44e",
+      "name": "Pages Interfast",
+      "parameters": {
+        "jsCode": "const out = [];\nfor (let i = 0; i < 32; i++) out.push({ json: { page: i, archived: 'false' } });\nfor (let i = 0; i < 12; i++) out.push({ json: { page: i, archived: 'true' } });\nreturn out;"
+      },
+      "position": [
+        220,
+        300
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "f25d828e-bd33-4ca7-aa31-906bdb47fe31",
+      "name": "Rapprocher",
+      "parameters": {
+        "jsCode": "// Rapproche chaque client des archives avec un client Interfast. Aucune IA, aucune ecriture Interfast.\nconst STOP = new Set(['M','MR','MRS','MME','MLLE','MM','MONSIEUR','MADAME','ET','EPOUX','SCI','SARL','SAS','SASU','SA','EURL','STE','SOCIETE','LA','LE','LES','DE','DU','DES','D','L','RESTAURANT','HOTEL','LOCATAIRE','CHEZ','CABINET','MAITRE','DR','THE','AND','OF']);\nconst norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/[^A-Z0-9]+/g, ' ').trim();\nconst toks = s => [...new Set(norm(s).split(' ').filter(t => t.length >= 2 && !STOP.has(t)))];\nconst cp5 = s => { const d = String(s || '').replace(/\\D/g, ''); return d ? d.padStart(5, '0').slice(0, 5) : ''; };\nfunction lev1(a, b) { if (Math.abs(a.length - b.length) > 1) return false; let i = 0, j = 0, e = 0; while (i < a.length && j < b.length) { if (a[i] === b[j]) { i++; j++; continue; } if (++e > 1) return false; if (a.length > b.length) i++; else if (b.length > a.length) j++; else { i++; j++; } } return e + (a.length - i) + (b.length - j) <= 1; }\nconst same = (a, b) => a === b || (a.length >= 5 && b.length >= 5 && (lev1(a, b) || a.startsWith(b) || b.startsWith(a)));\nconst ifc = {};\nfor (const it of $('Clients Interfast').all()) for (const c of (it.json.items || [])) {\n  if (!c || c.category === 'supplier' || ifc[c.id]) continue;\n  const ad = c.address || {};\n  ifc[c.id] = { id: String(c.id), ref: c.reference || '', nom: c.name || '', T: toks(c.name), cp: cp5(ad.zipCode), ville: norm(ad.city), villeAff: ad.city || '', archived: !!c.archived };\n}\nconst liste = Object.values(ifc);\nif (liste.length < 500) throw new Error('Liste clients Interfast incomplete (' + liste.length + ') : rien n est ecrit');\n// Un mot present chez 8 clients Interfast ou plus (prenom, PROPERTIES...) ne suffit pas a lui seul\nconst df = {};\nfor (const c of liste) for (const t of c.T) df[t] = (df[t] || 0) + 1;\nconst rare = t => (df[t] || 0) < 8;\nfunction nameScore(A, B) {\n  if (!A.length || !B.length) return { s: 0, hit: 0, rareHit: 0, exact: 0, exactFull: false, cover: 0 };\n  let hit = 0, rareHit = 0, exact = 0;\n  for (const a of A) { const b = B.find(x => same(a, x)); if (b) { hit++; if (b === a) exact++; if (rare(a) || rare(b)) rareHit++; } }\n  return { s: hit / Math.min(A.length, B.length), hit, rareHit, exact, exactFull: exact >= Math.min(A.length, B.length), cover: hit / Math.max(A.length, B.length) };\n}\nconst idx = {};\nfor (const c of liste) for (const t of c.T) { (idx[t] = idx[t] || []).push(c); if (t.length >= 5) { const p = '#' + t.slice(0, 5); (idx[p] = idx[p] || []).push(c); } }\nconst groupes = {};\nfor (const it of $('Lire index').all()) {\n  const r = it.json || {};\n  if (String(r.statut || '') !== 'ok') continue;\n  const dossier = String(r.dossier_client || '').trim();\n  const fourreTout = !dossier || /ANCIENS CLIENTS|racine/i.test(dossier);\n  const cle = fourreTout ? (dossier || '(racine)') + ' / ' + String(r.client || '').trim() : dossier;\n  const g = groupes[cle] = groupes[cle] || { cle, dossier: fourreTout ? '' : dossier, noms: {}, villes: {}, cps: {}, dates: [], mat: new Set(), ht: 0, n: 0 };\n  g.n++;\n  if (r.client) g.noms[r.client] = (g.noms[r.client] || 0) + 1;\n  if (r.ville) g.villes[norm(r.ville)] = r.ville;\n  const cp = cp5(r.code_postal); if (cp) g.cps[cp] = 1;\n  if (r.date_facture) g.dates.push(String(r.date_facture).slice(0, 10));\n  const m = [r.marque, r.modele].filter(Boolean).join(' ').trim(); if (m) g.mat.add(m);\n  const ht = parseFloat(String(r.montant_ht || '').replace(/\\s/g, '').replace(',', '.')); if (!isNaN(ht)) g.ht += ht;\n}\nconst deja = new Set($('Lire correspondance').all().map(i => String((i.json || {}).cle || '').trim()).filter(Boolean));\nconst out = [];\nfor (const g of Object.values(groupes)) {\n  if (deja.has(g.cle)) continue;\n  const Tdossier = toks(g.dossier);\n  const variantes = [g.dossier, ...Object.keys(g.noms)].filter(Boolean).map(toks).filter(t => t.length);\n  const cand = new Map();\n  for (const T of variantes) for (const t of T) { for (const c of (idx[t] || [])) cand.set(c.id, c); if (t.length >= 5) for (const c of (idx['#' + t.slice(0, 5)] || [])) cand.set(c.id, c); }\n  const scores = [];\n  for (const c of cand.values()) {\n    // Le nom du dossier client (souvent le nom de famille) doit se retrouver dans la fiche Interfast\n    if (Tdossier.length && !Tdossier.some(a => c.T.some(b => same(a, b)))) continue;\n    let best = { s: 0, hit: 0, rareHit: 0, exact: 0, exactFull: false, cover: 0 };\n    let minS = 1;\n    for (const T of variantes) { const r = nameScore(T, c.T); minS = Math.min(minS, r.s); if (r.s > best.s || (r.s === best.s && r.cover > best.cover)) best = r; }\n    if (best.s < 0.5 || best.rareHit === 0) continue;\n    const geoCp = !!(c.cp && g.cps[c.cp]);\n    const geoVille = !!(c.ville && g.villes[c.ville]);\n    const geo = geoCp || geoVille;\n    // Correspondance partielle ou approximative (orthographe voisine) sans la meme ville : trop faible\n    if ((best.s < 1 || best.exact < best.hit) && !geo) continue;\n    const total = best.s + (geoCp ? 0.25 : 0) + (geoVille ? 0.15 : 0) + Math.min(best.hit - 1, 2) * 0.05 + best.cover * 0.1;\n    scores.push({ c, b: best, minS, geo, total });\n  }\n  scores.sort((a, b) => b.total - a.total);\n  const top = scores[0], second = scores[1];\n  let statut = 'absent';\n  if (top) {\n    const net = !second || top.total - second.total >= 0.2;\n    // sur = meme nom exact, meme ville, aucun autre candidat proche, et pas de prenom different\n    const prenomOk = top.minS === 1 || top.c.T.length === 1;\n    statut = (top.b.s === 1 && top.b.exactFull && top.geo && net && prenomOk) ? 'sur' : 'a_verifier';\n  }\n  const d = g.dates.sort();\n  const a1 = d.length ? d[0].slice(0, 4) : '', a2 = d.length ? d[d.length - 1].slice(0, 4) : '';\n  const nomPrincipal = Object.entries(g.noms).sort((a, b) => b[1] - a[1]).map(x => x[0])[0] || g.dossier;\n  out.push({\n    cle: g.cle, statut, decision_laurent: '', nb_factures: g.n,\n    periode: a1 === a2 ? a1 : a1 + '-' + a2,\n    villes: Object.values(g.villes).slice(0, 3).join(', '),\n    materiel: [...g.mat].slice(0, 6).join(' ; ').slice(0, 250),\n    total_ht: Math.round(g.ht * 100) / 100,\n    client_archives: nomPrincipal,\n    interfast_nom: top ? top.c.nom.trim() + (top.c.archived ? ' (archive)' : '') : '',\n    interfast_ref: top ? top.c.ref : '', interfast_id: top ? top.c.id : '',\n    interfast_ville: top ? top.c.villeAff : '',\n    score: top ? Math.round(top.total * 100) / 100 : 0,\n    autre_candidat: second ? second.c.nom.trim() + ' (' + second.c.ref + ', ' + second.c.villeAff + ')' : '',\n    note_interfast: ''\n  });\n}\nconst ordre = { a_verifier: 0, sur: 1, absent: 2 };\nout.sort((a, b) => ordre[a.statut] - ordre[b.statut] || b.nb_factures - a.nb_factures);\nreturn out.map(j => ({ json: j }));",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1100,
+        300
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-19T05:56:45.149Z"
+}

@@ -1,0 +1,346 @@
+{
+  "active": false,
+  "connections": {
+    "Entree": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Marque",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Marque": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Outil Toshiba",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Outil Hitachi",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Erreur",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook Claude": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Entree",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-12T21:46:54.301Z",
+  "description": "Passerelle webhook pour Claude (MCP n8n) vers Outil - Dispo Toshiba et Outil - Dispo Hitachi, role admin. POST /webhook/pieces-detachees, en-tete x-cle (cle de Outil - Sonepar). Corps : marque + reference, ou modele + mots_cles. Lecture seule.",
+  "id": "EQvQIgDjOe2gq98m",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Claude - Pieces detachees",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "8692f54c-a1d4-4fb8-9228-8d4f6cb24f3b",
+      "name": "Entree",
+      "parameters": {
+        "jsCode": "const i = $input.first().json || {};\nconst h = i.headers || {};\nconst b = (i.body && Object.keys(i.body).length) ? i.body : (i.query || {});\nif (String(h['x-cle'] || '') !== '<SECRET-RETIRE>') return [{ json: { marque: 'erreur', erreur: 'cle webhook invalide' } }];\nconst marque = String(b.marque || '').toLowerCase().trim();\nconst reference = String(b.reference || '').trim();\nconst modele = String(b.modele || '').trim();\nconst mots_cles = String(b.mots_cles || '').trim();\nif (!['toshiba', 'hitachi'].includes(marque)) return [{ json: { marque: 'erreur', erreur: 'marque attendue : toshiba ou hitachi' } }];\nif (!reference && !modele) return [{ json: { marque: 'erreur', erreur: 'fournir une reference de piece, ou un modele + mots_cles' } }];\nreturn [{ json: { marque, reference, modele, mots_cles, erreur: '' } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        224,
+        192
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "beaf75a2-59ea-4d7d-b0f3-a91e6dff9722",
+      "name": "Erreur",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "res",
+              "name": "resultat",
+              "type": "string",
+              "value": "=Erreur : {{ $json.erreur }}"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "mode": "manual"
+      },
+      "position": [
+        672,
+        384
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "456c784b-4e5b-46e5-8634-a58157401c1d",
+      "name": "Marque",
+      "parameters": {
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.marque }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "toshiba"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                }
+              },
+              "outputKey": "toshiba"
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.marque }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "hitachi"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                }
+              },
+              "outputKey": "hitachi"
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.marque }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "erreur"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                }
+              },
+              "outputKey": "erreur"
+            }
+          ]
+        }
+      },
+      "position": [
+        448,
+        176
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "86cbd6af-7dc6-413d-bee0-71df727dd787",
+      "name": "Outil Hitachi",
+      "parameters": {
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "p7VfJ2HTKTctJBsv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "reference",
+              "id": "reference",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "modele",
+              "id": "modele",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "mots_cles",
+              "id": "mots_cles",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "role",
+              "id": "role",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "modele": "={{ $json.modele }}",
+            "mots_cles": "={{ $json.mots_cles }}",
+            "reference": "={{ $json.reference }}",
+            "role": "admin"
+          }
+        }
+      },
+      "position": [
+        672,
+        192
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "5f68798f-c536-465b-a717-8e2a7a50384e",
+      "name": "Outil Toshiba",
+      "parameters": {
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "4PjuGOfWCDdkuoPq"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "reference",
+              "id": "reference",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "modele",
+              "id": "modele",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "mots_cles",
+              "id": "mots_cles",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "role",
+              "id": "role",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "modele": "={{ $json.modele }}",
+            "mots_cles": "={{ $json.mots_cles }}",
+            "reference": "={{ $json.reference }}",
+            "role": "admin"
+          }
+        }
+      },
+      "position": [
+        672,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "16d065bf-fa3f-40d3-8787-8377be397c10",
+      "name": "Webhook Claude",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "pieces-detachees",
+        "responseMode": "lastNode"
+      },
+      "position": [
+        0,
+        192
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-12T21:46:54.301Z"
+}

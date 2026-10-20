@@ -1,0 +1,1783 @@
+{
+  "active": true,
+  "connections": {
+    "Alerte quota": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Alerter Laurent",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Assistant": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer reponse",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Construire bulle copie": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Envoyer copie",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Controle acces": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Quota OK ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Detecter alerte": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Alerter Laurent",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Haiku": {
+      "ai_languageModel": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_languageModel"
+          }
+        ]
+      ]
+    },
+    "Joindre photo": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire fournisseurs": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Construire bulle copie",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire utilisateurs": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Controle acces",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Memoire courte": {
+      "ai_memory": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_memory"
+          }
+        ]
+      ]
+    },
+    "Message Telegram": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire utilisateurs",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Message quota": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Repondre Telegram",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Alerte quota",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Photo ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Telecharger photo",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer reponse": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Repondre Telegram",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Detecter alerte",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Quota OK ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Photo ?",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Message quota",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Repondre Telegram": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Journal",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Lire fournisseurs",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Telecharger photo": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Joindre photo",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "camions": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "clients_sans_entretien": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "code_defaut": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "detail_rdv": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "dispo_daikin": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "dispo_hitachi": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "dispo_toshiba": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "expert_diagnostic": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "fiche_client": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "materiel_devis": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "memos": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "planning": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "prix_sonepar": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "recherche_client": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "Assistant",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-08T14:33:03.740Z",
+  "description": "Bot Telegram assistant libre (Haiku + outils planning, recherche client, fiche client, matériel devis). Remplace Bot - Questions (V2).",
+  "id": "fb86kJwEmjNC5Vcd",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Bot - Assistant",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "096f0bc7-656e-4be8-aa6b-5f3021148f0c",
+      "name": "Alerte quota",
+      "parameters": {
+        "jsCode": "const c = $('Controle acces').first().json;\nif (c.vocal || (c.nb_jour !== 101 && c.nb_jour !== 151)) return [];\nconst admins = $('Lire utilisateurs').all().map(i => i.json).filter(u => u.actif && u.role === 'admin' && u.telegram_id);\nconst text = c.nb_jour === 101\n  ? 'Info bot : ' + c.nom + ' a depasse 100 questions aujourd hui (limite 150).'\n  : 'Alerte bot : ' + c.nom + ' a atteint la limite de 150 questions aujourd hui, il est bloque jusqu a demain.';\nreturn admins.map(a => ({ json: { chat_id: String(a.telegram_id), text } }));\n",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1000,
+        -350
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "id": "32bff9c3-3892-4ae0-9f3f-7d36db2067dc",
+      "name": "Alerter Laurent",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        },
+        "chatId": "={{ $json.chat_id }}",
+        "operation": "sendMessage",
+        "resource": "message",
+        "text": "={{ String($json.text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }}"
+      },
+      "position": [
+        1400,
+        200
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "0ca97527-2936-4742-8f1a-00b0e2895317",
+      "name": "Assistant",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "options": {
+          "enableStreaming": false,
+          "maxIterations": 8,
+          "passthroughBinaryImages": true,
+          "systemMessage": "={{ 'Tu es l assistant interne de ClimatPro (climatisation et pompes a chaleur, Cote d Azur). Tu parles a ' + $json.nom + ' (role : ' + $json.role + ', identifiant technicien ' + $json.interfast_id + '), tutoie-le. Nous sommes le ' + $now.setZone('Europe/Paris').setLocale('fr').toFormat('cccc d LLLL yyyy') + ', il est ' + $now.setZone('Europe/Paris').toFormat('HH:mm') + ' (heure de Paris).\\n\\nREGLES DE CONTENU :\\n- Tu reponds UNIQUEMENT a partir de ce que renvoient tes outils. Si les outils ne donnent pas l info, dis-le simplement. N invente jamais un client, un horaire, un numero ou un materiel.\\n- Recopie les numeros de telephone, adresses et references exactement comme l outil les donne.\\n- Client cite par son nom : appelle TOUJOURS recherche_client avant de repondre, meme si le nom semble incomplet ou ecrit bizarrement (ex B4 Azur, B4Azur, SCI B4 AZUR). Si rien ne sort, reessaie avec une variante (sans espaces, avec ou sans SCI, un seul mot du nom). Ne demande une precision QUE si les recherches ne trouvent rien ou trouvent plusieurs clients plausibles, et dans ce cas liste ceux trouves. Pour la derniere ou la prochaine intervention d un client, utilise ensuite fiche_client (historique des interventions) avec son client_id.\\n- Categories : installation (chantier), devis (visite avant devis), maintenance (entretien), depannage, rdv, tache, intervention. Un chantier de climatisation = installation.\\n- Prochain = premier evenement a venir apres l heure actuelle. Cherche sur plusieurs jours si besoin (jusqu a 31).\\n- Camions (ex : le camion est libre demain, j ai un camion cet apres-midi, il me reste un vehicule) : appelle TOUJOURS l outil camions (date_debut et nombre de jours). Il calcule lui-meme, par demi-journee, combien des 2 camions (utilises par Christophe et Axel) sont libres. Recopie son verdict tel quel, sans le recalculer ni le contredire, en gardant les lignes Matin, Apres-midi et A caler. Ne dis jamais que tu ne geres pas les vehicules.\\n- Des qu une question porte sur un RDV precis (quoi faire, quel materiel, quelle clim, consignes, acces), appelle detail_rdv avec son event_id : la description de l intervention est la source prioritaire. Complete avec materiel_devis si besoin, en precisant le numero et la date du devis. Si les deux ne disent pas la meme chose, signale l ecart.\\n- Codes defaut (codes erreur) : outil code_defaut, disponible pour Toshiba, Daikin (sauf Daikin Altherma) et Hitachi. Un code cite seul ou avec une photo (ex A6, defaut E04, code 0011) EST une demande de fiche code defaut : appelle l outil tout de suite. Passe la marque, le code exactement comme affiche (avec son sous-code s il y en a un) et le modele lu sur la plaque ou donne dans le message. Si la marque est inconnue, demande une photo de la plaque signaletique. Pour une autre marque, dis que la recherche de codes defaut n est disponible que pour Toshiba, Daikin et Hitachi pour l instant, sans jamais deviner. Hitachi : le libelle et la fiche de depannage dependent du modele exact. Si l outil ne trouve pas le modele ou en liste plusieurs, donne en une ligne ce qu il dit du code puis demande la plaque ou le modele exact. Si l outil donne plusieurs fiches pour un meme code, ne garde que celle dont les gammes correspondent a la machine ; si tu ne peux pas trancher, cite les deux en une ligne chacune. Si l outil liste des sous-codes, demande lequel s affiche. Si le code est introuvable, recopie le message de l outil. Sinon, si une piece est suspectee et que le modele est connu : pour Toshiba, appelle dispo_toshiba avec ce modele et mots_cles = la designation probable de cette piece en anglais ET en francais ; pour Hitachi, appelle dispo_hitachi de la meme facon (modele + mots_cles) ; pour Daikin, appelle dispo_daikin de la meme facon (modele + mots_cles), puis applique la regle Demande de prix. Si la piece suspecte se trouve dans l autre unite que le modele lu (ex P22 Toshiba ou E7 Daikin = moteur ventilateur du groupe exterieur alors que la plaque est celle de l unite interieure ; chez Hitachi RAS, RAC et RAM = groupe exterieur, RAK, RCI, RPI, RPK, RCD = unite interieure), ne cherche pas : demande la plaque de l autre unite. Reponds ensuite en 3 blocs courts, sans jamais repeter une information d un bloc a l autre : 1) Defaut et causes possibles : une ou deux phrases, en ne gardant que la partie qui concerne la gamme de la machine. 2) A verifier avant de commander : si une note terrain ClimatPro existe, mets-la en premier, puis les verifications de la fiche constructeur (pour Daikin, la fiche donne des causes presumees : transforme-les en points a verifier, dans l ordre de la fiche, sans en ajouter ; pour Hitachi, une ligne par controle dans l ordre de la fiche, en gardant ses reperes : carte PCB, connecteur CN, thermistance THM, valeurs). S il n y a qu une verification, ecris-la seule, sans commenter ce qui manque. 3) Piece suspecte (non confirmee) : designation, reference, disponibilite, prix indicatif client, et le prix portail ou public s il est fourni. N ajoute aucune cause, verification ou piece absente de la reponse des outils, et ne signale jamais l absence de note terrain.\\n- Demande de prix au distributeur : pour Daikin, des qu une piece est suspectee ou demandee, termine TOUJOURS ta reponse par une ligne contenant exactement ===COPIER=== suivie du message a envoyer au distributeur. Pour Toshiba et Hitachi, fais-le seulement si on te demande la demande de prix ou le message pour le distributeur. Le message est court, en texte simple, et au ton NEUTRE : ni tutoiement ni vouvoiement, aucun tu, toi, vous, votre, pouvez-vous ; formule-le avec nous. INTERDIT dans ce message : toute reference de piece et tout prix (portail, public, indicatif, achat), MEME si les outils en ont trouve. C est au distributeur d identifier et de verifier la bonne reference a partir de la machine : s il se trompe, c est son erreur et pas la notre. Contenu dans cet ordre : Bonjour, ; la demande : Nous aurions besoin de la reference exacte, du prix et du delai pour la piece suivante. ; la piece (designation en francais et en anglais uniquement, sans reference ni repere de vue eclatee, quantite 1 sauf indication contraire) ; la machine (marque et modele exact ; ajoute le numero de serie UNIQUEMENT s il a ete lu sur une photo ou donne dans la conversation, sinon n en parle pas du tout) ; le code defaut affiche s il y en a un ; Merci. ; ' + $json.nom + ', ClimatPro. N ecris rien apres ce message.\\n- Diagnostic complexe : outil expert_diagnostic (expert qui raisonne, plus lent et plus cher). Appelle-le UNIQUEMENT si plusieurs symptomes sont decrits, si une panne revient alors qu une piece a deja ete changee, si le code ne colle pas avec ce que constate le technicien, ou si on te demande explicitement un diagnostic. Pour une simple question de code, code_defaut suffit. Passe marque, modele, code, symptomes (tout ce que le technicien a decrit, y compris le contexte et les pieces deja changees) et client_id si le client est cite (appelle recherche_client d abord). Dans ce cas, n applique pas le format en 3 blocs : recopie l analyse de l expert telle quelle, sans ajouter ni retirer d hypothese, en enlevant seulement sa premiere ligne de titre. Si l expert designe une piece a envisager, cherche ensuite sa dispo (dispo_toshiba, dispo_hitachi ou dispo_daikin) avec le modele et la designation qu il donne, et ajoute-la a la fin (pour Daikin, applique la regle Demande de prix).\\n- Photos : lis attentivement le texte visible (marque, modele exact, numero de serie, code erreur). Recopie le modele caractere par caractere, tirets compris. Si la photo est floue ou illisible, dis-le et demande une autre photo, plus proche et sans reflet.\\n- Pieces detachees Hitachi : outil dispo_hitachi. Avec une reference de piece (ex PMRAC35NH4S01), passe reference. Sans reference mais avec le modele de la machine (lu sur une photo de plaque ou donne dans le message, ex RAC-35NH4, RASM-3VRE), laisse reference vide et passe modele et mots_cles = la designation probable de la piece en anglais ET en francais, separees par des virgules (ex FAN MOTOR, MOTEUR VENTILATEUR ou PWB, PCB, CARTE ou COMPRESSOR, COMPRESSEUR ou THERMISTOR, SONDE). Si l outil renvoie plusieurs pieces, donne la plus probable et cite les autres en une ligne. Si c est vraiment ambigu (ex carte principale ou module de puissance), pose la question. Si l outil renvoie la liste complete des pieces, choisis la bonne ligne et rappelle l outil avec sa reference. Recopie tels quels le verdict, la disponibilite et le prix indicatif client, en precisant HT hors pose. OBLIGATOIRE : si la reponse de l outil contient un Prix public Hitachi (a afficher a Laurent), ecris-le toujours sur sa propre ligne, juste apres le prix indicatif client, sans jamais l omettre. Ne calcule jamais un prix et ne donne aucun prix absent de la reponse de l outil. Si la reference est remplacee, dis-le en premier. Chez Hitachi, RAC = groupe exterieur et RAK = unite interieure : si la piece demandee est dans l autre unite, dis-le. Sans reference ni modele, demande une photo de la plaque signaletique.\\n- Pieces detachees Toshiba : outil dispo_toshiba. Avec une reference de piece (ex 43T21488), passe reference. Sans reference mais avec le modele de la machine (ex RAS-B10E2KVG-E, RAV-GM901ATP-E), laisse reference vide et passe modele et mots_cles = la designation probable de la piece en anglais ET en francais, separees par des virgules. L outil precise si le modele est une unite interieure ou un groupe exterieur : si la piece demandee est dans l autre unite, dis-le et demande la plaque de l autre unite. Si l outil renvoie plusieurs pieces, donne la plus probable et cite les autres en une ligne. Si l outil renvoie la liste complete des pieces, choisis la bonne ligne et rappelle l outil avec sa reference. Recopie tels quels la reference, la disponibilite et le prix indicatif client. OBLIGATOIRE : si la reponse de l outil contient un Prix portail Toshiba (a afficher a Laurent), ecris-le toujours sur sa propre ligne, juste apres le prix indicatif client, sans jamais l omettre. Ne calcule jamais un prix et ne donne aucun prix absent de la reponse de l outil. Sans reference ni modele, demande une photo de la plaque signaletique.\\n- Pieces detachees Daikin : outil dispo_daikin (portail Daikin Spare Parts Bank). Avec une reference de piece (ex 5038836), passe reference. Sans reference mais avec le modele de la machine (ex FTXM35R2V1B, RXM35R5V1B), laisse reference vide et passe modele et mots_cles = la designation probable de la piece en anglais ET en francais, separees par des virgules. Si l outil renvoie plusieurs pieces, donne la plus probable et cite les autres en une ligne. Si l outil renvoie la liste complete des pieces, choisis la bonne ligne et rappelle l outil avec sa reference. Si la piece est remplacee, dis-le en premier. Recopie tels quels la reference, le stock avec sa date et la mention a confirmer, et le prix indicatif client en precisant HT hors pose. OBLIGATOIRE : si la reponse de l outil contient un Prix catalogue Daikin (a afficher a Laurent), ecris-le toujours sur sa propre ligne, juste apres le prix indicatif client. Ne calcule jamais un prix et ne donne aucun prix absent de la reponse de l outil. Termine ensuite par la regle Demande de prix (le message au distributeur reste sans reference ni prix, comme l exige cette regle).\\n- Pour une marque autre que Hitachi, Toshiba ou Daikin, dis que la recherche de pieces n est disponible que pour Hitachi, Toshiba et Daikin pour l instant.\\n- Materiel neuf chez Sonepar (prix d achat net, stock, delai) : outil prix_sonepar, UNIQUEMENT si le role est admin. Pour un autre role, reponds que les prix d achat sont reserves a Laurent, sans appeler l outil. Recopie les prix et delais tels quels.\\n- Lecture seule : tu ne peux rien creer ni modifier dans Interfast.\\n\\nREGLES DE STYLE (obligatoires) :\\n- Agis tout de suite : ne demande JAMAIS de confirmation avant d utiliser un outil (ils sont tous en lecture seule, sans risque). Pas de Tu veux que je lance, Dis-moi oui, Je peux le faire si tu confirmes : fais-le directement et donne le resultat.\\n- Reponds en une seule fois, completement. Ne demande jamais Veux-tu les details ? : si la question porte sur un materiel, une clim ou des consignes, va chercher l info avec les outils et donne-la directement.\\n- Recopie les heures exactement comme l outil les donne, avec la precision entre parentheses : 9h01 (approx.), 11h02 (demi-journee). Ne les arrondis jamais (pas 9h au lieu de 9h01).\\n- Quand tu listes des RDV pour la personne qui te parle, ne la cite jamais dans les techniciens : indique seulement les autres (Avec Axel). Si elle est seule, n ecris rien.\\n- Aucune formule de politesse, d encouragement ou de conclusion (pas de Bonne journee, Une belle journee bien remplie, N hesite pas), sauf dans le message pour le distributeur. Pas d emoji. Pas de markdown, pas de tableau, texte simple adapte a Telegram.\\n- Va droit au but : une ligne par RDV (heure, client, ville, objet), puis le detail seulement si on le demande ou si c est utile a la question.' }}"
+        },
+        "promptType": "define",
+        "text": "={{ $json.question }}"
+      },
+      "position": [
+        650,
+        0
+      ],
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1
+    },
+    {
+      "id": "4da8e435-ed6d-48ef-8588-57c8b6a80edd",
+      "name": "Construire bulle copie",
+      "parameters": {
+        "jsCode": "if (!$('Preparer reponse').isExecuted) return [];\nconst p = $('Preparer reponse').first().json;\nconst brut = String(p.copie || '').trim();\nif (!brut) return [];\n// Garde-fou : jamais de reference ni de prix dans le message distributeur (c est au distributeur de verifier)\nconst copie = brut.split('\\n').map(l => l\n  .replace(/\\b(r[ée]f[ée]rence|r[ée]f)\\.?\\s*(de\\s+(la\\s+)?pi[eè]ce\\s*)?[:=-]?\\s*[A-Z0-9][A-Z0-9./-]*\\d[A-Z0-9./-]*/gi, '')\n  .replace(/\\(?\\s*\\d[\\d\\s.,]*\\s*(€|eur\\b|euros?\\b)\\s*(HT|TTC)?\\s*\\)?/gi, '')\n  .replace(/\\s*,\\s*,/g, ',').replace(/\\s{2,}/g, ' ').trimEnd()\n).filter(l => !/^\\s*(prix|tarif)[^:]*:\\s*$/i.test(l)).join('\\n').trim();\nconst fournisseurs = $input.all().map(i => i.json).filter(f => f && f.marque && f.email && f.actif !== false);\nconst texte = (p.text || '') + '\\n' + copie;\nconst escRe = s => String(s).replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');\nlet f = null;\nfor (const x of fournisseurs) {\n  const re = new RegExp('\\\\b' + escRe(x.marque) + '\\\\b', 'i');\n  if (re.test(copie) || re.test(texte)) { f = x; break; }\n}\nlet mail_url = '', bouton_texte = '';\nif (f) {\n  let modele = '';\n  const m1 = copie.match(new RegExp(escRe(f.marque) + '\\\\s*[:,-]?\\\\s*(?:mod[eè]le\\\\s*:?\\\\s*)?([A-Z0-9][A-Z0-9./-]*\\\\d[A-Z0-9./-]*)', 'i'));\n  if (m1) modele = m1[1];\n  if (!modele) { const m2 = copie.match(/mod[eè]le\\s*:?\\s*([A-Z0-9][A-Z0-9./-]*\\d[A-Z0-9./-]*)/i); if (m2) modele = m2[1]; }\n  if (!modele) { const m3 = copie.match(/\\b([A-Z]{2,6}[A-Z0-9]*-[A-Z0-9./-]*\\d[A-Z0-9./-]*)\\b/); if (m3) modele = m3[1]; }\n  modele = modele.replace(/[.,;:-]+$/, '');\n  const sujet = 'ClimatPro - Demande de prix piece ' + f.marque + (modele ? ' ' + modele.toUpperCase() : '');\n  const q = 'to=' + encodeURIComponent(String(f.email).trim()) + '&cc=' + encodeURIComponent('contact@climatpro.fr') + '&s=' + encodeURIComponent(sujet) + '&b=' + encodeURIComponent(copie);\n  mail_url = 'https://n8n.climatpro.fr/webhook/mailto?' + q;\n  bouton_texte = 'Envoyer par email a ' + String(f.email).trim();\n}\nreturn [{ json: { chat_id: p.chat_id, text: copie, mail_url, bouton_texte } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1550,
+        -200
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "278b197e-9c3a-46f4-9bcd-d70632a71dee",
+      "name": "Controle acces",
+      "parameters": {
+        "jsCode": "const upd = $('Message Telegram').first().json;\nconst msg = upd.message || {};\nif (!msg.chat || msg.chat.type !== 'private') return [];\nconst chatId = String(msg.chat.id);\nconst users = $input.all().map(i => i.json);\nconst u = users.find(x => x.actif && String(x.telegram_id) === chatId);\nif (!u) return [];\nconst role = String(u.role || '');\nconst base = { chat_id: chatId, interfast_id: Number(u.interfast_id), role, nom: String(u.nom || ''), photo_id: '' };\nif (!msg.text && (msg.voice || msg.audio || msg.video_note)) {\n  return [{ json: { ...base, question: '[message vocal]', vocal: true, quota_ok: false, nb_jour: 0 } }];\n}\nlet photo_id = '';\nif (Array.isArray(msg.photo) && msg.photo.length) photo_id = String(msg.photo[msg.photo.length - 1].file_id || '');\nelse if (msg.document && /^image\\//.test(String(msg.document.mime_type || ''))) photo_id = String(msg.document.file_id || '');\nlet q = String(msg.text || msg.caption || '').trim();\nif (photo_id) q = (q ? q + '\\n' : '') + '[Photo jointe : lis-la (plaque signaletique, etiquette, code erreur). Si le texte ou la photo contient un code defaut (ex A6, E04, 0011, defaut U4), c est une demande de fiche code defaut : traite-la tout de suite avec les outils, sans demander de confirmation. Si le texte contient une autre demande, traite-la directement. Seulement si il n y a ni code ni demande, donne la marque et le modele lus, puis demande quelle piece ou quelle info est voulue.]';\nif (!q) return [];\nconst QUOTA = 150;\nconst jour = DateTime.now().setZone('Europe/Paris').toISODate();\nconst st = $getWorkflowStaticData('global');\nif (!st.quota || st.quota.jour !== jour) st.quota = { jour, n: {} };\nst.quota.n[chatId] = (st.quota.n[chatId] || 0) + 1;\nconst quota_ok = role === 'admin' || st.quota.n[chatId] <= QUOTA;\nreturn [{ json: { ...base, photo_id, question: q.slice(0, 1200), vocal: false, quota_ok, nb_jour: st.quota.n[chatId] } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        400,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "12c15fe1-d380-4d1f-bca5-549781f6e059",
+      "name": "Detecter alerte",
+      "parameters": {
+        "jsCode": "const p = $input.first().json;\nconst ctx = $('Controle acces').first().json;\nif (ctx.role === 'admin') return [];\nconst q = String(p.question || ''), r = String(p.text || '');\nconst sens = /(prix|tarif|co[uû]t|marge|chiffre d.?affaires|\\bca\\b|salaire|paie|b[ée]n[ée]fice|facture|montant|€|euro|mot de passe|password|identifiant|banque|\\brib\\b|iban)/i;\nconst piece = /(pi[eè]ce|r[ée]f[ée]rence|\\br[ée]f\\b|hitachi|dispo|stock|carte|moteur|sonde|compresseur|ventilateur)/i;\nconst sensMarge = /(marge|chiffre d.?affaires|\\bca\\b|salaire|paie|b[ée]n[ée]fice|facture|mot de passe|password|identifiant|banque|\\brib\\b|iban|prix d.?achat)/i;\nconst refus = /(pas acc[eè]s|n.?ai pas acc[eè]s|je ne peux pas|pas autoris|non autoris|confidenti)/i;\nconst motifs = [];\nif (piece.test(q) ? sensMarge.test(q) : sens.test(q)) motifs.push('sujet sensible');\nif (refus.test(r)) motifs.push('refus du bot');\nif (!motifs.length) return [];\nconst admins = $('Lire utilisateurs').all().map(i => i.json).filter(u => u.actif && u.role === 'admin' && u.telegram_id);\nreturn admins.map(a => ({ json: { chat_id: String(a.telegram_id), text: 'Alerte bot (' + motifs.join(', ') + ')\\n' + ctx.nom + ' a demandé : « ' + q.slice(0, 300) + ' »\\nRéponse : ' + r.slice(0, 400) } }));",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1150,
+        200
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "id": "b25546a9-b39e-4e1d-87bc-7542f1a1abcd",
+      "name": "Envoyer copie",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        },
+        "chatId": "={{ $json.chat_id }}",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "additionalFields": {
+                      "url": "={{ $json.mail_url }}"
+                    },
+                    "text": "={{ $json.bouton_texte }}"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "operation": "sendMessage",
+        "replyMarkup": "={{ $json.mail_url ? 'inlineKeyboard' : 'none' }}",
+        "resource": "message",
+        "text": "={{ String($json.text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }}"
+      },
+      "position": [
+        1750,
+        -200
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "credentials": {
+        "anthropicApi": {
+          "id": "UtZzlYk97MvjuDan",
+          "name": "Anthropic account 2"
+        }
+      },
+      "id": "b161405a-268d-4eca-80ea-d1937ddd10a7",
+      "name": "Haiku",
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "cachedResultName": "Claude Haiku 5.5",
+          "mode": "list",
+          "value": "claude-haiku-5-5"
+        },
+        "options": {
+          "maxTokensToSample": 1024,
+          "thinkingMode": "disabled"
+        }
+      },
+      "position": [
+        672,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.6
+    },
+    {
+      "id": "3306bf1a-b15b-4dfa-aebe-4f05ccaf4f32",
+      "name": "Joindre photo",
+      "parameters": {
+        "jsCode": "const c = $('Controle acces').first().json;\nconst it = $input.first();\nconst b = it.binary || {};\nfor (const k of Object.keys(b)) { if (!b[k].mimeType || !/^image\\//.test(b[k].mimeType)) b[k].mimeType = 'image/jpeg'; }\nreturn [{ json: c, binary: b }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        600,
+        -500
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "fKAETwT6ij09juV8",
+          "name": "Google Sheets account"
+        }
+      },
+      "executeOnce": true,
+      "id": "4f0a16ed-d3c6-441d-bf35-f10b7d2fc157",
+      "name": "Journal",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "oAuth2",
+        "columns": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "horodatage",
+              "id": "horodatage",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "workflow",
+              "id": "workflow",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "utilisateur",
+              "id": "utilisateur",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "question",
+              "id": "question",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "reponse",
+              "id": "reponse",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "horodatage": "={{ $now.setZone('Europe/Paris').toFormat('yyyy-MM-dd HH:mm:ss') }}",
+            "question": "={{ $('Preparer reponse').isExecuted ? $('Preparer reponse').first().json.question : $('Message quota').first().json.question }}",
+            "reponse": "={{ $('Preparer reponse').isExecuted ? ($('Preparer reponse').first().json.full || $('Preparer reponse').first().json.text) : $('Message quota').first().json.text }}",
+            "utilisateur": "={{ $('Controle acces').first().json.nom }} ({{ $('Controle acces').first().json.chat_id }})",
+            "workflow": "assistant"
+          }
+        },
+        "documentId": {
+          "__rl": true,
+          "cachedResultName": "Journal Bot ClimatPro",
+          "mode": "id",
+          "value": "1AYGI1KRBJrVBRiE9VIcfq6i6-0Tcz0HF9Mjan12wJmg"
+        },
+        "operation": "append",
+        "options": {
+          "useAppend": true
+        },
+        "resource": "sheet",
+        "sheetName": {
+          "__rl": true,
+          "cachedResultName": "Untitled",
+          "mode": "id",
+          "value": "282010760"
+        }
+      },
+      "position": [
+        1350,
+        0
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "395891d9-8a52-497b-a43e-c16c61620969",
+      "name": "Lire fournisseurs",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "fournisseurs_pieces",
+          "mode": "id",
+          "value": "G8J0dx9EwoyaTfto"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        1350,
+        -200
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "alwaysOutputData": true,
+      "executeOnce": true,
+      "id": "f88f4939-bbee-40b5-8225-ed782d926963",
+      "name": "Lire utilisateurs",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "cachedResultName": "bot_users",
+          "mode": "id",
+          "value": "MAaqIFX2KBiCvHFa"
+        },
+        "operation": "get",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        200,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "fd2fdd86-8aa8-4a26-bf3d-e0feb80e6083",
+      "name": "Memoire courte",
+      "parameters": {
+        "contextWindowLength": 6,
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ 'tg2-' + $('Controle acces').first().json.chat_id }}"
+      },
+      "position": [
+        800,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "id": "2671fe36-5c4b-42a8-9d55-3bacf7317821",
+      "name": "Message Telegram",
+      "parameters": {
+        "additionalFields": {},
+        "updates": [
+          "message"
+        ]
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "e52c7f8d-ecce-486d-a209-658c07dae00e",
+      "name": "Message quota",
+      "parameters": {
+        "jsCode": "const c = $input.first().json;\nconst text = c.vocal\n  ? 'Je ne lis pas encore les messages vocaux. Dicte ta question avec le micro du clavier (elle s ecrit en texte), ou tape-la.'\n  : 'Tu as atteint la limite de 150 questions pour aujourd hui. Pour la suite, appelle Laurent. Le compteur repart demain.';\nreturn [{ json: { chat_id: c.chat_id, nom: c.nom, question: c.question, text } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        760,
+        -200
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "b66b8da5-76bb-4b7c-9d55-5c0aac426064",
+      "name": "Photo ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.photo_id }}",
+              "operator": {
+                "operation": "notEmpty",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        560,
+        -150
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "bb3cec0a-5079-4707-877f-219c35f96ea0",
+      "name": "Preparer reponse",
+      "parameters": {
+        "jsCode": "const ctx = $('Controle acces').first().json;\nlet t = String(($input.first().json || {}).output || '').trim();\nif (!t) t = 'Desole, je n ai pas pu repondre. Reessaie dans un instant.';\nt = t.replace(/\\*\\*/g, '').replace(/[–—]/g, '-');\nconst parts = t.split(/\\s*={3}\\s*COPIER\\s*={3}\\s*/i);\nconst main = parts[0].trim();\nconst copie = parts.length > 1 ? parts.slice(1).join('\\n').trim() : '';\nlet t1 = main || 'Message pour le distributeur :';\nif (copie && main) t1 += '\\n\\nMessage pour le distributeur dans la bulle suivante : bouton Envoyer par email, ou appui long pour copier.';\nif (t1.length > 4000) t1 = t1.slice(0, 3990) + '...';\nreturn [{ json: { chat_id: ctx.chat_id, nom: ctx.nom, question: ctx.question, text: t1, full: t, copie: copie.slice(0, 3990) } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        950,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "cb701ff6-72a1-4e78-94fd-a6dc9e693758",
+      "name": "Quota OK ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.quota_ok }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              }
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        520,
+        0
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "id": "6af8ae89-edfd-4095-b082-388ac0d38298",
+      "name": "Repondre Telegram",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "HTML"
+        },
+        "chatId": "={{ $json.chat_id }}",
+        "operation": "sendMessage",
+        "resource": "message",
+        "text": "={{ String($json.text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }}"
+      },
+      "position": [
+        1150,
+        0
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "3438aaeb-7f60-4ba7-ab10-31af7036c95c",
+      "name": "Sticky Note b92efb5d",
+      "parameters": {
+        "color": 4,
+        "content": "## Bot - Assistant (V2 libre)\nHaiku choisit ses outils : planning (periode, categorie, technicien), recherche_client, fiche_client, materiel_devis.\nSecurite dans le code : liste blanche ID Telegram (bot_users), prive uniquement, lecture seule via Interfast - Lecture, prix d achat supprimes, un technicien ne voit que son planning (role force par le code, pas par le modele).\nJournal Google Sheet."
+      },
+      "position": [
+        576,
+        320
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "thfKrKcwKcCWoR9V",
+          "name": "Telegram account"
+        }
+      },
+      "id": "805c99e2-582f-45de-bd41-e67e85db2d7a",
+      "name": "Telecharger photo",
+      "parameters": {
+        "additionalFields": {},
+        "download": true,
+        "fileId": "={{ $json.photo_id }}",
+        "resource": "file"
+      },
+      "position": [
+        560,
+        -350
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "id": "ea54963c-033f-4377-8a66-0747af63e3c6",
+      "name": "camions",
+      "parameters": {
+        "description": "Disponibilite des 2 camions de ClimatPro (utilises par Christophe et Axel) par demi-journee, calculee automatiquement a partir du planning. A utiliser pour toute question sur un camion ou un vehicule libre.",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Camions",
+          "mode": "id",
+          "value": "NXr5qAKWTQU0nVoY"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "date_debut",
+              "id": "date_debut",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "jours",
+              "id": "jours",
+              "required": false,
+              "type": "number"
+            }
+          ],
+          "value": {
+            "date_debut": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('date_debut', 'Premier jour, format AAAA-MM-JJ') }}",
+            "jours": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('jours', 'Nombre de jours, de 1 a 14', 'number') }}"
+          }
+        }
+      },
+      "position": [
+        2350,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "cc82a3ce-0ee1-46b0-b32c-8dfd7f05f2f5",
+      "name": "clients_sans_entretien",
+      "parameters": {
+        "description": "Clients chez qui ClimatPro a pose une clim et qui n ont eu aucun entretien depuis X mois, hors contrat de maintenance et hors entretien deja planifie (historique Interfast depuis sept. 2023, mis a jour chaque nuit). A utiliser pour preparer une tournee d entretien, trouver a qui proposer un entretien, ou savoir qui est a voir autour d un RDV. Deux modes : par villes, ou autour d un client (passe son client_id, donne par planning ou recherche_client, et un rayon en km). Combine avec l outil memos pour les entretiens a proposer notes a la main.",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Clients sans entretien",
+          "mode": "id",
+          "value": "NvBI84JhjfoUH5FZ"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "villes",
+              "id": "villes",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "mois_min",
+              "id": "mois_min",
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "client_id",
+              "id": "client_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "rayon_km",
+              "id": "rayon_km",
+              "required": false,
+              "type": "number"
+            }
+          ],
+          "value": {
+            "client_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('client_id', 'client_id du client autour duquel chercher, chaine vide sinon') }}",
+            "mois_min": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('mois_min', 'Nombre minimum de mois sans entretien, 12 par defaut', 'number') }}",
+            "rayon_km": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('rayon_km', 'Rayon en km autour du client, 3 par defaut', 'number') }}",
+            "villes": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('villes', 'Villes separees par des virgules (ex Mandelieu, Cannes), ou chaine vide pour toutes') }}"
+          }
+        }
+      },
+      "position": [
+        2220,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "2d24bd7b-c215-4920-a078-805d060e0f6e",
+      "name": "code_defaut",
+      "parameters": {
+        "description": "Signification d un code defaut (code erreur) Toshiba, Daikin ou Hitachi, sources officielles constructeur (Toshiba France Espace Pro, Daikin France SM-TS3, appli Hitachi airCloud Alarm Code avec la fiche de depannage du manuel de service) : designation, gammes concernees, causes, verifications, notes terrain ClimatPro, sous-codes. Donner marque, code exact et modele de la machine (indispensable pour Hitachi). Pas les codes Daikin Altherma. La premiere lecture d une fiche Hitachi prend 15 a 30 secondes.",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Code defaut",
+          "mode": "id",
+          "value": "uWkW4FbbnjkmwTXb"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "marque",
+              "id": "marque",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "code",
+              "id": "code",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "modele",
+              "id": "modele",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "demandeur",
+              "id": "demandeur",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "code": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('code', 'Code defaut exactement comme affiche, avec son sous-code s il y en a un (ex E04, P22, 0011, E31 04)') }}",
+            "demandeur": "={{ $('Controle acces').first().json.nom }}",
+            "marque": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('marque', 'Marque de la machine (ex Toshiba, Daikin, Hitachi)') }}",
+            "modele": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('modele', 'Modele de la machine lu sur la plaque ou donne dans le message (ex RAS-B10E2KVG-E, RAV-GM901ATP-E). Chaine vide si inconnu') }}"
+          }
+        }
+      },
+      "position": [
+        1700,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "211c04bb-7c0d-4bac-8715-783a27208246",
+      "name": "detail_rdv",
+      "parameters": {
+        "description": "Detail complet d une intervention par son event_id (donne par l outil planning) : description ecrite dans l intervention (type de clim, materiel, consignes), adresse complete avec batiment et acces, techniciens, devis lie. A utiliser des qu on demande ce qu il y a a faire, quel materiel, ou des consignes pour un RDV precis.",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Detail RDV",
+          "mode": "id",
+          "value": "0bCdxnRh9exHqvvM"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "event_id",
+              "id": "event_id",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "event_id": "={{ $fromAI('event_id', 'Identifiant event_id du RDV, donne par l outil planning', 'string') }}"
+          }
+        }
+      },
+      "position": [
+        900,
+        300
+      ],
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "32b0ae13-3545-4a9e-9bee-e65c30c8d74a",
+      "name": "dispo_daikin",
+      "parameters": {
+        "description": "Piece detachee Daikin (portail Daikin Spare Parts Bank). Deux usages : 1) par reference de piece (ex 5038836) ; 2) sans reference, par modele de machine (ex FTXM35R2V1B, RXM35R5V1B) + mots_cles de la piece en anglais et francais : l outil lit la vue eclatee du modele et renvoie les pieces correspondantes. Renvoie designation, repere, reference, piece de remplacement, stock France et Belgique avec sa date, prix indicatif client HT hors pose. Prend 5 a 15 secondes.",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Dispo Daikin",
+          "mode": "id",
+          "value": "di2cU3TRSnyS2BdQ"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "reference",
+              "id": "reference",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "modele",
+              "id": "modele",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "mots_cles",
+              "id": "mots_cles",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "role",
+              "id": "role",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "modele": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('modele', 'Modele de la machine Daikin tel qu ecrit sur la plaque (ex FTXM35R2V1B, RXM35R5V1B). Chaine vide si une reference de piece est donnee') }}",
+            "mots_cles": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('mots_cles', 'Designation probable de la piece en anglais ET en francais separees par des virgules (ex FAN MOTOR, MOTEUR VENTILATEUR). Chaine vide si une reference de piece est donnee') }}",
+            "reference": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('reference', 'Reference exacte de la piece Daikin (ex 5038836). Chaine vide si on ne connait que le modele de la machine') }}",
+            "role": "={{ $('Controle acces').first().json.role }}"
+          }
+        }
+      },
+      "position": [
+        2090,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "62e046b9-7845-4345-8e39-5ccd7c6d950d",
+      "name": "dispo_hitachi",
+      "parameters": {
+        "description": "Piece detachee Hitachi (source hi-parts.fr). Deux usages : 1) par reference de piece (ex PMRAC35NH4S01) ; 2) sans reference, par modele de machine (ex RAC-35NH4, RASM-3VRE) + mots_cles de la piece en anglais et francais : l outil lit les vues eclatees du modele et renvoie les pieces correspondantes. Renvoie designation, repere, remplacement, disponibilite, verdict, prix indicatif client HT hors pose. Prend 5 a 15 secondes.",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Dispo Hitachi",
+          "mode": "id",
+          "value": "p7VfJ2HTKTctJBsv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "reference",
+              "id": "reference",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "role",
+              "id": "role",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "modele",
+              "id": "modele",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "mots_cles",
+              "id": "mots_cles",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "modele": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('modele', 'Modele de la machine Hitachi tel qu ecrit sur la plaque (ex RAC-35NH4, RASM-3VRE). Chaine vide si une reference de piece est donnee') }}",
+            "mots_cles": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('mots_cles', 'Designation probable de la piece en anglais ET en francais separees par des virgules (ex FAN MOTOR, MOTEUR VENTILATEUR). Chaine vide si une reference de piece est donnee') }}",
+            "reference": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('reference', 'Reference exacte de la piece Hitachi sans espaces (ex PMRAC35NH4S01). Chaine vide si on ne connait que le modele de la machine') }}",
+            "role": "={{ $('Controle acces').first().json.role }}"
+          }
+        }
+      },
+      "position": [
+        1440,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "b519a343-8e1b-49a1-8172-bb845a7d5b1b",
+      "name": "dispo_toshiba",
+      "parameters": {
+        "description": "Piece detachee Toshiba (source pieces.toshiba-confort.fr). Deux usages : 1) par reference de piece (ex 43T21488) ; 2) sans reference, par modele de machine (ex RAS-B10E2KVG-E, RAV-GM901ATP-E) + mots_cles de la piece en anglais et francais : l outil lit la vue eclatee du modele et renvoie les pieces correspondantes. Renvoie designation, repere, reference, stock, prix indicatif client HT hors pose, et si le modele est une unite interieure ou un groupe exterieur. Prend 2 a 5 secondes.",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Dispo Toshiba",
+          "mode": "id",
+          "value": "4PjuGOfWCDdkuoPq"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "reference",
+              "id": "reference",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "modele",
+              "id": "modele",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "mots_cles",
+              "id": "mots_cles",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "role",
+              "id": "role",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "modele": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('modele', 'Modele de la machine Toshiba tel qu ecrit sur la plaque (ex RAS-B10E2KVG-E, RAV-GM901ATP-E). Chaine vide si une reference de piece est donnee') }}",
+            "mots_cles": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('mots_cles', 'Designation probable de la piece en anglais ET en francais separees par des virgules (ex FAN MOTOR, MOTEUR VENTILATEUR). Chaine vide si une reference de piece est donnee') }}",
+            "reference": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('reference', 'Reference exacte de la piece Toshiba (ex 43T21488). Chaine vide si on ne connait que le modele de la machine') }}",
+            "role": "={{ $('Controle acces').first().json.role }}"
+          }
+        }
+      },
+      "position": [
+        1830,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "07d070d6-4fd3-4d07-b21e-5470968598a0",
+      "name": "expert_diagnostic",
+      "parameters": {
+        "description": "Expert diagnostic (Sonnet, raisonne avant de repondre, 10 a 20 secondes, plus cher). Pour les pannes complexes uniquement : plusieurs symptomes, panne qui revient apres une piece changee, code incoherent avec le constat, ou demande explicite de diagnostic. Croise fiche officielle du code, notes terrain ClimatPro, symptomes et historique client. Renvoie hypotheses classees, ordre des controles, piece a envisager seulement si un controle la designe.",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Expert diagnostic",
+          "mode": "id",
+          "value": "LA38f9HqFWwMlXjY"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "marque",
+              "id": "marque",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "modele",
+              "id": "modele",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "code",
+              "id": "code",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "symptomes",
+              "id": "symptomes",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "client_id",
+              "id": "client_id",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "client_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('client_id', 'client_id Interfast si le client est connu (via recherche_client), sinon chaine vide') }}",
+            "code": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('code', 'Code defaut affiche avec son sous-code. Chaine vide si aucun') }}",
+            "marque": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('marque', 'Marque de la machine (ex Toshiba, Hitachi, Daikin). Chaine vide si inconnue') }}",
+            "modele": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('modele', 'Modele exact lu sur la plaque. Chaine vide si inconnu') }}",
+            "symptomes": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('symptomes', 'Tout ce que le technicien a decrit : symptomes, bruits, contexte (orage, travaux), pieces deja changees, controles deja faits') }}"
+          }
+        }
+      },
+      "position": [
+        1960,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "ede5e00a-d269-4681-aa7a-d8fd420ba21c",
+      "name": "fiche_client",
+      "parameters": {
+        "description": "Fiche d un client par son client_id : contacts avec telephones, adresses, notes, historique des interventions.",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Fiche client",
+          "mode": "id",
+          "value": "yj2W2NXNAbFRiuN6"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "client_id",
+              "id": "client_id",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "client_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('client_id', 'Identifiant client Interfast (client_id)') }}"
+          }
+        }
+      },
+      "position": [
+        1056,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "c4f96476-2d4c-43d9-8481-d99fab6ac4b4",
+      "name": "materiel_devis",
+      "parameters": {
+        "description": "Materiel des devis signes d un client (marque, modele, puissance, quantites, fournitures), sans prix. Donner client_id, ou ref_devis si un n de devis est connu (ex DC4282).",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Materiel devis",
+          "mode": "id",
+          "value": "RkGCPcG8e1gI0knk"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "client_id",
+              "id": "client_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "ref_devis",
+              "id": "ref_devis",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "client_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('client_id', 'Identifiant client Interfast, vide si ref_devis est donne') }}",
+            "ref_devis": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('ref_devis', 'Numero de devis (ex DC4282), vide si inconnu') }}"
+          }
+        }
+      },
+      "position": [
+        1312,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "082a4e3e-92df-4560-9996-e89a3784e6a4",
+      "name": "memos",
+      "parameters": {
+        "description": "Memos vocaux non coches dictes par Laurent et l equipe (clients a qui proposer un entretien, clients a relancer, pieces a commander, depannages a prevoir). A utiliser des qu on parle de memos, de ce qui a ete note ou de ce qu on a en memoire, et pour preparer une tournee d entretien (en complement du planning). Renvoie pour chaque memo : titre et client, qui l a note et quand, client proche suggere, theme. Un client suivi de ? est seulement une suggestion par position GPS, a presenter comme a confirmer.",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Memos",
+          "mode": "id",
+          "value": "6jYK4PkJgDjs4Zf2"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "theme",
+              "id": "theme",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "client",
+              "id": "client",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "role",
+              "id": "role",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "nom",
+              "id": "nom",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "client": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('client', 'Nom du client pour filtrer, chaine vide sinon') }}",
+            "nom": "={{ $('Controle acces').first().json.nom }}",
+            "role": "={{ $('Controle acces').first().json.role }}",
+            "theme": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('theme', 'entretien, relance, depannage, commande, devis ou tous') }}"
+          }
+        }
+      },
+      "position": [
+        2090,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "c811d1de-4bd2-4554-8027-9551a19316ec",
+      "name": "planning",
+      "parameters": {
+        "description": "Planning Interfast (interventions, RDV, taches) sur une periode. Chaque ligne donne : jour et heure, categorie (installation, devis, maintenance, depannage, rdv, tache, intervention), client, ville, objet, techniciens, statut (termine, passe, a venir), client_id, n de devis lie.",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Planning",
+          "mode": "id",
+          "value": "zA9fv7IqJnrBuRRy"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "date_debut",
+              "id": "date_debut",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "jours",
+              "id": "jours",
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "categorie",
+              "id": "categorie",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "technicien",
+              "id": "technicien",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "user_id",
+              "id": "user_id",
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "role",
+              "id": "role",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "categorie": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('categorie', 'tous, installation, devis, maintenance, depannage, rdv, tache ou intervention') }}",
+            "date_debut": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('date_debut', 'Premier jour, format AAAA-MM-JJ') }}",
+            "jours": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('jours', 'Nombre de jours a couvrir, de 1 a 31', 'number') }}",
+            "role": "={{ $('Controle acces').first().json.role }}",
+            "technicien": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('technicien', 'tous, moi, christophe, axel ou laurent') }}",
+            "user_id": "={{ $('Controle acces').first().json.interfast_id }}"
+          }
+        }
+      },
+      "position": [
+        928,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "f2c059de-64ed-4aba-b690-1011f48ec07e",
+      "name": "prix_sonepar",
+      "parameters": {
+        "description": "Prix d achat net ClimatPro, stock et delai d un materiel neuf chez Sonepar (clim, PAC, accessoires, cable...) par reference fabricant (ex RAS-B10E2KVG-E) ou mot-cle. Reserve au role admin. Prend 20 a 30 secondes.",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Sonepar",
+          "mode": "id",
+          "value": "nUxjWTbY2DyKPetM"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "reference",
+              "id": "reference",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "role",
+              "id": "role",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "reference": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('reference', 'Reference fabricant ou mot-cle du materiel (ex RAS-B10E2KVG-E)') }}",
+            "role": "={{ $('Controle acces').first().json.role }}"
+          }
+        }
+      },
+      "position": [
+        1570,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "c923c86a-e4dc-41f1-9227-0aa30bbbb830",
+      "name": "recherche_client",
+      "parameters": {
+        "description": "Recherche de clients par nom (recherche approximative). Renvoie client_id, adresse et telephone. A utiliser quand on cite un client par son nom sans client_id.",
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Outil - Recherche client",
+          "mode": "id",
+          "value": "FHVtoHPBvB59ExMT"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "nom",
+              "id": "nom",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "nom": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('nom', 'Nom ou partie du nom du client') }}"
+          }
+        }
+      },
+      "position": [
+        1184,
+        336
+      ],
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-15T14:10:31.067Z"
+}

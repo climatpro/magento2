@@ -1,0 +1,103 @@
+{
+  "active": true,
+  "connections": {
+    "Construire page": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Repondre HTML",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lien mailto": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Construire page",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-11T20:03:48.032Z",
+  "description": "Page du bot : GET /webhook/mailto?to=&cc=&s=&b= renvoie une mini-page qui ouvre la messagerie du telephone (mailto) avec destinataire, copie, objet et corps pre-remplis. Utilisee par le bouton Envoyer par email de Bot - Assistant.",
+  "id": "zRZHM0b8qyaYTHTy",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Page - Mailto",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "54f8dc6d-0707-4645-819f-6f1808003e69",
+      "name": "Construire page",
+      "parameters": {
+        "jsCode": "const q = ($input.first().json.query) || {};\nconst clean = s => String(s || '').slice(0, 3000);\nconst to = clean(q.to).replace(/[^a-zA-Z0-9@._+-]/g, '');\nconst cc = clean(q.cc).replace(/[^a-zA-Z0-9@._+-]/g, '');\nconst subject = clean(q.s);\nconst body = clean(q.b);\nconst esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;');\nlet mailto = 'mailto:' + to;\nconst p = [];\nif (cc) p.push('cc=' + cc);\nif (subject) p.push('subject=' + encodeURIComponent(subject));\nif (body) p.push('body=' + encodeURIComponent(body));\nif (p.length) mailto += '?' + p.join('&');\nconst html = '<!doctype html><html lang=\"fr\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta name=\"robots\" content=\"noindex\"><title>Email fournisseur</title>'\n + '<style>body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;margin:0;padding:24px;background:#f5f6f8;color:#1a1a1a}a.b{display:block;background:#0a7cff;color:#fff;text-decoration:none;padding:16px;border-radius:12px;text-align:center;font-size:18px;font-weight:600;margin:16px 0}pre{white-space:pre-wrap;background:#fff;padding:12px;border-radius:8px;font-size:14px}</style>'\n + '<script>window.addEventListener(\"load\",function(){setTimeout(function(){window.location.href=' + JSON.stringify(mailto) + ';},150);});</script></head><body>'\n + '<p>Ouverture de ta messagerie...</p><a class=\"b\" href=\"' + esc(mailto) + '\">Ouvrir l email</a>'\n + '<p>Destinataire : ' + esc(to || '(aucun)') + (cc ? '<br>Copie : ' + esc(cc) : '') + '</p>'\n + (subject ? '<p>Objet : ' + esc(subject) + '</p>' : '')\n + (body ? '<pre>' + esc(body) + '</pre>' : '')\n + '</body></html>';\nreturn [{ json: { html } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "cd29f6ae-c01a-4ef1-afd9-9692cb9473bd",
+      "name": "Lien mailto",
+      "parameters": {
+        "httpMethod": "GET",
+        "options": {},
+        "path": "mailto",
+        "responseMode": "responseNode"
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1
+    },
+    {
+      "id": "7364684c-4d4e-46b7-b5e2-64d7cbad007f",
+      "name": "Repondre HTML",
+      "parameters": {
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "text/html; charset=utf-8"
+              },
+              {
+                "name": "Cache-Control",
+                "value": "no-store"
+              }
+            ]
+          }
+        },
+        "respondWith": "text",
+        "responseBody": "={{ $json.html }}"
+      },
+      "position": [
+        448,
+        0
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-11T20:06:17.607Z"
+}

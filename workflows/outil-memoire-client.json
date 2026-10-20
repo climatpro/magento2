@@ -1,0 +1,558 @@
+{
+  "active": true,
+  "connections": {
+    "A traiter ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire fiche",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Rien",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Assembler": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Matiere ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Entree": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "A traiter ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interventions passees": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire rapports",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire activites": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire historique",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire fiche": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire activites",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire historique": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interventions passees",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire rapports": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Assembler",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Matiere ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resumer (Haiku)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Rien",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Resumer (Haiku)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Extraire",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-15T21:42:23.388Z",
+  "description": "Sous-workflow du brief 18h : mémoire client (fiche, notes et appels CRM dont Plaud, comptes rendus des 6 dernières interventions, emails) résumée par Haiku en 2 versions : tech (sans argent) et admin (Laurent). Lecture seule.",
+  "id": "99B4KwoLPMWmJuNc",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Outil - Memoire client",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "7a375abe-f060-426c-be5c-d2d278a7042b",
+      "name": "A traiter ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.clientId }}",
+              "operator": {
+                "operation": "notEmpty",
+                "singleValue": true,
+                "type": "string"
+              }
+            },
+            {
+              "leftValue": "={{ $json.actif }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              }
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        224,
+        128
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "f63e299f-4c26-4d86-8a94-1c0c8aedda45",
+      "name": "Assembler",
+      "parameters": {
+        "jsCode": "const NL = String.fromCharCode(10);\nfunction txt(s) {\n  return String(s || '').replace(/<br\\s*\\/?>/gi, NL).replace(/<\\/p>/gi, NL).replace(/<[^>]+>/g, '')\n    .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')\n    .replace(/&eacute;/g, 'e').replace(/&egrave;/g, 'e').replace(/&agrave;/g, 'a').replace(/&ucirc;/g, 'u').replace(/&rsquo;/g, \"'\").replace(/&[a-z]+;/g, ' ')\n    .replace(/[ \\t]+/g, ' ').replace(/(\\r?\\n\\s*){2,}/g, NL).trim();\n}\nfunction d(x) { const t = DateTime.fromISO(String(x || ''), { zone: 'utc' }); return t.isValid ? t.setZone('Europe/Paris').toFormat('dd/MM/yyyy') : '?'; }\nfunction premier(n) { try { return $(n).first().json || {}; } catch (e) { return {}; } }\nconst A = [];\nconst fiche = premier('Lire fiche');\nlet aFiche = false;\nif (fiche.ok && fiche.data) {\n  const c = fiche.data;\n  const parts = [txt(c.commentary)].concat(Object.values(c.additionalData || {}).map(txt)).filter(x => x && !/^(france|monaco)$/i.test(x));\n  if (parts.length) { A.push('FICHE CLIENT (notes internes) : ' + parts.join(' | ').slice(0, 1200)); aFiche = true; }\n}\nconst act = premier('Lire activites');\nconst acts = (act.ok && act.data && act.data.items) || [];\nconst notes = [], mails = [];\nfor (const a of acts) {\n  const dt = d(a.date);\n  const da = a.data || {};\n  if (a.type === 'email' || a.type === 'sms') {\n    const s = da.subject || txt(da.body).slice(0, 120);\n    if (s) mails.push('- ' + dt + ' ' + a.type + ' : ' + s);\n  } else {\n    const c = txt(da.content);\n    if (c) notes.push('- ' + dt + ' (' + (a.type === 'call' ? 'appel' : 'note') + ') ' + c.slice(0, 4000));\n  }\n}\nconst rap = [];\nlet rapAll = [];\ntry { rapAll = $('Lire rapports').all(); } catch (e) {}\nfor (const it of rapAll) {\n  const r = it.json || {};\n  if (!r.ok || !r.data) continue;\n  const x = r.data;\n  const L = ['- ' + d(x.startDate || x.date) + ' ' + [x.title, x.type].filter(Boolean).join(' / ')];\n  const desc = txt(x.description);\n  if (desc) L.push('  Consigne RDV : ' + desc.slice(0, 400));\n  for (const rp of (x.reports || [])) {\n    let rd = {};\n    try { rd = typeof rp.reportData === 'string' ? JSON.parse(rp.reportData) : (rp.reportData || {}); } catch (e) {}\n    const champs = [\n      ['Travaux', rd.comments],\n      ['Remarque technicien', rd.technicianComment],\n      ['Remarque client', rd.clientComment],\n      ['A replanifier', rd.scheduleOtherIntervention ? (rd.scheduleOtherInterventionComment || 'oui') : ''],\n      ['Devis a prevoir', (rd.forecastingCostEstimates || rp.needAQuotation) ? (rd.forecastingCostEstimatesComment || 'oui') : ''],\n      ['Client absent', rd.clientNotHere ? 'oui' : '']\n    ];\n    for (const [k, v] of champs) { const t = txt(v); if (t) L.push('  ' + k + ' : ' + t.slice(0, 800)); }\n  }\n  const eq = (x.equipments || []).map(e => [e.name, e.brand, e.model, e.serialNumber].filter(Boolean).join(' ')).filter(Boolean);\n  if (eq.length) L.push('  Equipements : ' + eq.join(', ').slice(0, 300));\n  rap.push(L.join(NL));\n}\nif (notes.length) A.push('NOTES ET APPELS CONSIGNES (plus recent en premier) :' + NL + notes.join(NL));\nif (rap.length) A.push('INTERVENTIONS PASSEES (plus recente en premier) :' + NL + rap.join(NL));\nif (mails.length) A.push('EMAILS ET SMS ENVOYES PAR CLIMATPRO :' + NL + mails.slice(0, 15).join(NL));\nconst vide = !aFiche && !notes.length && !rap.length && !mails.length;\nreturn [{ json: { vide, contexte: A.join(NL + NL).slice(0, 24000) } }];",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1568,
+        48
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "7ad29f62-c169-4992-8b9c-883e10a741fb",
+      "name": "Entree",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "clientId",
+              "type": "string"
+            },
+            {
+              "name": "eventId",
+              "type": "string"
+            },
+            {
+              "name": "objet",
+              "type": "string"
+            },
+            {
+              "name": "actif",
+              "type": "boolean"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        128
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "ee57bc01-20e5-497f-a529-0e91286a4112",
+      "name": "Extraire",
+      "parameters": {
+        "jsCode": "const NL = String.fromCharCode(10);\nlet t = '';\ntry { t = ($input.first().json.content || []).map(c => c.text || '').join('').trim(); } catch (e) {}\nlet o = {};\ntry { const a = t.indexOf('{'), b = t.lastIndexOf('}'); o = JSON.parse(t.slice(a, b + 1)); } catch (e) { o = { tech: '', admin: t }; }\nconst BAN = /\\u20ac|\\beur\\b|euro|prix|tarif|remise|factur|impay|budget|marge|n[e\\u00e9]goci|montant|ristourne|\\bht\\b|\\bttc\\b|galer/i;\nconst VIDE = /^-?\\s*(aucun|aucune|rien|pas de)\\b/i;\nconst lignes = s => String(s || '').replace(/[\\u2013\\u2014]/g, '-').split(/\\r?\\n/).map(x => x.trim()).filter(x => x && !VIDE.test(x));\nconst tech = lignes(o.tech).filter(l => !BAN.test(l)).slice(0, 6).join(NL);\nconst admin = lignes(o.admin).filter(l => !/intervention pr[e\\u00e9]vue/i.test(l)).slice(0, 8).join(NL);\nreturn [{ json: { eventId: String($('Entree').first().json.eventId || ''), tech, admin } }];",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        2240,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "f323e795-34bc-49f2-ae71-c716fcace313",
+      "name": "Interventions passees",
+      "parameters": {
+        "jsCode": "const h = $input.first().json || {};\nconst evId = String($('Entree').first().json.eventId || '');\nconst items = (h.ok && h.data && h.data.items) || [];\nconst now = Date.now();\nconst passes = items.filter(e => (e.category || 'intervention') === 'intervention' && e.finished && String(e.id) !== evId && new Date(e.start).getTime() < now)\n  .sort((a, b) => String(b.start).localeCompare(String(a.start)))\n  .slice(0, 6);\nreturn passes.length ? passes.map(e => ({ json: { id: String(e.id) } })) : [{ json: { id: 'aucune' } }];",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1120,
+        48
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "22d58fda-8240-4f04-b5b0-7b8cc7c28660",
+      "name": "Lire activites",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "client_activites",
+            "params": "={{ ({ id: $('Entree').first().json.clientId, taille: 40 }) }}"
+          }
+        }
+      },
+      "position": [
+        672,
+        48
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "408235cc-e693-43b9-baf2-423861642b22",
+      "name": "Lire fiche",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "client",
+            "params": "={{ ({ id: $('Entree').first().json.clientId }) }}"
+          }
+        }
+      },
+      "position": [
+        448,
+        48
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "552d9b54-24d0-4c0b-b60b-7b5d3ffbd5b8",
+      "name": "Lire historique",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "client_events",
+            "params": "={{ ({ id: $('Entree').first().json.clientId }) }}"
+          }
+        }
+      },
+      "position": [
+        896,
+        48
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "d9d9e1f4-b8cd-4b76-8642-5562a594cb3a",
+      "name": "Lire rapports",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "cachedResultName": "Interfast - Lecture",
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "intervention",
+            "params": "={{ ({ id: $json.id }) }}"
+          }
+        }
+      },
+      "position": [
+        1344,
+        48
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "e13dfe03-9f19-47e4-a24e-9af96b3293d1",
+      "name": "Matiere ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.vide }}",
+              "operator": {
+                "operation": "false",
+                "singleValue": true,
+                "type": "boolean"
+              }
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        1792,
+        48
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "credentials": {
+        "anthropicApi": {
+          "id": "UtZzlYk97MvjuDan",
+          "name": "Anthropic account 2"
+        }
+      },
+      "id": "1cf59f91-e104-44be-a014-18b32ad2c99e",
+      "name": "Resumer (Haiku)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "contentType": "json",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify({ model: 'claude-haiku-5-5', max_tokens: 4000, system: \"Tu prepares la memoire client pour une intervention de climatisation prevue demain chez ClimatPro (Cote d'Azur). On te donne l'historique du client : notes internes de la fiche, notes et appels consignes (dont des resumes d'enregistrements de Laurent, le gerant), comptes rendus des interventions passees, emails envoyes. Ecris deux resumes en francais. Faits uniquement, aucune invention, dates au format jj/mm/aaaa, texte simple sans markdown, chaque ligne commence par un tiret simple suivi d'un espace, 120 caracteres maximum par ligne, jamais de tiret long. Ne commente pas la qualite des donnees (dates, pays, doublons). Ne repete ni l'adresse ni le telephone.\\n\\ntech : pour le technicien qui y va demain, 6 lignes maximum, de la plus utile a la moins utile : consignes de la fiche destinees au technicien (toujours en premier, ex. faire payer sur place avant d'intervenir, numero de serie a relever), ce qui a ete fait la derniere fois et quand, anomalies ou pieces signalees, travaux promis ou prevus, acces et habitudes du client, attentes ou mecontentements exprimes, materiel en place. INTERDIT dans tech : tout montant, prix, tarif, remise, budget, negociation, devis chiffre, facture, impaye, marge, et toute remarque desobligeante sur le client (reformule la consigne de facon neutre).\\n\\nadmin : pour Laurent, 8 lignes maximum : tout ce qui est utile, y compris commercial (devis en cours, negociations, factures envoyees ou relances, contrat echu, engagements pris par Laurent, points sensibles, opportunites comme proposer un contrat d'entretien ou un remplacement).\\n\\nSi rien d'utile pour un resume, chaine vide. Reponds uniquement par un objet JSON {\\\"tech\\\": \\\"...\\\", \\\"admin\\\": \\\"...\\\"} avec \\\\n entre les lignes.\", messages: [{ role: 'user', content: 'Date du jour : ' + $now.setZone('Europe/Paris').toFormat('dd/MM/yyyy') + '\\nIntervention prevue : ' + ($('Entree').first().json.objet || '') + '\\n\\nHistorique du client :\\n' + $json.contexte }] }) }}",
+        "method": "POST",
+        "nodeCredentialType": "anthropicApi",
+        "options": {
+          "timeout": 45000
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://api.anthropic.com/v1/messages"
+      },
+      "position": [
+        2016,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5
+    },
+    {
+      "id": "e509c910-dd9a-4019-8c52-233c1a0e1c54",
+      "name": "Rien",
+      "parameters": {
+        "jsCode": "return [{ json: { eventId: String($('Entree').first().json.eventId || ''), tech: '', admin: '' } }];",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        2016,
+        224
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-16T06:38:52.661Z"
+}

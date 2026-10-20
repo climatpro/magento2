@@ -1,0 +1,1195 @@
+{
+  "active": true,
+  "connections": {
+    "A valider ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Ranger a valider",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Alerte avec client": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Noter message Telegram",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Alerte sans client": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Noter message Telegram",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Analyser (Haiku)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lignes du lot",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Chercher client Interfast": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resoudre client",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Client propose ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Alerte avec client",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Alerte sans client",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Commandes ouvertes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Dedoublonner commandes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Dedoublonner commandes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Todoist - creer commande",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Eclater notes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Chercher client Interfast",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extraire commandes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Commandes ouvertes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Interfast - consigner la note": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Messages consignes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lignes du lot": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Marquer traites",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Extraire commandes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire non traites": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer lot",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lire planning du jour": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Planning du jour",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Marquer traites": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Eclater notes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Messages consignes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Marquer note Interfast",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Note autorisee ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Interfast - consigner la note",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "A valider ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Planning du jour": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Analyser (Haiku)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer alerte": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Client propose ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Preparer lot": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire planning du jour",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Ranger a valider": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Preparer alerte",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Resoudre client": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Note autorisee ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Toutes les 5 min": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lire non traites",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-16T22:22:41.231Z",
+  "description": "Toutes les 5 min : Haiku lit les messages du fil equipe. Notes client -> a valider par Laurent (TOUT_VALIDER = true) puis Interfast. Demandes de materiel -> Todoist Commandes materiel (sans doublon). PRODUCTION.",
+  "id": "aG1bAfDj6ErD5IOQ",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Equipe - Notes Interfast",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "c6e0a12f-b59e-484e-bd17-8042cdb3d9ab",
+      "name": "A valider ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.voie === 'a_valider' }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        2640,
+        120
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "gQjbmvis03Oi1VtD",
+          "name": "Bot Telegram - groupe climatpro"
+        }
+      },
+      "id": "a82884c0-dac0-4b61-b34e-7c5af5bbd66e",
+      "name": "Alerte avec client",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        },
+        "chatId": "1857340429",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "additionalFields": {
+                      "callback_data": "=nv:{{ $json.id }}:ok"
+                    },
+                    "text": "={{ $json.bouton_ok }}"
+                  },
+                  {
+                    "additionalFields": {
+                      "callback_data": "=nv:{{ $json.id }}:no"
+                    },
+                    "text": "🗑 Ignorer"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "operation": "sendMessage",
+        "replyMarkup": "inlineKeyboard",
+        "resource": "message",
+        "text": "={{ $json.texte }}"
+      },
+      "position": [
+        3520,
+        40
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "credentials": {
+        "telegramApi": {
+          "id": "gQjbmvis03Oi1VtD",
+          "name": "Bot Telegram - groupe climatpro"
+        }
+      },
+      "id": "c362dc49-9443-4905-922a-e83cc4b28cda",
+      "name": "Alerte sans client",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "additionalFields": {
+          "appendAttribution": false,
+          "disable_web_page_preview": true,
+          "parse_mode": "HTML"
+        },
+        "chatId": "1857340429",
+        "inlineKeyboard": {
+          "rows": [
+            {
+              "row": {
+                "buttons": [
+                  {
+                    "additionalFields": {
+                      "callback_data": "=nv:{{ $json.id }}:no"
+                    },
+                    "text": "🗑 Ignorer"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "operation": "sendMessage",
+        "replyMarkup": "inlineKeyboard",
+        "resource": "message",
+        "text": "={{ $json.texte }}"
+      },
+      "position": [
+        3520,
+        200
+      ],
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2
+    },
+    {
+      "credentials": {
+        "anthropicApi": {
+          "id": "UtZzlYk97MvjuDan",
+          "name": "Anthropic account 2"
+        }
+      },
+      "id": "042f6266-6281-4180-a50f-ffef7fb8f667",
+      "name": "Analyser (Haiku)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "contentType": "json",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            }
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify({ model: 'claude-haiku-5-5', max_tokens: 8000, system: \"Tu es l'assistant de ClimatPro (climatisation et pompes a chaleur, Cote d'Azur). Le gerant est Laurent ; les techniciens sont Christophe et Axel. Tu recois les derniers messages du groupe Telegram professionnel de l'equipe (texte, photos signalees par \\\"(photo jointe)\\\") et le planning des interventions du jour. Ton travail : 1) reperer les informations utiles a garder dans la fiche d'un client (notes) ; 2) reperer les demandes de materiel a commander pour l'equipe (commandes). Rien d'autre.\\n\\nNOTES. Est utile : constat technique, panne, code erreur, materiel en place (marque, modele), travaux faits ou a faire, piece a commander ou fournie pour un client, mesure, acces au site (code, gardien, cle, contact sur place), demande ou remarque du client, rendez-vous a prevoir, coordonnees d'un client.\\nN'est PAS utile : bavardage, salutations, retards, organisation interne sans client, blagues et second degre (emoji qui rit, ironie), vie privee, sujets RH ou juridiques internes, achats d'outillage, materiel ou consommable a commander sans client precis (il va dans commandes, pas dans notes), photo ou video seule sans texte qui la relie a un client, messages vides. Dans le doute, ne cree pas de note.\\n\\nRattachement au client (champ rattachement) :\\n- \\\"nomme\\\" : le message nomme le client (nom de famille, raison sociale ou nom de villa), meme si le nom est court, inhabituel ou ecrit en minuscules (ex. \\\"chez le client test\\\" = client nomme \\\"client test\\\", \\\"chez dupont\\\" = \\\"dupont\\\"). client_nom = le nom tel qu'ecrit, avec le prenom s'il est cite (ex. Claude Dienot).\\n- \\\"planning\\\" : le client n'est pas nomme, mais l'auteur a une intervention dans le planning du jour a cette heure-la ou juste avant et le message parle visiblement de ce chantier. Reprends le nom et le client_id du planning.\\n- \\\"aucun\\\" : info utile mais client impossible a determiner. client_nom vide.\\n- client_id seulement si tu le lis dans le planning, sinon chaine vide. Ne devine jamais.\\n- Une photo juste avant ou apres un texte du meme auteur sur un client va avec ce texte.\\n- Plusieurs messages sur le meme client se regroupent dans une seule note.\\n\\nresume : 1 a 4 lignes courtes en francais, faits uniquement, sans markdown, sans tiret long, chaque ligne commence par \\\"- \\\". Jamais de date relative (demain, lundi, la semaine prochaine) : ecris la date reelle au format jj/mm/aaaa, calculee a partir de la date du message.\\n\\nCOMMANDES. Une commande = un materiel, outillage, consommable ou piece qui manque ou qu'il faut commander, acheter ou racheter, meme sans le mot commander (\\\"il faut commander\\\", \\\"il manque\\\", \\\"il n'y a plus de\\\", \\\"on n'a plus de\\\", \\\"plus de Colson\\\", \\\"il nous faut une pince coupante\\\"). Pour chacune : message_ids, article = l'article avec la quantite, les dimensions ou la marque si elles sont dites, sans verbe (ex. \\\"Goulottes electriques 12,5 x 20 (grand modele)\\\", \\\"Colson\\\", \\\"Pince coupante\\\"), client_nom = le client si la commande est pour un client nomme, sinon vide. Une piece a commander pour un client nomme donne une note ET une commande. Une simple information (piece recue, deja commandee, deja livree) ou une question n'est pas une commande. Plusieurs articles dans un message = plusieurs commandes.\\n\\nReponds uniquement par un objet JSON : {\\\"notes\\\": [{\\\"message_ids\\\": [12, 13], \\\"rattachement\\\": \\\"nomme\\\", \\\"client_nom\\\": \\\"DUPONT\\\", \\\"client_id\\\": \\\"\\\", \\\"resume\\\": \\\"- ...\\\"}], \\\"commandes\\\": [{\\\"message_ids\\\": [14], \\\"article\\\": \\\"Colson\\\", \\\"client_nom\\\": \\\"\\\"}]}. Si rien : {\\\"notes\\\": [], \\\"commandes\\\": []}.\", messages: [{ role: 'user', content: 'Planning des interventions du ' + $('Preparer lot').first().json.jour + ' :\\n' + $('Planning du jour').first().json.planning + '\\n\\nMessages du groupe (format [id] date heure auteur : texte) :\\n' + $('Preparer lot').first().json.texte }] }) }}",
+        "method": "POST",
+        "nodeCredentialType": "anthropicApi",
+        "options": {
+          "timeout": 120000
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://api.anthropic.com/v1/messages"
+      },
+      "position": [
+        1100,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "a76a0268-b137-4d01-b975-28cc5c194bca",
+      "name": "Chercher client Interfast",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "method": "GET",
+        "options": {
+          "timeout": 15000
+        },
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "page",
+              "value": "0"
+            },
+            {
+              "name": "size",
+              "value": "5"
+            },
+            {
+              "name": "archived",
+              "value": "false"
+            },
+            {
+              "name": "name",
+              "value": "={{ $json.client_id_indice ? '__aucun__' : ((String($json.client_nom || '').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').split(' ').filter(w => w.length > 1 && !['client', 'clients', 'cliente', 'chez', 'monsieur', 'madame', 'mr', 'mme', 'la', 'le', 'les', 'de', 'du', 'des', 'et', 'sarl', 'sas', 'sci', 'societe', 'famille', 'villa', 'residence'].includes(w)).sort((a, b) => b.length - a.length)[0]) || '__aucun__') }}"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://app.inter-fast.fr/v1/crm/search"
+      },
+      "position": [
+        1980,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "9e25cc06-6dcb-4cd0-9bd1-402857208c32",
+      "name": "Client propose ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.avec_client }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        3300,
+        120
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "todoistApi": {
+          "id": "feB4B4HQds0e2tFC",
+          "name": "Todoist account"
+        }
+      },
+      "executeOnce": true,
+      "id": "ff86e899-3108-4e0a-a249-eed3fff7e105",
+      "name": "Commandes ouvertes",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "method": "GET",
+        "nodeCredentialType": "todoistApi",
+        "options": {},
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "@commande"
+            },
+            {
+              "name": "limit",
+              "value": "200"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "url": "https://api.todoist.com/api/v1/tasks/filter"
+      },
+      "position": [
+        1760,
+        300
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "f5b66095-a44e-46d5-9cfc-0527cd02bc26",
+      "name": "Dedoublonner commandes",
+      "parameters": {
+        "jsCode": "// Anti-doublon : une commande deja ouverte dans Todoist (raccourci Climapro, fil, saisie a la main) n'est pas recreee.\n// Meme article = au moins 60 % des mots du plus court en commun (ex. \"Colson\" et \"Colson noirs 300 mm\").\nconst VIDES = ['commander', 'commande', 'acheter', 'prendre', 'des', 'les', 'une', 'pour', 'avec', 'plus', 'modele', 'grand', 'petit', 'gros'];\nconst mots = s => [...new Set(String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/^a commander : /, '').replace(/[^a-z0-9]+/g, ' ').split(' ').filter(w => w.length > 2 && !VIDES.includes(w)).map(w => w.replace(/s$/, '')))];\nconst pareil = (a, b) => { if (!a.length || !b.length) return false; const n = a.filter(w => b.includes(w)).length; return n >= 1 && n / Math.min(a.length, b.length) >= 0.6; };\nconst ouvertes = ((($input.first() || {}).json || {}).results || []).map(t => mots(t.content));\nconst deja = ouvertes.slice();\nconst out = [];\nfor (const it of $('Extraire commandes').all()) {\n  const c = it.json;\n  const m = mots(c.article);\n  if (deja.some(o => pareil(m, o))) continue;\n  deja.push(m);\n  out.push({ json: { todoist: {\n    content: 'À commander : ' + c.article + (c.client ? ' - ' + c.client : ''),\n    description: 'Demandé par ' + c.auteur + ' dans le fil équipe' + (c.quand ? ' le ' + c.quand : '') + '.\\nMessage : ' + c.textes,\n    labels: ['commande', 'memo'],\n    project_id: '6hh423vw4vGgHFPw',\n    section_id: '6hjM3Rw4RPRw474w',\n    priority: 1\n  } } });\n}\nreturn out;",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1980,
+        300
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "executeOnce": true,
+      "id": "e05cbefd-48f5-4822-93f7-a37abfeff2b1",
+      "name": "Eclater notes",
+      "parameters": {
+        "jsCode": "// Une note par client, avec les messages d'origine et les liens des photos.\nconst lignes = $('Lignes du lot').all().map(i => i.json);\nif (!lignes.length || !lignes[0].traite) return [];\nlet t = '';\ntry { t = ($('Analyser (Haiku)').first().json.content || []).map(c => c.text || '').join('').trim(); } catch (e) {}\nlet o = null;\ntry { const a = t.indexOf('{'), b = t.lastIndexOf('}'); o = JSON.parse(t.slice(a, b + 1)); } catch (e) { o = null; }\nlet notes = (o && Array.isArray(o.notes)) ? o.notes : [];\nif (lignes[0].illisible) notes = [{ message_ids: lignes.map(l => l.id), rattachement: 'aucun', client_nom: '', client_id: '', resume: '- Lot non analyse (reponse illisible deux fois) : a trier a la main.' }];\nconst rows = {};\nfor (const it of $('Lire non traites').all()) rows[it.json.id] = it.json;\nconst NL = String.fromCharCode(10);\nconst out = [];\nfor (const n of notes) {\n  const mids = (n.message_ids || []).map(Number).filter(id => rows[id]);\n  if (!mids.length) continue;\n  const msgs = mids.map(id => {\n    const r = rows[id];\n    const d = DateTime.fromISO(String(r.date || r.createdAt), { zone: 'utc' }).setZone('Europe/Paris');\n    let l = (d.isValid ? d.toFormat('dd/MM HH:mm') : '') + ' ' + (r.auteur || '?') + ' : ' + (r.texte || (r.photo_drive_id ? '(photo)' : ''));\n    if (r.photo_drive_id) l += NL + 'Photo : https://drive.google.com/file/d/' + r.photo_drive_id + '/view';\n    return l;\n  });\n  const premier = rows[mids[0]];\n  const d0 = DateTime.fromISO(String(premier.date || premier.createdAt), { zone: 'utc' }).setZone('Europe/Paris');\n  const resume = String(n.resume || '').replace(/[–—]/g, '-').trim();\n  const idIndice = /^\\d{3,12}$/.test(String(n.client_id || '')) ? String(n.client_id) : '';\n  let ratt = String(n.rattachement || '');\n  if (!['nomme', 'planning', 'aucun'].includes(ratt)) ratt = idIndice ? 'planning' : (n.client_nom ? 'nomme' : 'aucun');\n  const contenu = 'Fil equipe Telegram du ' + (d0.isValid ? d0.toFormat('dd/MM/yyyy') : '') + ' (' + [...new Set(mids.map(id => rows[id].auteur || '?'))].join(', ') + ')' + NL\n    + 'Resume :' + NL + resume + NL + NL + '[Messages]' + NL + msgs.join(NL);\n  out.push({ json: { message_ids: mids, rattachement: ratt, client_nom: String(n.client_nom || '').trim(), client_id_indice: idIndice, date_lot: d0.isValid ? d0.toFormat('dd/MM/yyyy') : '', contenu } });\n}\nreturn out;",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1760,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "4c329201-8121-4e26-ae73-69a6fc51d7b9",
+      "name": "Extraire commandes",
+      "parameters": {
+        "jsCode": "// Demandes de materiel reperees par Haiku dans le lot (champ commandes). Rien si le lot n'est pas encore traite.\nconst lignes = $input.all().map(i => i.json);\nif (!lignes.length || !lignes[0].traite || lignes[0].illisible) return [];\nlet t = '';\ntry { t = ($('Analyser (Haiku)').first().json.content || []).map(c => c.text || '').join('').trim(); } catch (e) {}\nlet o = null;\ntry { const a = t.indexOf('{'), b = t.lastIndexOf('}'); o = JSON.parse(t.slice(a, b + 1)); } catch (e) { o = null; }\nconst cmds = (o && Array.isArray(o.commandes)) ? o.commandes : [];\nconst rows = {};\nfor (const it of $('Lire non traites').all()) rows[it.json.id] = it.json;\nconst out = [];\nfor (const c of cmds) {\n  const mids = (c.message_ids || []).map(Number).filter(id => rows[id]);\n  const article = String(c.article || '').replace(/[–—]/g, '-').replace(/\\s+/g, ' ').trim().slice(0, 120);\n  if (!mids.length || !article) continue;\n  const r = rows[mids[0]];\n  const d = DateTime.fromISO(String(r.date || r.createdAt), { zone: 'utc' }).setZone('Europe/Paris');\n  out.push({ json: {\n    article,\n    client: String(c.client_nom || '').trim().slice(0, 80),\n    auteur: [...new Set(mids.map(id => rows[id].auteur || '?'))].join(', '),\n    quand: d.isValid ? d.toFormat(\"dd/MM/yyyy 'à' HH'h'mm\") : '',\n    textes: mids.map(id => rows[id].texte || '').filter(Boolean).join(' / ').slice(0, 600)\n  } });\n}\nreturn out;",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1540,
+        300
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "c961f17d-46be-44b1-9b7e-5d32470bb594",
+      "name": "Interfast - consigner la note",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "jsonBody": "={{ JSON.stringify({ type: \"note\", content: $json.contenu }) }}",
+        "method": "POST",
+        "options": {
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "=https://app.inter-fast.fr/v1/client/{{ $json.client_id }}/activities/notes"
+      },
+      "position": [
+        2640,
+        -120
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "50672e6d-f486-4f94-a682-ebcb9d0600f6",
+      "name": "Lignes du lot",
+      "parameters": {
+        "jsCode": "// Lecture de la reponse de Haiku.\n// Reponse illisible : 1er echec -> le lot sera retente au passage suivant ; 2e echec -> lot classe et envoye a Laurent pour tri manuel.\nlet t = '';\ntry { t = ($input.first().json.content || []).map(c => c.text || '').join('').trim(); } catch (e) {}\nlet o = null;\ntry { const a = t.indexOf('{'), b = t.lastIndexOf('}'); o = JSON.parse(t.slice(a, b + 1)); } catch (e) { o = null; }\nconst ids = $('Preparer lot').first().json.ids || [];\nconst rows = {};\nfor (const it of $('Lire non traites').all()) rows[it.json.id] = it.json;\nconst ess = id => Number((rows[id] || {}).essais) || 0;\nif (!o || !Array.isArray(o.notes)) {\n  const essais = Math.max(0, ...ids.map(ess)) + 1;\n  const fini = essais >= 2;\n  return ids.map(id => ({ json: { id, traite: fini, essais, illisible: true, client_nom: fini ? '(lot illisible)' : '' } }));\n}\nconst nomPar = {};\nfor (const n of o.notes) for (const id of (n.message_ids || [])) nomPar[Number(id)] = String(n.client_nom || '').trim().slice(0, 120);\nreturn ids.map(id => ({ json: { id, traite: true, essais: ess(id), illisible: false, client_nom: nomPar[id] || '' } }));",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        1320,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "4b9535f5-85be-4184-a28c-5b5967e33dd8",
+      "name": "Lire non traites",
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "JtuuDgi9yHe84lHj"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "isFalse",
+              "keyName": "traite"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "get",
+        "orderBy": true,
+        "orderByColumn": "id",
+        "orderByDirection": "ASC",
+        "resource": "row",
+        "returnAll": true
+      },
+      "position": [
+        220,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "2ca017ef-f71a-446d-af60-05b18ba1cce6",
+      "name": "Lire planning du jour",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "mode": "once",
+        "options": {
+          "waitForSubWorkflow": true
+        },
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "Qgn9xL6dGSAcq4Zv"
+        },
+        "workflowInputs": {
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false,
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "op",
+              "id": "op",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "params",
+              "id": "params",
+              "required": false,
+              "type": "object"
+            }
+          ],
+          "value": {
+            "op": "events_jour",
+            "params": "={{ ({ date: $json.jour, jours: 1 }) }}"
+          }
+        }
+      },
+      "position": [
+        660,
+        0
+      ],
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4
+    },
+    {
+      "id": "e291b035-5c43-433b-9015-433480631b4c",
+      "name": "Marquer note Interfast",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "note_interfast",
+              "id": "note_interfast",
+              "required": false,
+              "type": "boolean"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "client_id",
+              "id": "client_id",
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "client_nom",
+              "id": "client_nom",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "client_id": "={{ $json.client_id }}",
+            "client_nom": "={{ $json.client_nom }}",
+            "note_interfast": true
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "JtuuDgi9yHe84lHj"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "id",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "update",
+        "options": {},
+        "resource": "row"
+      },
+      "position": [
+        3080,
+        -120
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "ec51dca8-5195-4dcf-9cdb-86cf502172f3",
+      "name": "Marquer traites",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "traite",
+              "id": "traite",
+              "required": false,
+              "type": "boolean"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "essais",
+              "id": "essais",
+              "required": false,
+              "type": "number"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "client_nom",
+              "id": "client_nom",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "client_nom": "={{ $json.client_nom }}",
+            "essais": "={{ $json.essais }}",
+            "traite": "={{ $json.traite }}"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "JtuuDgi9yHe84lHj"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "id",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "update",
+        "options": {},
+        "resource": "row"
+      },
+      "position": [
+        1540,
+        0
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "47a26b75-0b64-421d-80a1-90d038fef470",
+      "name": "Messages consignes",
+      "parameters": {
+        "jsCode": "// Messages effectivement consignes dans Interfast : on le note dans la table.\nconst src = $('Note autorisee ?').all();\nconst out = [];\n$input.all().forEach((it, i) => {\n  const n = (src[i] || {}).json || {};\n  for (const id of (n.message_ids || [])) out.push({ json: { id, client_id: Number(n.client_id) || null, client_nom: n.client_nom || '' } });\n});\nreturn out;",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        2860,
+        -120
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "bd4f456d-f6f1-4c1f-b18c-97b5d19d67f1",
+      "name": "Note autorisee ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.autorise }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        }
+      },
+      "position": [
+        2420,
+        0
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "456e6258-9eb5-4234-913c-356e3adb1f0f",
+      "name": "Noter message Telegram",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "tg_message_id",
+              "id": "tg_message_id",
+              "required": false,
+              "type": "number"
+            }
+          ],
+          "value": {
+            "tg_message_id": "={{ ($json.result || {}).message_id || 0 }}"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "yUbZrUGS9DHJX3ss"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "condition": "eq",
+              "keyName": "id",
+              "keyValue": "={{ $('Preparer alerte').item.json.id }}"
+            }
+          ]
+        },
+        "matchType": "allConditions",
+        "operation": "update",
+        "options": {},
+        "resource": "row"
+      },
+      "position": [
+        3740,
+        120
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "7432ea37-801a-4f31-b864-7cf3fa957514",
+      "name": "Planning du jour",
+      "parameters": {
+        "jsCode": "// Interventions du jour (tous techniciens) pour aider a rattacher un message au bon client.\nconst r = $input.first().json || {};\nconst items = (r.ok && r.data && Array.isArray(r.data.items)) ? r.data.items : [];\nconst lignes = items.map(ev => {\n  const c = ev.client || {};\n  const a = ev.address || c.address || {};\n  const techs = (ev.users || []).map(u => u.firstName || u.name || u.id).join(', ');\n  return '- ' + (ev.heureParis || '') + ' ' + String(c.name || ev.clientName || '?').trim() + ' (client_id ' + (c.id || ev.clientId || '?') + ') ' + (a.city || '') + ' ; ' + String(ev.title || ev.name || ev.type || '').replace(/<[^>]+>/g, ' ').slice(0, 120) + ' ; techniciens : ' + techs;\n});\nreturn [{ json: { planning: lignes.join('\\n').slice(0, 6000) || '(aucune intervention trouvee aujourd hui)' } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        880,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "23210997-a546-4f2b-af90-e84516521856",
+      "name": "Preparer alerte",
+      "parameters": {
+        "jsCode": "// Message prive a Laurent pour une note a valider : resume visible, messages d'origine repliables.\nconst r = $input.item.json || {};\nconst esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst motif = r.client_id ? (r.rattachement === 'planning' ? 'client devine par le planning' : 'client nomme, fiche trouvee') : (r.client_nom ? 'fiche introuvable ou en double' : 'client non identifie');\nconst parts = String(r.contenu || '').split('\\n[Messages]\\n');\nconst tete = parts[0].replace(/^Fil equipe Telegram du [^\\n]*\\n/, '').replace(/^Resume :\\n/, '');\nconst msgs = parts[1] || '';\nlet t = '<b>📝 ' + (r.client_nom ? esc(r.client_nom) : 'Client ?') + '</b>' + (r.client_id ? ' (id ' + esc(r.client_id) + ')' : '') + '\\n<i>' + motif + ' · ' + esc(r.date_lot || '') + '</i>\\n\\n';\nt += esc(tete.slice(0, 1500));\nif (msgs) t += '\\n\\n<blockquote expandable>' + esc(msgs.slice(0, 1800)) + '</blockquote>';\nif (r.candidats) t += '\\n<b>Fiches possibles :</b>\\n' + esc(String(r.candidats).slice(0, 500));\nt += '\\n\\n<i>' + (r.client_id ? 'Autre client ? Reponds avec son nom ou son id.' : 'Reponds avec le nom du client ou son id.') + '</i>';\nreturn { json: { id: r.id, texte: t, avec_client: !!r.client_id, bouton_ok: ('✅ ' + (r.client_nom || 'Valider')).slice(0, 40) } };",
+        "language": "javaScript",
+        "mode": "runOnceForEachItem"
+      },
+      "position": [
+        3080,
+        120
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "7f873365-5a66-46c2-ac49-bd458da89e38",
+      "name": "Preparer lot",
+      "parameters": {
+        "jsCode": "// Lot de messages du groupe pas encore traites. On attend 3 min de calme pour garder une rafale (photo + texte) ensemble.\nconst NOW = Date.now();\nconst rows = $input.all().map(i => i.json).filter(r => r && r.id);\nif (!rows.length) return [];\nconst t = r => new Date(r.createdAt || r.date).getTime();\nconst plusRecent = Math.max(...rows.map(t));\nif (NOW - plusRecent < 3 * 60 * 1000) return [];\nconst lot = rows.sort((a, b) => a.id - b.id).slice(0, 60);\nconst lignes = lot.map(r => {\n  const d = DateTime.fromISO(String(r.date || r.createdAt), { zone: 'utc' }).setZone('Europe/Paris');\n  const extra = (r.photo_drive_id ? ' (photo jointe)' : '') + (r.type && !['texte', 'photo'].includes(r.type) ? ' (' + r.type + ')' : '');\n  return '[' + r.id + '] ' + (d.isValid ? d.toFormat('dd/MM/yyyy HH:mm') : '') + ' ' + (r.auteur || '?') + ' : ' + (r.texte || '') + extra;\n});\nconst jour = DateTime.now().setZone('Europe/Paris').toISODate();\nreturn [{ json: { ids: lot.map(r => r.id), texte: lignes.join('\\n'), jour } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        440,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "bbecebb1-efc9-49ab-bd34-59a962cd5fbc",
+      "name": "Ranger a valider",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "schema": [
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "date_lot",
+              "id": "date_lot",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "message_ids",
+              "id": "message_ids",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "client_nom",
+              "id": "client_nom",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "client_id",
+              "id": "client_id",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "candidats",
+              "id": "candidats",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "rattachement",
+              "id": "rattachement",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "contenu",
+              "id": "contenu",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "canBeUsedToMatch": true,
+              "defaultMatch": false,
+              "display": true,
+              "displayName": "statut",
+              "id": "statut",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "value": {
+            "candidats": "={{ $json.candidats }}",
+            "client_id": "={{ $json.client_id }}",
+            "client_nom": "={{ $json.client_nom }}",
+            "contenu": "={{ $json.contenu }}",
+            "date_lot": "={{ $json.date_lot }}",
+            "message_ids": "={{ ($json.message_ids || []).join(\",\") }}",
+            "rattachement": "={{ $json.rattachement }}",
+            "statut": "a_valider"
+          }
+        },
+        "dataTableId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "yUbZrUGS9DHJX3ss"
+        },
+        "operation": "insert",
+        "options": {},
+        "resource": "row"
+      },
+      "position": [
+        2860,
+        120
+      ],
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1
+    },
+    {
+      "id": "69b8c581-5c98-48f7-be62-0c9b9fa9ce4a",
+      "name": "Resoudre client",
+      "parameters": {
+        "jsCode": "// Production : toutes les fiches clients sont possibles, mais TOUT_VALIDER = true => chaque note passe par Laurent (boutons Telegram).\n// Pour laisser partir directement les notes sures (client nomme + fiche unique) : TOUT_VALIDER = false.\nconst TOUT_VALIDER = true;\nconst VIDES = ['client', 'clients', 'cliente', 'chez', 'monsieur', 'madame', 'mr', 'mme', 'la', 'le', 'les', 'de', 'du', 'des', 'et', 'sarl', 'sas', 'sci', 'societe', 'famille', 'villa', 'residence'];\nconst n = $('Eclater notes').item.json;\nconst res = $input.item.json || {};\nconst norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();\nconst mots = norm(n.client_nom).split(' ').filter(w => w.length > 1 && !VIDES.includes(w));\nconst tous = (Array.isArray(res.items) ? res.items : []).filter(c => String(c.reference || '').toUpperCase().startsWith('C') && String(c.category || 'client') !== 'supplier');\nconst items = mots.length ? tous.filter(c => mots.every(w => norm(c.name).split(' ').some(m => m === w || (w.length >= 4 && m.startsWith(w))))) : [];\nlet id = n.client_id_indice;\nlet nom = n.client_nom;\nif (!id && items.length === 1) { id = String(items[0].id); nom = String(items[0].name || '').trim(); }\nlet voie = (n.rattachement === 'nomme' && id) ? 'direct' : 'a_valider';\nif (TOUT_VALIDER) voie = 'a_valider';\nconst liste = (items.length > 1 ? items : (items.length ? [] : tous)).slice(0, 5);\nconst candidats = liste.map(c => '- ' + String(c.name || '').trim() + ' (' + c.reference + ') : id ' + c.id).join('\\n');\nreturn { json: { ...n, client_id: id || '', client_nom: nom || '', voie, autorise: voie === 'direct', candidats } };",
+        "language": "javaScript",
+        "mode": "runOnceForEachItem"
+      },
+      "position": [
+        2200,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "todoistApi": {
+          "id": "feB4B4HQds0e2tFC",
+          "name": "Todoist account"
+        }
+      },
+      "id": "b8e10545-57c6-4ba0-8cd0-d5269109ec07",
+      "maxTries": 2,
+      "name": "Todoist - creer commande",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "jsonBody": "={{ JSON.stringify($json.todoist) }}",
+        "method": "POST",
+        "nodeCredentialType": "todoistApi",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://api.todoist.com/api/v1/tasks"
+      },
+      "position": [
+        2200,
+        300
+      ],
+      "retryOnFail": true,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "waitBetweenTries": 1500
+    },
+    {
+      "id": "0c1d10af-9eb3-4ffe-9e82-6c418ee2a1ee",
+      "name": "Toutes les 5 min",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-18T08:52:21.629Z"
+}

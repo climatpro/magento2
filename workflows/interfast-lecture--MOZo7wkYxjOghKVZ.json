@@ -1,0 +1,235 @@
+{
+  "active": false,
+  "connections": {
+    "Chemin autorise ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "GET Interfast",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Pas d appel",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Entree lecture": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Liste blanche GET",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "GET Interfast": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Suppression champs sensibles",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Liste blanche GET": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Chemin autorise ?",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-07T21:01:43.729Z",
+  "description": "Sous-workflow unique d'acces a Interfast : liste blanche GET + suppression des champs sensibles (prix d'achat, couts horaires, tokens).",
+  "id": "MOZo7wkYxjOghKVZ",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Interfast - Lecture",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "55f8662e-0acf-4532-b1e9-a51ba86bfc5a",
+      "name": "Chemin autorise ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.ok === true ? 'oui' : 'non' }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "oui"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "position": [
+        448,
+        96
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2
+    },
+    {
+      "id": "b4d66619-7b9b-4893-bf5d-03c3b8d7d697",
+      "name": "Entree lecture",
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "path",
+              "type": "string"
+            },
+            {
+              "name": "query",
+              "type": "object"
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        96
+      ],
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "GgJ5wsyGIUSWY0cN",
+          "name": "Interfast API"
+        }
+      },
+      "id": "fd9611c5-c2e5-4cf8-a850-c31a914a9135",
+      "name": "GET Interfast",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "method": "GET",
+        "options": {
+          "timeout": 20000
+        },
+        "url": "={{ $json.url }}"
+      },
+      "position": [
+        672,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5
+    },
+    {
+      "id": "b35b19ac-aa34-40ce-9210-d33f78e05f9f",
+      "name": "Liste blanche GET",
+      "parameters": {
+        "jsCode": "const inp = $input.first().json;\nconst path = String(inp.path || '').trim();\nconst query = inp.query && typeof inp.query === 'object' ? inp.query : {};\nif (path === '') {\n  return [{ json: { ok: false, reason: 'no_path', path: '', data: null } }];\n}\nconst ALLOWED = [\n  /^\\/v1\\/events$/,\n  /^\\/v1\\/events\\/to-plan$/,\n  /^\\/v1\\/intervention\\/\\d+$/,\n  /^\\/v1\\/client\\/\\d+$/,\n  /^\\/v1\\/client\\/\\d+\\/events$/,\n  /^\\/v1\\/billing\\/quotations$/,\n  /^\\/v1\\/billing\\/quotations\\/[0-9a-fA-F-]{36}$/\n];\nif (!ALLOWED.some(r => r.test(path))) {\n  throw new Error('Interfast - Lecture : chemin refuse par la liste blanche : ' + path);\n}\nconst parts = [];\nfor (const [k, v] of Object.entries(query)) {\n  if (v === undefined || v === null || v === '') continue;\n  if (Array.isArray(v)) {\n    for (const x of v) parts.push(encodeURIComponent(k) + '=' + encodeURIComponent(String(x)));\n  } else {\n    parts.push(encodeURIComponent(k) + '=' + encodeURIComponent(String(v)));\n  }\n}\nconst url = 'https://app.inter-fast.fr' + path + (parts.length ? '?' + parts.join('&') : '');\nreturn [{ json: { ok: true, path: path, url: url } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        224,
+        96
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "dab4bb5c-47de-4f40-84b5-da531ebdb60b",
+      "name": "Pas d appel",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ok",
+              "name": "ok",
+              "type": "boolean",
+              "value": false
+            },
+            {
+              "id": "reason",
+              "name": "reason",
+              "type": "string",
+              "value": "no_path"
+            },
+            {
+              "id": "path",
+              "name": "path",
+              "type": "string",
+              "value": ""
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "mode": "manual"
+      },
+      "position": [
+        672,
+        192
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "id": "fa8e954f-a080-4a67-a804-e6ae44ffc343",
+      "name": "Sticky Note 32c44830",
+      "parameters": {
+        "color": 4,
+        "content": "## Interfast - Lecture\nSeul point d acces a Interfast. Lecture seule garantie par le code : liste blanche de chemins GET, et suppression des prix d achat / couts horaires / tokens avant tout retour.\nEntree : path (string), query (object). Sortie : { ok, path, data }."
+      },
+      "position": [
+        384,
+        192
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "db6cf80b-b8ee-454c-9613-3394c14d20ac",
+      "name": "Suppression champs sensibles",
+      "parameters": {
+        "jsCode": "const BLOCK = new Set([\n  'purchasePrice', 'purchaseAmount', 'hourlyCost', 'hiddenFeesPercentage',\n  'firebaseNotificationTokens', 'password', 'salt', 'confirmationCode',\n  'emailSignature', 'accountingNumber'\n]);\nfunction clean(v) {\n  if (Array.isArray(v)) return v.map(clean);\n  if (v && typeof v === 'object') {\n    const o = {};\n    for (const [k, x] of Object.entries(v)) {\n      if (!BLOCK.has(k)) o[k] = clean(x);\n    }\n    return o;\n  }\n  return v;\n}\nconst items = $input.all().map(i => i.json);\nconst body = items.length === 1 ? items[0] : items;\nconst path = $('Liste blanche GET').first().json.path;\nreturn [{ json: { ok: true, path: path, data: clean(body) } }];",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        896,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-07T21:14:07.421Z"
+}

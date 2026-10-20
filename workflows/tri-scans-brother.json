@@ -1,0 +1,1324 @@
+{
+  "active": false,
+  "connections": {
+    "Append Interfast": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Append Dedup Facture",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Call Gemini": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Parse Gemini Response",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Compute MD5": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Lookup Dedup",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Create Admin": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "List Subtype",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Create Autre Monthly": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "List Admin",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Create Facture Monthly": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Move Facture",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Create Subtype": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Move Autre",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Download File": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Compute MD5",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "IF - Is Duplicate?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Move to Doublons",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Call Gemini",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "IF - Low Confidence?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Move to A-trier",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Switch Category",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "IF Admin Empty": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Create Admin",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "List Subtype",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "IF Autre Monthly Empty": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Create Autre Monthly",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "List Admin",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "IF Facture Monthly Empty": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Create Facture Monthly",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Move Facture",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "IF Subtype Empty": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Create Subtype",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Move Autre",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "List Admin": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "IF Admin Empty",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "List Autre Monthly": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "IF Autre Monthly Empty",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "List Facture Monthly": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "IF Facture Monthly Empty",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "List Subtype": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "IF Subtype Empty",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Lookup Dedup": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "IF - Is Duplicate?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Move Autre": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Rename Autre",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Move Facture": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Rename Facture",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Parse Gemini Response": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "IF - Low Confidence?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Rename Autre": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Append Dedup Autre",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Rename Facture": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Append Interfast",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Switch Category": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "List Facture Monthly",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "List Autre Monthly",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Trigger - Drive Watch": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Download File",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-29T13:02:12.083Z",
+  "id": "u0mZuNjuW4LW54vI",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Tri scans Brother",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sI64hm3ZUMyRS8JL",
+          "name": "Google Sheets account 2"
+        }
+      },
+      "id": "b02cc1bf-292b-4455-8da6-90421e230217",
+      "name": "Append Dedup Autre",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [],
+          "value": {
+            "Categorie": "={{ $('Parse Gemini Response').item.json.gemini.category }}",
+            "Date traitement": "={{ $now.toISO() }}",
+            "Hash MD5": "={{ $('Parse Gemini Response').item.json.md5 }}",
+            "Nom fichier classe": "={{ $('Parse Gemini Response').item.json.newFilename }}",
+            "Sous-type": "={{ $('Parse Gemini Response').item.json.gemini.subtype }}"
+          }
+        },
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1MCpIeHZpRLekJ22We9rG94JdJQIHcGzGLttA0c-ow60"
+        },
+        "operation": "append",
+        "options": {},
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Sheet1"
+        }
+      },
+      "position": [
+        1920,
+        368
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5
+    },
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sI64hm3ZUMyRS8JL",
+          "name": "Google Sheets account 2"
+        }
+      },
+      "id": "c7504884-ec6e-4d95-a65c-8192b837a7d8",
+      "name": "Append Dedup Facture",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [],
+          "value": {
+            "Categorie": "={{ $('Parse Gemini Response').item.json.gemini.category }}",
+            "Date traitement": "={{ $now.toISO() }}",
+            "Hash MD5": "={{ $('Parse Gemini Response').item.json.md5 }}",
+            "Nom fichier classe": "={{ $('Parse Gemini Response').item.json.newFilename }}",
+            "Sous-type": "={{ $('Parse Gemini Response').item.json.gemini.subtype }}"
+          }
+        },
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1MCpIeHZpRLekJ22We9rG94JdJQIHcGzGLttA0c-ow60"
+        },
+        "operation": "append",
+        "options": {},
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Sheet1"
+        }
+      },
+      "position": [
+        816,
+        -48
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5
+    },
+    {
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sI64hm3ZUMyRS8JL",
+          "name": "Google Sheets account 2"
+        }
+      },
+      "id": "cff47176-ffa9-4b15-ae19-5da671d69b32",
+      "name": "Append Interfast",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "schema": [],
+          "value": {
+            "Date facture": "={{ $('Parse Gemini Response').item.json.dateFr }}",
+            "Libellé": "={{ $('Parse Gemini Response').item.json.libelle }}",
+            "Montant HT": "={{ $('Parse Gemini Response').item.json.gemini.amount_ht }}",
+            "Montant TTC": "={{ $('Parse Gemini Response').item.json.gemini.amount_ttc }}"
+          }
+        },
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "15wNATo6gpL-rDyTdPjaQemLx8GXgd_4TtFbJtfk-tVY"
+        },
+        "operation": "appendOrUpdate",
+        "options": {},
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Sheet1"
+        }
+      },
+      "position": [
+        608,
+        -48
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ZcL2hYc3F444ZEyn",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "4b6e0f7b-60e3-4426-96f5-e6687af6d716",
+      "name": "Call Gemini",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "jsonBody": "={\n  \"contents\": [{\n    \"parts\": [\n      {\n        \"inline_data\": {\n          \"mime_type\": \"application/pdf\",\n          \"data\": \"{{ $('Compute MD5').item.json.pdfBase64 }}\"\n        }\n      },\n      {\n        \"text\": \"Tu es un classifieur de documents administratifs et comptables francais. Analyse ce PDF et extrais les informations demandees dans le schema JSON. Le category vaut facture uniquement pour les factures fournisseurs. Tout le reste (URSSAF, impots, attestations, banque, RH, etc.) vaut autre avec un sous-type. La confidence reflete ta certitude sur la classification. Si une info est absente, mets null. Renvoie UNIQUEMENT le JSON conforme au schema, sans markdown.\"\n      }\n    ]\n  }],\n  \"generationConfig\": {\n    \"temperature\": 0,\n    \"responseMimeType\": \"application/json\",\n    \"responseSchema\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"category\": { \"type\": \"string\", \"enum\": [\"facture\", \"autre\"] },\n        \"subtype\": { \"type\": \"string\", \"enum\": [\"URSSAF\", \"impots\", \"attestations\", \"releves-bancaires\", \"fiches-de-paie\", \"RIB\", \"autre\"] },\n        \"doc_date\": { \"type\": \"string\" },\n        \"emitter\": { \"type\": \"string\" },\n        \"object\": { \"type\": \"string\" },\n        \"amount_ttc\": { \"type\": \"number\" },\n        \"amount_ht\": { \"type\": \"number\" },\n        \"currency\": { \"type\": \"string\" },\n        \"confidence\": { \"type\": \"number\" }\n      },\n      \"required\": [\"category\", \"subtype\", \"doc_date\", \"emitter\", \"object\", \"confidence\"]\n    }\n  }\n}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+      },
+      "position": [
+        -1392,
+        160
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "67c41973-b04e-4a42-add1-e2d46795b506",
+      "name": "Compute MD5",
+      "parameters": {
+        "jsCode": "// Récupère le vrai buffer binaire via l'API N8N (compatible filesystem-v2)\nconst buffer = await this.helpers.getBinaryDataBuffer(0, 'data');\n\n// Hash 53 bits pure JS (cyrb53), aucune dependance crypto\nlet h1 = 0xdeadbeef, h2 = 0x41c6ce57;\nfor (let i = 0; i < buffer.length; i++) {\n  h1 = Math.imul(h1 ^ buffer[i], 2654435761);\n  h2 = Math.imul(h2 ^ buffer[i], 1597334677);\n}\nh1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);\nh2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);\nconst md5 = (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16).padStart(14, '0');\n\n// Base64 réel pour le body HTTP de Gemini en aval\nconst pdfBase64 = buffer.toString('base64');\n\nconst binaryMeta = items[0].binary && items[0].binary.data;\nconst filename = items[0].json.name || (binaryMeta && binaryMeta.fileName) || '';\nconst m = filename.match(/^(\\d{4})(\\d{2})(\\d{2})(\\d{2})(\\d{2})(\\d{2})/);\nconst scanDate = m ? `${m[1]}-${m[2]}-${m[3]}` : null;\n\nreturn [{\n  json: {\n    ...items[0].json,\n    md5,\n    scanDate,\n    originalFilename: filename,\n    sourceFileId: items[0].json.id,\n    sourceParentId: (items[0].json.parents && items[0].json.parents[0]) || '1RiEj8rvkgx9GR-ULdvvnrwL1lMYvUO0d',\n    pdfBase64\n  },\n  binary: items[0].binary\n}];"
+      },
+      "position": [
+        -2048,
+        160
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "579682ea-30f1-48a5-b3f9-7ea6f9fc385a",
+      "name": "Create Admin",
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "0AAse2-rbb-B9Uk9PVA"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Create Autre Monthly').isExecuted ? $('Create Autre Monthly').item.json.id : $('List Autre Monthly').item.json.id }}"
+        },
+        "name": "administratif",
+        "options": {},
+        "resource": "folder"
+      },
+      "position": [
+        608,
+        256
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "4275579c-81cd-4635-8ec0-e31196f6e6e3",
+      "name": "Create Autre Monthly",
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "0AAse2-rbb-B9Uk9PVA"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "0AAse2-rbb-B9Uk9PVA"
+        },
+        "name": "={{ $('Parse Gemini Response').item.json.targetFolderName }}",
+        "options": {},
+        "resource": "folder"
+      },
+      "position": [
+        -64,
+        256
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "cf622a00-392c-4dc8-8614-87f633b3b2c0",
+      "name": "Create Facture Monthly",
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "0AAse2-rbb-B9Uk9PVA"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "0AAse2-rbb-B9Uk9PVA"
+        },
+        "name": "={{ $('Parse Gemini Response').item.json.targetFolderName }}",
+        "options": {},
+        "resource": "folder"
+      },
+      "position": [
+        -64,
+        -144
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "2adbec24-d6b5-4d47-af50-30cd103e6d28",
+      "name": "Create Subtype",
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "0AAse2-rbb-B9Uk9PVA"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Create Admin').isExecuted ? $('Create Admin').item.json.id : $('List Admin').item.json.id }}"
+        },
+        "name": "={{ $('Parse Gemini Response').item.json.subtypeFolderName }}",
+        "options": {},
+        "resource": "folder"
+      },
+      "position": [
+        1264,
+        256
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "15b9eb45-bf7b-458c-ad36-06fdfaef8f39",
+      "name": "Download File",
+      "parameters": {
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.id }}"
+        },
+        "operation": "download",
+        "options": {}
+      },
+      "position": [
+        -2272,
+        160
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "id": "522ac2f2-a7bd-4195-8d3f-33a83a1cbfff",
+      "name": "IF - Is Duplicate?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json['Hash MD5'] }}",
+              "operator": {
+                "operation": "notEmpty",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        -1600,
+        160
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "id": "64141e7b-a7b8-4d65-a6ec-cfac39410d2e",
+      "name": "IF - Low Confidence?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.gemini.confidence }}",
+              "operator": {
+                "operation": "lt",
+                "type": "number"
+              },
+              "rightValue": 0.85
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        -944,
+        160
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "id": "bff26eac-9cc3-4613-9df6-c49de01d6697",
+      "name": "IF Admin Empty",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.id }}",
+              "operator": {
+                "operation": "empty",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        384,
+        368
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "id": "63b5360e-b55c-4d08-98d8-05c169d6d2be",
+      "name": "IF Autre Monthly Empty",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.id }}",
+              "operator": {
+                "operation": "empty",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        -288,
+        368
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "id": "0391cdcd-820f-4e75-a6f5-19ec311c454e",
+      "name": "IF Facture Monthly Empty",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.id }}",
+              "operator": {
+                "operation": "empty",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        -288,
+        -48
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "id": "c5cd083c-27eb-4f45-bde3-24b926599a85",
+      "name": "IF Subtype Empty",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "1",
+              "leftValue": "={{ $json.id }}",
+              "operator": {
+                "operation": "empty",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1040,
+        368
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "3d923ed6-b719-4b2e-bffb-cc92034ec403",
+      "name": "List Admin",
+      "parameters": {
+        "filter": {
+          "driveId": {
+            "__rl": true,
+            "mode": "list",
+            "value": "0AAse2-rbb-B9Uk9PVA"
+          },
+          "folderId": {
+            "__rl": true,
+            "mode": "list",
+            "value": "0AAse2-rbb-B9Uk9PVA"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {},
+        "queryString": "=name = 'administratif' and '{{ $('Create Autre Monthly').isExecuted ? $('Create Autre Monthly').item.json.id : $('List Autre Monthly').item.json.id }}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false",
+        "resource": "fileFolder"
+      },
+      "position": [
+        160,
+        368
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "ad4b67d5-c6da-40a0-803a-4c0c91db8803",
+      "name": "List Autre Monthly",
+      "parameters": {
+        "filter": {
+          "driveId": {
+            "__rl": true,
+            "cachedResultName": "DEPENSES FIMAREX",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/0AAse2-rbb-B9Uk9PVA",
+            "mode": "list",
+            "value": "0AAse2-rbb-B9Uk9PVA"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {},
+        "queryString": "==name = '{{ $json.targetFolderName }}' and '0AAse2-rbb-B9Uk9PVA' in parents and trashed = false",
+        "resource": "fileFolder"
+      },
+      "position": [
+        -512,
+        368
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "14c2eda9-3cf8-42f8-babf-224b21b28369",
+      "name": "List Facture Monthly",
+      "parameters": {
+        "filter": {
+          "driveId": {
+            "__rl": true,
+            "mode": "list",
+            "value": "0AAse2-rbb-B9Uk9PVA"
+          },
+          "folderId": {
+            "__rl": true,
+            "mode": "list",
+            "value": "0AAse2-rbb-B9Uk9PVA"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {},
+        "queryString": "=name = '{{ $json.targetFolderName }}' and '0AAse2-rbb-B9Uk9PVA' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false",
+        "resource": "fileFolder"
+      },
+      "position": [
+        -512,
+        -48
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "5e69358a-ade0-41ac-b04d-f6a1ddf55c02",
+      "name": "List Subtype",
+      "parameters": {
+        "filter": {
+          "driveId": {
+            "__rl": true,
+            "mode": "list",
+            "value": "0AAse2-rbb-B9Uk9PVA"
+          },
+          "folderId": {
+            "__rl": true,
+            "mode": "list",
+            "value": "0AAse2-rbb-B9Uk9PVA"
+          },
+          "whatToSearch": "folders"
+        },
+        "options": {},
+        "queryString": "=name = '{{ $('Parse Gemini Response').item.json.subtypeFolderName }}' and '{{ $('Create Admin').isExecuted ? $('Create Admin').item.json.id : $('List Admin').item.json.id }}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false",
+        "resource": "fileFolder"
+      },
+      "position": [
+        816,
+        368
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "sI64hm3ZUMyRS8JL",
+          "name": "Google Sheets account 2"
+        }
+      },
+      "id": "b16f3664-f90d-4e4c-9697-2af19bfacb60",
+      "name": "Lookup Dedup",
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "cachedResultName": "DEDUP_SCANS_BROTHER",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MCpIeHZpRLekJ22We9rG94JdJQIHcGzGLttA0c-ow60/edit?usp=drivesdk",
+          "mode": "list",
+          "value": "1MCpIeHZpRLekJ22We9rG94JdJQIHcGzGLttA0c-ow60"
+        },
+        "options": {},
+        "sheetName": {
+          "__rl": true,
+          "cachedResultName": "DEDUP_SCANS_BROTHER",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MCpIeHZpRLekJ22We9rG94JdJQIHcGzGLttA0c-ow60/edit#gid=2118304750",
+          "mode": "list",
+          "value": 2118304750
+        }
+      },
+      "position": [
+        -1824,
+        160
+      ],
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "2db22726-66a6-4a97-a267-15cd3ba7e385",
+      "name": "Move Autre",
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Parse Gemini Response').item.json.sourceFileId }}"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Create Subtype').isExecuted ? $('Create Subtype').item.json.id : $('List Subtype').item.json.id }}"
+        },
+        "operation": "move"
+      },
+      "position": [
+        1488,
+        368
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "2f013205-d888-449b-8320-be8c8f7aa602",
+      "name": "Move Facture",
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Parse Gemini Response').item.json.sourceFileId }}"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Create Facture Monthly').isExecuted ? $('Create Facture Monthly').item.json.id : $('List Facture Monthly').item.json.id }}"
+        },
+        "operation": "move"
+      },
+      "position": [
+        160,
+        -48
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "0288acda-8969-4f2a-a95b-21f36c91d56e",
+      "name": "Move to A-trier",
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.sourceFileId }}"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1vakJ22BlyeToQn-8RdykHanAOOtmCSWD"
+        },
+        "operation": "move"
+      },
+      "position": [
+        -720,
+        368
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "4f7d6798-53ff-4582-b473-4cee6a0d3549",
+      "name": "Move to Doublons",
+      "parameters": {
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Compute MD5').item.json.sourceFileId }}"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1O9FObKt6aRNcXLUiOXEPrG3qSU3EDIMj"
+        },
+        "operation": "move"
+      },
+      "position": [
+        -1392,
+        368
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "id": "23b84b1e-5bcc-4123-a194-86d4c17db3a6",
+      "name": "Parse Gemini Response",
+      "parameters": {
+        "jsCode": "const geminiText = items[0].json.candidates[0].content.parts[0].text;\nconst data = JSON.parse(geminiText);\n\nconst prev = $('Compute MD5').first().json;\n\nconst inputDate = data.doc_date || prev.scanDate;\nconst date = new Date(inputDate);\nif (isNaN(date.getTime())) {\n  throw new Error('Date invalide retournee par Gemini : ' + inputDate);\n}\n\nconst yyyy = date.getFullYear();\nconst mm = String(date.getMonth() + 1).padStart(2, '0');\nconst dd = String(date.getDate()).padStart(2, '0');\n\nconst moisFr = ['janvier','fevrier','mars','avril','mai','juin','juillet','aout','septembre','octobre','novembre','decembre'];\nconst targetFolderName = 'depenses ' + moisFr[date.getMonth()] + ' ' + yyyy;\n\nconst slugify = (s) => (s || '')\n  .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')\n  .replace(/[^a-zA-Z0-9 \\-]/g, '')\n  .trim()\n  .replace(/\\s+/g, '-')\n  .substring(0, 40);\n\nconst emitterSlug = slugify(data.emitter || 'INCONNU').toUpperCase();\nconst objectSlug = slugify(data.object || 'document').toLowerCase();\nlet newFilename = yyyy + mm + dd + '_' + emitterSlug + '_' + objectSlug;\nif (data.amount_ttc != null) {\n  newFilename += '_' + data.amount_ttc.toFixed(2) + 'EUR';\n}\nnewFilename += '.pdf';\n\nconst libelle = (data.emitter || 'Inconnu') + ' - ' + (data.object || 'document');\nconst dateFr = dd + '/' + mm + '/' + yyyy;\n\nreturn [{\n  json: {\n    ...prev,\n    gemini: data,\n    targetFolderName,\n    subtypeFolderName: data.subtype,\n    newFilename,\n    libelle: libelle.substring(0, 100),\n    dateFr\n  },\n  binary: items[0].binary\n}];"
+      },
+      "position": [
+        -1168,
+        160
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "ab6389be-b229-4d93-8407-a82ed6f90279",
+      "name": "Rename Autre",
+      "parameters": {
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Parse Gemini Response').item.json.sourceFileId }}"
+        },
+        "operation": "update",
+        "options": {}
+      },
+      "position": [
+        1696,
+        368
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "d3a52839-e96a-4b1a-9052-29121a0ab59d",
+      "name": "Rename Facture",
+      "parameters": {
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Parse Gemini Response').item.json.sourceFileId }}"
+        },
+        "operation": "update",
+        "options": {}
+      },
+      "position": [
+        384,
+        -48
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "id": "dbd8d108-8150-4b7f-a372-8bbacd176d04",
+      "name": "Switch Category",
+      "parameters": {
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "1",
+                    "leftValue": "={{ $json.gemini.category }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "facture"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                }
+              },
+              "outputKey": "facture",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "2",
+                    "leftValue": "={{ $json.gemini.category }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "autre"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                }
+              },
+              "outputKey": "autre",
+              "renameOutput": true
+            }
+          ]
+        }
+      },
+      "position": [
+        -720,
+        160
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3
+    },
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "481c05f6-5f56-481e-84cf-4a152a2effd1",
+      "name": "Trigger - Drive Watch",
+      "parameters": {
+        "event": "fileCreated",
+        "folderToWatch": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1RiEj8rvkgx9GR-ULdvvnrwL1lMYvUO0d"
+        },
+        "options": {},
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder"
+      },
+      "position": [
+        -2480,
+        160
+      ],
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "binaryMode": "separate",
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-07T21:13:34.370Z"
+}

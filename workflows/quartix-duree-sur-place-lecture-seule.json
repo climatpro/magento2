@@ -1,0 +1,134 @@
+{
+  "active": false,
+  "connections": {
+    "Auth Quartix": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Trajets du jour (lecture seule)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Parametres (jour, immat)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Auth Quartix",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Test manuel": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Auth Quartix",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-16T18:41:48.621Z",
+  "description": "Lecture seule. Donne les arrets et la duree reelle sur place d'un vehicule pour un jour donne (parametres jour=AAAA-MM-JJ, immat, defaut FL 192 RP). Sert a facturer le temps reel plutot que celui du bon d'intervention.",
+  "id": "mT1ui2kYOVnAJdLM",
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  },
+  "name": "Quartix - Duree sur place (lecture seule)",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "httpCustomAuth": {
+          "id": "JVvofvrQJHHfTNQ3",
+          "name": "Custom Auth account"
+        }
+      },
+      "id": "fe2c042c-9ea7-4127-8880-2e3d7d898c35",
+      "name": "Auth Quartix",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "contentType": "json",
+        "genericAuthType": "httpCustomAuth",
+        "jsonBody": "{}",
+        "method": "POST",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true,
+              "responseFormat": "json"
+            }
+          },
+          "timeout": 15000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://qws.quartix.net/v2/api/auth"
+      },
+      "position": [
+        224,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "b9d6d80b-545f-4be3-9f4a-3418c43d5a53",
+      "name": "Parametres (jour, immat)",
+      "parameters": {
+        "httpMethod": "GET",
+        "options": {},
+        "path": "quartix-trajets-jour",
+        "responseMode": "lastNode"
+      },
+      "position": [
+        0,
+        -200
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2
+    },
+    {
+      "id": "13ef8a13-fd60-4b1b-807a-a6049c92471a",
+      "name": "Test manuel",
+      "parameters": {},
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "id": "ade9d632-ec47-4f28-b21d-e821e12fd232",
+      "name": "Trajets du jour (lecture seule)",
+      "parameters": {
+        "jsCode": "// Lecture seule. Parametres : jour (AAAA-MM-JJ) et immat (defaut FL 192 RP, camion blanc).\nlet q = {};\ntry { q = $('Parametres (jour, immat)').first().json.query || {}; } catch (e) {}\nconst JOUR = q.jour || DateTime.now().setZone('Europe/Paris').toFormat('yyyy-MM-dd');\nconst IMMAT = q.immat || 'FL 192 RP';\nconst r = $input.first().json || {};\nconst b = r.body || {};\nconst d = b.Data || b.data || {};\nconst tok = d.AccessToken || d.accessToken;\nif (!tok) return [{ json: { erreur: 'Connexion Quartix refusee', code: r.statusCode || null } }];\nconst base = 'https://qws.quartix.net/v2/api';\nconst H = { AccessToken: tok };\nconst get = async (p) => { const x = await this.helpers.httpRequest({ method: 'GET', url: base + p, headers: H, json: true, timeout: 20000 }); return (x && (x.Data || x.data)) || []; };\nconst vehicules = await get('/vehicles');\nconst v = vehicules.find(x => String(x.RegistrationNumber).replace(/\\s/g, '') === String(IMMAT).replace(/\\s/g, ''));\nif (!v) return [{ json: { erreur: 'Vehicule introuvable', immats: vehicules.map(x => x.RegistrationNumber) } }];\nconst lieu = s => String(s || '').replace(/, France$/, '').trim();\nconst estDepot = s => /^climatpro$/i.test(String(s || '').trim()) || /Chem(in|\\.) de Dandon/i.test(String(s || ''));\nconst hm = iso => iso ? DateTime.fromISO(iso).setZone('Europe/Paris').toFormat('HH:mm') : null;\nconst T = (await get('/vehicles/trips?StartDay=' + JOUR + '&EndDay=' + JOUR)).filter(t => t.VehicleID === v.VehicleId).sort((a, b) => String(a.StartDateTime).localeCompare(String(b.StartDateTime)));\nconst arrets = [];\nfor (let i = 0; i < T.length; i++) {\n  const arr = T[i], dep = T[i + 1];\n  if (!dep) continue;\n  const min = Math.round((Date.parse(dep.StartDateTime) - Date.parse(arr.EndDateTime)) / 60000);\n  if (min < 5 || estDepot(arr.EndLocation)) continue;\n  arrets.push({ lieu: lieu(arr.EndLocation), arrivee: hm(arr.EndDateTime), depart: hm(dep.StartDateTime), minutes: min, duree: Math.floor(min / 60) + 'h' + String(min % 60).padStart(2, '0') });\n}\nconst parLieu = {};\nfor (const a of arrets) parLieu[a.lieu] = (parLieu[a.lieu] || 0) + a.minutes;\nconst totaux = Object.entries(parLieu).map(([l, m]) => ({ lieu: l, minutes: m, duree: Math.floor(m / 60) + 'h' + String(m % 60).padStart(2, '0') })).sort((a, b) => b.minutes - a.minutes);\nreturn [{ json: { jour: JOUR, immat: v.RegistrationNumber, arrets, totauxParLieu: totaux, trajets: T.map(t => ({ depart: hm(t.StartDateTime), de: lieu(t.StartLocation), arrivee: hm(t.EndDateTime), a: lieu(t.EndLocation), km: t.Distance })) } }];\n",
+        "language": "javaScript",
+        "mode": "runOnceForAllItems"
+      },
+      "position": [
+        448,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-16T18:45:51.491Z"
+}

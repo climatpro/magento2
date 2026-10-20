@@ -1,0 +1,193 @@
+{
+  "active": false,
+  "connections": {
+    "Drive - Telecharger": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Mode envoi ?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Mode envoi ?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Gmail - Envoyer",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Gmail - Brouillon",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Drive - Telecharger",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-10-07T15:07:17.091Z",
+  "id": "qVSGol88bMMOGOKf",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Claude - SCAN vers MAIL pour PJ",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "54fd9ApHaDydoOJv",
+          "name": "Google Drive account 2"
+        }
+      },
+      "id": "4b6b18ba-cc2c-41de-a32e-8190366e4a77",
+      "name": "Drive - Telecharger",
+      "parameters": {
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.body.fileId }}"
+        },
+        "operation": "download",
+        "options": {}
+      },
+      "position": [
+        -496,
+        128
+      ],
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3
+    },
+    {
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "QkVJEJmojKI4yW63",
+          "name": "Gmail account"
+        }
+      },
+      "id": "8848db9d-ec51-4d93-ab57-039f9c70c9d8",
+      "name": "Gmail - Brouillon",
+      "parameters": {
+        "message": "={{ $('Webhook').item.json.body.body }}",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {
+                "property": "data"
+              }
+            ]
+          },
+          "sendTo": "={{ $('Webhook').item.json.body.to }}",
+          "threadId": "={{ $('Webhook').item.json.body.threadId || '' }}"
+        },
+        "resource": "draft",
+        "subject": "={{ $('Webhook').item.json.body.subject }}"
+      },
+      "position": [
+        0,
+        240
+      ],
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1
+    },
+    {
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "QkVJEJmojKI4yW63",
+          "name": "Gmail account"
+        }
+      },
+      "id": "d63b4f59-b7cf-4480-b04c-c887c6e4e38d",
+      "name": "Gmail - Envoyer",
+      "parameters": {
+        "emailType": "text",
+        "message": "={{ $('Webhook').item.json.body.body }}",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        },
+        "sendTo": "={{ $('Webhook').item.json.body.to }}",
+        "subject": "={{ $('Webhook').item.json.body.subject }}"
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1
+    },
+    {
+      "id": "2d6aea55-bf7e-45f6-8474-765346608a27",
+      "name": "Mode envoi ?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $('Webhook').item.json.body.mode }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "send"
+            }
+          ],
+          "options": {
+            "caseSensitive": false,
+            "typeValidation": "loose"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        -256,
+        128
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "id": "2b1d6eb3-621f-46f6-9c61-946d8b3596de",
+      "name": "Webhook",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "claude-envoi-fichier",
+        "responseMode": "lastNode"
+      },
+      "position": [
+        -752,
+        128
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "availableInMCP": true,
+    "binaryMode": "separate",
+    "executionOrder": "v1"
+  },
+  "tags": [],
+  "updatedAt": "2026-10-07T21:13:24.924Z"
+}
