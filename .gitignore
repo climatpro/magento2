@@ -1,0 +1,5 @@
+# Jamais de secrets ni d'exports bruts
+*.env
+.env*
+raw/
+*.raw.json
