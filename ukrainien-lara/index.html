@@ -1,0 +1,820 @@
+<title>Soniachko Ukrainien</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout : une appli à colonne unique, bandeau bleu « ciel » en tête, galon de broderie (vychyvanka) comme séparateur, tuiles pastel par thème. */
+:root{
+  --bg:#F3F6FF; --surface:#FFFFFF; --ink:#1B2046; --muted:#5D6591; --line:#DCE3F6;
+  --blue:#0057B7; --blue-soft:#E3ECFF; --yellow:#FFD500; --on-yellow:#1B2046;
+  --red:#D7263D; --green:#23945A; --good-bg:#DDF5E6; --bad-bg:#FFE1E5;
+  --plate:#EAF0FF; --hero:#0057B7; --hero-ink:#FFFFFF; --hero-soft:#ffffff26;
+  --t-alpha:#FFEBA8; --t-bases:#CFE5FF; --t-vocab:#D3F1DB; --t-gram:#E7DCFF;
+  --t-conv:#FFD8E1; --t-trad:#FFE0C4; --t-path:#CFF1EF; --t-prog:#FFF4B8;
+  --shadow:0 1px 0 #1B204612, 0 8px 24px -12px #1B204633;
+  --f-display:"Unbounded","Trebuchet MS",system-ui,sans-serif;
+  --f-body:"Nunito","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0C1330; --surface:#151E45; --ink:#EEF1FF; --muted:#A5AEDA; --line:#27336B;
+  --blue:#5D9BFF; --blue-soft:#1D2A5E; --yellow:#FFD500; --on-yellow:#1B2046;
+  --red:#FF6B7D; --green:#4FD08A; --good-bg:#123F2C; --bad-bg:#4A1A26;
+  --plate:#DCE6FF; --hero:#0A3F8A; --hero-ink:#FFFFFF; --hero-soft:#ffffff1f;
+  --t-alpha:#4B4114; --t-bases:#173A66; --t-vocab:#173F28; --t-gram:#33255E;
+  --t-conv:#552136; --t-trad:#55331A; --t-path:#14423F; --t-prog:#4D4615;
+  --shadow:0 1px 0 #00000040, 0 10px 26px -14px #000000aa; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0C1330; --surface:#151E45; --ink:#EEF1FF; --muted:#A5AEDA; --line:#27336B;
+  --blue:#5D9BFF; --blue-soft:#1D2A5E; --yellow:#FFD500; --on-yellow:#1B2046;
+  --red:#FF6B7D; --green:#4FD08A; --good-bg:#123F2C; --bad-bg:#4A1A26;
+  --plate:#DCE6FF; --hero:#0A3F8A; --hero-ink:#FFFFFF; --hero-soft:#ffffff1f;
+  --t-alpha:#4B4114; --t-bases:#173A66; --t-vocab:#173F28; --t-gram:#33255E;
+  --t-conv:#552136; --t-trad:#55331A; --t-path:#14423F; --t-prog:#4D4615;
+  --shadow:0 1px 0 #00000040, 0 10px 26px -14px #000000aa; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:2px;border-radius:10px}
+.wrap{max-width:980px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+h2{font-size:1.3rem}
+h3{font-size:1.02rem}
+.muted{color:var(--muted)}
+.band{height:14px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14' viewBox='0 0 28 14'%3E%3Cpath d='M7 1 L13 7 L7 13 L1 7Z' fill='%23D7263D'/%3E%3Cpath d='M7 4.5 L9.5 7 L7 9.5 L4.5 7Z' fill='%231B2046'/%3E%3Cpath d='M19 4h2v6h-2zM17 6h6v2h-6z' fill='%23FFD500'/%3E%3C/svg%3E");background-repeat:repeat-x;background-position:center}
+
+/* Hero */
+.hero{background:var(--hero);color:var(--hero-ink);position:relative;overflow:hidden}
+.hero .wrap{padding-block:22px 20px;display:grid;gap:14px;position:relative;z-index:1}
+.hero-top{display:flex;justify-content:flex-start;padding-right:110px;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-weight:700;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;background:none;border:0;padding:0;color:var(--hero-ink)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{background:var(--hero-soft);border-radius:999px;padding:5px 12px;font-weight:800;font-size:.9rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hello{font-size:clamp(1.7rem,6vw,2.6rem);font-weight:800}
+.hello small{display:block;font-family:var(--f-body);font-weight:600;font-size:1rem;opacity:.85;margin-top:6px}
+.sun-deco{position:absolute;right:-40px;top:-30px;width:230px;opacity:.9;z-index:0;pointer-events:none}
+@media (max-width:560px){.sun-deco{width:160px;right:-50px;top:-20px;opacity:.55}}
+
+.search{display:flex;gap:8px;background:var(--surface);border-radius:18px;padding:6px;box-shadow:var(--shadow);max-width:640px}
+.search input{flex:1;min-width:0;border:0;background:transparent;padding:10px 12px;outline:none;color:var(--ink)}
+.search input::placeholder{color:var(--muted)}
+.search:focus-within{outline:3px solid var(--yellow)}
+
+.btn{border:0;border-radius:14px;padding:11px 18px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s ease, filter .12s}
+.btn:active{transform:scale(.97)}
+.btn-y{background:var(--yellow);color:var(--on-yellow)}
+.btn-b{background:var(--blue);color:#fff}
+.btn-g{background:var(--blue-soft);color:var(--ink)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-sm{padding:7px 12px;font-size:.9rem;border-radius:11px}
+
+main .wrap{padding-block:22px 60px;display:grid;gap:26px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.eyebrow{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--muted)}
+
+/* Thèmes */
+.themes{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:760px){.themes{grid-template-columns:repeat(2,1fr)}}
+.tile{border:0;text-align:left;border-radius:22px;padding:16px;display:grid;gap:6px;align-content:start;min-height:142px;position:relative;color:var(--ink);box-shadow:var(--shadow);transition:transform .15s ease}
+.tile:hover{transform:translateY(-3px) rotate(-.4deg)}
+.tile .em{font-size:2.1rem;line-height:1}
+.tile b{font-family:var(--f-display);font-size:.98rem;font-weight:700}
+.tile span{font-size:.86rem;color:var(--muted);font-weight:600}
+.tile .bar{margin-top:auto}
+.bar{height:8px;border-radius:99px;background:#1B204614;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--blue);border-radius:99px;transition:width .5s ease}
+
+.card{background:var(--surface);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+.continue{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.continue .txt{flex:1;min-width:200px}
+.wod{display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:center}
+@media (max-width:440px){.wod{grid-template-columns:90px 1fr}}
+
+.plate{background:var(--plate);border-radius:18px;aspect-ratio:1;display:grid;place-items:center;max-width:100%;overflow:hidden}
+.plate svg,.plate img{width:84%;height:84%}
+.plate .emo{font-size:3.2rem}
+.plate .num{font-family:var(--f-display);font-weight:800;font-size:2.4rem;color:#0057B7}
+.plate .let{font-family:var(--f-display);font-weight:800;font-size:2.6rem;color:#1B2046}
+
+/* Leçon */
+.back{background:none;border:0;padding:6px 0;font-weight:800;color:var(--blue)}
+.lesson-head{display:flex;gap:14px;align-items:center}
+.lesson-head .big{font-size:2.6rem}
+.intro{max-width:65ch;font-size:1.05rem}
+.words{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.w{background:var(--surface);border-radius:20px;padding:12px;display:grid;gap:8px;box-shadow:var(--shadow);align-content:start}
+.w .uk{font-family:var(--f-display);font-weight:700;font-size:clamp(.92rem,3.4vw,1.12rem);overflow-wrap:anywhere}
+.w{position:relative}
+.w > .say{position:absolute;top:18px;right:18px;background:var(--surface)}
+.w .ph{font-size:.85rem;color:var(--blue);font-weight:700}
+.w .fr{font-weight:600}
+.w .row{display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+.say{border:0;background:var(--blue-soft);border-radius:10px;padding:4px 8px;font-size:1rem;flex:none}
+.letter-card .plate .let{font-size:3rem}
+.blocks{display:grid;gap:14px;max-width:70ch}
+.blocks p{margin:6px 0 0}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;min-width:280px;background:var(--surface);border-radius:14px;overflow:hidden}
+td,th{padding:8px 14px;border-bottom:1px solid var(--line);text-align:left}
+th{font-family:var(--f-display);font-size:.8rem;background:var(--blue-soft)}
+td:first-child{font-weight:700}
+.phr{display:grid;gap:8px}
+.phr .p{background:var(--surface);border-radius:16px;padding:12px 14px;display:flex;gap:12px;align-items:center;justify-content:space-between;box-shadow:var(--shadow)}
+.phr .p > div{min-width:0}
+.phr .u{font-weight:800;font-size:1.05rem}
+.tip{background:var(--t-prog);border-radius:18px;padding:14px 16px;max-width:70ch}
+.cta-row{display:flex;gap:10px;flex-wrap:wrap}
+
+/* Liste sections */
+.section{display:grid;gap:10px}
+.sbox{border-radius:22px;padding:16px;display:grid;gap:10px}
+.lrow{display:flex;align-items:center;gap:12px;background:var(--surface);border:0;border-radius:16px;padding:12px 14px;text-align:left;width:100%;box-shadow:var(--shadow)}
+.lrow .e{font-size:1.5rem;flex:none}
+.lrow .t{flex:1;min-width:0}
+.lrow .t b{display:block}
+.lrow .t small{color:var(--muted);font-weight:600}
+.lrow .st{flex:none;font-size:1.2rem}
+.lrow.eval{background:var(--blue);color:#fff}
+.lrow.eval small{color:#ffffffcc}
+.lrow.locked{opacity:.6}
+.lvl{font-size:.72rem;font-weight:800;padding:3px 9px;border-radius:99px;background:var(--surface);letter-spacing:.06em}
+
+/* Quiz */
+.quiz{max-width:640px;width:100%;margin:0 auto;display:grid;gap:16px}
+.qtop{display:flex;align-items:center;gap:12px}
+.qtop .bar{flex:1;height:12px}
+.qprompt{text-align:center;display:grid;gap:10px;justify-items:center}
+.qprompt .plate{width:150px}
+.qprompt .big{font-family:var(--f-display);font-size:1.7rem;font-weight:800;overflow-wrap:anywhere}
+.opts{display:grid;gap:10px}
+.opt{border:2px solid var(--line);background:var(--surface);border-radius:16px;padding:14px;font-weight:700;text-align:left;font-size:1.05rem}
+.opt:hover{border-color:var(--blue)}
+.opt.ok{background:var(--good-bg);border-color:var(--green)}
+.opt.ko{background:var(--bad-bg);border-color:var(--red)}
+.fb{border-radius:16px;padding:12px 14px;font-weight:700}
+.fb.ok{background:var(--good-bg)}
+.fb.ko{background:var(--bad-bg)}
+.build-out{min-height:58px;border:2px dashed var(--line);border-radius:16px;display:flex;flex-wrap:wrap;gap:6px;padding:8px;justify-content:center;align-items:center;font-family:var(--f-display);font-size:1.3rem}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.ltile{min-width:46px;height:50px;border-radius:12px;border:0;background:var(--yellow);color:var(--on-yellow);font-family:var(--f-display);font-weight:700;font-size:1.25rem;box-shadow:0 3px 0 #b39500}
+.ltile:disabled{opacity:.25}
+.result{text-align:center;display:grid;gap:12px;justify-items:center}
+.score{font-family:var(--f-display);font-size:3.2rem;font-weight:800;color:var(--blue);font-variant-numeric:tabular-nums}
+
+/* Progression */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--surface);border-radius:18px;padding:14px;box-shadow:var(--shadow)}
+.stat b{display:block;font-family:var(--f-display);font-size:1.6rem;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-weight:700;font-size:.85rem}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px}
+.badge{background:var(--surface);border-radius:18px;padding:12px;text-align:center;box-shadow:var(--shadow)}
+.badge .e{font-size:2rem;display:block}
+.badge.off{opacity:.35;filter:grayscale(1)}
+.badge small{font-weight:700;font-size:.78rem;display:block}
+.prow{display:grid;grid-template-columns:1fr 120px 54px;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.prow:last-child{border-bottom:0}
+.prow .n{font-variant-numeric:tabular-nums;text-align:right;font-weight:800}
+@media (max-width:460px){.prow{grid-template-columns:1fr 70px 46px}}
+.miss{display:flex;flex-wrap:wrap;gap:8px}
+.miss span{background:var(--bad-bg);border-radius:99px;padding:5px 12px;font-weight:700}
+
+/* Parcours */
+.path{display:grid;gap:0;position:relative}
+.step{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:start;padding-bottom:16px;position:relative}
+.step::before{content:"";position:absolute;left:23px;top:44px;bottom:0;width:3px;background:repeating-linear-gradient(var(--red) 0 8px,transparent 8px 14px)}
+.step:last-child::before{display:none}
+.dot{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:1.4rem;background:var(--surface);box-shadow:var(--shadow);position:relative;z-index:1}
+.step .lrow{margin-top:0}
+
+.gen{display:grid;gap:12px}
+.spinner{display:inline-block;animation:spin 1.6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom, 0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:14px;font-weight:700;z-index:50;max-width:calc(100% - 32px);text-align:center}
+.confetti{position:fixed;top:-40px;font-size:1.6rem;z-index:40;pointer-events:none;animation:fall 2.4s ease-in forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:.2}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.confetti{display:none}}
+footer{padding-block:0 30px;text-align:center;color:var(--muted);font-size:.85rem}
+</style>
+
+<header class="hero">
+  <svg class="sun-deco" viewBox="0 0 100 100" aria-hidden="true"><g id="deco-sun"></g></svg>
+  <div class="wrap">
+    <div class="hero-top">
+      <button class="brand" id="brand" type="button">🌻 Сонячко · ukrainien</button>
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="hello">Привіт, Лара! 💛💙<small>Prête pour ta leçon d'ukrainien ?</small></div>
+    <form class="search" id="searchForm" autocomplete="off">
+      <input id="q" type="search" placeholder="✨ Leçon perso : les voyages, le shopping, la musique…" aria-label="Thème de leçon personnalisée">
+      <button class="btn btn-y" type="submit">Créer</button>
+    </form>
+  </div>
+</header>
+<div class="band" aria-hidden="true"></div>
+<main><div class="wrap" id="app"></div></main>
+<footer class="wrap">Слава Україні 🇺🇦 · Fait main pour Lara</footer>
+
+<script>
+/* ============ ILLUSTRATIONS (dessinées à la main en SVG) ============ */
+const C={b:"#2F6FE0",y:"#FFC93C",r:"#E0393E",g:"#43A35E",br:"#A0612F",sk:"#F5C9A6",w:"#FFFDF8",dk:"#2B2346",pk:"#F7A1B5",or:"#F28C28",gr:"#B9C1D1",lb:"#BFE3FF",pu:"#8E3B8F"};
+const S=(inner)=>`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><g stroke="${C.dk}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">${inner}</g></svg>`;
+const eyes=(y=50,a=42,b=58)=>`<circle cx="${a}" cy="${y}" r="2.6" fill="${C.dk}" stroke="none"/><circle cx="${b}" cy="${y}" r="2.6" fill="${C.dk}" stroke="none"/>`;
+const face=(back,front,extra,shirt)=>S(`${back}<path d="M22 100 Q22 72 50 72 Q78 72 78 100Z" fill="${shirt}"/><circle cx="50" cy="50" r="22" fill="${C.sk}"/>${front}${eyes()}<path d="M43 59 Q50 65 57 59" fill="none"/><circle cx="37" cy="57" r="3" fill="${C.pk}" stroke="none"/><circle cx="63" cy="57" r="3" fill="${C.pk}" stroke="none"/>${extra}`);
+const glasses=`<circle cx="42" cy="50" r="6.5" fill="none"/><circle cx="58" cy="50" r="6.5" fill="none"/><path d="M48.5 50 L51.5 50"/>`;
+const blob=(col)=>S(`<path d="M50 16 Q70 13 79 31 Q91 50 77 68 Q66 87 45 83 Q21 80 17 60 Q11 36 30 23 Q39 17 50 16Z" fill="${col}"/><circle cx="38" cy="36" r="6" fill="#ffffff66" stroke="none"/>`);
+const cup=(liquid)=>`<path d="M24 40 L70 40 L66 80 Q65 86 58 86 L36 86 Q29 86 28 80 Z" fill="${C.w}"/><path d="M69 48 Q84 48 82 62 Q80 72 66 70" fill="none"/><ellipse cx="47" cy="40" rx="23" ry="5" fill="${liquid}"/>`;
+const steam=`<path d="M40 30 Q36 24 40 18 M50 30 Q46 24 50 16 M60 30 Q56 24 60 18" fill="none" stroke-width="2"/>`;
+const shirtShape="M30 18 L42 13 Q50 20 58 13 L70 18 L86 32 L90 80 L77 82 L71 44 L71 88 L29 88 L29 44 L23 82 L10 80 L14 32 Z";
+const IC={
+ tshirt:S(`<path d="M30 20 L42 14 Q50 22 58 14 L70 20 L87 35 L76 46 L69 40 L69 86 L31 86 L31 40 L24 46 L13 35 Z" fill="${C.b}"/><path d="M31 56 L69 56 L69 64 L31 64Z" fill="${C.y}"/>`),
+ dress:S(`<path d="M40 14 L60 14 L58 34 Q72 52 80 86 L20 86 Q28 52 42 34 Z" fill="${C.r}"/><path d="M41 36 L59 36" /><circle cx="44" cy="58" r="2.5" fill="${C.w}" stroke="none"/><circle cx="56" cy="66" r="2.5" fill="${C.w}" stroke="none"/><circle cx="40" cy="75" r="2.5" fill="${C.w}" stroke="none"/><circle cx="62" cy="78" r="2.5" fill="${C.w}" stroke="none"/>`),
+ skirt:S(`<path d="M32 28 L68 28 L84 80 L16 80 Z" fill="${C.pk}"/><rect x="31" y="22" width="38" height="9" rx="3" fill="${C.pu}"/><path d="M40 31 L34 80 M50 31 L50 80 M60 31 L66 80" fill="none" stroke-width="1.6"/>`),
+ pants:S(`<path d="M30 14 L70 14 L75 88 L56 88 L50 42 L44 88 L25 88 Z" fill="#3C5BA8"/><path d="M30 22 L70 22" /><path d="M50 22 L50 34" />`),
+ sweater:S(`<path d="${shirtShape}" fill="${C.g}"/><path d="M29 54 l7 -6 l7 6 l7 -6 l7 6 l7 -6 l7 6" fill="none" stroke="${C.w}" stroke-width="3"/><path d="M42 13 Q50 22 58 13" fill="none"/>`),
+ jacket:S(`<path d="${shirtShape}" fill="${C.or}"/><path d="M50 18 L50 88" /><rect x="34" y="60" width="11" height="9" rx="2" fill="#d9761a"/><rect x="55" y="60" width="11" height="9" rx="2" fill="#d9761a"/><path d="M42 13 L50 26 L58 13" fill="${C.w}"/>`),
+ hat:S(`<path d="M22 70 Q22 26 50 26 Q78 26 78 70 Z" fill="${C.r}"/><rect x="18" y="64" width="64" height="16" rx="6" fill="${C.w}"/><circle cx="50" cy="20" r="9" fill="${C.w}"/><path d="M36 40 L36 64 M50 34 L50 64 M64 40 L64 64" fill="none" stroke-width="1.6"/>`),
+ scarf:S(`<path d="M22 30 Q50 44 78 30 L78 44 Q50 58 22 44 Z" fill="${C.b}"/><path d="M58 48 L70 84 L56 88 L48 52 Z" fill="${C.b}"/><path d="M58 88 L57 95 M63 87 L63 94 M68 85 L69 92" fill="none"/><path d="M30 37 L30 47 M42 41 L42 51 M58 41 L58 51 M70 37 L70 47" stroke="${C.y}" stroke-width="3"/>`),
+ socks:S(`<path d="M28 14 L46 14 L46 58 Q46 68 56 70 Q66 72 64 82 L32 82 Q24 82 26 72 Z" fill="${C.y}"/><path d="M54 18 L72 18 L72 62 Q72 72 82 74 Q92 76 90 86 L58 86 Q50 86 52 76 Z" fill="${C.b}"/><path d="M28 24 L46 24 M54 28 L72 28" stroke="${C.r}" stroke-width="4"/>`),
+ shoes:S(`<path d="M12 72 Q12 52 26 50 L44 50 Q52 62 70 64 Q88 66 88 78 L88 82 L12 82 Z" fill="${C.br}"/><path d="M12 82 L88 82" stroke-width="5"/><path d="M30 56 L36 60 M34 52 L40 57" fill="none" stroke="${C.w}" stroke-width="2"/>`),
+ vyshyvanka:S(`<path d="${shirtShape}" fill="${C.w}"/><path d="M42 13 Q50 22 58 13" fill="none"/><path d="M50 26 l5 5 l-5 5 l-5 -5z M50 42 l5 5 l-5 5 l-5 -5z M50 58 l5 5 l-5 5 l-5 -5z" fill="${C.r}" stroke="none"/><path d="M50 30 l1.5 1 -1.5 1 -1.5 -1z" fill="${C.dk}" stroke="none"/><path d="M14 56 l4 -4 4 4 4 -4 4 4 M78 56 l4 -4 4 4 4 -4" fill="none" stroke="${C.r}" stroke-width="3"/><path d="M16 66 L26 66 M76 66 L88 66" stroke="${C.dk}" stroke-width="2"/>`),
+ bread:S(`<path d="M14 62 Q14 34 50 34 Q86 34 86 62 L86 70 Q86 77 79 77 L21 77 Q14 77 14 70 Z" fill="#E0A458"/><path d="M32 44 L40 56 M48 42 L56 54 M64 44 L72 56" fill="none"/>`),
+ water:S(`<path d="M30 18 L70 18 L64 86 L36 86 Z" fill="${C.lb}"/><path d="M32 40 Q50 46 68 40 L64 86 L36 86 Z" fill="#6FB6F2"/><circle cx="44" cy="60" r="3" fill="#fff" stroke="none"/><circle cx="54" cy="72" r="2" fill="#fff" stroke="none"/>`),
+ milk:S(`<path d="M32 32 L68 32 L68 88 L32 88 Z" fill="${C.w}"/><path d="M32 32 L40 16 L60 16 L68 32" fill="${C.w}"/><path d="M40 16 L44 32" /><rect x="32" y="48" width="36" height="24" fill="${C.b}"/><path d="M50 52 Q44 60 50 66 Q56 60 50 52Z" fill="#fff"/>`),
+ cheese:S(`<path d="M12 70 L60 30 L88 46 L88 78 L12 78 Z" fill="${C.y}"/><path d="M12 70 L88 46" fill="none"/><circle cx="36" cy="70" r="4" fill="#E9A800"/><circle cx="62" cy="64" r="5" fill="#E9A800"/><circle cx="76" cy="72" r="3" fill="#E9A800"/><circle cx="58" cy="44" r="3" fill="#E9A800"/>`),
+ apple:S(`<path d="M50 32 Q30 18 21 40 Q15 70 38 85 Q50 89 62 85 Q85 70 79 40 Q70 18 50 32 Z" fill="${C.r}"/><path d="M50 32 Q50 22 55 14" fill="none"/><path d="M55 22 Q68 14 74 24 Q62 30 55 22Z" fill="${C.g}"/><path d="M33 44 Q31 52 34 58" fill="none" stroke="#fff" stroke-width="3"/>`),
+ egg:S(`<ellipse cx="50" cy="56" rx="26" ry="32" fill="${C.w}"/><path d="M38 40 Q36 46 37 52" fill="none" stroke="${C.gr}" stroke-width="3"/>`),
+ coffee:S(`${cup("#7A4A2A")}${steam}<ellipse cx="47" cy="90" rx="30" ry="5" fill="${C.gr}"/>`),
+ tea:S(`${cup("#D9902E")}${steam}<path d="M60 40 L64 62" fill="none" stroke-width="1.5"/><rect x="60" y="60" width="9" height="11" rx="1.5" fill="${C.g}"/>`),
+ borscht:S(`<path d="M14 50 L86 50 Q83 84 50 86 Q17 84 14 50 Z" fill="${C.w}"/><path d="M18 64 Q50 70 82 64" fill="none" stroke="${C.b}" stroke-width="3"/><ellipse cx="50" cy="50" rx="36" ry="9" fill="#C2263A"/><ellipse cx="52" cy="49" rx="8" ry="3.5" fill="#fff"/><path d="M34 48 l3 -3 M38 51 l3 -3 M64 48 l3 -3" stroke="${C.g}" stroke-width="2.5"/><path d="M70 46 L90 20" stroke-width="4" stroke="${C.gr}"/>`),
+ varenyky:S(`<ellipse cx="50" cy="70" rx="40" ry="14" fill="${C.w}"/><path d="M18 66 Q30 36 46 66 Z" fill="#F3E2B8"/><path d="M42 62 Q54 30 68 62 Z" fill="#F3E2B8"/><path d="M58 70 Q70 44 84 70 Z" fill="#F3E2B8"/><path d="M60 56 l4 3 M63 50 l4 3" stroke="${C.br}" stroke-width="1.6"/><path d="M40 72 l4 -3 4 3" stroke="${C.g}" fill="none"/>`),
+ holubtsi:S(`<ellipse cx="50" cy="70" rx="40" ry="14" fill="${C.w}"/><rect x="18" y="48" width="30" height="20" rx="10" fill="#B9D98A"/><rect x="50" y="48" width="30" height="20" rx="10" fill="#B9D98A"/><path d="M22 56 Q50 46 78 56" fill="none" stroke="${C.r}" stroke-width="4"/>`),
+ salo:S(`<path d="M18 40 L82 40 L82 70 L18 70 Z" fill="#FBEFEA"/><path d="M18 52 L82 52" stroke="${C.pk}" stroke-width="5"/><path d="M18 40 L82 40" stroke="#C98A6B" stroke-width="5"/><rect x="24" y="74" width="52" height="12" rx="4" fill="#6B3E26"/>`),
+ pampushky:S(`<circle cx="34" cy="60" r="16" fill="#E8A54B"/><circle cx="66" cy="60" r="16" fill="#E8A54B"/><circle cx="50" cy="40" r="16" fill="#F0B65E"/><path d="M45 36 l2 1 M54 42 l2 1 M30 58 l2 1 M68 56 l2 1" stroke="${C.g}" stroke-width="2.5"/>`),
+ uzvar:S(`<path d="M32 30 L60 30 L64 40 Q74 56 66 80 Q62 88 50 88 L42 88 Q30 88 28 76 Q24 56 32 40 Z" fill="#C97A2B"/><path d="M60 34 Q80 36 74 56" fill="none"/><path d="M30 46 Q48 52 64 46" fill="none" stroke="#fff" stroke-width="2"/><circle cx="44" cy="66" r="4" fill="#7A3A1C"/><circle cx="54" cy="74" r="3" fill="#7A3A1C"/>`),
+ beet:S(`<path d="M50 40 Q76 42 74 64 Q72 82 50 92 Q28 82 26 64 Q24 42 50 40 Z" fill="#9B1B4B"/><path d="M50 40 Q40 18 30 14 Q40 30 46 40 M50 40 Q60 16 72 12 Q60 30 54 40" fill="${C.g}"/><path d="M50 92 L50 98" />`),
+ mom:face(`<path d="M26 54 Q24 25 50 25 Q76 25 74 54 L78 86 L22 86 Z" fill="#8A4B2A"/>`,`<path d="M28 47 Q30 27 50 27 Q70 27 72 47 Q60 36 46 38 Q36 40 28 47Z" fill="#8A4B2A"/>`,"",C.r),
+ dad:face("",`<path d="M28 45 Q28 26 50 26 Q72 26 72 45 Q64 34 50 35 Q36 34 28 45Z" fill="#3B2A20"/>`,`<path d="M42 58 Q46 55 50 57 Q54 55 58 58 Q54 61 50 59 Q46 61 42 58Z" fill="#3B2A20"/>`,C.b),
+ sister:face(`<circle cx="25" cy="56" r="9" fill="#E9B949"/><circle cx="75" cy="56" r="9" fill="#E9B949"/>`,`<path d="M28 47 Q30 26 50 26 Q70 26 72 47 Q62 38 50 40 Q38 38 28 47Z" fill="#E9B949"/>`,"",C.pk),
+ brother:face("",`<path d="M28 45 L31 30 L38 36 L44 26 L50 34 L56 26 L62 36 L69 30 L72 45 Q60 36 50 37 Q40 36 28 45Z" fill="#B5542C"/>`,"",C.g),
+ grandma:face(`<circle cx="50" cy="25" r="10" fill="#C9CCD6"/>`,`<path d="M28 49 Q28 29 50 29 Q72 29 72 49 Q62 37 50 38 Q38 37 28 49Z" fill="#C9CCD6"/>`,glasses,C.pu),
+ grandpa:face("",`<path d="M28 52 Q26 38 33 33 L35 47Z M72 52 Q74 38 67 33 L65 47Z" fill="#C9CCD6"/>`,glasses+`<path d="M42 58 Q46 55 50 57 Q54 55 58 58 Q54 62 50 59 Q46 62 42 58Z" fill="#C9CCD6"/>`,C.br),
+ son:face("",`<path d="M28 46 Q28 27 50 27 Q72 27 72 46 Q66 38 56 39 L52 33 L48 39 Q36 38 28 46Z" fill="#E9B949"/>`,"",C.y),
+ daughter:face(`<path d="M25 62 Q21 26 50 25 Q79 26 75 62 Z" fill="#5A3420"/>`,`<path d="M29 45 Q31 28 50 28 Q69 28 71 45 Q50 40 29 45Z" fill="#5A3420"/>`,`<path d="M64 28 L74 21 L74 35Z M64 28 L56 21 L56 35Z" fill="${C.r}"/><circle cx="64" cy="28" r="3" fill="${C.r}"/>`,C.b),
+ me:face(`<path d="M25 64 Q21 25 50 24 Q79 25 75 64 Z" fill="#6B3A1E"/>`,`<path d="M28 47 Q32 26 52 27 Q70 28 72 47 Q58 34 42 40 Q34 42 28 47Z" fill="#6B3A1E"/>`,`<circle cx="30" cy="30" r="4" fill="${C.y}"/><circle cx="36" cy="25" r="4" fill="${C.r}"/><circle cx="43" cy="22" r="4" fill="${C.b}"/>`,C.y),
+ house:S(`<rect x="22" y="46" width="56" height="40" fill="${C.y}"/><path d="M14 50 L50 18 L86 50 Z" fill="${C.r}"/><rect x="42" y="62" width="16" height="24" fill="${C.b}"/><rect x="28" y="54" width="10" height="10" fill="${C.lb}"/><rect x="62" y="54" width="10" height="10" fill="${C.lb}"/><rect x="64" y="22" width="8" height="16" fill="${C.br}"/>`),
+ room:S(`<rect x="10" y="14" width="80" height="72" rx="4" fill="#EAF2FF"/><rect x="10" y="64" width="80" height="22" fill="#D9A46A"/><rect x="58" y="24" width="22" height="18" fill="${C.y}"/><path d="M58 38 L66 30 L72 36 L80 28" fill="none"/><rect x="16" y="46" width="34" height="18" rx="6" fill="${C.r}"/><rect x="18" y="38" width="30" height="12" rx="5" fill="${C.r}"/><path d="M78 64 L78 56" /><circle cx="78" cy="52" r="6" fill="${C.g}"/>`),
+ kitchen:S(`<rect x="18" y="58" width="64" height="30" fill="${C.w}"/><circle cx="34" cy="73" r="5" fill="${C.gr}"/><circle cx="66" cy="73" r="5" fill="${C.gr}"/><rect x="26" y="34" width="48" height="24" rx="5" fill="${C.r}"/><path d="M26 40 L16 40 M74 40 L84 40" stroke-width="4"/><rect x="24" y="30" width="52" height="6" rx="3" fill="#B52A30"/>${steam.replace(/30/g,"26").replace(/2[4]/g,"20").replace(/1[68]/g,"12")}`),
+ bed:S(`<rect x="12" y="30" width="12" height="54" rx="3" fill="${C.br}"/><rect x="12" y="58" width="76" height="18" rx="4" fill="${C.b}"/><ellipse cx="34" cy="54" rx="10" ry="6" fill="${C.w}"/><path d="M44 58 L88 58 L88 76 L44 76 Z" fill="${C.y}"/><path d="M84 76 L84 86 M20 76 L20 86" stroke-width="4"/>`),
+ table:S(`<rect x="12" y="38" width="76" height="10" rx="3" fill="${C.br}"/><rect x="18" y="48" width="7" height="38" fill="${C.br}"/><rect x="75" y="48" width="7" height="38" fill="${C.br}"/><path d="M40 38 Q42 26 50 26 Q58 26 60 38" fill="${C.r}"/>`),
+ chair:S(`<rect x="30" y="12" width="40" height="44" rx="6" fill="${C.g}"/><rect x="26" y="54" width="48" height="10" rx="3" fill="${C.br}"/><path d="M32 64 L30 90 M68 64 L70 90" stroke-width="5"/><path d="M38 24 L62 24 M38 36 L62 36" stroke="${C.w}" stroke-width="3"/>`),
+ window:S(`<rect x="24" y="16" width="52" height="64" rx="3" fill="${C.lb}"/><path d="M50 16 L50 80 M24 48 L76 48" stroke-width="4" stroke="${C.w}"/><path d="M16 12 Q24 50 18 88 L28 88 Q34 50 28 12Z M84 12 Q76 50 82 88 L72 88 Q66 50 72 12Z" fill="${C.r}"/><circle cx="62" cy="30" r="6" fill="${C.y}" stroke="none"/>`),
+ door:S(`<path d="M28 88 L28 26 Q28 12 50 12 Q72 12 72 26 L72 88 Z" fill="${C.br}"/><circle cx="63" cy="54" r="4" fill="${C.y}"/><rect x="36" y="28" width="28" height="18" rx="4" fill="#8A4F24"/><rect x="36" y="58" width="22" height="22" rx="4" fill="#8A4F24"/><path d="M18 88 L82 88" stroke-width="4"/>`),
+ lamp:S(`<path d="M30 48 L40 18 L60 18 L70 48 Z" fill="${C.y}"/><path d="M50 48 L50 80" stroke-width="4"/><rect x="34" y="80" width="32" height="8" rx="3" fill="${C.b}"/><path d="M22 58 L14 64 M78 58 L86 64 M50 56 L50 60" stroke="${C.or}" stroke-width="3"/>`),
+ key:S(`<circle cx="30" cy="50" r="16" fill="${C.y}"/><circle cx="30" cy="50" r="6" fill="#fff"/><rect x="44" y="46" width="42" height="8" rx="2" fill="${C.y}"/><path d="M72 54 L72 64 M80 54 L80 62" stroke-width="5"/>`),
+ cat:S(`<path d="M26 40 L30 14 L46 30 Z M74 40 L70 14 L54 30Z" fill="${C.or}"/><circle cx="50" cy="52" r="28" fill="${C.or}"/><path d="M32 28 L36 20 L40 30" fill="${C.pk}" stroke="none"/>${eyes(48,40,60)}<path d="M47 56 L53 56 L50 60Z" fill="${C.pk}"/><path d="M50 60 Q46 66 42 63 M50 60 Q54 66 58 63" fill="none"/><path d="M28 56 L14 52 M28 62 L14 64 M72 56 L86 52 M72 62 L86 64" stroke-width="1.6"/><path d="M42 30 L46 38 M50 28 L50 36 M58 30 L54 38" stroke="#C96A12"/>`),
+ dog:S(`<path d="M24 30 Q10 34 14 60 Q20 66 28 56 Z M76 30 Q90 34 86 60 Q80 66 72 56Z" fill="#6B3E26"/><circle cx="50" cy="50" r="27" fill="#C88B4E"/><ellipse cx="50" cy="62" rx="14" ry="10" fill="${C.w}"/>${eyes(46,40,60)}<ellipse cx="50" cy="56" rx="5" ry="3.5" fill="${C.dk}"/><path d="M50 60 L50 64 M44 64 Q50 68 56 64" fill="none"/><path d="M48 66 Q50 76 54 68" fill="${C.pk}"/>`),
+ bird:S(`<ellipse cx="46" cy="54" rx="28" ry="22" fill="${C.b}"/><circle cx="66" cy="38" r="14" fill="${C.b}"/><path d="M78 36 L92 40 L78 44Z" fill="${C.y}"/><circle cx="68" cy="35" r="2.6" fill="${C.dk}" stroke="none"/><path d="M26 50 Q40 40 52 54 Q40 66 26 50Z" fill="#5B93F0"/><path d="M18 52 L6 44 L10 58Z" fill="${C.b}"/><path d="M42 76 L40 88 M52 76 L54 88" fill="none"/>`),
+ fish:S(`<path d="M18 50 Q44 22 74 50 Q44 78 18 50 Z" fill="${C.or}"/><path d="M72 50 L90 34 L88 66 Z" fill="${C.or}"/><circle cx="32" cy="46" r="3" fill="${C.dk}" stroke="none"/><path d="M44 40 Q50 50 44 60 M54 38 Q60 50 54 62" fill="none" stroke="#fff" stroke-width="2.5"/><circle cx="12" cy="30" r="3" fill="${C.lb}"/><circle cx="18" cy="22" r="2" fill="${C.lb}"/>`),
+ cow:S(`<path d="M26 30 L16 20 M74 30 L84 20" stroke-width="5" stroke="${C.gr}"/><ellipse cx="22" cy="40" rx="9" ry="5" fill="${C.w}"/><ellipse cx="78" cy="40" rx="9" ry="5" fill="${C.w}"/><path d="M28 30 Q50 18 72 30 L70 66 Q50 74 30 66 Z" fill="${C.w}"/><path d="M34 32 Q42 30 44 40 Q38 46 32 42Z" fill="${C.dk}"/>${eyes(46,40,60)}<ellipse cx="50" cy="70" rx="20" ry="13" fill="${C.pk}"/><circle cx="43" cy="70" r="3" fill="${C.dk}" stroke="none"/><circle cx="57" cy="70" r="3" fill="${C.dk}" stroke="none"/>`),
+ horse:S(`<path d="M30 88 L36 40 Q40 18 62 18 Q76 20 82 40 Q84 50 76 52 Q70 52 66 46 L64 88 Z" fill="${C.br}"/><path d="M36 40 Q30 26 44 18 Q40 30 46 36 Q42 28 52 20 Q50 30 54 34" fill="${C.dk}"/>${'<circle cx="66" cy="32" r="2.6" fill="'+C.dk+'" stroke="none"/>'}<circle cx="78" cy="46" r="2" fill="${C.dk}" stroke="none"/>`),
+ stork:S(`<path d="M68 22 L64 48" stroke-width="6" stroke="${C.dk}"/><path d="M68 22 L64 48" stroke-width="3" stroke="${C.w}"/><ellipse cx="48" cy="54" rx="24" ry="14" fill="${C.w}"/><path d="M28 50 Q40 64 62 60 L50 68 Q30 68 24 56Z" fill="${C.dk}"/><circle cx="69" cy="19" r="7" fill="${C.w}"/><path d="M75 17 L94 22 L75 23Z" fill="${C.r}"/><circle cx="70" cy="17" r="1.8" fill="${C.dk}" stroke="none"/><path d="M44 68 L40 92 M54 68 L56 92" stroke="${C.r}" stroke-width="3"/>`),
+ hedgehog:S(`<path d="M14 70 L18 58 L14 50 L24 46 L22 36 L32 36 L34 26 L44 32 L50 22 L56 32 L66 28 L66 38 L76 40 L72 50 L80 58 Q86 70 70 74 L20 74 Q12 74 14 70Z" fill="#7A4E2D"/><path d="M60 46 Q84 50 90 66 Q86 74 70 74 Q56 72 56 60 Z" fill="#E8C49A"/><circle cx="90" cy="64" r="3" fill="${C.dk}"/><circle cx="72" cy="56" r="2.4" fill="${C.dk}" stroke="none"/><path d="M30 74 L30 80 M50 74 L50 80" />`),
+ sun:S(`<path d="M50 8 L50 20 M50 80 L50 92 M8 50 L20 50 M80 50 L92 50 M20 20 L28 28 M72 72 L80 80 M80 20 L72 28 M20 80 L28 72" stroke="${C.or}" stroke-width="5"/><circle cx="50" cy="50" r="24" fill="${C.y}"/>${eyes(46,42,58)}<path d="M42 56 Q50 62 58 56" fill="none"/>`),
+ cloud:S(`<path d="M24 70 Q10 70 12 56 Q14 44 28 46 Q30 28 48 28 Q64 28 68 42 Q86 40 88 56 Q90 70 74 70 Z" fill="${C.w}"/>`),
+ rain:S(`<path d="M24 56 Q10 56 12 42 Q14 30 28 32 Q30 14 48 14 Q64 14 68 28 Q86 26 88 42 Q90 56 74 56 Z" fill="${C.gr}"/><path d="M30 66 Q26 74 30 78 Q34 74 30 66Z M50 70 Q46 78 50 82 Q54 78 50 70Z M70 66 Q66 74 70 78 Q74 74 70 66Z M40 82 Q37 88 40 91 Q43 88 40 82Z M60 82 Q57 88 60 91 Q63 88 60 82Z" fill="${C.b}"/>`),
+ snow:S(`<path d="M50 12 L50 88 M17 31 L83 69 M17 69 L83 31" stroke="${C.b}" stroke-width="5"/><path d="M42 18 L50 26 L58 18 M42 82 L50 74 L58 82 M20 42 L30 38 L24 28 M80 58 L70 62 L76 72 M20 58 L30 62 L24 72 M80 42 L70 38 L76 28" fill="none" stroke="${C.b}" stroke-width="3.5"/><circle cx="50" cy="50" r="6" fill="${C.lb}"/>`),
+ wind:S(`<path d="M12 36 L60 36 Q74 36 74 26 Q74 16 62 18 M12 52 L76 52 Q90 52 90 64 Q90 76 76 72 M12 68 L46 68 Q56 68 56 78 Q56 86 48 84" fill="none" stroke="${C.b}" stroke-width="5"/>`),
+ snowman:S(`<circle cx="50" cy="68" r="22" fill="${C.w}"/><circle cx="50" cy="36" r="16" fill="${C.w}"/><rect x="36" y="14" width="28" height="8" rx="2" fill="${C.dk}"/><rect x="40" y="4" width="20" height="14" fill="${C.dk}"/>${eyes(33,44,56)}<path d="M50 38 L64 42 L50 42Z" fill="${C.or}"/><path d="M36 50 Q50 58 64 50 L66 56 Q50 62 34 56Z" fill="${C.r}"/><circle cx="50" cy="66" r="2.5" fill="${C.dk}" stroke="none"/><circle cx="50" cy="76" r="2.5" fill="${C.dk}" stroke="none"/>`),
+ tulip:S(`<path d="M50 52 L50 92" stroke="${C.g}" stroke-width="5"/><path d="M50 80 Q30 76 26 58 Q44 60 50 76Z M50 84 Q70 78 74 62 Q56 64 50 80Z" fill="${C.g}"/><path d="M32 22 L40 32 L50 16 L60 32 L68 22 Q72 50 50 54 Q28 50 32 22Z" fill="${C.pk}"/>`),
+ summer:S(`<circle cx="50" cy="40" r="22" fill="${C.y}"/><path d="M50 8 L50 14 M18 40 L24 40 M76 40 L82 40 M27 17 L31 21 M73 17 L69 21" stroke="${C.or}" stroke-width="4"/><path d="M6 64 Q18 56 30 64 Q42 72 54 64 Q66 56 78 64 Q88 70 96 64 L96 96 L6 96Z" fill="${C.b}"/><path d="M6 80 Q18 72 30 80 Q42 88 54 80 Q66 72 78 80 Q88 86 96 80" fill="none" stroke="#fff" stroke-width="2.5"/>`),
+ leaf:S(`<path d="M50 12 Q78 30 74 58 Q70 80 50 88 Q30 80 26 58 Q22 30 50 12Z" fill="${C.or}"/><path d="M50 22 L50 96 M50 44 L64 36 M50 58 L68 50 M50 44 L36 36 M50 58 L32 50 M50 72 L62 66 M50 72 L38 66" fill="none" stroke="#B85F12" stroke-width="2"/>`),
+ plane:S(`<path d="M12 56 Q12 46 24 46 L80 46 Q94 48 94 54 Q94 60 80 62 L24 62 Q12 62 12 56Z" fill="${C.w}"/><path d="M44 48 L60 20 L68 20 L62 48Z M46 60 L60 84 L68 84 L60 60Z" fill="${C.b}"/><path d="M16 50 L10 32 L18 32 L28 46Z" fill="${C.y}"/><circle cx="74" cy="53" r="2.5" fill="${C.lb}"/><circle cx="64" cy="53" r="2.5" fill="${C.lb}"/><circle cx="54" cy="53" r="2.5" fill="${C.lb}"/>`),
+ train:S(`<rect x="22" y="12" width="56" height="68" rx="14" fill="${C.b}"/><rect x="30" y="22" width="40" height="22" rx="4" fill="${C.lb}"/><rect x="22" y="50" width="56" height="6" fill="${C.y}" stroke="none"/><circle cx="34" cy="66" r="5" fill="${C.y}"/><circle cx="66" cy="66" r="5" fill="${C.y}"/><path d="M30 80 L20 94 M70 80 L80 94 M26 88 L74 88" fill="none" stroke-width="3"/>`),
+ suitcase:S(`<rect x="38" y="16" width="24" height="14" rx="5" fill="none" stroke-width="5"/><rect x="18" y="28" width="64" height="56" rx="8" fill="${C.r}"/><path d="M34 28 L34 84 M66 28 L66 84" stroke="#B52A30" stroke-width="4"/><circle cx="50" cy="52" r="8" fill="${C.y}"/><rect x="40" y="68" width="18" height="8" rx="2" fill="${C.b}" transform="rotate(-10 49 72)"/>`),
+ ticket:S(`<path d="M10 30 L90 30 L90 44 Q82 44 82 50 Q82 56 90 56 L90 70 L10 70 L10 56 Q18 56 18 50 Q18 44 10 44 Z" fill="${C.y}"/><path d="M64 32 L64 68" stroke-dasharray="4 4"/><path d="M24 42 L54 42 M24 52 L48 52 M24 60 L40 60" stroke-width="3"/><path d="M70 44 L80 50 L70 56Z" fill="${C.b}"/>`),
+ hotel:S(`<rect x="22" y="14" width="56" height="74" rx="3" fill="#7FA8E8"/><rect x="40" y="70" width="20" height="18" fill="${C.y}"/>${[24,38,52].map(y=>[30,46,62].map(x=>`<rect x="${x}" y="${y}" width="9" height="9" fill="${C.lb}"/>`).join("")).join("")}<path d="M14 88 L86 88" stroke-width="4"/>`),
+ sea:S(`<path d="M6 54 Q18 46 30 54 Q42 62 54 54 Q66 46 78 54 Q88 60 96 54 L96 96 L6 96Z" fill="${C.b}"/><path d="M40 50 L64 50 L60 58 L44 58Z" fill="${C.br}"/><path d="M52 50 L52 20 L70 44Z" fill="${C.w}"/><circle cx="22" cy="24" r="10" fill="${C.y}"/>`),
+ mountain:S(`<path d="M4 88 L36 30 L54 58 L68 38 L96 88Z" fill="${C.g}"/><path d="M36 30 L28 44 L34 42 L38 48 L44 40Z M68 38 L62 48 L68 46 L74 50Z" fill="${C.w}"/><path d="M20 88 L26 70 L32 88Z M78 88 L84 72 L90 88Z" fill="#2E7A44"/>`),
+ church:S(`<rect x="24" y="48" width="52" height="40" fill="${C.w}"/><rect x="40" y="36" width="20" height="14" fill="${C.w}"/><path d="M50 10 Q64 26 60 36 L40 36 Q36 26 50 10Z" fill="${C.y}"/><path d="M30 24 Q38 34 35 42 L25 42 Q22 34 30 24Z M70 24 Q78 34 75 42 L65 42 Q62 34 70 24Z" fill="${C.y}"/><rect x="25" y="42" width="10" height="8" fill="${C.w}"/><rect x="65" y="42" width="10" height="8" fill="${C.w}"/><path d="M50 4 L50 12 M47 7 L53 7" /><path d="M44 88 L44 70 Q50 62 56 70 L56 88" fill="${C.b}"/>`),
+ pysanka:S(`<ellipse cx="50" cy="54" rx="28" ry="36" fill="${C.r}"/><path d="M23 46 Q50 38 77 46 L78 56 Q50 48 22 56Z" fill="${C.y}"/><path d="M24 70 Q50 64 76 70" fill="none" stroke="${C.dk}" stroke-width="4"/><path d="M28 64 l6 -6 6 6 6 -6 6 6 6 -6 6 6 6 -6" fill="none" stroke="${C.w}" stroke-width="2.4"/><circle cx="50" cy="30" r="7" fill="${C.y}"/><path d="M50 18 L50 23 M40 30 L43 30 M57 30 L60 30 M50 37 L50 40" stroke="${C.y}" stroke-width="2"/><circle cx="36" cy="80" r="2" fill="${C.y}" stroke="none"/><circle cx="50" cy="84" r="2" fill="${C.y}" stroke="none"/><circle cx="64" cy="80" r="2" fill="${C.y}" stroke="none"/>`),
+ sunflower:S(`<path d="M50 60 L50 96" stroke="${C.g}" stroke-width="5"/><path d="M50 82 Q30 70 22 80 Q34 92 50 86Z" fill="${C.g}"/>${Array.from({length:12},(_,i)=>`<ellipse cx="50" cy="20" rx="7" ry="14" fill="${C.y}" transform="rotate(${i*30} 50 40)"/>`).join("")}<circle cx="50" cy="40" r="14" fill="#6B3E26"/><path d="M42 36 l2 0 M50 32 l2 0 M56 38 l2 0 M46 44 l2 0 M54 46 l2 0" stroke="#C88B4E" stroke-width="2.4"/>`),
+ kalyna:S(`<path d="M50 14 L50 40 M50 40 L34 52 M50 40 L66 52 M50 40 L50 56" fill="none" stroke="${C.br}" stroke-width="3"/><path d="M50 18 Q30 6 18 20 Q26 34 48 26Z M52 18 Q72 6 84 20 Q76 34 54 26Z" fill="${C.g}"/>${[[34,58],[44,60],[56,60],[66,58],[38,70],[50,70],[62,70],[44,80],[56,80],[50,90]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="7" fill="${C.r}"/>`).join("")}<circle cx="47" cy="68" r="2" fill="#fff" stroke="none"/>`),
+ korovai:S(`<ellipse cx="50" cy="66" rx="40" ry="20" fill="#D9963F"/><ellipse cx="50" cy="56" rx="36" ry="16" fill="#E8B060"/><path d="M30 54 Q34 46 40 52 Q36 58 30 54Z M62 50 Q66 42 72 48 Q68 54 62 50Z" fill="#F6D9A2"/><circle cx="50" cy="48" r="7" fill="#F6D9A2"/><path d="M14 80 Q50 92 86 80" fill="none" stroke="${C.r}" stroke-width="4"/><path d="M18 84 l4 -3 4 3 4 -3" fill="none" stroke="${C.r}" stroke-width="2"/>`),
+ candle:S(`<path d="M10 84 Q30 70 50 78 Q70 70 90 84" fill="none" stroke="${C.g}" stroke-width="6"/><rect x="40" y="40" width="20" height="44" rx="3" fill="${C.w}"/><path d="M50 40 L50 34" /><path d="M50 12 Q60 24 50 34 Q40 24 50 12Z" fill="${C.y}"/><path d="M50 20 Q54 26 50 31 Q46 26 50 20Z" fill="${C.or}" stroke="none"/><circle cx="24" cy="76" r="4" fill="${C.r}"/><circle cx="76" cy="76" r="4" fill="${C.r}"/>`),
+ wreath:S(`<path d="M30 56 L24 92 M70 56 L76 92" stroke="${C.b}" stroke-width="4"/><path d="M40 60 L38 94 M60 60 L62 94" stroke="${C.y}" stroke-width="4"/>${[[18,44,C.r],[28,30,C.y],[42,22,C.b],[58,22,C.pk],[72,30,C.r],[82,44,C.y],[74,56,C.b],[26,56,C.pk],[50,60,C.r]].map(([x,y,c])=>`<circle cx="${x}" cy="${y}" r="9" fill="${c}"/><circle cx="${x}" cy="${y}" r="3" fill="${C.y}" stroke="none"/>`).join("")}`),
+ fire:S(`<path d="M20 90 L80 76 M20 76 L80 90" stroke="${C.br}" stroke-width="6"/><path d="M50 10 Q78 40 70 64 Q64 82 50 82 Q36 82 30 64 Q24 44 40 30 Q40 46 48 48 Q44 28 50 10Z" fill="${C.or}"/><path d="M50 44 Q62 58 58 70 Q54 78 50 78 Q44 78 42 70 Q40 60 50 44Z" fill="${C.y}"/>`),
+ bandura:S(`<path d="M50 12 Q62 12 62 24 L64 40 Q84 52 80 72 Q74 92 50 92 Q26 92 20 72 Q16 52 36 40 L38 24 Q38 12 50 12Z" fill="#C98A4B"/><circle cx="50" cy="66" r="9" fill="#6B3E26"/>${[36,42,48,54,60,66].map(x=>`<path d="M${x} 44 L${x} 88" stroke-width="1.2"/>`).join("")}<path d="M44 16 L44 40 M50 16 L50 40 M56 16 L56 40" stroke-width="1.2"/>`),
+ petrykivka:S(`<rect x="8" y="8" width="84" height="84" rx="10" fill="#1F1F3A"/><path d="M50 86 Q46 60 50 40" fill="none" stroke="${C.g}" stroke-width="3"/><path d="M50 62 Q30 58 24 40 Q40 44 50 60Z M50 70 Q70 66 76 48 Q60 52 50 68Z" fill="${C.g}"/><path d="M50 42 Q34 34 38 18 Q46 26 50 20 Q54 26 62 18 Q66 34 50 42Z" fill="${C.r}"/><path d="M50 36 Q44 30 46 24 M50 36 Q56 30 54 24" fill="none" stroke="${C.y}" stroke-width="2"/><circle cx="26" cy="76" r="5" fill="${C.y}"/><circle cx="74" cy="76" r="5" fill="${C.y}"/><circle cx="18" cy="56" r="3" fill="${C.or}"/><circle cx="82" cy="34" r="3" fill="${C.or}"/>`),
+ didukh:S(`${[30,38,46,54,62,70].map((x,i)=>`<path d="M50 70 Q${x} 40 ${x} ${18+(i%2)*6}" fill="none" stroke="#C9952E" stroke-width="2.5"/><ellipse cx="${x}" cy="${16+(i%2)*6}" rx="4" ry="8" fill="${C.y}"/>`).join("")}<path d="M50 70 L40 92 M50 70 L60 92 M50 70 L50 94" stroke="#C9952E" stroke-width="3"/><rect x="40" y="64" width="20" height="8" rx="3" fill="${C.r}"/>`),
+ flag:S(`<path d="M16 10 L16 94" stroke-width="5" stroke="${C.br}"/><path d="M16 14 Q40 6 60 14 Q76 20 90 14 L90 38 Q76 44 60 38 Q40 30 16 38Z" fill="#0057B7"/><path d="M16 38 Q40 30 60 38 Q76 44 90 38 L90 62 Q76 68 60 62 Q40 54 16 62Z" fill="#FFD700"/>`),
+ kutia:S(`<path d="M14 48 L86 48 Q82 84 50 86 Q18 84 14 48 Z" fill="${C.b}"/><path d="M20 62 l5 -4 5 4 5 -4 5 4 5 -4 5 4 5 -4 5 4 5 -4 5 4 5 -4" fill="none" stroke="${C.w}" stroke-width="2.4"/><ellipse cx="50" cy="48" rx="36" ry="9" fill="#8A5A34"/>${[[36,46],[46,44],[56,47],[64,44],[42,50],[60,50]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2" fill="#E8C07A" stroke="none"/>`).join("")}`),
+ heart:S(`<path d="M50 86 Q14 60 14 36 Q14 16 32 16 Q44 16 50 28 Q56 16 68 16 Q86 16 86 36 Q86 60 50 86Z" fill="${C.r}"/><path d="M28 30 Q24 36 26 42" fill="none" stroke="#fff" stroke-width="3"/>`),
+ book:S(`<path d="M50 24 Q34 16 14 20 L14 80 Q34 76 50 84 Q66 76 86 80 L86 20 Q66 16 50 24Z" fill="${C.w}"/><path d="M50 24 L50 84" /><path d="M14 20 L14 80 Q34 76 50 84 L50 88 Q34 80 10 84 L10 24Z" fill="${C.b}"/><path d="M22 34 L42 34 M22 44 L42 44 M58 34 L78 34 M58 44 L78 44 M22 54 L38 54 M58 54 L72 54" stroke-width="2"/>`),
+ button:S(`<circle cx="50" cy="50" r="34" fill="${C.r}"/><circle cx="50" cy="50" r="24" fill="none" stroke="#B52A30" stroke-width="3"/>${[[42,42],[58,42],[42,58],[58,58]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="4.5" fill="${C.w}"/>`).join("")}`),
+ needle:S(`<path d="M16 84 L80 20" stroke-width="4" stroke="${C.gr}"/><ellipse cx="78" cy="22" rx="3" ry="6" transform="rotate(45 78 22)" fill="#fff"/><path d="M78 22 Q90 40 70 50 Q50 60 60 80 Q66 90 56 94" fill="none" stroke="${C.r}" stroke-width="3"/>`),
+ map:S(`<path d="M12 22 L36 14 L64 22 L88 14 L88 78 L64 86 L36 78 L12 86 Z" fill="${C.lb}"/><path d="M36 14 L36 78 M64 22 L64 86" fill="none"/><path d="M20 60 Q34 40 50 56 Q62 66 78 42" fill="none" stroke="${C.r}" stroke-width="3" stroke-dasharray="5 5"/><path d="M78 30 Q86 30 86 38 Q86 44 78 52 Q70 44 70 38 Q70 30 78 30Z" fill="${C.r}"/>`),
+ smile:S(`<circle cx="50" cy="50" r="36" fill="${C.y}"/>${eyes(42,38,62)}<path d="M34 56 Q50 74 66 56" fill="none" stroke-width="3.5"/><circle cx="30" cy="56" r="5" fill="${C.pk}" stroke="none"/><circle cx="70" cy="56" r="5" fill="${C.pk}" stroke="none"/>`)
+};
+const ICON_KEYS=Object.keys(IC);
+document.getElementById("deco-sun").outerHTML=IC.sunflower.replace(/^<svg[^>]*>|<\/svg>$/g,"");
+
+/* ============ CONTENU ============ */
+// Mot : [ukrainien, prononciation (syllabe accentuée en MAJ), français, illustration (clé IC) ou emoji]
+const W=a=>{const o={u:a[0],p:a[1],f:a[2]};if(a[3]){if(IC[a[3]])o.i=a[3];else o.e=a[3];}return o;};
+const L=a=>({u:a[0],p:a[1],f:a[2],letter:true,ex:a[3]?W(a[3]):null});
+const THEMES=[
+ {id:"alpha",em:"🔤",name:"Alphabet",sub:"Lire le cyrillique",col:"--t-alpha"},
+ {id:"bases",em:"👋",name:"Premiers pas",sub:"Saluer, compter, se présenter",col:"--t-bases"},
+ {id:"vocab",em:"📚",name:"Vocabulaire",sub:"Mots du quotidien illustrés",col:"--t-vocab"},
+ {id:"gram",em:"✍️",name:"Grammaire",sub:"Comprendre comment ça marche",col:"--t-gram"},
+ {id:"conv",em:"💬",name:"Conversation",sub:"Phrases pour la vraie vie",col:"--t-conv"},
+ {id:"trad",em:"🌻",name:"Traditions & découverte",sub:"Fêtes, symboles, villes",col:"--t-trad"}
+];
+const SECTIONS=[
+ {id:"s-alpha",theme:"alpha",name:"L'alphabet cyrillique",lvl:"A1",badge:"🔤",lessons:[
+  {id:"alpha1",em:"🤝",title:"Les lettres amies",k:"alphabet lettres cyrillique lire",intro:"L'ukrainien s'écrit en cyrillique : 33 lettres. Bonne nouvelle, certaines se lisent comme en français ! Dans l'appli, la prononciation est écrite « à la française » et la syllabe accentuée est en MAJUSCULES.",
+   words:[L(["А а","a","a, comme dans « papa »",["мама","MA-ma","maman","mom"]]),L(["К к","k","k, comme dans « kiwi »",["кіт","kit","chat","cat"]]),L(["М м","m","m, comme dans « mot »",["молоко","mo-lo-KO","lait","milk"]]),L(["О о","o","o, comme dans « porte »",["вікно","vik-NO","fenêtre","window"]]),L(["Т т","t","t, comme dans « tasse »",["тато","TA-to","papa","dad"]]),L(["Е е","è","è, comme dans « mère »",["мед","mèd","miel","🍯"]]),L(["І і","i","i, comme dans « lit »",["ліжко","LIJ-ko","lit","bed"]])],
+   tip:"🧠 Astuce : l'accent tonique n'est pas écrit en ukrainien. On l'apprend avec chaque mot, et il peut changer le sens !"},
+  {id:"alpha2",em:"🎭",title:"Les faux amis",k:"alphabet lettres pièges",intro:"Ces lettres ressemblent à notre alphabet… mais se prononcent autrement. Ce sont les pièges préférés des débutants 😏",
+   words:[L(["В в","v","v, comme dans « vélo »",["вода","vo-DA","eau","water"]]),L(["Н н","n","n, comme dans « nez »",["ні","ni","non","❌"]]),L(["Р р","r roulé","r roulé, comme en espagnol",["риба","RY-ba","poisson","fish"]]),L(["С с","s","s, comme dans « sac »",["сонце","SON-tsé","soleil","sun"]]),L(["У у","ou","ou, comme dans « loup »",["сукня","SOUK-nia","robe","dress"]]),L(["Х х","kh","kh, un h raclé comme la jota espagnole",["хліб","khlib","pain","bread"]]),L(["И и","y","un i bref, entre « i » et « é »",["син","syn","fils","son"]])],
+   tip:"😏 Р n'est pas un P, Н n'est pas un H, С n'est pas un C dur et В n'est pas un B !"},
+  {id:"alpha3",em:"✨",title:"Nouvelles lettres (1)",k:"alphabet lettres",intro:"Place aux lettres qui n'existent pas en français. Regarde bien leur forme et associe-les à un mot.",
+   words:[L(["Б б","b","b, comme dans « bébé »",["борщ","borchtch","bortsch","borscht"]]),L(["Г г","h","h soufflé, comme en anglais « hello »",["гора","ho-RA","montagne","mountain"]]),L(["Ґ ґ","g","g dur, comme dans « gâteau »",["ґудзик","GOU-dzyk","bouton","button"]]),L(["Д д","d","d, comme dans « dame »",["дім","dim","maison","house"]]),L(["Ж ж","j","j, comme dans « jour »",["жовтий","JOV-tyï","jaune","sunflower"]]),L(["З з","z","z, comme dans « zéro »",["зима","zy-MA","hiver","snowman"]]),L(["Й й","ï","y, comme dans « ail »",["чай","tchaï","thé","tea"]]),L(["Л л","l","l, comme dans « lune »",["лелека","lé-LÉ-ka","cigogne","stork"]]),L(["П п","p","p, comme dans « pomme »",["писанка","PY-san-ka","œuf décoré","pysanka"]])]},
+  {id:"alpha4",em:"🌟",title:"Nouvelles lettres (2)",k:"alphabet lettres",intro:"Les dernières ! Après cette leçon, tu sais lire tout l'alphabet ukrainien 🎉",
+   words:[L(["Ф ф","f","f, comme dans « fleur »",["футболка","fout-BOL-ka","T-shirt","tshirt"]]),L(["Ц ц","ts","ts, comme dans « tsé-tsé »",["цибуля","tsy-BOU-lia","oignon","🧅"]]),L(["Ч ч","tch","tch, comme dans « tchao »",["черевики","tché-ré-VY-ky","chaussures","shoes"]]),L(["Ш ш","ch","ch, comme dans « chat »",["шапка","CHAP-ka","bonnet","hat"]]),L(["Щ щ","chtch","ch + tch collés",["дощ","dochtch","pluie","rain"]]),L(["Ь ь","'","signe mou : adoucit la consonne d'avant",["кінь","kin'","cheval","horse"]]),L(["Ю ю","iou","you, comme dans « youpi »",["любов","liou-BOV","amour","heart"]]),L(["Я я","ia","ya, comme dans « yack »",["яблуко","IA-blou-ko","pomme","apple"]]),L(["Є є","ié","yè, comme dans « yéti »",["Європа","yév-RO-pa","Europe","🌍"]]),L(["Ї ї","yi","yi, comme dans « yiddish »",["їжак","yi-JAK","hérisson","hedgehog"]])],
+   tip:"🇺🇦 Ї, Є, Ґ et І sont typiquement ukrainiennes : elles n'existent pas en russe. Et l'apostrophe (’) sépare les sons, comme dans сім'я (sim-IA, la famille)."}
+ ]},
+ {id:"s-bases",theme:"bases",name:"Bonjour l'Ukraine",lvl:"A1",badge:"👋",lessons:[
+  {id:"salut1",em:"👋",title:"Dire bonjour",k:"bonjour salut saluer au revoir bonsoir",intro:"Les premiers mots à connaître. En Ukraine, on dit « Привіт » entre amis et « Добрий день » aux adultes.",
+   words:[W(["Привіт","pry-VIT","Salut","smile"]),W(["Добрий день","DOB-ryï dèn'","Bonjour","sun"]),W(["Добрий ранок","DOB-ryï RA-nok","Bonjour (le matin)","🌅"]),W(["Добрий вечір","DOB-ryï VÈ-tchir","Bonsoir","🌙"]),W(["До побачення","do po-BA-tchén-nia","Au revoir","👋"]),W(["Бувай","bou-VAÏ","Salut (pour partir)","✌️"])],
+   tip:"💡 « Добрий » veut dire « bon ». Добрий день = « bonne journée » mot à mot."},
+  {id:"salut2",em:"🙏",title:"La politesse",k:"merci s'il te plaît pardon oui non politesse",intro:"Avec ces mots-là, tu deviens la personne la plus polie de Kyiv 😇",
+   words:[W(["Дякую","DIA-kou-iou","Merci","heart"]),W(["Будь ласка","boud' LAS-ka","S'il te plaît / De rien","🙏"]),W(["Вибачте","VY-batch-té","Excusez-moi","😅"]),W(["Так","tak","Oui","✅"]),W(["Ні","ni","Non","❌"]),W(["Добре","DOB-ré","D'accord / Bien","👍"])],
+   tip:"🎁 Будь ласка sert à la fois pour « s'il te plaît » et pour « de rien ». Deux en un !"},
+  {id:"salut3",em:"🙋‍♀️",title:"Se présenter",k:"présenter prénom nom ça va enchanté",intro:"Apprends à dire qui tu es. Bientôt tu pourras te présenter à une vraie Ukrainienne !",
+   words:[W(["Мене звати Лара","mé-NÉ ZVA-ty LA-ra","Je m'appelle Lara","me"]),W(["Як тебе звати?","iak té-BÉ ZVA-ty","Comment tu t'appelles ?","❓"]),W(["Я з Франції","ia z FRAN-tsiyi","Je viens de France","🇫🇷"]),W(["Як справи?","iak SPRA-vy","Comment ça va ?","🙂"]),W(["Дуже добре","DOU-jé DOB-ré","Très bien","😄"]),W(["Приємно познайомитися","pry-IÈM-no poz-na-YO-my-ty-sia","Enchantée","🤝"])],
+   tip:"🗣️ Petit dialogue : — Привіт! Як тебе звати? — Мене звати Лара. Я з Франції. — Приємно познайомитися!"}
+ ]},
+ {id:"s-nums",theme:"bases",name:"Les nombres",lvl:"A1",badge:"🔢",lessons:[
+  {id:"num1",em:"🔢",title:"De 1 à 10",k:"nombres chiffres compter un deux trois",intro:"Compter, c'est utile partout : au marché, pour l'heure, pour ton âge…",
+   words:[W(["один","o-DYN","un (1)","#1"]),W(["два","dva","deux (2)","#2"]),W(["три","try","trois (3)","#3"]),W(["чотири","tcho-TY-ry","quatre (4)","#4"]),W(["п'ять","p'iat'","cinq (5)","#5"]),W(["шість","chist'","six (6)","#6"]),W(["сім","sim","sept (7)","#7"]),W(["вісім","VI-sim","huit (8)","#8"]),W(["дев'ять","DÈ-v'iat'","neuf (9)","#9"]),W(["десять","DÈ-siat'","dix (10)","#10"])]},
+  {id:"num2",em:"💯",title:"Les grands nombres",k:"nombres dizaines cent mille âge",intro:"Les dizaines se construisent souvent avec « -дцять » (de « десять »).",
+   words:[W(["двадцять","DVAD-tsiat'","vingt (20)","#20"]),W(["тридцять","TRYD-tsiat'","trente (30)","#30"]),W(["сорок","SO-rok","quarante (40)","#40"]),W(["п'ятдесят","p'iat-dé-SIAT","cinquante (50)","#50"]),W(["сто","sto","cent (100)","#100"]),W(["тисяча","TY-sia-tcha","mille (1000)","#1000"])],
+   tip:"🎂 Pour ton âge : « Мені … років » (mé-NI … ro-KIV). Ex : Мені двадцять років = j'ai 20 ans."}
+ ]},
+ {id:"s-daily",theme:"vocab",name:"Le quotidien",lvl:"A1",badge:"🏠",lessons:[
+  {id:"fam",em:"👨‍👩‍👧",title:"La famille",k:"famille parents mère père frère soeur grand-mère",intro:"Сім'я (la famille) est très importante en Ukraine. Les grands-parents gardent souvent les petits-enfants !",
+   words:[W(["мама","MA-ma","maman","mom"]),W(["тато","TA-to","papa","dad"]),W(["сестра","sés-TRA","sœur","sister"]),W(["брат","brat","frère","brother"]),W(["бабуся","ba-BOU-sia","mamie","grandma"]),W(["дідусь","di-DOUS'","papi","grandpa"]),W(["син","syn","fils","son"]),W(["донька","DON'-ka","fille","daughter"])]},
+  {id:"home",em:"🏠",title:"La maison",k:"maison chambre meuble lit table cuisine",intro:"Fais le tour de la maison ukrainienne, pièce par pièce.",
+   words:[W(["дім","dim","maison","house"]),W(["кімната","kim-NA-ta","pièce / chambre","room"]),W(["кухня","KOUKH-nia","cuisine","kitchen"]),W(["ліжко","LIJ-ko","lit","bed"]),W(["стіл","stil","table","table"]),W(["стілець","sti-LÈTS'","chaise","chair"]),W(["вікно","vik-NO","fenêtre","window"]),W(["двері","DVÈ-ri","porte","door"]),W(["лампа","LAM-pa","lampe","lamp"]),W(["ключ","kliouch","clé","key"])],
+   tip:"🚪 « двері » est toujours au pluriel, même pour une seule porte !"},
+  {id:"days",em:"📅",title:"Les jours",k:"jours semaine lundi aujourd'hui demain hier temps",intro:"Les jours de la semaine. Petit secret : « п'ятниця » vient de « п'ять » (cinq), c'est le 5e jour !",
+   words:[W(["понеділок","po-né-DI-lok","lundi","📅"]),W(["вівторок","viv-TO-rok","mardi","📅"]),W(["середа","sé-ré-DA","mercredi","📅"]),W(["четвер","tchét-VÈR","jeudi","📅"]),W(["п'ятниця","P'IAT-ny-tsia","vendredi","🎉"]),W(["субота","sou-BO-ta","samedi","🛍️"]),W(["неділя","né-DI-lia","dimanche","😴"]),W(["сьогодні","sio-HOD-ni","aujourd'hui","⭐"]),W(["завтра","ZAV-tra","demain","➡️"]),W(["вчора","VTCHO-ra","hier","⬅️"])]}
+ ]},
+ {id:"s-eat",theme:"vocab",name:"Manger & s'habiller",lvl:"A1",badge:"👕",lessons:[
+  {id:"food1",em:"🍞",title:"À table !",k:"nourriture manger boire aliments cuisine repas",intro:"Les aliments de base pour survivre (et bien manger) en Ukraine.",
+   words:[W(["хліб","khlib","pain","bread"]),W(["вода","vo-DA","eau","water"]),W(["молоко","mo-lo-KO","lait","milk"]),W(["сир","syr","fromage","cheese"]),W(["яблуко","IA-blou-ko","pomme","apple"]),W(["яйце","iaï-TSÈ","œuf","egg"]),W(["кава","KA-va","café","coffee"]),W(["чай","tchaï","thé","tea"])]},
+  {id:"food2",em:"🥟",title:"Plats ukrainiens",k:"cuisine plats nourriture recette borchtch vareniki",intro:"La cuisine ukrainienne, c'est du réconfort dans une assiette. Prépare-toi à avoir faim 🤤",
+   words:[W(["борщ","borchtch","bortsch (soupe de betterave)","borscht"]),W(["вареники","va-RÈ-ny-ky","raviolis ukrainiens","varenyky"]),W(["голубці","ho-loub-TSI","chou farci","holubtsi"]),W(["сало","SA-lo","lard","salo"]),W(["пампушки","pam-POUCH-ky","petits pains à l'ail","pampushky"]),W(["узвар","ouz-VAR","boisson aux fruits secs","uzvar"])],
+   tip:"🥟 Les вареники peuvent être salés (pomme de terre, fromage) ou sucrés (cerises !). On les mange avec de la сметана (crème fraîche)."},
+  {id:"clothes",em:"👕",title:"Les vêtements",k:"vêtements habits mode shopping tenue",intro:"Qu'est-ce qu'on porte aujourd'hui ? Voici la garde-robe en ukrainien.",
+   words:[W(["футболка","fout-BOL-ka","T-shirt","tshirt"]),W(["сукня","SOUK-nia","robe","dress"]),W(["спідниця","spid-NY-tsia","jupe","skirt"]),W(["штани","chta-NY","pantalon","pants"]),W(["светр","svètr","pull","sweater"]),W(["куртка","KOURT-ka","veste","jacket"]),W(["шапка","CHAP-ka","bonnet","hat"]),W(["шарф","charf","écharpe","scarf"]),W(["шкарпетки","chkar-PÈT-ky","chaussettes","socks"]),W(["черевики","tché-ré-VY-ky","chaussures","shoes"]),W(["вишиванка","vy-chy-VAN-ka","chemise brodée","vyshyvanka"])],
+   tip:"👖 « штани » est toujours au pluriel, comme « pantalons » en anglais (trousers)."},
+  {id:"colors",em:"🎨",title:"Les couleurs",k:"couleurs rouge bleu jaune vert",intro:"Le drapeau ukrainien est синьо-жовтий : bleu et jaune. Mais il y a plein d'autres couleurs !",
+   words:[W(["червоний","tché-RVO-nyï","rouge","%#E0393E"]),W(["синій","SY-niï","bleu foncé","%#2F4FC9"]),W(["блакитний","bla-KYT-nyï","bleu ciel","%#7CC4FF"]),W(["жовтий","JOV-tyï","jaune","%#FFC93C"]),W(["зелений","zé-LÈ-nyï","vert","%#43A35E"]),W(["білий","BI-lyï","blanc","%#FFFFFF"]),W(["чорний","TCHOR-nyï","noir","%#2B2346"]),W(["рожевий","ro-JÈ-vyï","rose","%#F7A1B5"]),W(["помаранчевий","po-ma-RAN-tché-vyï","orange","%#F28C28"])],
+   tip:"🎨 Les couleurs s'accordent : червоний (masc.), червона (fém.), червоне (neutre). Червона сукня = robe rouge."}
+ ]},
+ {id:"s-nature",theme:"vocab",name:"La nature",lvl:"A1",badge:"🦔",lessons:[
+  {id:"animals",em:"🐾",title:"Les animaux",k:"animaux chat chien oiseau",intro:"Des animaux de la ferme aux héros des contes ukrainiens 🦔",
+   words:[W(["кіт","kit","chat","cat"]),W(["собака","so-BA-ka","chien","dog"]),W(["птах","ptakh","oiseau","bird"]),W(["риба","RY-ba","poisson","fish"]),W(["корова","ko-RO-va","vache","cow"]),W(["кінь","kin'","cheval","horse"]),W(["лелека","lé-LÈ-ka","cigogne","stork"]),W(["їжак","yi-JAK","hérisson","hedgehog"])],
+   tip:"🐱 Un chat qui miaule en ukrainien fait « няв » (niav) !"},
+  {id:"weather",em:"🌦️",title:"Météo & saisons",k:"météo temps saisons pluie soleil hiver été",intro:"Les hivers ukrainiens sont froids et neigeux, les étés chauds et ensoleillés.",
+   words:[W(["сонце","SON-tsé","soleil","sun"]),W(["дощ","dochtch","pluie","rain"]),W(["сніг","snih","neige","snow"]),W(["хмара","KHMA-ra","nuage","cloud"]),W(["вітер","VI-tér","vent","wind"]),W(["зима","zy-MA","hiver","snowman"]),W(["весна","vés-NA","printemps","tulip"]),W(["літо","LI-to","été","summer"]),W(["осінь","O-sin'","automne","leaf"])],
+   tip:"☔ Il pleut se dit « Іде дощ » : mot à mot « la pluie marche » !"}
+ ]},
+ {id:"s-gram1",theme:"gram",name:"Les fondations",lvl:"A1",badge:"🧱",lessons:[
+  {id:"g-pron",em:"🙋‍♀️",title:"Les pronoms",k:"pronoms je tu il elle grammaire",intro:"Je, tu, il, elle… la base de toute phrase.",
+   words:[W(["я","ia","je","me"]),W(["ти","ty","tu","👉"]),W(["він","vin","il","👦"]),W(["вона","vo-NA","elle","👧"]),W(["воно","vo-NO","il/elle (neutre)","👶"]),W(["ми","my","nous","👭"]),W(["ви","vy","vous","👥"]),W(["вони","vo-NY","ils / elles","👨‍👩‍👧"])],
+   tip:"🎩 « Ви » sert aussi à vouvoyer, exactement comme en français."},
+  {id:"g-be",em:"🪄",title:"Le verbe « être » disparaît",k:"être verbe phrase c'est grammaire",intro:"Magie : au présent, l'ukrainien ne dit pas « suis / est ». On colle simplement les mots !",
+   blocks:[{h:"Comment ça marche ?",p:"Я студентка. = Je (suis) étudiante. On enlève simplement le verbe. Pour dire « c'est », on utilise Це (tsé)."}],
+   phrases:[W(["Я студентка.","ia stou-DÈNT-ka","Je suis étudiante."]),W(["Він лікар.","vin LI-kar","Il est médecin."]),W(["Це мій кіт.","tsé miï kit","C'est mon chat."]),W(["Де мама? Мама вдома.","dé MA-ma? MA-ma VDO-ma","Où est maman ? Maman est à la maison."])],
+   quiz:[{q:"Comment dit-on « Je suis étudiante » ?",o:["Я студентка","Я студентку","Мене студентка"],a:0},{q:"« Це » veut dire…",o:["c'est","elle","où"],a:0},{q:"« Il est médecin » =",o:["Він лікар","Вона лікар","Він є лікарі"],a:0}]},
+  {id:"g-gender",em:"⚖️",title:"Masculin, féminin, neutre",k:"genre masculin féminin neutre grammaire noms",intro:"Chaque nom a un genre. Et souvent, il suffit de regarder la dernière lettre !",
+   table:{head:["Genre","Finale","Exemples"],rows:[["Masculin ♂️","consonne","стіл, кіт, дім"],["Féminin ♀️","-а / -я","мама, кухня"],["Neutre ⚪","-о / -е","вікно, сонце"]]},
+   blocks:[{h:"Les pièges 😈",p:"тато (papa) finit par -о mais il est masculin (logique !). ніч (la nuit) finit par une consonne mais elle est féminine."}],
+   quiz:[{q:"Quel genre pour « кухня » ?",o:["Féminin","Masculin","Neutre"],a:0},{q:"Quel genre pour « вікно » ?",o:["Neutre","Féminin","Masculin"],a:0},{q:"Quel genre pour « стіл » ?",o:["Masculin","Neutre","Féminin"],a:0},{q:"Quel genre pour « сонце » ?",o:["Neutre","Masculin","Féminin"],a:0},{q:"« тато » est…",o:["Masculin (exception !)","Neutre","Féminin"],a:0}]},
+  {id:"g-poss",em:"💝",title:"Mon, ma, mes",k:"possessifs mon ma mes grammaire",intro:"Le possessif s'accorde avec l'objet possédé, pas avec la personne.",
+   table:{head:["","Masc.","Fém.","Neutre","Pluriel"],rows:[["mon/ma","мій","моя","моє","мої"],["ton/ta","твій","твоя","твоє","твої"]]},
+   phrases:[W(["мій кіт","miï kit","mon chat"]),W(["моя мама","mo-IA MA-ma","ma maman"]),W(["моє вікно","mo-IÈ vik-NO","ma fenêtre"]),W(["мої друзі","mo-YI DROU-zi","mes amis"])],
+   quiz:[{q:"___ мама",o:["моя","мій","моє"],a:0},{q:"___ дім",o:["мій","моя","мої"],a:0},{q:"___ яблуко",o:["моє","мій","моя"],a:0},{q:"___ сестри (mes sœurs)",o:["мої","моя","моє"],a:0}]}
+ ]},
+ {id:"s-gram2",theme:"gram",name:"Verbes & questions",lvl:"A1+",badge:"⚡",lessons:[
+  {id:"g-verb1",em:"📖",title:"Le présent (1) : читати",k:"verbes conjugaison présent lire grammaire",intro:"La 1re conjugaison : les verbes en -ати comme читати (lire). On enlève -ти et on ajoute les terminaisons.",
+   table:{head:["Pronom","читати (lire)"],rows:[["я","читаю"],["ти","читаєш"],["він / вона","читає"],["ми","читаємо"],["ви","читаєте"],["вони","читають"]]},
+   phrases:[W(["Я читаю книгу.","ia tchy-TA-iou KNY-hou","Je lis un livre.","book"]),W(["Ти знаєш?","ty ZNA-iéch","Tu sais ?"]),W(["Ми гуляємо.","my hou-LIA-ié-mo","Nous nous promenons."])],
+   quiz:[{q:"ми ___ (lire)",o:["читаємо","читаєш","читають"],a:0},{q:"ти ___ (lire)",o:["читаєш","читаю","читає"],a:0},{q:"вони ___ (lire)",o:["читають","читаємо","читаєте"],a:0},{q:"я ___ (savoir : знати)",o:["знаю","знаєш","знає"],a:0}]},
+  {id:"g-verb2",em:"🗣️",title:"Le présent (2) : говорити",k:"verbes conjugaison présent parler aimer grammaire",intro:"La 2e conjugaison : les verbes en -ити comme говорити (parler).",
+   table:{head:["Pronom","говорити (parler)","любити (aimer)"],rows:[["я","говорю","люблю"],["ти","говориш","любиш"],["він / вона","говорить","любить"],["ми","говоримо","любимо"],["ви","говорите","любите"],["вони","говорять","люблять"]]},
+   blocks:[{h:"Le « л » surprise",p:"Avec любити, un л apparaît à « я люблю » et « вони люблять ». C'est juste pour que ça sonne mieux !"}],
+   phrases:[W(["Я говорю французькою.","ia ho-vo-RIOU fran-TSOUZ'-ko-iou","Je parle français."]),W(["Я люблю тебе!","ia liou-BLIOU té-BÉ","Je t'aime !","heart"])],
+   quiz:[{q:"я ___ (parler)",o:["говорю","говориш","говорять"],a:0},{q:"вони ___ (aimer)",o:["люблять","любить","любимо"],a:0},{q:"ти ___ (aimer)",o:["любиш","люблю","любите"],a:0}]},
+  {id:"g-quest",em:"❓",title:"Poser des questions",k:"questions négation quoi qui où quand comment pourquoi",intro:"Les mots interrogatifs, plus la négation : il suffit de mettre не (né) devant le verbe.",
+   words:[W(["Що?","chtcho","Quoi ?","❓"]),W(["Хто?","khto","Qui ?","🧑"]),W(["Де?","dé","Où ?","map"]),W(["Коли?","ko-LY","Quand ?","⏰"]),W(["Як?","iak","Comment ?","🤔"]),W(["Чому?","tcho-MOU","Pourquoi ?","🧐"]),W(["Скільки?","SKIL'-ky","Combien ?","💰"]),W(["Я не знаю.","ia né ZNA-iou","Je ne sais pas.","🤷‍♀️"])]}
+ ]},
+ {id:"s-gram3",theme:"gram",name:"Aller plus loin",lvl:"A2",badge:"🚀",lessons:[
+  {id:"g-plur",em:"👯",title:"Le pluriel",k:"pluriel grammaire noms",intro:"Le pluriel se fait surtout avec -и, -і ou -а.",
+   table:{head:["Singulier","Pluriel","Règle"],rows:[["кіт","коти","masc. → -и"],["мама","мами","-а → -и"],["кухня","кухні","-я → -і"],["вікно","вікна","-о → -а"],["яблуко","яблука","-о → -а"]]},
+   quiz:[{q:"Le pluriel de « сестра » ?",o:["сестри","сестрі","сестра"],a:0},{q:"Le pluriel de « вікно » ?",o:["вікна","вікни","вікні"],a:0},{q:"Le pluriel de « кухня » ?",o:["кухні","кухни","кухна"],a:0}]},
+  {id:"g-cases",em:"🧩",title:"Les cas (introduction)",k:"cas déclinaison locatif accusatif vocatif grammaire",intro:"L'ukrainien a 7 cas : la fin des mots change selon leur rôle. Pas de panique, on en voit 3 très utiles.",
+   blocks:[{h:"📍 Le locatif : où je suis",p:"Après в / у (dans, à) : Київ → у Києві, Львів → у Львові, Одеса → в Одесі, школа → у школі."},{h:"🎯 L'accusatif : l'objet",p:"Les mots féminins en -а prennent -у : кава → Я люблю каву. книга → Я читаю книгу."},{h:"📣 Le vocatif : appeler quelqu'un",p:"Мама → Мамо! · Лара → Ларо! Oui, en Ukraine on t'appellera « Ларо ! » 😄"}],
+   quiz:[{q:"« J'habite à Kyiv » =",o:["Я живу в Києві","Я живу в Київ","Я живу Києва"],a:0},{q:"« J'aime le café » =",o:["Я люблю каву","Я люблю кава","Я люблю каві"],a:0},{q:"Pour appeler Lara, on crie…",o:["Ларо!","Лара!","Ларі!"],a:0}]},
+  {id:"g-past",em:"⏳",title:"Le passé",k:"passé conjugaison était grammaire",intro:"Bonne nouvelle : le passé est simple ! Il s'accorde seulement en genre et en nombre.",
+   table:{head:["Qui ?","Finale","читати","бути (être)"],rows:[["він (il)","-в","читав","був"],["вона (elle)","-ла","читала","була"],["воно (neutre)","-ло","читало","було"],["вони (ils)","-ли","читали","були"]]},
+   phrases:[W(["Я була в Києві.","ia bou-LA v KY-ié-vi","J'étais à Kyiv. (fille)"]),W(["Він був у Львові.","vin bouv ou L'VO-vi","Il était à Lviv."])],
+   quiz:[{q:"« Lara a lu » =",o:["Лара читала","Лара читав","Лара читали"],a:0},{q:"« Il était à Lviv » =",o:["Він був у Львові","Він була у Львові","Він були у Львові"],a:0}]}
+ ]},
+ {id:"s-conv",theme:"conv",name:"La vraie vie",lvl:"A1+",badge:"💬",lessons:[
+  {id:"c-cafe",em:"☕",title:"Au café",k:"café restaurant commander manger boire",intro:"Lviv est la capitale du café en Ukraine. Allons commander !",
+   words:[W(["Можна каву, будь ласка?","MOJ-na KA-vou, boud' LAS-ka","Un café, s'il vous plaît ?","coffee"]),W(["Я хочу чай.","ia KHO-tchou tchaï","Je veux du thé.","tea"]),W(["Скільки коштує?","SKIL'-ky KOCH-tou-ié","Combien ça coûte ?","💰"]),W(["Смачного!","smatch-NO-ho","Bon appétit !","varenyky"]),W(["Дуже смачно!","DOU-jé SMATCH-no","C'est très bon !","😋"]),W(["Рахунок, будь ласка.","ra-KHOU-nok, boud' LAS-ka","L'addition, s'il vous plaît.","🧾"])]},
+  {id:"c-travel",em:"🧳",title:"En voyage",k:"voyage voyages voyager vacances avion train gare hôtel tourisme valise",intro:"Prête à partir ? Tout le vocabulaire pour voyager en Ukraine.",
+   words:[W(["літак","li-TAK","avion","plane"]),W(["поїзд","PO-yizd","train","train"]),W(["вокзал","vok-ZAL","gare","🚉"]),W(["квиток","kvy-TOK","billet","ticket"]),W(["валіза","va-LI-za","valise","suitcase"]),W(["готель","ho-TÈL'","hôtel","hotel"]),W(["море","MO-ré","mer","sea"]),W(["карта","KAR-ta","carte","map"])],
+   phrases:[W(["Де вокзал?","dé vok-ZAL","Où est la gare ?"]),W(["Праворуч / Ліворуч","pra-VO-routch / li-VO-routch","À droite / À gauche"]),W(["Прямо","PRIA-mo","Tout droit"]),W(["Це далеко?","tsé da-LÉ-ko","C'est loin ?"])],
+   tip:"🚆 En Ukraine, on voyage beaucoup en train de nuit : l'Укрзалізниця (Ukrzaliznytsia) est super ponctuelle !"},
+  {id:"c-feel",em:"💖",title:"Mes émotions",k:"émotions sentiments humeur amour",intro:"Dire ce que tu ressens. Attention, en tant que fille, tu utilises les formes féminines !",
+   words:[W(["Я щаслива.","ia chtchas-LY-va","Je suis heureuse.","smile"]),W(["Мені сумно.","mé-NI SOUM-no","Je suis triste.","😢"]),W(["Я втомилася.","ia vto-MY-la-sia","Je suis fatiguée.","😴"]),W(["Мені холодно.","mé-NI KHO-lod-no","J'ai froid.","snow"]),W(["Мені цікаво.","mé-NI tsi-KA-vo","Ça m'intéresse.","🤩"]),W(["Я люблю тебе.","ia liou-BLIOU té-BÉ","Je t'aime.","heart"])]}
+ ]},
+ {id:"s-trad",theme:"trad",name:"Fêtes & traditions",lvl:"Culture",badge:"🪅",lessons:[
+  {id:"t-vysh",em:"🧵",title:"La vychyvanka",k:"vychyvanka broderie vêtement tradition chemise",intro:"La вишиванка est une chemise brodée à la main. C'est LE symbole de l'identité ukrainienne.",
+   ill:"vyshyvanka",
+   blocks:[{h:"Une broderie qui protège",p:"Autrefois, on pensait que les motifs brodés protégeaient celui qui la portait. Chaque région a ses propres motifs et couleurs : rouge et noir, bleu, multicolore…"},{h:"📅 Une journée rien que pour elle",p:"Le 3e jeudi de mai, c'est le Jour de la vychyvanka : tout le monde la porte au travail et à l'école !"}],
+   words:[W(["вишиванка","vy-chy-VAN-ka","chemise brodée","vyshyvanka"]),W(["візерунок","vi-zé-ROU-nok","motif","pysanka"]),W(["нитка","NYT-ka","fil","needle"])],
+   quiz:[{q:"Quand a lieu le Jour de la vychyvanka ?",o:["Le 3e jeudi de mai","Le 1er janvier","Le 14 juillet"],a:0},{q:"Autrefois, la broderie servait à…",o:["protéger la personne","indiquer son âge","faire peur aux chats"],a:0}]},
+  {id:"t-pys",em:"🥚",title:"La pysanka",k:"pysanka pâques oeuf tradition art",intro:"Pour Великдень (Pâques), on décore des œufs : les писанки.",ill:"pysanka",
+   blocks:[{h:"La technique",p:"On dessine avec de la cire chaude, puis on trempe l'œuf dans la teinture, couleur après couleur. À la fin, on fait fondre la cire et les motifs apparaissent ✨"},{h:"Chaque symbole a un sens",p:"Le soleil ☀️ pour la vie, le blé 🌾 pour une bonne récolte, les vagues 🌊 pour la santé."},{h:"Le saviez-tu ?",p:"À Kolomyia, il existe un musée en forme de pysanka géante !"}],
+   words:[W(["писанка","PY-san-ka","œuf décoré","pysanka"]),W(["Великдень","vé-LYK-dén'","Pâques","🐣"]),W(["яйце","iaï-TSÈ","œuf","egg"])],
+   quiz:[{q:"Une pysanka est…",o:["un œuf décoré à la cire","une soupe","une danse"],a:0},{q:"Dans quelle ville trouve-t-on le musée en forme de pysanka ?",o:["Kolomyia","Paris","Odessa"],a:0}]},
+  {id:"t-xmas",em:"🎄",title:"Noël ukrainien",k:"noël fête hiver tradition chants",intro:"Різдво (Noël) est une fête magique. Depuis 2023, l'Ukraine le célèbre le 25 décembre.",ill:"candle",
+   blocks:[{h:"🌟 Святвечір, le réveillon",p:"Le soir du 24, on attend la première étoile pour commencer le repas : 12 plats sans viande ! Le plus important : la кутя, du blé au miel et aux graines de pavot."},{h:"🎶 Les колядки",p:"Les enfants vont de maison en maison chanter des chants de Noël. Le célèbre « Щедрик » de Mykola Leontovych est devenu « Carol of the Bells » dans le monde entier !"},{h:"🌾 Le дідух",p:"Une gerbe de blé qu'on place dans la maison : elle représente les ancêtres."}],
+   words:[W(["Різдво","riz-DVO","Noël","candle"]),W(["кутя","kou-TIA","plat de blé au miel","kutia"]),W(["колядка","ko-LIAD-ka","chant de Noël","🎶"]),W(["дідух","di-DOUKH","gerbe de blé","didukh"])],
+   phrases:[W(["Христос народився!","khrys-TOS na-ro-DY-vsia","Le Christ est né ! (salutation de Noël)"]),W(["Славімо Його!","sla-VI-mo io-HO","Glorifions-le ! (la réponse)"])],
+   quiz:[{q:"Combien de plats pour le Святвечір ?",o:["12","3","7"],a:0},{q:"« Щедрик » est devenu…",o:["Carol of the Bells","Jingle Bells","Douce nuit"],a:0},{q:"La кутя est faite de…",o:["blé, miel et pavot","betterave","pommes de terre"],a:0}]},
+  {id:"t-kupala",em:"🔥",title:"La nuit d'Ivan Kupala",k:"kupala été fête tradition feu fleurs",intro:"La nuit du 6 au 7 juillet, on fête le plein été avec Івана Купала.",ill:"wreath",
+   blocks:[{h:"Les traditions",p:"Les filles tressent des couronnes de fleurs (вінки) et les font flotter sur la rivière. On saute au-dessus du feu pour se purifier."},{h:"🌿 La fleur de fougère",p:"La légende dit que la fougère fleurit une seule fois par an, cette nuit-là. Celui qui la trouve aura bonheur et richesse !"}],
+   words:[W(["вінок","vi-NOK","couronne de fleurs","wreath"]),W(["вогонь","vo-HON'","feu","fire"]),W(["квітка","KVIT-ka","fleur","tulip"]),W(["річка","RITCH-ka","rivière","🏞️"])],
+   quiz:[{q:"Que font flotter les filles sur la rivière ?",o:["des couronnes de fleurs","des pysanky","des bougies de Noël"],a:0},{q:"Au-dessus de quoi saute-t-on ?",o:["du feu","d'une rivière","d'un hérisson"],a:0}]}
+ ]},
+ {id:"s-disc",theme:"trad",name:"Découvrir l'Ukraine",lvl:"Culture",badge:"🗺️",lessons:[
+  {id:"t-symb",em:"💛",title:"Les symboles",k:"symboles drapeau tournesol cigogne trident",intro:"Les symboles que tu verras partout en Ukraine.",ill:"flag",
+   blocks:[{h:"🇺🇦 Le drapeau",p:"Le bleu, c'est le ciel. Le jaune, ce sont les champs de blé. Simple et beau."},{h:"🌻 Le tournesol",p:"L'Ukraine est l'un des plus grands producteurs de tournesol au monde."},{h:"🔴 La калина",p:"Ses baies rouges symbolisent l'amour et la beauté. On la retrouve dans les chansons et les broderies."},{h:"🪺 La cigogne",p:"Une cigogne qui fait son nid sur ta maison porte bonheur !"}],
+   words:[W(["прапор","PRA-por","drapeau","flag"]),W(["соняшник","SO-niach-nyk","tournesol","sunflower"]),W(["калина","ka-LY-na","viorne (baies rouges)","kalyna"]),W(["лелека","lé-LÈ-ka","cigogne","stork"]),W(["тризуб","TRY-zoub","trident (armoiries)","🔱"])],
+   quiz:[{q:"Le bleu et le jaune du drapeau représentent…",o:["le ciel et les champs de blé","la mer et le sable","l'eau et le soleil couchant"],a:0},{q:"Une cigogne sur la maison apporte…",o:["le bonheur","la pluie","des bébés chats"],a:0}]},
+  {id:"t-borsch",em:"🍲",title:"Le borchtch, un trésor",k:"borchtch cuisine unesco recette",intro:"Le борщ est bien plus qu'une soupe : c'est un patrimoine.",ill:"borscht",
+   blocks:[{h:"🏛️ Protégé par l'UNESCO",p:"En 2022, la culture du borchtch ukrainien a été inscrite au patrimoine culturel immatériel de l'UNESCO."},{h:"Chaque famille a sa recette",p:"Betterave, chou, pommes de terre, carottes… et une cuillère de сметана. On le mange avec des пампушки à l'ail !"}],
+   words:[W(["буряк","bou-RIAK","betterave","beet"]),W(["сметана","smé-TA-na","crème fraîche","🥛"]),W(["пампушки","pam-POUCH-ky","petits pains à l'ail","pampushky"]),W(["борщ","borchtch","bortsch","borscht"])],
+   quiz:[{q:"Quel légume rend le borchtch rouge ?",o:["la betterave (буряк)","la tomate","le poivron"],a:0},{q:"En quelle année l'UNESCO l'a-t-elle protégé ?",o:["2022","1991","2010"],a:0}]},
+  {id:"t-cities",em:"🏙️",title:"Les villes",k:"villes kyiv lviv odessa kharkiv carpates géographie voyage",intro:"Petit tour de l'Ukraine, d'ouest en est.",ill:"church",
+   blocks:[{h:"Київ (Kyiv)",p:"La capitale, avec ses coupoles dorées : la cathédrale Sainte-Sophie et la Laure des Grottes sont classées à l'UNESCO."},{h:"Львів (Lviv)",p:"Ville de l'ouest au centre historique magnifique, célèbre pour ses cafés et son chocolat."},{h:"Одеса (Odessa)",p:"Port sur la mer Noire, connu pour son escalier monumental et son humour."},{h:"Карпати (les Carpates)",p:"Les montagnes de l'ouest. Le plus haut sommet, la Говерла, culmine à 2 061 m."}],
+   words:[W(["Київ","KY-yiv","Kyiv (capitale)","church"]),W(["Львів","l'viv","Lviv","coffee"]),W(["Одеса","o-DÈ-sa","Odessa","sea"]),W(["Карпати","kar-PA-ty","les Carpates","mountain"]),W(["місто","MIS-to","ville","hotel"])],
+   quiz:[{q:"La capitale de l'Ukraine ?",o:["Київ","Львів","Одеса"],a:0},{q:"Quelle ville est au bord de la mer Noire ?",o:["Одеса","Львів","Київ"],a:0},{q:"Le plus haut sommet des Carpates ?",o:["Говерла","Монблан","Еверест"],a:0}]},
+  {id:"t-arts",em:"🎨",title:"Arts & musique",k:"art peinture musique danse instrument petrykivka bandura",intro:"L'Ukraine est un pays d'artistes, de couleurs et de chansons.",ill:"petrykivka",
+   blocks:[{h:"🌺 La peinture de Petrykivka",p:"Des fleurs et des oiseaux peints au pinceau, inscrits au patrimoine de l'UNESCO en 2013. On en voit sur la vaisselle, les murs, les boîtes."},{h:"🎻 La bandoura",p:"Un instrument à cordes national, joué autrefois par les kobzars, des musiciens itinérants qui chantaient l'histoire."},{h:"👩‍🎨 Maria Prymatchenko",p:"Une peintre naïve aux animaux fantastiques. Picasso aurait admiré son travail !"},{h:"💃 Le hopak",p:"Une danse cosaque pleine d'énergie, avec des sauts spectaculaires."}],
+   words:[W(["бандура","ban-DOU-ra","bandoura (instrument)","bandura"]),W(["пісня","PIS-nia","chanson","🎵"]),W(["танець","TA-néts'","danse","💃"]),W(["малюнок","ma-LIOU-nok","dessin","petrykivka"])],
+   quiz:[{q:"La peinture de Petrykivka représente surtout…",o:["des fleurs et des oiseaux","des voitures","des montagnes"],a:0},{q:"La bandoura est…",o:["un instrument à cordes","un plat","une fête"],a:0}]}
+ ]}
+];
+const PATH_ORDER=["s-alpha","s-bases","s-nums","s-gram1","s-daily","s-eat","s-conv","s-gram2","s-nature","s-trad","s-gram3","s-disc"];
+
+/* ============ ÉTAT & SAUVEGARDE ============ */
+const LS="soniachko-v1";
+const blank=()=>({xp:0,days:[],lessons:{},evals:{},missed:{},custom:[],updated:0});
+let P=blank();
+try{const s=localStorage.getItem(LS);if(s)P=Object.assign(blank(),JSON.parse(s));}catch(e){}
+let dbRef=null, saveT=null;
+function save(){
+  P.updated=Date.now();
+  try{localStorage.setItem(LS,JSON.stringify(P));}catch(e){}
+  clearTimeout(saveT);
+  saveT=setTimeout(()=>{if(dbRef)dbRef.set(JSON.parse(JSON.stringify(P))).catch(()=>{});},700);
+}
+(async()=>{
+  try{
+    if(!window.claude?.use)return;
+    const [db,user]=await Promise.all([claude.use("db"),claude.use("user")]);
+    if(!db||!user)return;
+    const id=await user.id(); if(!id)return;
+    dbRef=db.doc("data/users/"+id+"/progress");
+    const snap=await dbRef.get();
+    const remote=snap.exists?snap.data():null;
+    if(remote&&(remote.updated||0)>(P.updated||0)){P=Object.assign(blank(),remote);try{localStorage.setItem(LS,JSON.stringify(P));}catch(e){}route();}
+    else if(P.updated){dbRef.set(JSON.parse(JSON.stringify(P))).catch(()=>{});}
+  }catch(e){}
+})();
+let sampleFn=null;
+(async()=>{try{if(window.claude?.use)sampleFn=await claude.use("sample");}catch(e){}})();
+
+/* ============ OUTILS ============ */
+const $=s=>document.querySelector(s);
+const app=$("#app");
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
+const norm=s=>String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[’']/g," ");
+const allLessons=()=>SECTIONS.flatMap(s=>s.lessons.map(l=>Object.assign(l,{sec:s.id})));
+const lessonById=id=>allLessons().find(l=>l.id===id)||P.custom.find(l=>l.id===id);
+const secById=id=>SECTIONS.find(s=>s.id===id);
+const quizPool=l=>{const w=[...(l.words||[])];(l.words||[]).forEach(x=>{if(x.letter&&x.ex)w.push(x.ex);});(l.phrases||[]).forEach(x=>w.push(x));return w;};
+const isDone=id=>!!P.lessons[id]?.done;
+const secProgress=s=>{const d=s.lessons.filter(l=>isDone(l.id)).length;return {done:d,total:s.lessons.length,pct:Math.round(d/s.lessons.length*100)};};
+const themeProgress=t=>{const ls=SECTIONS.filter(s=>s.theme===t).flatMap(s=>s.lessons);const d=ls.filter(l=>isDone(l.id)).length;return ls.length?Math.round(d/ls.length*100):0;};
+function streak(){const set=new Set(P.days);let n=0;const d=new Date();if(!set.has(today()))d.setDate(d.getDate()-1);while(true){const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");if(set.has(k)){n++;d.setDate(d.getDate()-1);}else break;}return n;}
+function touchDay(){if(!P.days.includes(today())){P.days.push(today());if(P.days.length>400)P.days=P.days.slice(-400);}}
+function toast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
+function confetti(){const em=["💛","💙","🌻","⭐","🎉","✨"];for(let i=0;i<26;i++){const s=document.createElement("span");s.className="confetti";s.textContent=em[i%em.length];s.style.left=Math.random()*100+"vw";s.style.animationDelay=(Math.random()*.6)+"s";document.body.appendChild(s);setTimeout(()=>s.remove(),3300);}}
+
+function art(w,cls=""){
+  if(!w)return `<div class="plate ${cls}"><span class="emo">🌻</span></div>`;
+  if(w.letter)return `<div class="plate ${cls}"><span class="let">${esc(w.u)}</span></div>`;
+  if(w.svg)return `<div class="plate ${cls}"><img alt="" src="data:image/svg+xml;charset=utf-8,${encodeURIComponent(w.svg)}"></div>`;
+  if(w.i&&IC[w.i])return `<div class="plate ${cls}">${IC[w.i]}</div>`;
+  if(w.e&&w.e[0]==="#")return `<div class="plate ${cls}"><span class="num">${esc(w.e.slice(1))}</span></div>`;
+  if(w.e&&w.e[0]==="%")return `<div class="plate ${cls}">${blob(w.e.slice(1))}</div>`;
+  return `<div class="plate ${cls}"><span class="emo">${esc(w.e||"🌻")}</span></div>`;
+}
+const hasPic=w=>!w.letter&&(w.svg||(w.i&&IC[w.i])||(w.e&&/^[%#]/.test(w.e)));
+
+/* ---- Voix ukrainienne ---- */
+let ukVoice=null;
+function loadVoices(){try{const v=speechSynthesis.getVoices();ukVoice=v.find(x=>/^uk/i.test(x.lang))||null;}catch(e){}}
+if("speechSynthesis" in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
+function speak(text){
+  if(!("speechSynthesis" in window)){toast("Pas de voix sur cet appareil 🙈 Lis la prononciation !");return;}
+  loadVoices();
+  if(!ukVoice){toast("Ton appareil n'a pas de voix ukrainienne 😕 Suis la prononciation écrite.");return;}
+  try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text.replace(/\(.*?\)/g,""));u.lang="uk-UA";u.voice=ukVoice;u.rate=.85;speechSynthesis.speak(u);}catch(e){}
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(b){e.stopPropagation();speak(b.dataset.say);}});
+
+/* ============ ROUTEUR ============ */
+let quizState=null, searchState=null;
+function go(h){if(location.hash==="#"+h)route();else location.hash=h;}
+function route(){
+  renderChips();
+  const h=location.hash.slice(1);
+  window.scrollTo(0,0);
+  if(!h)return renderHome();
+  if(h==="progress")return renderProgress();
+  if(h==="path")return renderPath();
+  if(h==="quiz")return quizState?renderQuiz():renderHome();
+  if(h==="search")return searchState?renderSearch():renderHome();
+  if(h==="mine")return renderMine();
+  if(h.startsWith("theme-"))return renderTheme(h.slice(6));
+  if(h.startsWith("lesson-"))return renderLesson(h.slice(7));
+  renderHome();
+}
+window.addEventListener("hashchange",route);
+$("#brand").onclick=()=>go("");
+
+function renderChips(){
+  const badges=Object.values(P.evals).filter(e=>e.passed).length;
+  $("#chips").innerHTML=`<span class="chip">🔥 ${streak()} j</span><span class="chip">⭐ ${P.xp} XP</span><span class="chip">🏅 ${badges}</span>`;
+}
+
+/* ============ ACCUEIL ============ */
+function nextLesson(){for(const sid of PATH_ORDER){const s=secById(sid);for(const l of s.lessons)if(!isDone(l.id))return l;if(!P.evals[sid]?.passed)return {evalOf:s};}return null;}
+function wordOfDay(){const pool=allLessons().flatMap(l=>(l.words||[]).filter(w=>!w.letter&&hasPic(w)));const d=new Date();const n=Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);return pool[(n*7)%pool.length];}
+function renderHome(){
+  const nx=nextLesson(), wod=wordOfDay();
+  const tiles=THEMES.map(t=>`<button class="tile" style="background:var(${t.col})" onclick="go('theme-${t.id}')"><span class="em">${t.em}</span><b>${t.name}</b><span>${t.sub}</span><div class="bar"><i style="width:${themeProgress(t.id)}%"></i></div></button>`).join("")+
+   `<button class="tile" style="background:var(--t-path)" onclick="go('path')"><span class="em">🗺️</span><b>Parcours complet</b><span>Toutes les leçons dans l'ordre, de A1 à A2</span></button>`+
+   `<button class="tile" style="background:var(--t-prog)" onclick="go('progress')"><span class="em">📈</span><b>Ma progression</b><span>Badges, scores, mots à revoir</span></button>`;
+  let cont;
+  if(!nx)cont=`<div class="txt"><div class="eyebrow">Bravo !</div><h3>Tu as fini tout le parcours 🏆</h3><p class="muted">Crée des leçons perso avec la barre de recherche pour continuer.</p></div>`;
+  else if(nx.evalOf)cont=`<div class="txt"><div class="eyebrow">Prochaine étape</div><h3>🎓 Évaluation : ${esc(nx.evalOf.name)}</h3><p class="muted">Tu as fini les leçons de cette section, montre ce que tu sais !</p></div><button class="btn btn-y" onclick="startEval('${nx.evalOf.id}')">C'est parti</button>`;
+  else cont=`<div class="txt"><div class="eyebrow">Continuer · ${esc(secById(nx.sec).name)}</div><h3>${nx.em} ${esc(nx.title)}</h3><p class="muted">${esc(nx.intro.slice(0,90))}…</p></div><button class="btn btn-y" onclick="go('lesson-${nx.id}')">▶️ Reprendre</button>`;
+  const mine=P.custom.length?`<button class="lrow" onclick="go('mine')"><span class="e">✨</span><span class="t"><b>Mes leçons perso</b><small>${P.custom.length} leçon${P.custom.length>1?"s":""} créée${P.custom.length>1?"s":""} pour toi</small></span><span class="st">›</span></button>`:"";
+  app.innerHTML=`
+   <div class="card continue">${cont}</div>
+   <section class="section"><div class="sec-head"><h2>Thèmes</h2><span class="muted">Choisis ce que tu veux apprendre</span></div><div class="themes">${tiles}</div></section>
+   ${mine}
+   <section class="card wod"><div>${art(wod)}</div><div><div class="eyebrow">🌟 Mot du jour</div><h2 style="margin:4px 0">${esc(wod.u)} <button class="say" data-say="${esc(wod.u)}" aria-label="Écouter">🔊</button></h2><div style="color:var(--blue);font-weight:800">${esc(wod.p)}</div><div style="font-weight:700">${esc(wod.f)}</div></div></section>`;
+}
+
+/* ============ THÈME ============ */
+function lessonRow(l){const r=P.lessons[l.id];return `<button class="lrow" onclick="go('lesson-${l.id}')"><span class="e">${l.em}</span><span class="t"><b>${esc(l.title)}</b><small>${r?.done?"Meilleur score : "+r.best+"%":"À découvrir"}</small></span><span class="st">${r?.done?"✅":"▶️"}</span></button>`;}
+function evalRow(s){const sp=secProgress(s), ev=P.evals[s.id], open=sp.done===sp.total;
+  return `<button class="lrow eval ${open?"":"locked"}" ${open?`onclick="startEval('${s.id}')"`:`onclick="toast('🔒 Termine les ${sp.total} leçons pour débloquer l\\'évaluation')"`}><span class="e">${open?"🎓":"🔒"}</span><span class="t"><b>Évaluation de la section</b><small>${ev?`Dernier : ${ev.last}% · Meilleur : ${ev.best}% ${ev.passed?"· "+s.badge+" badge gagné":""}`:open?"Débloquée ! 10 questions":`${sp.done}/${sp.total} leçons terminées`}</small></span><span class="st">${ev?.passed?"🏅":"›"}</span></button>`;}
+function sectionBox(s,bg){return `<div class="sbox" style="background:var(${bg})"><div class="sec-head"><h3>${s.badge} ${esc(s.name)}</h3><span class="lvl">${s.lvl}</span></div>${s.lessons.map(lessonRow).join("")}${evalRow(s)}</div>`;}
+function renderTheme(tid){
+  const t=THEMES.find(x=>x.id===tid); if(!t)return renderHome();
+  app.innerHTML=`<button class="back" onclick="go('')">← Accueil</button>
+   <div class="lesson-head"><span class="big">${t.em}</span><div><h1 style="font-size:1.6rem">${t.name}</h1><div class="muted">${t.sub} · ${themeProgress(t.id)}% terminé</div></div></div>
+   ${SECTIONS.filter(s=>s.theme===tid).map(s=>sectionBox(s,t.col)).join("")}`;
+}
+
+/* ============ LEÇON ============ */
+function wordCard(w){
+  if(w.letter){const ex=w.ex;return `<div class="w letter-card">${art(w)}<div class="fr">${esc(w.f)}</div>${ex?`<div class="row"><div><div class="uk" style="font-size:1rem">${esc(ex.u)}</div><div class="ph">${esc(ex.p)}</div><div class="muted" style="font-size:.85rem;font-weight:700">${esc(ex.f)}</div></div><button class="say" data-say="${esc(ex.u)}" aria-label="Écouter">🔊</button></div>`:""}</div>`;}
+  return `<div class="w">${art(w)}<button class="say" data-say="${esc(w.u)}" aria-label="Écouter">🔊</button><div class="uk">${esc(w.u)}</div><div class="ph">${esc(w.p)}</div><div class="fr">${esc(w.f)}</div></div>`;
+}
+function renderLesson(id){
+  const l=lessonById(id); if(!l)return renderHome();
+  const s=l.sec?secById(l.sec):null;
+  const t=s?THEMES.find(x=>x.id===s.theme):null;
+  const backTo=s?`theme-${s.theme}`:"mine";
+  const ill=l.ill?`<div style="width:min(220px,60%)">${art({i:l.ill})}</div>`:"";
+  const blocks=(l.blocks||[]).map(b=>`<div class="card"><h3>${esc(b.h)}</h3><p>${esc(b.p)}</p></div>`).join("");
+  const table=l.table?`<div class="tbl"><table><thead><tr>${l.table.head.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${l.table.rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`:"";
+  const phrases=(l.phrases||[]).length?`<section class="section"><h2>🗣️ Phrases</h2><div class="phr">${l.phrases.map(p=>`<div class="p"><div><div class="u">${esc(p.u)}</div><div style="color:var(--blue);font-weight:700;font-size:.9rem">${esc(p.p)}</div><div class="muted" style="font-weight:600">${esc(p.f)}</div></div><button class="say" data-say="${esc(p.u)}" aria-label="Écouter">🔊</button></div>`).join("")}</div></section>`:"";
+  const words=(l.words||[]).length?`<section class="section"><h2>${l.words[0].letter?"🔤 Les lettres":"📚 Les mots"}</h2><div class="words">${l.words.map(wordCard).join("")}</div></section>`:"";
+  const r=P.lessons[l.id];
+  app.innerHTML=`<button class="back" onclick="go('${backTo}')">← ${t?esc(t.name):"Mes leçons perso"}</button>
+   <div class="lesson-head"><span class="big">${l.em||"✨"}</span><div><div class="eyebrow">${s?esc(s.name)+" · "+s.lvl:"✨ Leçon personnalisée"}</div><h1 style="font-size:1.6rem">${esc(l.title)}</h1></div></div>
+   <p class="intro">${esc(l.intro)}</p>${ill}
+   ${blocks?`<div class="blocks">${blocks}</div>`:""}${table}${words}${phrases}
+   ${l.tip?`<div class="tip">${esc(l.tip)}</div>`:""}
+   <div class="card continue"><div class="txt"><h3>🎯 Prête à t'entraîner ?</h3><p class="muted">${r?.done?"Meilleur score : "+r.best+"% · tu peux refaire pour t'améliorer":"Un petit quiz pour fixer tout ça dans ta tête."}</p></div><button class="btn btn-y" onclick="startPractice('${l.id}')">Je m'entraîne</button></div>`;
+  touchDay();save();renderChips();
+}
+
+/* ============ QUIZ ============ */
+function mkQuestions(words,n,extra,globalPool){
+  const qs=[];
+  const pool=words.filter(w=>w.u&&w.f);
+  const gp=globalPool||allLessons().flatMap(quizPool);
+  const distract=(w,key,count=3)=>{
+    const same=x=>!!x.letter===!!w.letter;
+    let c=shuffle(pool.filter(x=>x!==w&&same(x)&&x[key]!==w[key]));
+    if(c.length<count)c=c.concat(shuffle(gp.filter(x=>x!==w&&same(x)&&x[key]!==w[key]&&!c.includes(x))));
+    const out=[];for(const x of c){if(!out.includes(x[key])&&x[key]!==w[key])out.push(x[key]);if(out.length===count)break;}
+    return out;
+  };
+  for(const w of shuffle(pool)){
+    if(qs.length>=n)break;
+    const types=["u2f","f2u"];
+    if(hasPic(w))types.push("img","img");
+    const plain=w.u.replace(/[?!.,]/g,"");
+    if(!w.letter&&!/\s/.test(plain)&&plain.length>=3&&plain.length<=7)types.push("build");
+    const t=types[Math.floor(Math.random()*types.length)];
+    if(t==="build"){qs.push({type:"build",w,target:plain});continue;}
+    if(t==="u2f"){const o=shuffle([w.f,...distract(w,"f")]);qs.push({type:"mcq",w,show:"u",q:w.letter?"Quel son fait cette lettre ?":"Que veut dire ce mot ?",opts:o,ans:o.indexOf(w.f)});continue;}
+    const o=shuffle([w.u,...distract(w,"u")]);
+    qs.push({type:"mcq",w,show:t==="img"?"img":"f",q:t==="img"?"Comment dit-on ça en ukrainien ?":(w.letter?"Quelle lettre fait ce son ?":"Comment dit-on en ukrainien…"),opts:o,ans:o.indexOf(w.u)});
+  }
+  (extra||[]).forEach(x=>{const o=shuffle(x.o.map((t,i)=>({t,i})));qs.push({type:"mcq",q:x.q,opts:o.map(z=>z.t),ans:o.findIndex(z=>z.i===x.a)});});
+  return shuffle(qs);
+}
+function startPractice(id){
+  const l=lessonById(id);const pool=quizPool(l);
+  const n=Math.min(pool.length,(l.quiz||[]).length?4:8);
+  quizState={kind:"lesson",id,title:l.title,qs:mkQuestions(pool,n,l.quiz),i:0,good:0,answered:false,missed:[]};
+  go("quiz");
+}
+function startEval(sid){
+  const s=secById(sid);const pool=s.lessons.flatMap(quizPool);
+  const extra=shuffle(s.lessons.flatMap(l=>l.quiz||[])).slice(0,4);
+  const qs=mkQuestions(pool,10-extra.length,extra).slice(0,10);
+  quizState={kind:"eval",id:sid,title:"Évaluation · "+s.name,qs,i:0,good:0,answered:false,missed:[]};
+  go("quiz");
+}
+function startReview(){
+  const pool=Object.values(P.missed).sort((a,b)=>b.count-a.count).map(m=>m.w).slice(0,12);
+  if(!pool.length)return toast("Aucun mot à revoir, bravo ! 🎉");
+  quizState={kind:"review",id:"review",title:"Révision de mes erreurs",qs:mkQuestions(pool,Math.min(10,pool.length*2),[]),i:0,good:0,answered:false,missed:[]};
+  go("quiz");
+}
+function renderQuiz(){
+  const Q=quizState;
+  if(Q.i>=Q.qs.length)return renderResult();
+  const q=Q.qs[Q.i];
+  let prompt="";
+  if(q.type==="build")prompt=`${hasPic(q.w)?art(q.w):""}<div class="muted" style="font-weight:800">Écris en ukrainien :</div><div class="big">${esc(q.w.f)}</div>`;
+  else if(!q.w)prompt=`<div class="big" style="font-size:1.25rem">${esc(q.q)}</div>`;
+  else if(q.show==="u")prompt=`<div class="muted" style="font-weight:800">${esc(q.q)}</div>${q.w.letter?art(q.w):`<div class="big">${esc(q.w.u)} <button class="say" data-say="${esc(q.w.u)}" aria-label="Écouter">🔊</button></div>`}`;
+  else if(q.show==="img")prompt=`<div class="muted" style="font-weight:800">${esc(q.q)}</div>${art(q.w)}`;
+  else prompt=`<div class="muted" style="font-weight:800">${esc(q.q)}</div><div class="big">${esc(q.w.f)}</div>`;
+  let body;
+  if(q.type==="build"){
+    q.letters=q.letters||shuffle([...q.target]);q.picked=q.picked||[];
+    body=`<div class="build-out" id="bo">${q.picked.map(i=>esc(q.letters[i])).join("")||'<span class="muted" style="font-family:var(--f-body);font-size:.95rem">Touche les lettres dans l\'ordre</span>'}</div>
+     <div class="tiles">${q.letters.map((c,i)=>`<button class="ltile" ${q.picked.includes(i)||Q.answered?"disabled":""} onclick="pick(${i})">${esc(c)}</button>`).join("")}</div>
+     <div class="cta-row" style="justify-content:center"><button class="btn btn-g" onclick="unpick()" ${Q.answered?"disabled":""}>⌫ Effacer</button><button class="btn btn-b" onclick="checkBuild()" ${Q.answered||q.picked.length!==q.letters.length?"disabled":""}>Valider</button></div>`;
+  } else {
+    body=`<div class="opts">${q.opts.map((o,i)=>`<button class="opt ${Q.answered?(i===q.ans?"ok":(i===q.chosen?"ko":"")):""}" ${Q.answered?"disabled":""} onclick="answer(${i})">${esc(o)}</button>`).join("")}</div>`;
+  }
+  const fb=Q.answered?`<div class="fb ${q.right?"ok":"ko"}">${q.right?["🎉 Bravo !","✨ Exact !","💪 Parfait !","🌻 Super !"][Q.i%4]:`😅 Presque ! La réponse : <b>${esc(q.type==="build"?q.target:q.opts[q.ans])}</b>`}${q.w&&q.w.p&&!q.w.letter?` <span class="muted">· ${esc(q.w.u)} = ${esc(q.w.p)}</span>`:""}</div><button class="btn btn-y" onclick="nextQ()">${Q.i+1<Q.qs.length?"Suivant →":"Voir mon score 🏁"}</button>`:"";
+  app.innerHTML=`<div class="quiz"><div class="qtop"><button class="back" onclick="if(quizState.kind==='lesson')go('lesson-'+quizState.id);else go('')" aria-label="Quitter">✕</button><div class="bar"><i style="width:${Q.i/Q.qs.length*100}%"></i></div><b style="font-variant-numeric:tabular-nums">${Q.i+1}/${Q.qs.length}</b></div>
+   <div class="eyebrow" style="text-align:center">${esc(Q.title)}</div><div class="qprompt">${prompt}</div>${body}${fb}</div>`;
+}
+function recordMiss(w){if(!w||w.letter)return;const k=w.u;P.missed[k]=P.missed[k]||{count:0,w:{u:w.u,p:w.p,f:w.f,i:w.i,e:w.e,svg:w.svg}};P.missed[k].count++;}
+function recordHit(w){if(w&&P.missed[w.u]){P.missed[w.u].count--;if(P.missed[w.u].count<=0)delete P.missed[w.u];}}
+function answer(i){const Q=quizState,q=Q.qs[Q.i];if(Q.answered)return;q.chosen=i;q.right=i===q.ans;Q.answered=true;if(q.right){Q.good++;recordHit(q.w);}else{recordMiss(q.w);Q.missed.push(q.w);}renderQuiz();}
+function pick(i){const q=quizState.qs[quizState.i];q.picked.push(i);renderQuiz();}
+function unpick(){const q=quizState.qs[quizState.i];q.picked.pop();renderQuiz();}
+function checkBuild(){const Q=quizState,q=Q.qs[Q.i];const s=q.picked.map(i=>q.letters[i]).join("");q.right=s.toLowerCase()===q.target.toLowerCase();Q.answered=true;if(q.right){Q.good++;recordHit(q.w);}else{recordMiss(q.w);Q.missed.push(q.w);}renderQuiz();}
+function nextQ(){quizState.i++;quizState.answered=false;renderQuiz();window.scrollTo(0,0);}
+function renderResult(){
+  const Q=quizState;
+  if(!Q.saved){
+    Q.pct=Math.round(Q.good/Q.qs.length*100);Q.gain=Q.good*10;
+    if(Q.kind==="lesson"){const r=P.lessons[Q.id]||{best:0};P.lessons[Q.id]={done:true,best:Math.max(r.best||0,Q.pct),at:Date.now()};}
+    if(Q.kind==="eval"){const e=P.evals[Q.id]||{best:0,history:[]};e.last=Q.pct;e.best=Math.max(e.best||0,Q.pct);e.history=(e.history||[]).concat({s:Q.pct,at:Date.now()}).slice(-10);if(Q.pct>=70&&!e.passed){e.passed=true;Q.gain+=50;Q.newBadge=true;}P.evals[Q.id]=e;}
+    P.xp+=Q.gain;touchDay();save();Q.saved=true;
+    if(Q.pct>=70)confetti();
+  }
+  const msg=Q.pct>=90?"🏆 Incroyable !":Q.pct>=70?"🌟 Super travail !":Q.pct>=50?"💪 Pas mal du tout !":"🌱 On révise et on recommence !";
+  let extra="";
+  if(Q.kind==="lesson"){const l=lessonById(Q.id);const s=l.sec?secById(l.sec):null;
+    if(s){const sp=secProgress(s);if(sp.done===sp.total&&!P.evals[s.id]?.passed)extra=`<div class="card" style="background:var(--blue);color:#fff"><b>🎓 Évaluation débloquée !</b><br>Tu as fini toutes les leçons de « ${esc(s.name)} ».</div><button class="btn btn-y" onclick="startEval('${s.id}')">Passer l'évaluation</button>`;
+      else{const idx=s.lessons.findIndex(x=>x.id===l.id);const nx=s.lessons.slice(idx+1).find(x=>!isDone(x.id))||s.lessons.find(x=>!isDone(x.id));if(nx)extra=`<button class="btn btn-y" onclick="go('lesson-${nx.id}')">Leçon suivante : ${nx.em} ${esc(nx.title)}</button>`;}}}
+  if(Q.kind==="eval"){const s=secById(Q.id);extra=Q.pct>=70?`<div class="card"><b>${Q.newBadge?"Nouveau badge : ":"Badge : "}${s.badge} ${esc(s.name)}</b></div>`:`<p class="muted">Il faut 70% pour valider la section. Révise les mots ci-dessous et retente ta chance !</p>`;}
+  const missed=[...new Map(Q.missed.filter(Boolean).map(w=>[w.u,w])).values()];
+  app.innerHTML=`<div class="quiz result"><div class="eyebrow">${esc(Q.title)}</div><div class="score">${Q.pct}%</div><h2>${msg}</h2><p class="muted">${Q.good} bonne${Q.good>1?"s":""} réponse${Q.good>1?"s":""} sur ${Q.qs.length} · +${Q.gain} XP ⭐</p>
+   ${missed.length?`<div class="card" style="text-align:left;width:100%"><b>À revoir 🧐</b><div class="phr" style="margin-top:8px">${missed.map(w=>`<div class="p"><div><div class="u">${esc(w.u)}</div><div class="muted">${esc(w.p||"")} · ${esc(w.f)}</div></div><button class="say" data-say="${esc(w.u)}">🔊</button></div>`).join("")}</div></div>`:""}
+   ${extra}<div class="cta-row" style="justify-content:center"><button class="btn btn-g" onclick="retry()">🔁 Recommencer</button><button class="btn btn-g" onclick="go('')">🏠 Accueil</button></div></div>`;
+  renderChips();
+}
+function retry(){const Q=quizState;if(Q.kind==="lesson")startPractice(Q.id);else if(Q.kind==="eval")startEval(Q.id);else startReview();}
+
+/* ============ PROGRESSION ============ */
+function renderProgress(){
+  const all=allLessons(), done=all.filter(l=>isDone(l.id)).length;
+  const learned=new Set(all.filter(l=>isDone(l.id)).flatMap(l=>(l.words||[]).filter(w=>!w.letter).map(w=>w.u))).size;
+  const missed=Object.values(P.missed).sort((a,b)=>b.count-a.count);
+  const badges=SECTIONS.map(s=>`<div class="badge ${P.evals[s.id]?.passed?"":"off"}"><span class="e">${s.badge}</span><small>${esc(s.name)}</small></div>`).join("");
+  const rows=PATH_ORDER.map(secById).map(s=>{const sp=secProgress(s),ev=P.evals[s.id];return `<div class="prow"><div><b>${s.badge} ${esc(s.name)}</b><div class="muted" style="font-size:.85rem;font-weight:600">${sp.done}/${sp.total} leçons${ev?` · éval ${ev.best}%`:""}</div></div><div class="bar"><i style="width:${sp.pct}%"></i></div><div class="n">${sp.pct}%</div></div>`;}).join("");
+  const hist=Object.entries(P.evals).flatMap(([sid,e])=>(e.history||[]).map(h=>({sid,...h}))).sort((a,b)=>b.at-a.at).slice(0,6);
+  app.innerHTML=`<button class="back" onclick="go('')">← Accueil</button><h1 style="font-size:1.6rem">📈 Ma progression</h1>
+   <div class="stats"><div class="stat"><b>${Math.round(done/all.length*100)}%</b><span>du parcours</span></div><div class="stat"><b>${done}/${all.length}</b><span>leçons finies</span></div><div class="stat"><b>${learned}</b><span>mots appris</span></div><div class="stat"><b>🔥 ${streak()}</b><span>jours d'affilée</span></div></div>
+   <section class="section"><h2>🏅 Mes badges</h2><p class="muted" style="margin:0">Gagne un badge en réussissant l'évaluation d'une section (70% minimum).</p><div class="badges">${badges}</div></section>
+   <section class="section"><h2>🗂️ Par section</h2><div class="card">${rows}</div></section>
+   <section class="section"><h2>🧐 Mots à revoir</h2>${missed.length?`<div class="miss">${missed.slice(0,24).map(m=>`<span>${esc(m.w.u)} · ${esc(m.w.f)}</span>`).join("")}</div><div><button class="btn btn-y" onclick="startReview()">🔁 Réviser mes erreurs</button></div>`:`<p class="muted">Aucune erreur enregistrée pour l'instant. Continue comme ça ! 💪</p>`}</section>
+   ${hist.length?`<section class="section"><h2>🎓 Dernières évaluations</h2><div class="card">${hist.map(h=>`<div class="prow"><div><b>${esc(secById(h.sid)?.name||"")}</b><div class="muted" style="font-size:.85rem">${new Date(h.at).toLocaleDateString("fr-FR")}</div></div><div class="bar"><i style="width:${h.s}%;background:${h.s>=70?"var(--green)":"var(--red)"}"></i></div><div class="n">${h.s}%</div></div>`).join("")}</div></section>`:""}`;
+}
+
+/* ============ PARCOURS ============ */
+function renderPath(){
+  app.innerHTML=`<button class="back" onclick="go('')">← Accueil</button><h1 style="font-size:1.6rem">🗺️ Parcours complet</h1><p class="muted" style="margin:0">Suis le fil brodé : de l'alphabet jusqu'au niveau A2. Chaque section se termine par une évaluation.</p>
+   <div class="path">${PATH_ORDER.map(secById).map(s=>{const sp=secProgress(s),ev=P.evals[s.id];const st=ev?.passed?"🏅":sp.done===sp.total?"🎓":sp.done?"🌱":s.badge;return `<div class="step"><div class="dot">${st}</div><div class="sbox" style="background:var(${THEMES.find(t=>t.id===s.theme).col})"><div class="sec-head"><h3>${esc(s.name)}</h3><span class="lvl">${s.lvl}</span></div>${s.lessons.map(lessonRow).join("")}${evalRow(s)}</div></div>`;}).join("")}</div>`;
+}
+
+/* ============ LEÇONS PERSO ============ */
+function renderMine(){
+  app.innerHTML=`<button class="back" onclick="go('')">← Accueil</button><h1 style="font-size:1.6rem">✨ Mes leçons perso</h1>
+   <div class="section">${P.custom.length?P.custom.slice().reverse().map(lessonRow).join(""):`<p class="muted">Utilise la barre de recherche en haut pour créer ta première leçon.</p>`}</div>`;
+}
+const STOP=new Set(["le","la","les","des","de","du","un","une","en","et","sur","pour","apprendre","lecon","lecons","vocabulaire","mots","je","veux","a","au","aux","l","d","the"]);
+function localMatches(q){
+  const toks=norm(q).split(/[^a-z0-9а-яіїєґ]+/i).filter(t=>t.length>=3&&!STOP.has(t)).map(t=>t.replace(/s$/,""));
+  if(!toks.length)return [];
+  return allLessons().filter(l=>{const idx=norm([l.title,l.k,(l.words||[]).map(w=>w.f+" "+w.u).join(" ")].join(" "));return toks.some(t=>idx.includes(t));});
+}
+$("#searchForm").addEventListener("submit",e=>{e.preventDefault();const q=$("#q").value.trim();if(!q)return toast("Écris un thème, par exemple « les voyages » ✈️");searchState={q,status:"idle",err:""};go("search");if(sampleFn)generate();});
+function renderSearch(){
+  const S=searchState, m=localMatches(S.q);
+  let gen;
+  if(!sampleFn)gen=`<p class="muted">✨ La création de leçons sur mesure par Claude n'est pas disponible ici (il faut être connectée à Claude sur cette page). En attendant, voici ce que l'appli a déjà sur ce thème.</p>`;
+  else if(S.status==="loading")gen=`<p><span class="spinner">🌻</span> <b>Je prépare ta leçon « ${esc(S.q)} »…</b></p><p class="muted">${esc(S.note||"Ça prend environ 30 secondes. Je dessine aussi les illustrations !")}</p>`;
+  else if(S.status==="error")gen=`<p>😕 ${esc(S.err)}</p><button class="btn btn-y" onclick="generate()">Réessayer</button>`;
+  else gen=`<button class="btn btn-y" onclick="generate()">✨ Créer ma leçon « ${esc(S.q)} »</button>`;
+  app.innerHTML=`<button class="back" onclick="go('')">← Accueil</button><h1 style="font-size:1.6rem">🔎 « ${esc(S.q)} »</h1>
+   <div class="card gen"><h3>✨ Leçon personnalisée</h3>${gen}</div>
+   <section class="section"><h2>📚 Déjà dans tes leçons</h2>${m.length?m.map(lessonRow).join(""):`<p class="muted">Rien de proche dans le parcours pour l'instant.</p>`}</section>`;
+}
+async function generate(){
+  const S=searchState; if(!sampleFn||S.status==="loading")return;
+  S.status="loading";S.note="";if(location.hash==="#search")renderSearch();
+  const prompt=`Tu es une professeure d'ukrainien bienveillante pour Lara, une francophone débutante (niveau A1-A2).
+Crée une leçon sur le thème : « ${S.q} ».
+Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, de cette forme :
+{"title":"titre court en français","emoji":"un emoji","intro":"2 phrases chaleureuses en français","words":[{"u":"mot ukrainien","p":"prononciation","f":"traduction française","e":"emoji","i":"","svg":""}],"phrases":[{"u":"phrase ukrainienne","p":"prononciation","f":"traduction"}],"tip":"une astuce de grammaire ou de culture, en français, avec un emoji","quiz":[{"q":"question en français","o":["bonne réponse","mauvaise","mauvaise"],"a":0}]}
+Règles :
+- 8 à 10 mots utiles, 4 phrases du quotidien, 3 questions de quiz.
+- Ukrainien correct, naturel et moderne (aucun russisme).
+- Prononciation « à la française », syllabe accentuée en MAJUSCULES, tirets entre syllabes. Notation : и=y, і=i, й=ï, х=kh, ж=j, ч=tch, ш=ch, щ=chtch, у=ou, е=è, я=ia, ю=iou, є=ié, ї=yi, г=h, ь='. Exemple : привіт = pry-VIT.
+- Illustration de chaque mot : si une de ces clés correspond exactement au mot, mets-la dans "i" : ${ICON_KEYS.join(", ")}. Sinon laisse "i" vide et mets dans "svg" une petite illustration plate et mignonne que tu dessines toi-même : <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">…</svg>, formes simples, couleurs vives, contours stroke="#2B2346" stroke-width="2.5", aucun texte, aucun script, moins de 700 caractères. Pour les mots abstraits, "svg" peut rester vide : l'emoji sera utilisé.
+- Si le thème n'est pas adapté à une leçon, choisis un thème proche et adapté.`;
+  try{
+    const data=await sampleFn.json(prompt,{modelTier:"default",onText:({text})=>{S.note=`✍️ J'écris… (${text.length} caractères)`;const el=document.querySelector(".gen .muted");if(el&&location.hash==="#search")el.textContent=S.note;}});
+    const clean=s=>String(s??"").slice(0,400);
+    const okSvg=s=>typeof s==="string"&&/^\s*<svg[\s>]/i.test(s)&&s.length<6000&&!/script|foreignObject|on\w+=/i.test(s)?(/xmlns=/.test(s)?s:s.replace(/<svg/i,'<svg xmlns="http://www.w3.org/2000/svg"')):"";
+    const words=(Array.isArray(data.words)?data.words:[]).filter(w=>w&&w.u&&w.f).slice(0,12).map(w=>{const o={u:clean(w.u),p:clean(w.p),f:clean(w.f)};if(w.i&&IC[w.i])o.i=w.i;else{const sv=okSvg(w.svg);if(sv)o.svg=sv;else o.e=clean(w.e)||"✨";}return o;});
+    if(words.length<3)throw {code:"shape"};
+    const lesson={id:"perso-"+Date.now().toString(36),em:clean(data.emoji)||"✨",title:clean(data.title)||S.q,intro:clean(data.intro)||"Ta leçon sur mesure !",k:S.q,words,
+      phrases:(Array.isArray(data.phrases)?data.phrases:[]).filter(p=>p&&p.u&&p.f).slice(0,6).map(p=>({u:clean(p.u),p:clean(p.p),f:clean(p.f)})),
+      tip:clean(data.tip),quiz:(Array.isArray(data.quiz)?data.quiz:[]).filter(x=>x&&x.q&&Array.isArray(x.o)&&x.o.length>=2&&Number.isInteger(x.a)&&x.a<x.o.length).slice(0,4).map(x=>({q:clean(x.q),o:x.o.map(clean),a:x.a}))};
+    P.custom.push(lesson);if(P.custom.length>30)P.custom=P.custom.slice(-30);save();
+    S.status="done";go("lesson-"+lesson.id);
+  }catch(e){
+    S.status="error";
+    S.err=e?.code==="not_granted"?"Il faut autoriser Claude à créer la leçon (fenêtre d'autorisation).":e?.code==="rate_limited"?"Beaucoup de demandes d'un coup ! Attends une minute et réessaie.":"La leçon n'a pas pu être créée. Réessaie, ou reformule le thème.";
+    if(location.hash==="#search")renderSearch();
+  }
+}
+
+route();
+</script>
