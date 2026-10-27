@@ -21,3 +21,19 @@ head='''<!doctype html>
 '''
 (here/'site'/'index.html').write_text(head+body+'\n</body>\n</html>\n')
 print('site/index.html écrit')
+
+# Version « un seul fichier » : les icônes sont intégrées dans le HTML (pratique pour coller dans l'éditeur Neocities).
+import base64, json
+def uri(name, mime="image/png"):
+    return f"data:{mime};base64,"+base64.b64encode((here/'site'/name).read_bytes()).decode()
+manifest=json.loads((here/'site'/'manifest.json').read_text())
+manifest['icons']=[{**manifest['icons'][0],'src':uri('icon-192.png')}]
+manifest['start_url']='./'
+single=head.replace('href="favicon.ico"',f'href="{uri("favicon-48.png")}"') \
+  .replace('href="favicon-32.png"',f'href="{uri("favicon-32.png")}"') \
+  .replace('href="favicon-16.png"',f'href="{uri("favicon-16.png")}"') \
+  .replace('href="apple-touch-icon.png"',f'href="{uri("apple-touch-icon.png")}"') \
+  .replace('href="manifest.json"','href="data:application/manifest+json;base64,'+base64.b64encode(json.dumps(manifest).encode()).decode()+'"')
+(here/'site-single').mkdir(exist_ok=True)
+(here/'site-single'/'index.html').write_text(single+body+'\n</body>\n</html>\n')
+print('site-single/index.html écrit')
