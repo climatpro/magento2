@@ -197,6 +197,22 @@ td:first-child{font-weight:700}
 .confetti{position:fixed;top:-40px;font-size:1.6rem;z-index:40;pointer-events:none;animation:fall 2.4s ease-in forwards}
 @keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:.2}}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.confetti{display:none}}
+.plate{position:relative;background-image:radial-gradient(120% 90% at 30% 12%,#ffffffb8,#ffffff00 60%),linear-gradient(#ffffff00 65%,#3a2d4a12)}
+.plate::before{content:"";position:absolute;left:24%;right:24%;bottom:8%;height:7%;border-radius:50%;background:radial-gradient(closest-side,#3a2d4a2e,#3a2d4a00)}
+.plate > *{position:relative}
+.pl{white-space:pre-line}
+.tile.wide{grid-column:1/-1;min-height:0;display:flex;align-items:center;gap:14px;background:linear-gradient(110deg,var(--t-gram),var(--t-conv) 55%,var(--t-alpha))}
+.tile.wide > div{flex:1;min-width:0;display:grid;gap:2px}
+.tile.wide .go{font-size:1.6rem;font-weight:800;color:var(--ink)}
+.read .uk-text{font-size:1.12rem;font-weight:600;line-height:1.7;margin:0 0 10px}
+details{margin-top:8px}
+summary{cursor:pointer;font-weight:800;color:var(--blue)}
+.cahier{background:var(--surface);border-radius:18px;box-shadow:var(--shadow);padding:18px 18px 18px 30px;position:relative;background-image:repeating-linear-gradient(transparent 0 31px,var(--line) 31px 32px);background-position:0 12px}
+.cahier::before{content:"";position:absolute;top:0;bottom:0;left:16px;width:2px;background:#F2A7B8}
+.cahier ol{margin:0;padding-left:22px;display:grid;gap:14px}
+.cahier li{line-height:32px}
+.cahier li p{margin:0;font-weight:600}
+.cahier li::marker{font-family:var(--f-display);font-weight:700;color:var(--blue)}
 footer{padding-block:0 30px;text-align:center;color:var(--muted);font-size:.85rem}
 </style>
 
@@ -218,6 +234,20 @@ footer{padding-block:0 30px;text-align:center;color:var(--muted);font-size:.85re
 <main><div class="wrap" id="app"></div></main>
 <footer class="wrap">Слава Україні 🇺🇦 · Fait main pour Lara</footer>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<filter id="clay" x="-15%" y="-15%" width="130%" height="140%" color-interpolation-filters="sRGB">
+ <feGaussianBlur in="SourceAlpha" stdDeviation="2.6" result="blur"/>
+ <feSpecularLighting in="blur" surfaceScale="4" specularConstant=".75" specularExponent="18" lighting-color="#ffffff" result="spec"><fePointLight x="28" y="4" z="70"/></feSpecularLighting>
+ <feComposite in="spec" in2="SourceAlpha" operator="in" result="specIn"/>
+ <feComposite in="SourceGraphic" in2="specIn" operator="arithmetic" k2="1" k3=".6" result="lit"/>
+ <feOffset in="SourceAlpha" dx="-3" dy="-4" result="off"/><feGaussianBlur in="off" stdDeviation="3" result="offb"/>
+ <feComposite in="SourceAlpha" in2="offb" operator="arithmetic" k2="1" k3="-1" result="rim"/>
+ <feFlood flood-color="#3a2d4a" flood-opacity=".22"/><feComposite in2="rim" operator="in" result="shade"/>
+ <feComposite in="shade" in2="lit" operator="over" result="shaded"/>
+ <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="ds"/><feOffset in="ds" dy="3.5" result="dso"/>
+ <feFlood flood-color="#3a2d4a" flood-opacity=".16"/><feComposite in2="dso" operator="in" result="drop"/>
+ <feMerge><feMergeNode in="drop"/><feMergeNode in="shaded"/></feMerge>
+</filter></defs></svg>
 <script>
 /* ============ ILLUSTRATIONS (dessinées à la main en SVG) ============ */
 const C={b:"#2F6FE0",y:"#FFC93C",r:"#E0393E",g:"#43A35E",br:"#A0612F",sk:"#F5C9A6",w:"#FFFDF8",dk:"#2B2346",pk:"#F7A1B5",or:"#F28C28",gr:"#B9C1D1",lb:"#BFE3FF",pu:"#8E3B8F"};
@@ -327,10 +357,10 @@ function softify(svg,fills=true){
      if(m.toUpperCase()===C.dk.toUpperCase())return INK;
      if(!fills)return m;
      const c=[0,2,4].map(i=>parseInt(h.slice(i,i+2),16)), g=(c[0]+c[1]+c[2])/3;
-     return "#"+c.map(v=>Math.round((v*0.8+g*0.2)*0.55+255*0.45).toString(16).padStart(2,"0")).join("");
+     return "#"+c.map(v=>Math.round((v*0.8+g*0.2)*0.66+255*0.34).toString(16).padStart(2,"0")).join("");
    });
 }
-for(const k in IC)IC[k]=softify(IC[k]);
+for(const k in IC)IC[k]=softify(IC[k]).replace('<g stroke=','<g filter="url(#clay)" stroke-opacity=".7" stroke=');
 const TINTS=["#FCE9EF","#EEE8FB","#E3F3EC","#FDF0E3","#E5EFFB","#FBF4DD"];
 const tint=s=>{let h=0;for(const ch of String(s))h=(h*31+ch.codePointAt(0))>>>0;return TINTS[h%TINTS.length];};
 const ICON_KEYS=Object.keys(IC);
@@ -503,33 +533,61 @@ const SECTIONS=[
 ];
 const PATH_ORDER=["s-alpha","s-bases","s-nums","s-gram1","s-daily","s-eat","s-conv","s-gram2","s-nature","s-trad","s-gram3","s-disc"];
 
+/* ============ PARCOURS BILINGUE (leçons créées à la demande, sans fin) ============ */
+const INF=[
+ {name:"Ma vie de tous les jours",lvl:"A2",badge:"☀️",topics:[["⏰","Ma routine du matin","verbes pronominaux en -ся (прокидатися, вмиватися)"],["🕐","Quelle heure est-il ?","Котра година? les heures et les minutes"],["🍽️","Les repas de la journée","сніданок, обід, вечеря + le verbe їсти"],["🧹","Les tâches à la maison","verbes du quotidien, треба + infinitif"],["🗓️","Mon emploi du temps","у понеділок : l'accusatif de temps"],["🎈","Mon week-end","raconter au passé"]]},
+ {name:"En ville",lvl:"A2",badge:"🏙️",topics:[["🛍️","Les magasins","у магазині, купувати, скільки коштує"],["🥕","Au marché","les quantités et le génitif : кілограм яблук"],["🚌","Les transports","їхати автобусом : l'instrumental"],["🧭","Demander son chemin","l'impératif : ідіть, поверніть"],["💊","Chez le médecin","le corps, у мене болить"],["🏦","Les services en ville","пошта, банк, аптека, formules polies"]]},
+ {name:"Moi et les autres",lvl:"A2",badge:"🫶",topics:[["🪞","Décrire quelqu'un","adjectifs physiques et accords"],["🌈","Le caractère","adjectifs de personnalité, дуже / трохи"],["👯","Mes amis","le datif : мені подобається"],["🎨","Mes loisirs","грати в / на, займатися + instrumental"],["⚽","Le sport","verbes de sport, завжди / іноді / ніколи"],["💌","Inviter quelqu'un","proposer, accepter, refuser poliment"]]},
+ {name:"Le temps qui passe",lvl:"A2+",badge:"⏳",topics:[["📆","Les mois et les dates","les mois, les nombres ordinaux"],["🎂","Les anniversaires","З днем народження!, vœux et cadeaux"],["🚀","Le futur","буду + infinitif et futur perfectif"],["🏖️","Mes dernières vacances","raconter au passé avec des détails"],["🗺️","Mes projets","хочу, планую, мрію + infinitif"],["🍂","Les paysages","décrire la nature, adjectifs"]]},
+ {name:"Exprimer ce que je pense",lvl:"B1",badge:"💭",topics:[["🗣️","Donner son avis","на мою думку, я вважаю, що"],["🤝","Être d'accord ou pas","згодна, не згодна, можливо"],["🎭","Les émotions nuancées","verbes et adjectifs d'émotion"],["🌙","Si j'étais…","le conditionnel avec би"],["💡","Donner des conseils","варто, краще, раджу"],["✨","Rêves et souhaits","щоб + passé, бажаю тобі"]]},
+ {name:"Le monde autour de moi",lvl:"B1",badge:"🌍",topics:[["🎓","École et études","предмети, іспит, вчитися / вивчати"],["💼","Les métiers","les métiers au féminin et au masculin"],["📱","Téléphone et réseaux sociaux","вподобайка, допис, le vocabulaire d'internet"],["🌱","L'environnement","захищати природу, сортувати сміття"],["🎧","La musique ukrainienne d'aujourd'hui","Океан Ельзи, Go_A, Jamala"],["🎬","Cinéma et séries","raconter une histoire, les genres de films"]]},
+ {name:"Culture et littérature",lvl:"B1+",badge:"📜",topics:[["🧚","Les contes ukrainiens","Рукавичка, Колобок, le vocabulaire des contes"],["🖋️","Taras Chevtchenko","le poète national et son « Заповіт »"],["🌸","Lessia Oukraïnka","la poétesse de « Лісова пісня »"],["🧭","Les régions d'Ukraine","Галичина, Полісся, Слобожанщина…"],["🦜","Les expressions imagées","idiomes ukrainiens et leur sens"],["🥘","La cuisine régionale","recettes et impératif"]]},
+ {name:"Grammaire de pro",lvl:"B1+",badge:"🛠️",topics:[["🔁","Les aspects du verbe","perfectif et imperfectif : робити / зробити"],["🚶‍♀️","Les verbes de mouvement","йти / ходити, їхати / їздити, préfixes"],["📦","Le génitif pluriel","багато книжок, п'ять років"],["🖊️","L'instrumental","з ким? чим? писати ручкою"],["🎁","Le datif","кому? давати, допомагати"],["🌀","Les gérondifs","читаючи, прочитавши"]]},
+ {name:"La vie d'adulte",lvl:"B2",badge:"🗞️",topics:[["📰","Les médias et l'actualité","новини, стаття, повідомлення"],["⚖️","Débattre","по-перше, однак, отже"],["✉️","La lettre formelle","Шановний пане…, formules officielles"],["🧑‍💼","L'entretien d'embauche","compétences, expérience, questions"],["🧘‍♀️","Santé et bien-être","habitudes et vocabulaire médical"],["🧳","Voyager comme une locale","réserver, réclamer, négocier"]]},
+ {name:"Histoire et société",lvl:"B2",badge:"🏛️",topics:[["👑","La Rous' de Kyiv","Володимир, Ярослав Мудрий"],["🐎","Les Cosaques","Запорізька Січ, гетьман"],["📚","La littérature du XXe siècle","Франко, Стефаник, Розстріляне відродження"],["🎤","La poésie moderne","Ліна Костенко, Сергій Жадан"],["😎","L'argot des jeunes","сленг et expressions actuelles"],["😂","L'humour ukrainien","blagues, jeux de mots, ironie"]]},
+ {name:"Vers le bilinguisme",lvl:"C1",badge:"🦋",topics:[["🎼","Les nuances du style","registre familier, neutre, soutenu"],["📿","Proverbes et sagesse","прислів'я та приказки"],["📊","La langue des affaires","переговори, договір, звіт"],["🔬","Sciences et découvertes","la vulgarisation scientifique"],["🤔","La philosophie de Skovoroda","Григорій Сковорода et ses idées"],["🌐","Traduire avec finesse","les pièges français ↔ ukrainien"]]}
+];
+
 /* ============ ÉTAT & SAUVEGARDE ============ */
-const LS="soniachko-v1";
-const blank=()=>({xp:0,days:[],lessons:{},evals:{},missed:{},custom:[],updated:0});
-let P=blank();
+const LS="soniachko-v1", LSX="soniachko-lessons";
+const blank=()=>({xp:0,days:[],lessons:{},evals:{},missed:{},customIds:[],extraMods:[],updated:0});
+let P=blank(), LX={};
 try{const s=localStorage.getItem(LS);if(s)P=Object.assign(blank(),JSON.parse(s));}catch(e){}
-let dbRef=null, saveT=null;
+try{const s=localStorage.getItem(LSX);if(s)LX=JSON.parse(s)||{};}catch(e){}
+function storeLX(){try{localStorage.setItem(LSX,JSON.stringify(LX));}catch(e){}}
+// Les leçons perso de la v1 étaient rangées dans la progression : on les déplace.
+function migrate(p){if(Array.isArray(p.custom)){p.custom.forEach(l=>{l.custom=true;LX[l.id]=LX[l.id]||l;if(!p.customIds.includes(l.id))p.customIds.push(l.id);});delete p.custom;storeLX();}return p;}
+migrate(P);
+let dbRef=null, dbCol=null, saveT=null;
 function save(){
   P.updated=Date.now();
   try{localStorage.setItem(LS,JSON.stringify(P));}catch(e){}
   clearTimeout(saveT);
   saveT=setTimeout(()=>{if(dbRef)dbRef.set(JSON.parse(JSON.stringify(P))).catch(()=>{});},700);
 }
+function saveLesson(l){LX[l.id]=l;storeLX();if(dbCol)dbCol.doc("L-"+l.id).set(JSON.parse(JSON.stringify(l))).catch(()=>{});}
 (async()=>{
   try{
     if(!window.claude?.use)return;
     const [db,user]=await Promise.all([claude.use("db"),claude.use("user")]);
     if(!db||!user)return;
     const id=await user.id(); if(!id)return;
-    dbRef=db.doc("data/users/"+id+"/progress");
-    const snap=await dbRef.get();
+    dbCol=db.collection("data/users/"+id);
+    dbRef=dbCol.doc("progress");
+    const [snap,qs]=await Promise.all([dbRef.get(),dbCol.get().catch(()=>null)]);
+    let changed=false;
+    const remoteIds=new Set();
+    if(qs)for(const d of qs.docs){remoteIds.add(d.id);if(d.id.startsWith("L-")&&!LX[d.id.slice(2)]){LX[d.id.slice(2)]=d.data();changed=true;}}
+    if(changed)storeLX();
+    if(qs)for(const lid in LX)if(!remoteIds.has("L-"+lid))dbCol.doc("L-"+lid).set(JSON.parse(JSON.stringify(LX[lid]))).catch(()=>{});
     const remote=snap.exists?snap.data():null;
-    if(remote&&(remote.updated||0)>(P.updated||0)){P=Object.assign(blank(),remote);try{localStorage.setItem(LS,JSON.stringify(P));}catch(e){}route();}
+    if(remote&&(remote.updated||0)>(P.updated||0)){P=migrate(Object.assign(blank(),JSON.parse(JSON.stringify(remote))));try{localStorage.setItem(LS,JSON.stringify(P));}catch(e){}changed=true;}
     else if(P.updated){dbRef.set(JSON.parse(JSON.stringify(P))).catch(()=>{});}
+    if(changed&&location.hash!=="#quiz")route();
   }catch(e){}
 })();
 let sampleFn=null;
-(async()=>{try{if(window.claude?.use)sampleFn=await claude.use("sample");}catch(e){}})();
+(async()=>{try{if(window.claude?.use)sampleFn=await claude.use("sample");}catch(e){}if(sampleFn&&location.hash.match(/^#(search|theme-inf|lesson-i)/))route();})();
 
 /* ============ OUTILS ============ */
 const $=s=>document.querySelector(s);
@@ -539,8 +597,10 @@ const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(M
 const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");};
 const norm=s=>String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[’']/g," ");
 const allLessons=()=>SECTIONS.flatMap(s=>s.lessons.map(l=>Object.assign(l,{sec:s.id})));
-const lessonById=id=>allLessons().find(l=>l.id===id)||P.custom.find(l=>l.id===id);
-const secById=id=>SECTIONS.find(s=>s.id===id);
+const infMods=()=>INF.concat(P.extraMods||[]);
+function infSections(){return infMods().map((m,i)=>({id:"m"+i,theme:"inf",name:m.name,lvl:m.lvl,badge:m.badge||"🦋",lessons:m.topics.map((t,j)=>{const id="i"+i+"-"+j;return LX[id]||{id,em:t[0],title:t[1],focus:t[2],intro:"Objectif : "+t[2],stub:true,sec:"m"+i,lvl:m.lvl};})}));}
+const lessonById=id=>allLessons().find(l=>l.id===id)||LX[id]||infSections().flatMap(s=>s.lessons).find(l=>l.id===id);
+const secById=id=>SECTIONS.find(s=>s.id===id)||infSections().find(s=>s.id===id);
 const quizPool=l=>{const w=[...(l.words||[])];(l.words||[]).forEach(x=>{if(x.letter&&x.ex)w.push(x.ex);});(l.phrases||[]).forEach(x=>w.push(x));return w;};
 const isDone=id=>!!P.lessons[id]?.done;
 const secProgress=s=>{const d=s.lessons.filter(l=>isDone(l.id)).length;return {done:d,total:s.lessons.length,pct:Math.round(d/s.lessons.length*100)};};
@@ -551,16 +611,16 @@ function toast(msg){const t=document.createElement("div");t.className="toast";t.
 function confetti(){const em=["💛","💙","🌻","⭐","🎉","✨"];for(let i=0;i<26;i++){const s=document.createElement("span");s.className="confetti";s.textContent=em[i%em.length];s.style.left=Math.random()*100+"vw";s.style.animationDelay=(Math.random()*.6)+"s";document.body.appendChild(s);setTimeout(()=>s.remove(),3300);}}
 
 function art(w,cls=""){
-  if(w)cls+=`" style="background:${tint(w.u||w.i||"")}`;
+  if(w)cls+=`" style="background-color:${tint(w.u||w.i||"")}`;
   if(!w)return `<div class="plate ${cls}"><span class="emo">🌻</span></div>`;
   if(w.letter)return `<div class="plate ${cls}"><span class="let">${esc(w.u)}</span></div>`;
-  if(w.svg)return `<div class="plate ${cls}"><img alt="" src="data:image/svg+xml;charset=utf-8,${encodeURIComponent(w.svg)}"></div>`;
+  if(w.svg&&safeSvg(w.svg))return `<div class="plate ${cls}">${safeSvg(w.svg).replace(/<svg([^>]*)>/i,'<svg$1><g filter="url(#clay)">').replace(/<\/svg>$/i,"</g></svg>")}</div>`;
   if(w.i&&IC[w.i])return `<div class="plate ${cls}">${IC[w.i]}</div>`;
   if(w.e&&w.e[0]==="#")return `<div class="plate ${cls}"><span class="num">${esc(w.e.slice(1))}</span></div>`;
   if(w.e&&w.e[0]==="%")return `<div class="plate ${cls}">${softify(blob(w.e.slice(1)),false)}</div>`;
   return `<div class="plate ${cls}"><span class="emo">${esc(w.e||"🌻")}</span></div>`;
 }
-const hasPic=w=>!w.letter&&(w.svg||(w.i&&IC[w.i])||(w.e&&/^[%#]/.test(w.e)));
+const hasPic=w=>!w.letter&&((w.svg&&safeSvg(w.svg))||(w.i&&IC[w.i])||(w.e&&/^[%#]/.test(w.e)));
 
 /* ---- Voix ukrainienne ---- */
 let ukVoice=null;
@@ -600,18 +660,26 @@ function renderChips(){
 }
 
 /* ============ ACCUEIL ============ */
-function nextLesson(){for(const sid of PATH_ORDER){const s=secById(sid);for(const l of s.lessons)if(!isDone(l.id))return l;if(!P.evals[sid]?.passed)return {evalOf:s};}return null;}
+function nextLesson(){
+  for(const sid of PATH_ORDER){const s=secById(sid);for(const l of s.lessons)if(!isDone(l.id))return l;if(!P.evals[sid]?.passed)return {evalOf:s};}
+  for(const s of infSections()){for(const l of s.lessons)if(!isDone(l.id))return l;if(!P.evals[s.id]?.passed)return {evalOf:s};}
+  return null;
+}
+function currentInf(){const ss=infSections();return ss.find(s=>!P.evals[s.id]?.passed)||ss[ss.length-1];}
 function wordOfDay(){const pool=allLessons().flatMap(l=>(l.words||[]).filter(w=>!w.letter&&hasPic(w)));const d=new Date();const n=Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);return pool[(n*7)%pool.length];}
 function renderHome(){
-  const nx=nextLesson(), wod=wordOfDay();
+  const nx=nextLesson(), wod=wordOfDay(), ci=currentInf();
+  const infDone=infSections().flatMap(s=>s.lessons).filter(l=>isDone(l.id)).length;
   const tiles=THEMES.map(t=>`<button class="tile" style="background:var(${t.col})" onclick="go('theme-${t.id}')"><span class="em">${t.em}</span><b>${t.name}</b><span>${t.sub}</span><div class="bar"><i style="width:${themeProgress(t.id)}%"></i></div></button>`).join("")+
-   `<button class="tile" style="background:var(--t-path)" onclick="go('path')"><span class="em">🗺️</span><b>Parcours complet</b><span>Toutes les leçons dans l'ordre, de A1 à A2</span></button>`+
-   `<button class="tile" style="background:var(--t-prog)" onclick="go('progress')"><span class="em">📈</span><b>Ma progression</b><span>Badges, scores, mots à revoir</span></button>`;
+   `<button class="tile" style="background:var(--t-path)" onclick="go('path')"><span class="em">🗺️</span><b>Parcours complet</b><span>Toutes les leçons dans l'ordre, de l'alphabet au bilinguisme</span></button>`+
+   `<button class="tile" style="background:var(--t-prog)" onclick="go('progress')"><span class="em">📈</span><b>Ma progression</b><span>Badges, scores, mots à revoir</span></button>`+
+   `<button class="tile wide" onclick="go('theme-inf')"><span class="em">♾️</span><div><b>Parcours bilingue</b><span>Des leçons sans fin créées pour toi, de A2 jusqu'à C1 et au-delà · Niveau ${esc(ci.lvl)} · ${esc(ci.name)}${infDone?` · ${infDone} leçon${infDone>1?"s":""} faite${infDone>1?"s":""}`:""}</span></div><span class="go">›</span></button>`;
   let cont;
-  if(!nx)cont=`<div class="txt"><div class="eyebrow">Bravo !</div><h3>Tu as fini tout le parcours 🏆</h3><p class="muted">Crée des leçons perso avec la barre de recherche pour continuer.</p></div>`;
+  if(!nx)cont=`<div class="txt"><div class="eyebrow">Bravo !</div><h3>Tu as fini tous les modules 🏆</h3><p class="muted">Ouvre le parcours bilingue pour générer le module suivant.</p></div><button class="btn btn-y" onclick="go('theme-inf')">♾️ Continuer</button>`;
   else if(nx.evalOf)cont=`<div class="txt"><div class="eyebrow">Prochaine étape</div><h3>🎓 Évaluation : ${esc(nx.evalOf.name)}</h3><p class="muted">Tu as fini les leçons de cette section, montre ce que tu sais !</p></div><button class="btn btn-y" onclick="startEval('${nx.evalOf.id}')">C'est parti</button>`;
-  else cont=`<div class="txt"><div class="eyebrow">Continuer · ${esc(secById(nx.sec).name)}</div><h3>${nx.em} ${esc(nx.title)}</h3><p class="muted">${esc(nx.intro.slice(0,90))}…</p></div><button class="btn btn-y" onclick="go('lesson-${nx.id}')">▶️ Reprendre</button>`;
-  const mine=P.custom.length?`<button class="lrow" onclick="go('mine')"><span class="e">✨</span><span class="t"><b>Mes leçons perso</b><small>${P.custom.length} leçon${P.custom.length>1?"s":""} créée${P.custom.length>1?"s":""} pour toi</small></span><span class="st">›</span></button>`:"";
+  else cont=`<div class="txt"><div class="eyebrow">Continuer · ${esc(secById(nx.sec).name)}</div><h3>${nx.em} ${esc(nx.title)}</h3><p class="muted">${esc(String(nx.intro).slice(0,90))}${String(nx.intro).length>90?"…":""}</p></div><button class="btn btn-y" onclick="go('lesson-${nx.id}')">▶️ ${nx.stub?"Créer et commencer":"Reprendre"}</button>`;
+  const nMine=P.customIds.filter(id=>LX[id]).length;
+  const mine=nMine?`<button class="lrow" onclick="go('mine')"><span class="e">✨</span><span class="t"><b>Mes leçons perso</b><small>${nMine} leçon${nMine>1?"s":""} créée${nMine>1?"s":""} pour toi</small></span><span class="st">›</span></button>`:"";
   app.innerHTML=`
    <div class="card continue">${cont}</div>
    <section class="section"><div class="sec-head"><h2>Thèmes</h2><span class="muted">Choisis ce que tu veux apprendre</span></div><div class="themes">${tiles}</div></section>
@@ -620,15 +688,32 @@ function renderHome(){
 }
 
 /* ============ THÈME ============ */
-function lessonRow(l){const r=P.lessons[l.id];return `<button class="lrow" onclick="go('lesson-${l.id}')"><span class="e">${l.em}</span><span class="t"><b>${esc(l.title)}</b><small>${r?.done?"Meilleur score : "+r.best+"%":"À découvrir"}</small></span><span class="st">${r?.done?"✅":"▶️"}</span></button>`;}
+function lessonRow(l){const r=P.lessons[l.id];return `<button class="lrow" onclick="go('lesson-${l.id}')"><span class="e">${esc(l.em||"✨")}</span><span class="t"><b>${esc(l.title)}</b><small>${l.stub?"✨ Leçon à créer · "+esc(l.focus||""):r?.done?"Meilleur score : "+r.best+"%":"À découvrir"}</small></span><span class="st">${r?.done?"✅":l.stub?"✨":"▶️"}</span></button>`;}
 function evalRow(s){const sp=secProgress(s), ev=P.evals[s.id], open=sp.done===sp.total;
   return `<button class="lrow eval ${open?"":"locked"}" ${open?`onclick="startEval('${s.id}')"`:`onclick="toast('🔒 Termine les ${sp.total} leçons pour débloquer l\\'évaluation')"`}><span class="e">${open?"🎓":"🔒"}</span><span class="t"><b>Évaluation de la section</b><small>${ev?`Dernier : ${ev.last}% · Meilleur : ${ev.best}% ${ev.passed?"· "+s.badge+" badge gagné":""}`:open?"Débloquée ! 10 questions":`${sp.done}/${sp.total} leçons terminées`}</small></span><span class="st">${ev?.passed?"🏅":"›"}</span></button>`;}
-function sectionBox(s,bg){return `<div class="sbox" style="background:var(${bg})"><div class="sec-head"><h3>${s.badge} ${esc(s.name)}</h3><span class="lvl">${s.lvl}</span></div>${s.lessons.map(lessonRow).join("")}${evalRow(s)}</div>`;}
+function sectionBox(s,bg){return `<div class="sbox" style="background:var(${bg})"><div class="sec-head"><h3>${esc(s.badge)} ${esc(s.name)}</h3><span class="lvl">${esc(s.lvl)}</span></div>${s.lessons.map(lessonRow).join("")}${evalRow(s)}</div>`;}
 function renderTheme(tid){
+  if(tid==="inf")return renderInf();
   const t=THEMES.find(x=>x.id===tid); if(!t)return renderHome();
   app.innerHTML=`<button class="back" onclick="go('')">← Accueil</button>
    <div class="lesson-head"><span class="big">${t.em}</span><div><h1 style="font-size:1.6rem">${t.name}</h1><div class="muted">${t.sub} · ${themeProgress(t.id)}% terminé</div></div></div>
    ${SECTIONS.filter(s=>s.theme===tid).map(s=>sectionBox(s,t.col)).join("")}`;
+}
+const GEN={};
+function renderInf(){
+  const ss=infSections(), ci=currentInf(), last=ss[ss.length-1];
+  const canMore=last.lessons.some(l=>isDone(l.id));
+  const g=GEN.module||{};
+  let more;
+  if(!sampleFn)more=`<p class="muted">La création de nouveaux modules demande d'être connectée à Claude sur cette page.</p>`;
+  else if(g.status==="loading")more=`<p><span class="spinner">🌻</span> <b>Je prépare ton prochain module…</b></p>`;
+  else if(!canMore)more=`<p class="muted">Commence le dernier module (« ${esc(last.name)} ») et un nouveau pourra être créé ici. Il n'y a pas de fin !</p>`;
+  else more=`${g.status==="error"?`<p>😕 ${esc(g.err)}</p>`:""}<button class="btn btn-y" onclick="genModule()">✨ Créer le module suivant</button>`;
+  app.innerHTML=`<button class="back" onclick="go('')">← Accueil</button>
+   <div class="lesson-head"><span class="big">♾️</span><div><h1 style="font-size:1.6rem">Parcours bilingue</h1><div class="muted">Ton niveau actuel : <b>${esc(ci.lvl)}</b> · ${esc(ci.name)}</div></div></div>
+   <p class="intro">Ici, chaque leçon est écrite pour toi par Claude au moment où tu l'ouvres : mots illustrés, grammaire, petit texte à lire, exercices pour ton cahier et quiz. Plus tu avances, plus les explications passent en ukrainien. Quand tu finis un module, un nouveau peut être créé, et ça continue sans fin.</p>
+   ${ss.map(s=>sectionBox(s,"--t-path")).join("")}
+   <div class="card gen"><h3>♾️ Et après ?</h3>${more}</div>`;
 }
 
 /* ============ LEÇON ============ */
@@ -636,22 +721,63 @@ function wordCard(w){
   if(w.letter){const ex=w.ex;return `<div class="w letter-card">${art(w)}<div class="fr">${esc(w.f)}</div>${ex?`<div class="row"><div><div class="uk" style="font-size:1rem">${esc(ex.u)}</div><div class="ph">${esc(ex.p)}</div><div class="muted" style="font-size:.85rem;font-weight:700">${esc(ex.f)}</div></div><button class="say" data-say="${esc(ex.u)}" aria-label="Écouter">🔊</button></div>`:""}</div>`;}
   return `<div class="w">${art(w)}<button class="say" data-say="${esc(w.u)}" aria-label="Écouter">🔊</button><div class="uk">${esc(w.u)}</div><div class="ph">${esc(w.p)}</div><div class="fr">${esc(w.f)}</div></div>`;
 }
+const tableHtml=t=>t&&Array.isArray(t.head)&&Array.isArray(t.rows)?`<div class="tbl"><table><thead><tr>${t.head.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${t.rows.map(r=>`<tr>${(Array.isArray(r)?r:[r]).map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`:"";
+function cahierOf(l){
+  if(Array.isArray(l.cahier)&&l.cahier.length)return l.cahier;
+  if(l._cahier)return l._cahier;
+  const out=[], ws=(l.words||[]).filter(w=>!w.letter);
+  if(l.words&&l.words[0]?.letter){
+    out.push({t:"Écris chaque lettre sur une ligne entière, en majuscule puis en minuscule : "+l.words.map(w=>w.u).join(" · ")});
+    out.push({t:"Recopie les mots exemples et entoure la nouvelle lettre dans chacun : "+l.words.filter(w=>w.ex).map(w=>w.ex.u).join(", ")});
+    out.push({t:"Défi : écris ton prénom et le mot « maman » en cyrillique.",a:"Лара · мама"});
+  }else{
+    if(ws.length){
+      out.push({t:"Recopie chaque mot 3 fois en le disant à voix haute : "+ws.map(w=>w.u).join(", ")});
+      const pick=shuffle(ws).slice(0,5);
+      out.push({t:"Cache la leçon et traduis en ukrainien : "+pick.map(w=>w.f).join(" · "),a:pick.map(w=>w.f+" → "+w.u).join("\n")});
+    }
+    if(l.table)out.push({t:"Recopie le tableau dans ton cahier, cache-le, puis réécris-le de mémoire."});
+    if((l.phrases||[]).length){const p=l.phrases.slice(0,3);out.push({t:"Traduis ces phrases en ukrainien :\n"+p.map(x=>"• "+x.f).join("\n"),a:p.map(x=>"• "+x.u).join("\n")});}
+    if(Array.isArray(l.quiz)&&l.quiz.length&&!ws.length){const q=l.quiz.slice(0,3);out.push({t:"Réponds par écrit :\n"+q.map((x,i)=>(i+1)+". "+x.q).join("\n"),a:q.map((x,i)=>(i+1)+". "+x.o[x.a]).join("\n")});}
+    if(l.ill)out.push({t:"Écris 3 phrases en français pour raconter ce que tu as appris, avec au moins 2 mots ukrainiens. Décore la page 🎨"});
+    else if(ws.length)out.push({t:"Dessine 3 mots de la leçon et écris leur nom en ukrainien en dessous 🎨"});
+  }
+  l._cahier=out;return out;
+}
+function renderStub(l){
+  const s=secById(l.sec), g=GEN[l.id]||{};
+  let body;
+  if(!sampleFn)body=`<p class="muted">Cette leçon est créée par Claude au moment où tu l'ouvres. Il faut être connectée à Claude sur cette page pour ça.</p>`;
+  else if(g.status==="loading")body=`<p><span class="spinner">🌻</span> <b>J'écris ta leçon et je dessine les illustrations…</b></p><p class="muted" id="gen-note">${esc(g.note||"Ça prend environ une minute.")}</p>`;
+  else body=`${g.status==="error"?`<p>😕 ${esc(g.err)}</p>`:""}<button class="btn btn-y" onclick="genInf('${l.id}')">✨ Créer cette leçon</button>`;
+  app.innerHTML=`<button class="back" onclick="go('theme-inf')">← Parcours bilingue</button>
+   <div class="lesson-head"><span class="big">${esc(l.em)}</span><div><div class="eyebrow">${esc(s.name)} · ${esc(s.lvl)}</div><h1 style="font-size:1.6rem">${esc(l.title)}</h1></div></div>
+   <p class="intro">🎯 Objectif : ${esc(l.focus)}</p>
+   <div class="card gen"><h3>✨ Leçon sur mesure</h3>${body}</div>`;
+}
 function renderLesson(id){
   const l=lessonById(id); if(!l)return renderHome();
+  if(l.stub)return renderStub(l);
   const s=l.sec?secById(l.sec):null;
-  const t=s?THEMES.find(x=>x.id===s.theme):null;
+  const isInf=s&&s.theme==="inf";
+  const t=s&&!isInf?THEMES.find(x=>x.id===s.theme):null;
   const backTo=s?`theme-${s.theme}`:"mine";
+  const backLabel=isInf?"Parcours bilingue":t?t.name:"Mes leçons perso";
   const ill=l.ill?`<div style="width:min(220px,60%)">${art({i:l.ill})}</div>`:"";
-  const blocks=(l.blocks||[]).map(b=>`<div class="card"><h3>${esc(b.h)}</h3><p>${esc(b.p)}</p></div>`).join("");
-  const table=l.table?`<div class="tbl"><table><thead><tr>${l.table.head.map(h=>`<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${l.table.rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`:"";
+  const blocks=(l.blocks||[]).map(b=>`<div class="card"><h3>${esc(b.h)}</h3><p class="pl">${esc(b.p)}</p></div>`).join("");
+  const gram=l.grammar&&l.grammar.p?`<section class="section"><h2>✍️ Grammaire</h2><div class="card"><h3>${esc(l.grammar.h||"")}</h3><p class="pl">${esc(l.grammar.p)}</p></div>${tableHtml(l.grammar.table)}</section>`:"";
   const phrases=(l.phrases||[]).length?`<section class="section"><h2>🗣️ Phrases</h2><div class="phr">${l.phrases.map(p=>`<div class="p"><div><div class="u">${esc(p.u)}</div><div style="color:var(--blue);font-weight:700;font-size:.9rem">${esc(p.p)}</div><div class="muted" style="font-weight:600">${esc(p.f)}</div></div><button class="say" data-say="${esc(p.u)}" aria-label="Écouter">🔊</button></div>`).join("")}</div></section>`:"";
   const words=(l.words||[]).length?`<section class="section"><h2>${l.words[0].letter?"🔤 Les lettres":"📚 Les mots"}</h2><div class="words">${l.words.map(wordCard).join("")}</div></section>`:"";
+  const text=l.text&&l.text.uk?`<section class="section"><h2>📖 Je lis</h2><div class="card read"><p class="pl uk-text">${esc(l.text.uk)}</p><div class="cta-row"><button class="btn btn-g btn-sm" data-say="${esc(l.text.uk)}">🔊 Écouter</button></div>${l.text.fr?`<details><summary>Voir la traduction</summary><p class="pl">${esc(l.text.fr)}</p></details>`:""}</div></section>`:"";
+  const cah=cahierOf(l);
+  const cahier=cah.length?`<section class="section"><h2>📓 Dans mon cahier</h2><p class="muted" style="margin:0">Prends ton cahier et un joli stylo. Écrire à la main aide vraiment à retenir ✍️</p><div class="cahier"><ol>${cah.map(c=>`<li><p class="pl">${esc(c.t)}</p>${c.a?`<details><summary>Voir la correction</summary><p class="pl">${esc(c.a)}</p></details>`:""}</li>`).join("")}</ol></div></section>`:"";
   const r=P.lessons[l.id];
-  app.innerHTML=`<button class="back" onclick="go('${backTo}')">← ${t?esc(t.name):"Mes leçons perso"}</button>
-   <div class="lesson-head"><span class="big">${l.em||"✨"}</span><div><div class="eyebrow">${s?esc(s.name)+" · "+s.lvl:"✨ Leçon personnalisée"}</div><h1 style="font-size:1.6rem">${esc(l.title)}</h1></div></div>
-   <p class="intro">${esc(l.intro)}</p>${ill}
-   ${blocks?`<div class="blocks">${blocks}</div>`:""}${table}${words}${phrases}
+  app.innerHTML=`<button class="back" onclick="go('${backTo}')">← ${esc(backLabel)}</button>
+   <div class="lesson-head"><span class="big">${esc(l.em||"✨")}</span><div><div class="eyebrow">${s?esc(s.name)+" · "+esc(s.lvl):"✨ Leçon personnalisée"}</div><h1 style="font-size:1.6rem">${esc(l.title)}</h1></div></div>
+   <p class="intro pl">${esc(l.intro)}</p>${ill}
+   ${blocks?`<div class="blocks">${blocks}</div>`:""}${tableHtml(l.table)}${words}${gram}${phrases}${text}
    ${l.tip?`<div class="tip">${esc(l.tip)}</div>`:""}
+   ${cahier}
    <div class="card continue"><div class="txt"><h3>🎯 Prête à t'entraîner ?</h3><p class="muted">${r?.done?"Meilleur score : "+r.best+"% · tu peux refaire pour t'améliorer":"Un petit quiz pour fixer tout ça dans ta tête."}</p></div><button class="btn btn-y" onclick="startPractice('${l.id}')">Je m'entraîne</button></div>`;
   touchDay();save();renderChips();
 }
@@ -758,77 +884,131 @@ function retry(){const Q=quizState;if(Q.kind==="lesson")startPractice(Q.id);else
 /* ============ PROGRESSION ============ */
 function renderProgress(){
   const all=allLessons(), done=all.filter(l=>isDone(l.id)).length;
-  const learned=new Set(all.filter(l=>isDone(l.id)).flatMap(l=>(l.words||[]).filter(w=>!w.letter).map(w=>w.u))).size;
+  const inf=infSections(), infL=inf.flatMap(s=>s.lessons), infDone=infL.filter(l=>isDone(l.id)).length;
+  const learned=new Set([...all,...infL].filter(l=>isDone(l.id)).flatMap(l=>(l.words||[]).filter(w=>!w.letter).map(w=>w.u))).size;
   const missed=Object.values(P.missed).sort((a,b)=>b.count-a.count);
-  const badges=SECTIONS.map(s=>`<div class="badge ${P.evals[s.id]?.passed?"":"off"}"><span class="e">${s.badge}</span><small>${esc(s.name)}</small></div>`).join("");
-  const rows=PATH_ORDER.map(secById).map(s=>{const sp=secProgress(s),ev=P.evals[s.id];return `<div class="prow"><div><b>${s.badge} ${esc(s.name)}</b><div class="muted" style="font-size:.85rem;font-weight:600">${sp.done}/${sp.total} leçons${ev?` · éval ${ev.best}%`:""}</div></div><div class="bar"><i style="width:${sp.pct}%"></i></div><div class="n">${sp.pct}%</div></div>`;}).join("");
+  const badgeSecs=[...SECTIONS,...inf.filter(s=>P.evals[s.id]?.passed)];
+  const badges=badgeSecs.map(s=>`<div class="badge ${P.evals[s.id]?.passed?"":"off"}"><span class="e">${esc(s.badge)}</span><small>${esc(s.name)}</small></div>`).join("");
+  const row=s=>{const sp=secProgress(s),ev=P.evals[s.id];return `<div class="prow"><div><b>${esc(s.badge)} ${esc(s.name)}</b><div class="muted" style="font-size:.85rem;font-weight:600">${esc(s.lvl)} · ${sp.done}/${sp.total} leçons${ev?` · éval ${ev.best}%`:""}</div></div><div class="bar"><i style="width:${sp.pct}%"></i></div><div class="n">${sp.pct}%</div></div>`;};
+  const infRows=inf.filter((s,i)=>i===0||s.lessons.some(l=>isDone(l.id))).map(row).join("");
   const hist=Object.entries(P.evals).flatMap(([sid,e])=>(e.history||[]).map(h=>({sid,...h}))).sort((a,b)=>b.at-a.at).slice(0,6);
   app.innerHTML=`<button class="back" onclick="go('')">← Accueil</button><h1 style="font-size:1.6rem">📈 Ma progression</h1>
-   <div class="stats"><div class="stat"><b>${Math.round(done/all.length*100)}%</b><span>du parcours</span></div><div class="stat"><b>${done}/${all.length}</b><span>leçons finies</span></div><div class="stat"><b>${learned}</b><span>mots appris</span></div><div class="stat"><b>🔥 ${streak()}</b><span>jours d'affilée</span></div></div>
+   <div class="stats"><div class="stat"><b>${Math.round(done/all.length*100)}%</b><span>des bases (A1)</span></div><div class="stat"><b>${esc(currentInf().lvl)}</b><span>niveau du parcours bilingue</span></div><div class="stat"><b>${learned}</b><span>mots appris</span></div><div class="stat"><b>🔥 ${streak()}</b><span>jours d'affilée</span></div></div>
    <section class="section"><h2>🏅 Mes badges</h2><p class="muted" style="margin:0">Gagne un badge en réussissant l'évaluation d'une section (70% minimum).</p><div class="badges">${badges}</div></section>
-   <section class="section"><h2>🗂️ Par section</h2><div class="card">${rows}</div></section>
+   <section class="section"><h2>🗂️ Les bases</h2><div class="card">${PATH_ORDER.map(secById).map(row).join("")}</div></section>
+   <section class="section"><h2>♾️ Parcours bilingue · ${infDone} leçon${infDone>1?"s":""}</h2><div class="card">${infRows}</div></section>
    <section class="section"><h2>🧐 Mots à revoir</h2>${missed.length?`<div class="miss">${missed.slice(0,24).map(m=>`<span>${esc(m.w.u)} · ${esc(m.w.f)}</span>`).join("")}</div><div><button class="btn btn-y" onclick="startReview()">🔁 Réviser mes erreurs</button></div>`:`<p class="muted">Aucune erreur enregistrée pour l'instant. Continue comme ça ! 💪</p>`}</section>
    ${hist.length?`<section class="section"><h2>🎓 Dernières évaluations</h2><div class="card">${hist.map(h=>`<div class="prow"><div><b>${esc(secById(h.sid)?.name||"")}</b><div class="muted" style="font-size:.85rem">${new Date(h.at).toLocaleDateString("fr-FR")}</div></div><div class="bar"><i style="width:${h.s}%;background:${h.s>=70?"var(--green)":"var(--red)"}"></i></div><div class="n">${h.s}%</div></div>`).join("")}</div></section>`:""}`;
 }
 
 /* ============ PARCOURS ============ */
+function stepHtml(s,bg){const sp=secProgress(s),ev=P.evals[s.id];const st=ev?.passed?"🏅":sp.done===sp.total?"🎓":sp.done?"🌱":s.badge;return `<div class="step"><div class="dot">${esc(st)}</div>${sectionBox(s,bg)}</div>`;}
 function renderPath(){
-  app.innerHTML=`<button class="back" onclick="go('')">← Accueil</button><h1 style="font-size:1.6rem">🗺️ Parcours complet</h1><p class="muted" style="margin:0">Suis le fil brodé : de l'alphabet jusqu'au niveau A2. Chaque section se termine par une évaluation.</p>
-   <div class="path">${PATH_ORDER.map(secById).map(s=>{const sp=secProgress(s),ev=P.evals[s.id];const st=ev?.passed?"🏅":sp.done===sp.total?"🎓":sp.done?"🌱":s.badge;return `<div class="step"><div class="dot">${st}</div><div class="sbox" style="background:var(${THEMES.find(t=>t.id===s.theme).col})"><div class="sec-head"><h3>${esc(s.name)}</h3><span class="lvl">${s.lvl}</span></div>${s.lessons.map(lessonRow).join("")}${evalRow(s)}</div></div>`;}).join("")}</div>`;
+  app.innerHTML=`<button class="back" onclick="go('')">← Accueil</button><h1 style="font-size:1.6rem">🗺️ Parcours complet</h1><p class="muted" style="margin:0">Suis le fil brodé : d'abord les bases, puis le parcours bilingue qui continue sans fin. Chaque section se termine par une évaluation.</p>
+   <div class="path">${PATH_ORDER.map(secById).map(s=>stepHtml(s,THEMES.find(t=>t.id===s.theme).col)).join("")}${infSections().map(s=>stepHtml(s,"--t-path")).join("")}</div>`;
 }
 
-/* ============ LEÇONS PERSO ============ */
+/* ============ LEÇONS PERSO & CRÉATION PAR CLAUDE ============ */
 function renderMine(){
+  const ls=P.customIds.map(id=>LX[id]).filter(Boolean).reverse();
   app.innerHTML=`<button class="back" onclick="go('')">← Accueil</button><h1 style="font-size:1.6rem">✨ Mes leçons perso</h1>
-   <div class="section">${P.custom.length?P.custom.slice().reverse().map(lessonRow).join(""):`<p class="muted">Utilise la barre de recherche en haut pour créer ta première leçon.</p>`}</div>`;
+   <div class="section">${ls.length?ls.map(lessonRow).join(""):`<p class="muted">Utilise la barre de recherche en haut pour créer ta première leçon.</p>`}</div>`;
 }
 const STOP=new Set(["le","la","les","des","de","du","un","une","en","et","sur","pour","apprendre","lecon","lecons","vocabulaire","mots","je","veux","a","au","aux","l","d","the"]);
 function localMatches(q){
   const toks=norm(q).split(/[^a-z0-9а-яіїєґ]+/i).filter(t=>t.length>=3&&!STOP.has(t)).map(t=>t.replace(/s$/,""));
   if(!toks.length)return [];
-  return allLessons().filter(l=>{const idx=norm([l.title,l.k,(l.words||[]).map(w=>w.f+" "+w.u).join(" ")].join(" "));return toks.some(t=>idx.includes(t));});
+  const pool=[...allLessons(),...Object.values(LX)];
+  return pool.filter(l=>{const idx=norm([l.title,l.k,(l.words||[]).map(w=>w.f+" "+w.u).join(" ")].join(" "));return toks.some(t=>idx.includes(t));});
 }
-$("#searchForm").addEventListener("submit",e=>{e.preventDefault();const q=$("#q").value.trim();if(!q)return toast("Écris un thème, par exemple « les voyages » ✈️");searchState={q,status:"idle",err:""};go("search");if(sampleFn)generate();});
+$("#searchForm").addEventListener("submit",e=>{e.preventDefault();const q=$("#q").value.trim();if(!q)return toast("Écris un thème, par exemple « les voyages » ✈️");searchState={q};GEN.search={};go("search");if(sampleFn)generate();});
 function renderSearch(){
-  const S=searchState, m=localMatches(S.q);
+  const S=searchState, g=GEN.search||{}, m=localMatches(S.q);
   let gen;
   if(!sampleFn)gen=`<p class="muted">✨ La création de leçons sur mesure par Claude n'est pas disponible ici (il faut être connectée à Claude sur cette page). En attendant, voici ce que l'appli a déjà sur ce thème.</p>`;
-  else if(S.status==="loading")gen=`<p><span class="spinner">🌻</span> <b>Je prépare ta leçon « ${esc(S.q)} »…</b></p><p class="muted">${esc(S.note||"Ça prend environ 30 secondes. Je dessine aussi les illustrations !")}</p>`;
-  else if(S.status==="error")gen=`<p>😕 ${esc(S.err)}</p><button class="btn btn-y" onclick="generate()">Réessayer</button>`;
+  else if(g.status==="loading")gen=`<p><span class="spinner">🌻</span> <b>Je prépare ta leçon « ${esc(S.q)} »…</b></p><p class="muted" id="gen-note">${esc(g.note||"Ça prend environ une minute. Je dessine aussi les illustrations !")}</p>`;
+  else if(g.status==="error")gen=`<p>😕 ${esc(g.err)}</p><button class="btn btn-y" onclick="generate()">Réessayer</button>`;
   else gen=`<button class="btn btn-y" onclick="generate()">✨ Créer ma leçon « ${esc(S.q)} »</button>`;
   app.innerHTML=`<button class="back" onclick="go('')">← Accueil</button><h1 style="font-size:1.6rem">🔎 « ${esc(S.q)} »</h1>
    <div class="card gen"><h3>✨ Leçon personnalisée</h3>${gen}</div>
-   <section class="section"><h2>📚 Déjà dans tes leçons</h2>${m.length?m.map(lessonRow).join(""):`<p class="muted">Rien de proche dans le parcours pour l'instant.</p>`}</section>`;
+   <section class="section"><h2>📚 Déjà dans tes leçons</h2>${m.length?m.map(lessonRow).join(""):`<p class="muted">Rien de proche pour l'instant.</p>`}</section>`;
 }
-async function generate(){
-  const S=searchState; if(!sampleFn||S.status==="loading")return;
-  S.status="loading";S.note="";if(location.hash==="#search")renderSearch();
-  const prompt=`Tu es une professeure d'ukrainien bienveillante pour Lara, une francophone débutante (niveau A1-A2).
-Crée une leçon sur le thème : « ${S.q} ».
-Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour, de cette forme :
-{"title":"titre court en français","emoji":"un emoji","intro":"2 phrases chaleureuses en français","words":[{"u":"mot ukrainien","p":"prononciation","f":"traduction française","e":"emoji","i":"","svg":""}],"phrases":[{"u":"phrase ukrainienne","p":"prononciation","f":"traduction"}],"tip":"une astuce de grammaire ou de culture, en français, avec un emoji","quiz":[{"q":"question en français","o":["bonne réponse","mauvaise","mauvaise"],"a":0}]}
+function safeSvg(s,uid){
+  if(typeof s!=="string")return "";
+  s=s.trim();
+  if(!/^<svg[\s>]/i.test(s)||!/<\/svg>$/i.test(s)||s.length>9000)return "";
+  if(/<(script|foreignObject|iframe|image|use|a|style|animate\w*|set|link|meta|text)\b|\bon[a-z]+\s*=|javascript:|href|url\((?!#)/i.test(s))return "";
+  if(uid)s=s.replace(/\bid="([^"]+)"/g,(m,x)=>`id="${uid}${x}"`).replace(/url\(#([^)]+)\)/g,(m,x)=>`url(#${uid}${x})`);
+  if(!/xmlns=/.test(s))s=s.replace(/<svg/i,'<svg xmlns="http://www.w3.org/2000/svg"');
+  return s;
+}
+function learnerLevel(){const basesDone=PATH_ORDER.every(id=>secById(id).lessons.every(l=>isDone(l.id)));return basesDone?currentInf().lvl:"A1-A2";}
+async function genLesson({topic,focus,level},onNote){
+  const known=[...allLessons().map(l=>l.title),...Object.values(LX).map(l=>l.title)].slice(-60).join(", ");
+  const lang=/^B1/.test(level)?"Écris l'intro, la grammaire et les consignes du cahier en ukrainien simple, chaque phrase suivie de sa traduction française entre parenthèses.":/^(B2|C)/.test(level)?"Écris l'intro, la grammaire et les consignes du cahier entièrement en ukrainien (sans traduction), seules les traductions des mots et du texte restent en français.":"Écris l'intro, la grammaire et les consignes en français.";
+  const prompt=`Tu es une professeure d'ukrainien chaleureuse et exigeante. Ton élève, Lara, est francophone. Son niveau : ${level}. Elle veut devenir bilingue.
+Crée UNE leçon complète sur le thème : « ${topic} »${focus?` (objectif : ${focus})`:""}.
+Leçons qu'elle a déjà faites (ne les répète pas, mais réutilise un peu leur vocabulaire) : ${known}.
+${lang}
+Réponds UNIQUEMENT avec un objet JSON valide, sans texte autour :
+{"title":"titre court","emoji":"un emoji","intro":"2-3 phrases motivantes","words":[{"u":"mot ukrainien","p":"prononciation","f":"traduction française","e":"emoji","i":"","svg":""}],"phrases":[{"u":"phrase ukrainienne","p":"prononciation","f":"traduction"}],"grammar":{"h":"titre du point de grammaire","p":"explication claire avec des exemples","table":{"head":["…"],"rows":[["…"]]}},"text":{"uk":"petit texte à lire en ukrainien","fr":"sa traduction"},"cahier":[{"t":"consigne d'exercice à faire à la main dans un cahier, avec tout ce qu'il faut écrire","a":"la correction"}],"tip":"une astuce de culture ou de mémorisation, avec un emoji","quiz":[{"q":"question","o":["bonne réponse","mauvaise","mauvaise"],"a":0}]}
 Règles :
-- 8 à 10 mots utiles, 4 phrases du quotidien, 3 questions de quiz.
-- Ukrainien correct, naturel et moderne (aucun russisme).
+- 10 à 12 mots utiles, 5 phrases, 4 questions de quiz. "table" peut valoir null.
+- Texte à lire : 3 phrases en A1, 5 en A2, 8 en B1, 10 à 12 en B2 et plus.
+- Cahier : 4 exercices variés à écrire à la main (recopier, traduire, compléter des trous, transformer, puis une petite production libre : pour celle-ci, la correction est un exemple de réponse).
+- Ukrainien correct, naturel et moderne, aucun russisme.
 - Prononciation « à la française », syllabe accentuée en MAJUSCULES, tirets entre syllabes. Notation : и=y, і=i, й=ï, х=kh, ж=j, ч=tch, ш=ch, щ=chtch, у=ou, е=è, я=ia, ю=iou, є=ié, ї=yi, г=h, ь='. Exemple : привіт = pry-VIT.
-- Illustration de chaque mot : si une de ces clés correspond exactement au mot, mets-la dans "i" : ${ICON_KEYS.join(", ")}. Sinon laisse "i" vide et mets dans "svg" une petite illustration plate et mignonne que tu dessines toi-même : <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">…</svg>, style aesthetic pastel minimaliste : formes simples, couleurs pastel douces (rose poudré, lavande, menthe, pêche, bleu ciel, jaune beurre), traits fins stroke="#7A6C8C" stroke-width="1.5", aucun texte, aucun script, moins de 700 caractères. Pour les mots abstraits, "svg" peut rester vide : l'emoji sera utilisé.
+- Illustrations : si une de ces clés correspond exactement au mot, mets-la dans "i" : ${ICON_KEYS.join(", ")}. Sinon, pour au plus 7 mots concrets, dessine dans "svg" une illustration façon photo Pinterest, mignonne mais réaliste : un seul objet centré, vu de trois quarts, avec du volume grâce à des dégradés doux (linearGradient ou radialGradient), un reflet de lumière blanc semi-transparent et une petite ombre douce au sol ; couleurs naturelles légèrement pastel ; contours fins stroke="#7A6C8C" stroke-width="1.2" ou aucun contour ; viewBox="0 0 100 100" ; aucun texte, aucun script, aucun lien, aucune image externe ; moins de 1300 caractères. Pour les mots abstraits, laisse "svg" vide : l'emoji sera utilisé.
 - Si le thème n'est pas adapté à une leçon, choisis un thème proche et adapté.`;
+  const data=await sampleFn.json(prompt,{modelTier:"default",onText:({text})=>onNote&&onNote(`✍️ J'écris… (${text.length} caractères)`)});
+  const clean=(s,n=600)=>String(s??"").slice(0,n);
+  const uid="g"+Date.now().toString(36);
+  const words=(Array.isArray(data.words)?data.words:[]).filter(w=>w&&w.u&&w.f).slice(0,14).map((w,k)=>{const o={u:clean(w.u,120),p:clean(w.p,120),f:clean(w.f,160)};if(w.i&&IC[w.i])o.i=w.i;else{const sv=safeSvg(w.svg,uid+k+"_");if(sv)o.svg=sv;else o.e=clean(w.e,16)||"✨";}return o;});
+  if(words.length<3)throw {code:"shape"};
+  const gr=data.grammar&&data.grammar.p?{h:clean(data.grammar.h,140),p:clean(data.grammar.p,2500),table:data.grammar.table&&Array.isArray(data.grammar.table.head)&&Array.isArray(data.grammar.table.rows)?{head:data.grammar.table.head.slice(0,6).map(x=>clean(x,60)),rows:data.grammar.table.rows.slice(0,12).map(r=>(Array.isArray(r)?r:[r]).slice(0,6).map(x=>clean(x,80)))}:null}:null;
+  return {em:clean(data.emoji,16)||"✨",title:clean(data.title,120)||topic,intro:clean(data.intro,1200)||"Ta leçon sur mesure !",k:topic,words,
+    phrases:(Array.isArray(data.phrases)?data.phrases:[]).filter(p=>p&&p.u&&p.f).slice(0,8).map(p=>({u:clean(p.u,300),p:clean(p.p,300),f:clean(p.f,300)})),
+    grammar:gr,text:data.text&&data.text.uk?{uk:clean(data.text.uk,3000),fr:clean(data.text.fr,3000)}:null,
+    cahier:(Array.isArray(data.cahier)?data.cahier:[]).filter(c=>c&&c.t).slice(0,6).map(c=>({t:clean(c.t,1200),a:clean(c.a,1200)})),
+    tip:clean(data.tip,600),quiz:(Array.isArray(data.quiz)?data.quiz:[]).filter(x=>x&&x.q&&Array.isArray(x.o)&&x.o.length>=2&&Number.isInteger(x.a)&&x.a>=0&&x.a<x.o.length).slice(0,5).map(x=>({q:clean(x.q,300),o:x.o.slice(0,5).map(o=>clean(o,200)),a:x.a}))};
+}
+function genError(e){return e?.code==="not_granted"?"Il faut autoriser Claude à créer la leçon (fenêtre d'autorisation).":e?.code==="rate_limited"?"Beaucoup de demandes d'un coup ! Attends une minute et réessaie.":"La leçon n'a pas pu être créée. Réessaie dans un instant.";}
+const setNote=(key,hash)=>txt=>{GEN[key].note=txt;const el=document.getElementById("gen-note");if(el&&location.hash===hash)el.textContent=txt;};
+async function generate(){
+  const S=searchState; if(!sampleFn||GEN.search?.status==="loading")return;
+  GEN.search={status:"loading"};if(location.hash==="#search")renderSearch();
   try{
-    const data=await sampleFn.json(prompt,{modelTier:"default",onText:({text})=>{S.note=`✍️ J'écris… (${text.length} caractères)`;const el=document.querySelector(".gen .muted");if(el&&location.hash==="#search")el.textContent=S.note;}});
-    const clean=s=>String(s??"").slice(0,400);
-    const okSvg=s=>typeof s==="string"&&/^\s*<svg[\s>]/i.test(s)&&s.length<6000&&!/script|foreignObject|on\w+=/i.test(s)?(/xmlns=/.test(s)?s:s.replace(/<svg/i,'<svg xmlns="http://www.w3.org/2000/svg"')):"";
-    const words=(Array.isArray(data.words)?data.words:[]).filter(w=>w&&w.u&&w.f).slice(0,12).map(w=>{const o={u:clean(w.u),p:clean(w.p),f:clean(w.f)};if(w.i&&IC[w.i])o.i=w.i;else{const sv=okSvg(w.svg);if(sv)o.svg=sv;else o.e=clean(w.e)||"✨";}return o;});
-    if(words.length<3)throw {code:"shape"};
-    const lesson={id:"perso-"+Date.now().toString(36),em:clean(data.emoji)||"✨",title:clean(data.title)||S.q,intro:clean(data.intro)||"Ta leçon sur mesure !",k:S.q,words,
-      phrases:(Array.isArray(data.phrases)?data.phrases:[]).filter(p=>p&&p.u&&p.f).slice(0,6).map(p=>({u:clean(p.u),p:clean(p.p),f:clean(p.f)})),
-      tip:clean(data.tip),quiz:(Array.isArray(data.quiz)?data.quiz:[]).filter(x=>x&&x.q&&Array.isArray(x.o)&&x.o.length>=2&&Number.isInteger(x.a)&&x.a<x.o.length).slice(0,4).map(x=>({q:clean(x.q),o:x.o.map(clean),a:x.a}))};
-    P.custom.push(lesson);if(P.custom.length>30)P.custom=P.custom.slice(-30);save();
-    S.status="done";go("lesson-"+lesson.id);
-  }catch(e){
-    S.status="error";
-    S.err=e?.code==="not_granted"?"Il faut autoriser Claude à créer la leçon (fenêtre d'autorisation).":e?.code==="rate_limited"?"Beaucoup de demandes d'un coup ! Attends une minute et réessaie.":"La leçon n'a pas pu être créée. Réessaie, ou reformule le thème.";
-    if(location.hash==="#search")renderSearch();
-  }
+    const l=await genLesson({topic:S.q,level:learnerLevel()},setNote("search","#search"));
+    l.id="perso-"+Date.now().toString(36);l.custom=true;
+    saveLesson(l);P.customIds.push(l.id);save();
+    GEN.search={status:"done"};go("lesson-"+l.id);
+  }catch(e){GEN.search={status:"error",err:genError(e)};if(location.hash==="#search")renderSearch();}
+}
+async function genInf(id){
+  const stub=lessonById(id); if(!stub||!stub.stub||!sampleFn||GEN[id]?.status==="loading")return;
+  GEN[id]={status:"loading"};if(location.hash==="#lesson-"+id)renderLesson(id);
+  try{
+    const l=await genLesson({topic:stub.title,focus:stub.focus,level:stub.lvl},setNote(id,"#lesson-"+id));
+    Object.assign(l,{id,sec:stub.sec,em:stub.em,title:stub.title});
+    saveLesson(l);GEN[id]={status:"done"};
+    if(location.hash==="#lesson-"+id)renderLesson(id);else toast("✨ Ta leçon « "+stub.title+" » est prête !");
+  }catch(e){GEN[id]={status:"error",err:genError(e)};if(location.hash==="#lesson-"+id)renderLesson(id);}
+}
+async function genModule(){
+  if(!sampleFn||GEN.module?.status==="loading")return;
+  GEN.module={status:"loading"};if(location.hash==="#theme-inf")renderInf();
+  const mods=infMods().map(m=>`${m.lvl} « ${m.name} » : ${m.topics.map(t=>t[1]).join(", ")}`).join("\n");
+  try{
+    const d=await sampleFn.json(`Tu conçois un parcours pour qu'une francophone, Lara, devienne parfaitement bilingue en ukrainien. Voici les modules déjà au programme, dans l'ordre :
+${mods}
+Propose le module SUIVANT : un thème nouveau, utile et motivant, d'un niveau égal ou légèrement supérieur au dernier (après C1, passe au C2, puis à des spécialisations variées : littérature, métiers, régions, expressions, actualité, culture pop, etc.). Ne répète aucun sujet.
+Réponds UNIQUEMENT avec ce JSON : {"name":"nom du module en français","lvl":"niveau (ex : C1+)","badge":"un emoji","topics":[{"em":"emoji","title":"titre de leçon en français","focus":"objectif précis (grammaire ou vocabulaire)"}]} avec exactement 6 leçons.`,{modelTier:"default"});
+    const c=(s,n)=>String(s??"").slice(0,n);
+    const topics=(Array.isArray(d.topics)?d.topics:[]).filter(t=>t&&t.title).slice(0,6).map(t=>[c(t.em,16)||"✨",c(t.title,120),c(t.focus,200)]);
+    if(topics.length<3)throw {code:"shape"};
+    P.extraMods.push({name:c(d.name,120)||"Nouveau module",lvl:c(d.lvl,12)||"C1+",badge:c(d.badge,16)||"🦋",topics});save();
+    GEN.module={status:"done"};if(location.hash==="#theme-inf")renderInf();
+  }catch(e){GEN.module={status:"error",err:genError(e)};if(location.hash==="#theme-inf")renderInf();}
 }
 
 route();
